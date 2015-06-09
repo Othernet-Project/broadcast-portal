@@ -1,0 +1,4 @@
+bottle
+mako
+webassets
+outernet-metadata==0.5.post3
