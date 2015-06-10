@@ -3,7 +3,7 @@ import functools
 
 import webassets
 
-from bottle import request, static_file
+from bottle import request, BaseTemplate
 
 MODDIR = os.path.dirname(__file__)
 PKGDIR = os.path.dirname(MODDIR)
@@ -19,14 +19,21 @@ class Assets:
         self.debug = debug
         self.env = webassets.Environment(directory=directory, url=url,
                                          debug=debug, url_expire=True)
+        self.env.versions = 'hash'
+        self.env.manifest = 'file'
+        if not debug:
+            self.env.auto_rebuild = False
 
-        # Configure pyScss
-        self.env.config['pyscss_static_root'] = directory
-        self.env.config['pyscss_static_url'] = url
-        self.env.config['pyscss_assets_root'] = os.path.join(directory, 'img')
-        self.env.config['pyscss_assets_url'] = url + 'img/'
-        self.env.config['pyscss_style'] = (
-            'compressed' if debug is False else 'normal')
+        # Configure Compass
+        self.env.config['COMPASS_CONFIG'] = dict(
+            http_path='/static/',
+            css_dir='css',
+            sass_dir='scss',
+            images_dir='img',
+            javascripts_dir='js',
+            relative_assets=True,
+            output_style='compressed',
+        )
 
     def add_js_bundle(self, out, assets):
         """
@@ -40,7 +47,8 @@ class Assets:
         automatically inserted into the resulting filename, so the complete
         path will be ``js/common/foo-%(version)s.js``.
 
-        The ``out`` value is also used to identify bundles.
+        The ``out`` value is also used to identify bundles, and the identifier
+        is prefixed with 'js/'.
 
         Assets is an iterable containing the bundle's contents. They must be
         specified in correct load order. Similar to output path, the asset
@@ -55,18 +63,20 @@ class Assets:
         assets = [self._js_path(a) for a in assets]
         out_path = 'js/' + out + '-%(version)s.js'
         bundle = webassets.Bundle(*assets, filters='uglifyjs', output=out_path)
-        self.env.register(out, bundle)
+        self.env.register('js/' + out, bundle)
         return bundle
 
-    def register_scss_bundle(self, out, assets):
+    def add_css_bundle(self, out, assets):
         """
         Create and register Compass bundle
 
         The ``out`` parameter is a path to bundle. It does not include the
         ``css/`` prefix nor ``.css`` extension. These are added automatically.
         For example, if you want to build a bundle in ``static/css/main.css``,
-        then you would set the ``out`` argument to ``main``. The ``out`` value
-        is also used to identify the bundle.
+        then you would set the ``out`` argument to ``main``.
+
+        The ``out`` value is also used to identify the bundle, and the
+        identifier is prefixed with 'css/'.
 
         Assets is an iterable containing the bundle's contents. They must be
         specified in correct load order. Similar to output path, the asset
@@ -78,9 +88,15 @@ class Assets:
         """
         assets = [self._scss_path(a) for a in assets]
         out_path = 'css/' + out + '-%(version)s.css'
-        bundle = webassets.Bundle(*assets, filter='pyscss', output=out_path)
-        self.env.register(out, bundle)
+        bundle = webassets.Bundle(*assets, filters='compass', output=out_path)
+        self.env.register('css/' + out, bundle)
         return bundle
+
+    def get(self, name):
+        return self.env[name].urls()[0]
+
+    def __getitem__(self, name):
+        return self.get(name)
 
     @staticmethod
     def _js_path(s):
@@ -95,12 +111,34 @@ class Assets:
         return s
 
 
-def assets_plugin(conf):
-    assets_dir = os.path.join(PKGDIR, conf['assets.directory'])
-    assets_url = conf['assets.url']
-    assets_debug = conf['assets.debug']
+def parse_bundle(bundle):
+    bundle_name, bundle_content = [b.strip() for b in bundle.split(':')]
+    bundle_content = [b.strip() for b in bundle_content.split(',')]
+    return bundle_name, bundle_content
 
+
+def pre_init(config):
+    assets_dir = os.path.join(PKGDIR, config['assets.directory'])
+    assets_url = config['assets.url']
+    assets_debug = config['assets.debug']
     assets = Assets(assets_dir, assets_url, assets_debug)
+
+    js_bundles = [parse_bundle(b)
+                  for b in config.get('assets.js_bundles', [])]
+    for name, contents in js_bundles:
+        assets.add_js_bundle(name, contents)
+
+    css_bundles = [parse_bundle(b)
+                   for b in config.get('assets.css_bundles', [])]
+    for name, contents in css_bundles:
+        assets.add_css_bundle(name, contents)
+
+    config['assets.manager'] = assets
+
+
+def assets_plugin(config):
+    assets = config['assets.manager']
+    BaseTemplate.defaults['assets'] = assets
 
     def plugin(fn):
         @functools.wraps(fn)
@@ -110,10 +148,3 @@ def assets_plugin(conf):
         return wrapper
     plugin.name = 'assets'
     return plugin
-
-
-def static_handler(static_dir='static'):
-    """ Return static asset request handler """
-    def handle_asset(path):
-        return static_file(path, root=static_dir)
-    return handle_asset
