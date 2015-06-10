@@ -1,4 +1,12 @@
+import os
+import functools
+
 import webassets
+
+from bottle import request, static_file
+
+MODDIR = os.path.dirname(__file__)
+PKGDIR = os.path.dirname(MODDIR)
 
 
 class Assets:
@@ -11,6 +19,14 @@ class Assets:
         self.debug = debug
         self.env = webassets.Environment(directory=directory, url=url,
                                          debug=debug, url_expire=True)
+
+        # Configure pyScss
+        self.env.config['pyscss_static_root'] = directory
+        self.env.config['pyscss_static_url'] = url
+        self.env.config['pyscss_assets_root'] = os.path.join(directory, 'img')
+        self.env.config['pyscss_assets_url'] = url + 'img/'
+        self.env.config['pyscss_style'] = (
+            'compressed' if debug is False else 'normal')
 
     def add_js_bundle(self, out, assets):
         """
@@ -62,7 +78,7 @@ class Assets:
         """
         assets = [self._scss_path(a) for a in assets]
         out_path = 'css/' + out + '-%(version)s.css'
-        bundle = webassets.Bundle(*assets, filter='compass', output=out_path)
+        bundle = webassets.Bundle(*assets, filter='pyscss', output=out_path)
         self.env.register(out, bundle)
         return bundle
 
@@ -77,3 +93,27 @@ class Assets:
         if type(s) is str:
             return 'scss/' + s + '.scss'
         return s
+
+
+def assets_plugin(conf):
+    assets_dir = os.path.join(PKGDIR, conf['assets.directory'])
+    assets_url = conf['assets.url']
+    assets_debug = conf['assets.debug']
+
+    assets = Assets(assets_dir, assets_url, assets_debug)
+
+    def plugin(fn):
+        @functools.wraps(fn)
+        def wrapper(*args, **kwargs):
+            request.assets = assets
+            return fn(*args, **kwargs)
+        return wrapper
+    plugin.name = 'assets'
+    return plugin
+
+
+def static_handler(static_dir='static'):
+    """ Return static asset request handler """
+    def handle_asset(path):
+        return static_file(path, root=static_dir)
+    return handle_asset

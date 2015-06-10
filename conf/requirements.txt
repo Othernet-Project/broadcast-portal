@@ -1,4 +1,11 @@
 bottle
 mako
 webassets
+pyScss
+sqlize
+bottle-utils-csrf
+bottle-utils-html
+bottle-utils-lazy
+mandrill
+gevent
 outernet-metadata==0.5.post3
