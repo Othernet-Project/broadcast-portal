@@ -1,0 +1,15 @@
+.auth {
+    .col {
+        @include col2;
+        form {
+            display: inline-block;
+            text-align: left;
+        }
+    }
+    .col.login {
+        text-align: right;
+    }
+    .col.registration {
+        text-align: left;
+    }
+}
