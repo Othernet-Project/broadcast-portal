@@ -14,10 +14,10 @@ class Assets:
     Wrapper class for webassets.Environment
     """
     def __init__(self, directory='static', url='/static/', debug='merge'):
-        self.directory = directory
+        self.directory = os.path.abspath(directory)
         self.url = url
         self.debug = debug
-        self.env = webassets.Environment(directory=directory, url=url,
+        self.env = webassets.Environment(directory=self.directory, url=url,
                                          debug=debug, url_expire=True)
         self.env.versions = 'hash'
         self.env.manifest = 'file'
