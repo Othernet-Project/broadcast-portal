@@ -88,7 +88,8 @@ class Assets:
         """
         assets = [self._scss_path(a) for a in assets]
         out_path = 'css/' + out + '-%(version)s.css'
-        bundle = webassets.Bundle(*assets, filters='compass', output=out_path)
+        bundle = webassets.Bundle(*assets, filters='compass', output=out_path,
+                                  depends=('**/**/*.scss', '**/*.scss'))
         self.env.register('css/' + out, bundle)
         return bundle
 
