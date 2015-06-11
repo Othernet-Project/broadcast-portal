@@ -10,3 +10,4 @@ bottle-utils-lazy
 mandrill
 gevent
 outernet-metadata==0.5.post3
+pbkdf2==1.3
