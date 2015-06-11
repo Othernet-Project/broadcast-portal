@@ -17,10 +17,7 @@
                 Outernet
             </p>
         </header>
-        <%block name="main">
-            ${self.body(**context.kwargs)}
-        </%block>
-
+        <%block name="main"/>
         <script src="${assets['js/ui']}"></script>
         <%block name="extra_scripts"/>
     </body>
