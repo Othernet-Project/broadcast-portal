@@ -59,10 +59,12 @@ class DateTimeDecoder(json.JSONDecoder):
 
 class User(object):
 
-    def __init__(self, username=None, is_superuser=None, created=None,
-                 options=None):
+    def __init__(self, username=None, email=None, is_superuser=None,
+                 is_verified=False, created=None, options=None):
         self.username = username
+        self.email = email
         self.is_superuser = is_superuser
+        self.is_verified = is_verified
         self.created = created
         self.options = Options(options, onchange=self.save_options)
 
@@ -86,7 +88,9 @@ class User(object):
 
     def to_json(self):
         data = dict(username=self.username,
+                    email=self.email,
                     is_superuser=self.is_superuser,
+                    is_verified=self.is_verified,
                     created=self.created,
                     options=self.options.to_native())
         return json.dumps(data, cls=DateTimeEncoder)
@@ -148,8 +152,8 @@ def is_valid_password(password, encrypted_password):
     return encrypted_password == pbkdf2.crypt(password, encrypted_password)
 
 
-def create_user(username, password, is_superuser=False, db=None,
-                overwrite=False):
+def create_user(username, password, email, is_superuser=False,
+                is_verified=False, db=None, overwrite=False):
     if not username or not password:
         raise InvalidUserCredentials()
 
@@ -157,33 +161,40 @@ def create_user(username, password, is_superuser=False, db=None,
 
     user_data = {'username': username,
                  'password': encrypted,
+                 'email': email,
                  'created': datetime.datetime.utcnow(),
-                 'is_superuser': is_superuser}
+                 'is_superuser': is_superuser,
+                 'is_verified': is_verified}
 
     db = db or request.db.sessions
     sql_cmd = db.Replace if overwrite else db.Insert
     query = sql_cmd('users', cols=('username',
                                    'password',
+                                   'email',
                                    'created',
-                                   'is_superuser'))
+                                   'is_superuser',
+                                   'is_verified'))
     try:
         db.execute(query, user_data)
     except sqlite3.IntegrityError:
         raise UserAlreadyExists()
 
 
-def get_user(username):
+def get_user(username_or_email):
     db = request.db.sessions
-    query = db.Select(sets='users', where='username = ?')
-    db.query(query, username)
+    query = db.Select(sets='users',
+                      where='username = :username OR email = :email')
+    db.query(query, username=username_or_email, email=username_or_email)
     return db.result
 
 
-def login_user(username, password):
-    user = get_user(username)
+def login_user(username_or_email, password):
+    user = get_user(username_or_email)
     if user and is_valid_password(password, user.password):
         request.user = User(username=user.username,
+                            email=user.email,
                             is_superuser=user.is_superuser,
+                            is_verified=user.is_verified,
                             created=user.created,
                             options=user.options)
         request.session.rotate()
@@ -193,7 +204,7 @@ def login_user(username, password):
 
 
 def user_plugin(conf):
-    no_auth = conf['sessions.no_auth']
+    no_auth = conf['session.no_auth']
     bottle = conf['bottle']
     # Set up a hook, so handlers that raise cannot escape session-saving
 
