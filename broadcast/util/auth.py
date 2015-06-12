@@ -14,6 +14,7 @@ import json
 import sqlite3
 import urllib
 import urlparse
+import uuid
 
 import pbkdf2
 from bottle import request, abort, redirect
@@ -154,7 +155,7 @@ def is_valid_password(password, encrypted_password):
 
 def create_user(username, password, email, is_superuser=False,
                 is_verified=False, db=None, overwrite=False):
-    if not username or not password:
+    if not username or not email or not password:
         raise InvalidUserCredentials()
 
     encrypted = encrypt_password(password)
@@ -178,6 +179,17 @@ def create_user(username, password, email, is_superuser=False,
         db.execute(query, user_data)
     except sqlite3.IntegrityError:
         raise UserAlreadyExists()
+
+
+def create_confirmation(email, db=None):
+    confirmation_key = uuid.uuid4().hex
+    data = {'key': confirmation_key,
+            'email': email,
+            'created': datetime.datetime.utcnow()}
+    db = db or request.db.sessions
+    query = db.Insert('confirmations', cols=('key', 'email', 'created'))
+    db.execute(query, data)
+    return confirmation_key
 
 
 def get_user(username_or_email):

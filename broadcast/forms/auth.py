@@ -55,7 +55,18 @@ class RegistrationForm(form.Form):
 
     def postprocess_email(self, value):
         if not re.match(r'[^@]+@[^@]+\.[^@]+', value):
-            raise form.ValidationError(_("Invalid e-mail address entered."))
+            message = _("Invalid e-mail address entered.")
+            raise form.ValidationError(message, {})
+
+        if auth.get_user(value):
+            message = _("E-mail address already registered.")
+            raise form.ValidationError(message, {})
+
+        return value
+
+    def postprocess_username(self, value):
+        if auth.get_user(value):
+            raise form.ValidationError(_("Username already taken."), {})
 
         return value
 
@@ -65,3 +76,21 @@ class RegistrationForm(form.Form):
         if password1 != password2:
             message = _("The entered passwords do not match.")
             raise form.ValidationError(message, {})
+
+
+class ConfirmationForm(form.Form):
+    # Translators, used as label in create user form
+    email = form.StringField(_("E-mail"),
+                             validators=[form.Required()],
+                             placeholder=_('e-mail'))
+
+    def postprocess_email(self, value):
+        if not re.match(r'[^@]+@[^@]+\.[^@]+', value):
+            message = _("Invalid e-mail address entered.")
+            raise form.ValidationError(message, {})
+
+        if not auth.get_user(value):
+            message = _("E-mail address not registered.")
+            raise form.ValidationError(message, {})
+
+        return value
