@@ -8,6 +8,7 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
+import logging
 import Queue
 
 
@@ -27,7 +28,10 @@ class TaskRunner(object):
                 return
             else:
                 (func, args, kwargs) = task
-                func(*args, **kwargs)
+                try:
+                    func(*args, **kwargs)
+                except Exception:
+                    logging.exception("Background task execution failed.")
 
 
 def pre_init(config):
