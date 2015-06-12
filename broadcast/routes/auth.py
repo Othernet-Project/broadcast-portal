@@ -13,7 +13,11 @@ from bottle_utils.csrf import csrf_protect, csrf_token
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.auth import LoginForm, RegistrationForm, ConfirmationForm
-from ..util.auth import create_user, create_confirmation
+from ..util.auth import (create_user,
+                         create_confirmation,
+                         confirm_user,
+                         ConfirmationExpired,
+                         ConfirmationNotFound)
 from ..util.email import send_mail
 from ..util.template import view, template
 
@@ -54,7 +58,8 @@ def send_confirmation(email=None):
 
         email = form.processed_data['email']
 
-    confirmation_key = create_confirmation(email)
+    expiration = request.app.config['authentication.confirmation_expires']
+    confirmation_key = create_confirmation(email, expiration)
     request.app.config['app.url'] = request.url
     task_runner = request.app.config['task.runner']
     task_runner.schedule(send_mail,
@@ -68,7 +73,14 @@ def send_confirmation(email=None):
 
 @view('confirmed')
 def confirm(key):
-    pass
+    try:
+        confirm_user(key)
+    except ConfirmationExpired:
+        return {'error': _("The confirmation key has already expired.")}
+    except ConfirmationNotFound:
+        return {'error': _("The confirmation key is not valid.")}
+    else:
+        return {'error': None}
 
 
 @view('register')

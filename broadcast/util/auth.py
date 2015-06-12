@@ -30,6 +30,14 @@ class InvalidUserCredentials(Exception):
     pass
 
 
+class ConfirmationNotFound(Exception):
+    pass
+
+
+class ConfirmationExpired(Exception):
+    pass
+
+
 class DateTimeEncoder(json.JSONEncoder):
 
     def default(self, obj):
@@ -61,11 +69,11 @@ class DateTimeDecoder(json.JSONDecoder):
 class User(object):
 
     def __init__(self, username=None, email=None, is_superuser=None,
-                 is_verified=False, created=None, options=None):
+                 confirmed=None, created=None, options=None):
         self.username = username
         self.email = email
         self.is_superuser = is_superuser
-        self.is_verified = is_verified
+        self.confirmed = confirmed
         self.created = created
         self.options = Options(options, onchange=self.save_options)
 
@@ -91,7 +99,7 @@ class User(object):
         data = dict(username=self.username,
                     email=self.email,
                     is_superuser=self.is_superuser,
-                    is_verified=self.is_verified,
+                    confirmed=self.confirmed,
                     created=self.created,
                     options=self.options.to_native())
         return json.dumps(data, cls=DateTimeEncoder)
@@ -154,7 +162,7 @@ def is_valid_password(password, encrypted_password):
 
 
 def create_user(username, password, email, is_superuser=False,
-                is_verified=False, db=None, overwrite=False):
+                confirmed=None, db=None, overwrite=False):
     if not username or not email or not password:
         raise InvalidUserCredentials()
 
@@ -165,7 +173,7 @@ def create_user(username, password, email, is_superuser=False,
                  'email': email,
                  'created': datetime.datetime.utcnow(),
                  'is_superuser': is_superuser,
-                 'is_verified': is_verified}
+                 'confirmed': confirmed}
 
     db = db or request.db.sessions
     sql_cmd = db.Replace if overwrite else db.Insert
@@ -174,22 +182,42 @@ def create_user(username, password, email, is_superuser=False,
                                    'email',
                                    'created',
                                    'is_superuser',
-                                   'is_verified'))
+                                   'confirmed'))
     try:
         db.execute(query, user_data)
     except sqlite3.IntegrityError:
         raise UserAlreadyExists()
 
 
-def create_confirmation(email, db=None):
+def create_confirmation(email, expiration, db=None):
     confirmation_key = uuid.uuid4().hex
+    expires = datetime.datetime.utcnow() + datetime.timedelta(days=expiration)
     data = {'key': confirmation_key,
             'email': email,
-            'created': datetime.datetime.utcnow()}
+            'expires': expires}
     db = db or request.db.sessions
-    query = db.Insert('confirmations', cols=('key', 'email', 'created'))
+    query = db.Insert('confirmations', cols=('key', 'email', 'expires'))
     db.execute(query, data)
     return confirmation_key
+
+
+def confirm_user(key, db=None):
+    db = db or request.db.sessions
+    query = db.Select(sets='confirmations', where='key = :key')
+    db.execute(query, dict(key=key))
+    confirmation = db.result
+    if not confirmation:
+        raise ConfirmationNotFound()
+
+    now = datetime.datetime.utcnow()
+    if confirmation.expires < now:
+        db.query(db.Delete('confirmations', where='key = :key'), key=key)
+        raise ConfirmationExpired()
+
+    query = db.Update('users',
+                      confirmed=':confirmed',
+                      where='email = :email')
+    db.query(query, confirmed=now, email=confirmation.email)
 
 
 def get_user(username_or_email):
@@ -206,7 +234,7 @@ def login_user(username_or_email, password):
         request.user = User(username=user.username,
                             email=user.email,
                             is_superuser=user.is_superuser,
-                            is_verified=user.is_verified,
+                            confirmed=user.confirmed,
                             created=user.created,
                             options=user.options)
         request.session.rotate()

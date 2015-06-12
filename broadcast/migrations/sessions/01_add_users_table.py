@@ -6,7 +6,7 @@ create table users
     is_superuser boolean not null default 0,        -- is admin user
     created timestamp not null,                     -- user creation timestamp
     email varchar unique not null,                  -- email address
-    is_verified boolean not null default 0,         -- email verified flag
+    confirmed timestamp,                            -- email confirmed timestamp
     options varchar default '{}'                    -- arbitary user data
 );
 """
