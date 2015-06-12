@@ -19,6 +19,7 @@ from ..util.auth import (create_user,
                          ConfirmationExpired,
                          ConfirmationNotFound)
 from ..util.email import send_mail
+from ..util.http import http_redirect
 from ..util.template import view, template
 
 
@@ -36,7 +37,7 @@ def login():
     next_path = request.params.get('next', '/')
     login_form = LoginForm(request.params)
     if login_form.is_valid():
-        return redirect(next_path)
+        return http_redirect(next_path)
 
     return dict(next_path=next_path,
                 login_form=login_form,
