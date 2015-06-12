@@ -38,7 +38,10 @@ class Application:
     def configure(self, path):
         path = os.path.abspath(path)
         base_path = os.path.dirname(path)
-        self.config = ConfDict.from_file(path, base_dir=base_path)
+        self.config = ConfDict.from_file(path,
+                                         base_dir=base_path,
+                                         catchall=True,
+                                         autojson=True)
         self.app.config = self.config
 
     def pre_init(self, pre_init):
