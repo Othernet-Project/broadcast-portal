@@ -1,1 +1,1 @@
-Please follow this link: {{host_url + url('confirm', key=confirmation_key)}} to complete the registration process.
+{{_("Please follow this link: %s to complete the registration process.") % host_url + url('confirm', key=confirmation_key)}}
