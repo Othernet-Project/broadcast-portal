@@ -3,8 +3,8 @@
 <%block name="main">
 <div class="grid">
     <div class="grid-container">
-        <div class="grid-row auth">
-            <div class="col broadcast">
+        <div class="grid-row broadcast">
+            <div class="col content">
                 ${h.form('post', action=url('broadcast'), enctype="multipart/form-data")}
                     % if form.error:
                     ${form.error}
