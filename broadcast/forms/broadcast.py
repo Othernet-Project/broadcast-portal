@@ -17,7 +17,7 @@ from bottle_utils.i18n import lazy_gettext as _
 
 from outernet_metadata.values import LICENSE_PAIRS
 
-from ..util.broadcast import sign
+from ..util.broadcast import sign, get_content_by_url
 
 
 def get_extension(filepath):
@@ -70,7 +70,12 @@ class ContentForm(form.Form):
 
     def postprocess_path(self, value):
         template = request.app.config.get('app.content_path_template')
-        return template.format(value)
+        content_url = template.format(value)
+        if get_content_by_url(content_url):
+            message = _("The chosen path is already in use.")
+            raise form.ValidationError(message, {})
+
+        return content_url
 
     def validate(self):
         content_id = self.processed_data['content_id']

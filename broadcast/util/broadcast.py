@@ -25,6 +25,13 @@ def sign(data, secret_key):
     return hmac.new(secret_key, data, hashlib.sha256).hexdigest()
 
 
+def get_content_by_url(url):
+    db = request.db.sessions
+    query = db.Select(sets='content', where='url = :url')
+    db.query(query, url=url)
+    return db.result
+
+
 def save_upload(content_id, uploaded_file, upload_root=None):
     file_path = os.path.join(content_id, uploaded_file.filename)
     upload_root = upload_root or request.app.config['app.upload_root']
