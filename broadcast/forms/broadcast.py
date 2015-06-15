@@ -15,6 +15,10 @@ from bottle import request
 from bottle_utils import form
 from bottle_utils.i18n import lazy_gettext as _
 
+from outernet_metadata.values import LICENSE_PAIRS
+
+from ..util.broadcast import sign
+
 
 def get_extension(filepath):
     return os.path.splitext(filepath)[-1].strip(".").lower()
@@ -26,10 +30,23 @@ def list_zipfile(zip_filepath):
 
 
 class ContentForm(form.Form):
-    # Translators, used as label for a login field
-    content = form.FileField(_("Content"),
-                             placeholder=_('content'),
+    content_id = form.HiddenField(validators=[form.Required()])
+    signature = form.HiddenField(validators=[form.Required()])
+    # Translators, used as label for content file upload field
+    content_file = form.FileField(_("Content"),
+                                  placeholder=_('content'),
+                                  validators=[form.Required()])
+    # Translators, used as label for content title field
+    title = form.StringField(_("Content title"),
+                             placeholder=_('content title'),
                              validators=[form.Required()])
+    # Translators, used as label for content license field
+    license = form.SelectField(_("License"),
+                               choices=LICENSE_PAIRS.items(),
+                               validators=[form.Required()])
+    # Translators, used as label for content link field
+    path = form.StringField(_("Choose your content link"),
+                            validators=[form.Required()])
 
     def postprocess_content(self, file_upload):
         ext = get_extension(file_upload.filename)
@@ -50,3 +67,15 @@ class ContentForm(form.Form):
         file_upload.file.seek(0)
 
         return file_upload
+
+    def postprocess_path(self, value):
+        template = request.app.config.get('app.content_path_template')
+        return template.format(value)
+
+    def validate(self):
+        content_id = self.processed_data['content_id']
+        signature = self.processed_data['signature']
+        secret_key = request.app.config.get('app.secret_key')
+        if signature != sign(content_id, secret_key):
+            message = _("Form data missing or has been tampered with.")
+            raise form.ValidationError(message, {})

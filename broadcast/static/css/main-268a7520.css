@@ -1351,3 +1351,20 @@ table form button {
 /* line 12, ../scss/login.scss */
 .auth .col.registration {
   text-align: left; }
+
+/* line 3, ../scss/broadcast.scss */
+.broadcast .content-path .path-prefix {
+  width: 50%;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0 none;
+  float: left;
+  background-color: #eeeeee; }
+/* line 11, ../scss/broadcast.scss */
+.broadcast .content-path #id_path {
+  width: 50%;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0; }
+/* line 16, ../scss/broadcast.scss */
+.broadcast .content-path .field-help.preview {
+  font-weight: bold; }
