@@ -1368,3 +1368,23 @@ table form button {
 /* line 16, ../scss/broadcast.scss */
 .broadcast .content-path .field-help.preview {
   font-weight: bold; }
+
+/* line 3, ../scss/priority.scss */
+.choose-priority .switch-priority .free {
+  color: #058120; }
+/* line 36, ../scss/outernet/mixins/_hyperlinks.scss */
+.choose-priority .switch-priority .free:visited {
+  color: #058120; }
+/* line 6, ../scss/priority.scss */
+.choose-priority .switch-priority .priority {
+  color: #e17502; }
+/* line 36, ../scss/outernet/mixins/_hyperlinks.scss */
+.choose-priority .switch-priority .priority:visited {
+  color: #e17502; }
+
+/* line 13, ../scss/priority.scss */
+#payment-form .inline-fields .field {
+  display: inline-block; }
+/* line 16, ../scss/priority.scss */
+#payment-form .inline-fields input {
+  width: auto; }

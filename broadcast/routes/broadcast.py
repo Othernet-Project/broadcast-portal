@@ -56,39 +56,8 @@ def broadcast():
     return dict(form=form, path_prefix=path_prefix)
 
 
-def show_broadcast_free_form():
-    return {}
-
-
-def show_broadcast_priority_form():
-    return {}
-
-
 def route(conf):
     return (
-        (
-            '/broadcast/',
-            'GET',
-            show_broadcast_form,
-            'broadcast_form',
-            {}
-        ), (
-            '/broadcast/',
-            'POST',
-            broadcast,
-            'broadcast',
-            {}
-        ), (
-            '/broadcast/free',
-            'GET',
-            show_broadcast_free_form,
-            'broadcast_free_form',
-            {}
-        ), (
-            '/broadcast/priority',
-            'GET',
-            show_broadcast_priority_form,
-            'broadcast_priority_form',
-            {}
-        ),
+        ('/broadcast/', 'GET', show_broadcast_form, 'broadcast_form', {}),
+        ('/broadcast/', 'POST', broadcast, 'broadcast', {}),
     )
