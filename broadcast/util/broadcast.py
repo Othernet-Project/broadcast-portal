@@ -34,7 +34,7 @@ def get_content_by_url(url):
 
 def save_upload(content_id, uploaded_file, upload_root=None):
     file_path = os.path.join(content_id, uploaded_file.filename)
-    upload_root = upload_root or request.app.config['app.upload_root']
+    upload_root = upload_root or request.app.config['content.upload_root']
     upload_path = os.path.join(upload_root, file_path)
     # make sure folder with content_id exists
     os.makedirs(os.path.dirname(upload_path))

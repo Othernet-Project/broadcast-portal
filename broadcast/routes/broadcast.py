@@ -21,7 +21,7 @@ from ..util.template import view
 @view('broadcast')
 @csrf_token
 def show_broadcast_form():
-    path_template = request.app.config['app.content_path_template']
+    path_template = request.app.config['content.content_path_template']
     path_prefix = path_template.format(request.user.username)
     content_id = get_content_id()
     signature = sign(content_id,
@@ -34,7 +34,7 @@ def show_broadcast_form():
 @login_required()
 @view('broadcast')
 def broadcast():
-    path_template = request.app.config['app.content_path_template']
+    path_template = request.app.config['content.content_path_template']
     path_prefix = path_template.format(request.user.username)
     form_data = request.forms.decode()
     form_data.update(request.files)

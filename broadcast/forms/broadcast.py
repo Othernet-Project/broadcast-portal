@@ -13,6 +13,7 @@ import zipfile
 
 from bottle import request
 from bottle_utils import form
+from bottle_utils import html
 from bottle_utils.i18n import lazy_gettext as _
 
 from outernet_metadata.values import LICENSE_PAIRS
@@ -22,6 +23,24 @@ from ..util.broadcast import sign, get_content_by_url
 
 def get_extension(filepath):
     return os.path.splitext(filepath)[-1].strip(".").lower()
+
+
+def get_file_size(file_obj, limit=None, chunk_size=1024):
+    pos = file_obj.tell()
+    file_obj.seek(0)
+    file_size = 0
+    while True:
+        chunk = file_obj.read(chunk_size)
+        if not chunk:
+            break
+
+        file_size += len(chunk)
+        if limit is not None and file_size > limit:
+            # guard against reading huge files into memory
+            break
+
+    file_obj.seek(pos)
+    return file_size
 
 
 def list_zipfile(zip_filepath):
@@ -49,14 +68,22 @@ class ContentForm(form.Form):
                             validators=[form.Required()])
 
     def postprocess_content(self, file_upload):
+        # validate extension
         ext = get_extension(file_upload.filename)
-        valid = request.app.config.get('app.allowed_upload_extensions',
-                                       'zip').split(',')
+        valid = request.app.config['content.allowed_upload_extensions']
 
         if ext not in valid:
             msg = _("Only {0} files are allowed.").format(",".join(valid))
             raise form.ValidationError(msg, {})
 
+        # validate file size
+        allowed_size = request.app.config['content.size_limit']
+        if get_file_size(file_upload.file, limit=allowed_size) > allowed_size:
+            h_size = html.hsize(allowed_size)
+            msg = _("Files larger than {0} are not allowed.").format(h_size)
+            raise form.ValidationError(msg, {})
+
+        # validate contents
         is_html_file = lambda filename: any(filename.endswith(ext)
                                             for ext in ('htm', 'html'))
         files = list_zipfile(file_upload.file)
@@ -69,7 +96,7 @@ class ContentForm(form.Form):
         return file_upload
 
     def postprocess_path(self, value):
-        template = request.app.config.get('app.content_path_template')
+        template = request.app.config['content.content_path_template']
         content_url = template.format(value)
         if get_content_by_url(content_url):
             message = _("The chosen path is already in use.")
