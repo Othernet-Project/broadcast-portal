@@ -42,9 +42,22 @@ def content_owner_or_404(func):
     return wrapper
 
 
+def guard_already_charged(func):
+    @wraps(func)
+    def wrapper(content, **kwargs):
+        if content.charge_id:
+            scheduled_url = request.app.get_url('broadcast_priority_scheduled',
+                                                content_id=content.content_id)
+            redirect(scheduled_url)
+
+        return func(content=content, **kwargs)
+    return wrapper
+
+
 @login_required()
 @view('free')
 @content_owner_or_404
+@guard_already_charged
 def show_broadcast_free_form(content):
     priority_price = humanize_amount(calculate_price(content.file_size))
     return dict(mode='free', priority_price=priority_price, content=content)
@@ -54,6 +67,7 @@ def show_broadcast_free_form(content):
 @view('priority')
 @csrf_token
 @content_owner_or_404
+@guard_already_charged
 def show_broadcast_priority_form(content):
     priority_price = humanize_amount(calculate_price(content.file_size))
     stripe_public_key = request.app.config['stripe.public_key']
@@ -68,6 +82,7 @@ def show_broadcast_priority_form(content):
 @view('priority')
 @csrf_protect
 @content_owner_or_404
+@guard_already_charged
 def broadcast_priority(content):
     priority_price = humanize_amount(calculate_price(content.file_size))
     form = PaymentForm(request.forms)
@@ -79,14 +94,27 @@ def broadcast_priority(content):
         except ChargeError as exc:
             form.error = exc
         else:
-            success_url = request.app.get_url('broadcast_accepted',
-                                              content_id=content.content_id)
-            redirect(success_url)
+            scheduled_url = request.app.get_url('broadcast_priority_scheduled',
+                                                content_id=content.content_id)
+            redirect(scheduled_url)
 
     return dict(mode='priority',
                 priority_price=priority_price,
                 content=content,
                 form=form)
+
+
+@login_required()
+@view('priority_scheduled')
+@content_owner_or_404
+def show_broadcast_priority_scheduled(content):
+    if content.charge_id is None:
+        # attempted access to success-page, while not charged
+        priority_url = request.app.get_url('broadcast_priority_form',
+                                           content_id=content.content_id)
+        redirect(priority_url)
+
+    return dict(content=content)
 
 
 def route(conf):
@@ -108,6 +136,12 @@ def route(conf):
             'POST',
             broadcast_priority,
             'broadcast_priority',
+            {}
+        ), (
+            '/broadcast/<content_id:re:[0-9a-f]{32}>/scheduled/',
+            'GET',
+            show_broadcast_priority_scheduled,
+            'broadcast_priority_scheduled',
             {}
         ),
     )
