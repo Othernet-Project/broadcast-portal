@@ -25,10 +25,13 @@ def sign(data, secret_key):
     return hmac.new(secret_key, data, hashlib.sha256).hexdigest()
 
 
-def get_content_by_url(url):
-    db = request.db.sessions
-    query = db.Select(sets='content', where='url = :url')
-    db.query(query, url=url)
+def get_content_by(**kwargs):
+    db = request.db.main
+    query = db.Select(sets='content')
+    for name in kwargs:
+        query.where += '{0} = :{0}'.format(name)
+
+    db.query(query, **kwargs)
     return db.result
 
 
@@ -37,22 +40,29 @@ def save_upload(content_id, uploaded_file, upload_root=None):
     upload_root = upload_root or request.app.config['content.upload_root']
     upload_path = os.path.join(upload_root, file_path)
     # make sure folder with content_id exists
-    os.makedirs(os.path.dirname(upload_path))
+    upload_dir = os.path.dirname(upload_path)
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
+
+    if os.path.exists(upload_path):
+        # remove file if already exists
+        os.remove(upload_path)
+
     uploaded_file.save(upload_path)
     return file_path
 
 
-def save_content(content_id, email, name, file_path, title, license, url,
-                 is_priority=False, db=None):
+def save_content(content_id, email, name, file_path, file_size, title, license,
+                 url, db=None):
     content = {'content_id': content_id,
                'email': email,
                'name': name,
                'file_path': file_path,
+               'file_size': file_size,
                'title': title,
                'license': license,
                'url': url,
-               'created': datetime.datetime.utcnow(),
-               'is_priority': is_priority}
+               'created': datetime.datetime.utcnow()}
     db = db or request.db.main
     query = db.Insert('content', cols=content.keys())
     db.execute(query, content)

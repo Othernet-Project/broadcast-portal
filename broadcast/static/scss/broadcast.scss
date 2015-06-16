@@ -1,6 +1,6 @@
 .broadcast {
-    .content-path {
-        .path-prefix {
+    .content-url {
+        .url-prefix {
             width: 50%;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
@@ -8,7 +8,7 @@
             float: left;
             background-color: $earth;
         }
-        #id_path {
+        #id_url {
             width: 50%;
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;

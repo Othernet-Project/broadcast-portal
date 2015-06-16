@@ -6,9 +6,9 @@
                 <div class="switch-priority">
                     % if mode == 'free':
                     <span class="free">${_("I'm ok with waiting!")}</span>
-                    <a href="${url('broadcast_priority_form')}" class="priority">${_("Broadcast today for only %s") % priority_price}</a>
+                    <a href="${url('broadcast_priority_form', content_id=content.content_id)}" class="priority">${_("Broadcast today for only %s") % priority_price}</a>
                     % else:
-                    <a href="${url('broadcast_free_form')}" class="free">${_("I'm ok with waiting!")}</a>
+                    <a href="${url('broadcast_free_form', content_id=content.content_id)}" class="free">${_("I'm ok with waiting!")}</a>
                     <span class="priority">${_("Broadcast today for only %s") % priority_price}</span>
                     % endif
                 </div>

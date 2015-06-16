@@ -10,7 +10,7 @@ ${priority_switch.body()}
             <div class="col">
                 <h2>${_("Please provide your creditcard details")}</h2>
 
-                ${h.form('post', _id='payment-form', action=url('broadcast_priority'))}
+                ${h.form('post', _id='payment-form', action=url('broadcast_priority', content_id=content.content_id))}
                     % if form.error:
                     ${form.error}
                     % endif

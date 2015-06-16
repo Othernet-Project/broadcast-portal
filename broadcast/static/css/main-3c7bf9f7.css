@@ -1353,7 +1353,7 @@ table form button {
   text-align: left; }
 
 /* line 3, ../scss/broadcast.scss */
-.broadcast .content-path .path-prefix {
+.broadcast .content-url .url-prefix {
   width: 50%;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -1361,12 +1361,12 @@ table form button {
   float: left;
   background-color: #eeeeee; }
 /* line 11, ../scss/broadcast.scss */
-.broadcast .content-path #id_path {
+.broadcast .content-url #id_url {
   width: 50%;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0; }
 /* line 16, ../scss/broadcast.scss */
-.broadcast .content-path .field-help.preview {
+.broadcast .content-url .field-help.preview {
   font-weight: bold; }
 
 /* line 3, ../scss/priority.scss */

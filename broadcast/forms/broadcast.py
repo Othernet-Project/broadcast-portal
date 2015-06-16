@@ -18,7 +18,7 @@ from bottle_utils.i18n import lazy_gettext as _
 
 from outernet_metadata.values import LICENSE_PAIRS
 
-from ..util.broadcast import sign, get_content_by_url
+from ..util.broadcast import sign, get_content_by
 
 
 def get_extension(filepath):
@@ -64,10 +64,10 @@ class ContentForm(form.Form):
                                choices=LICENSE_PAIRS.items(),
                                validators=[form.Required()])
     # Translators, used as label for content link field
-    path = form.StringField(_("Choose your content link"),
-                            validators=[form.Required()])
+    url = form.StringField(_("Choose your content link"),
+                           validators=[form.Required()])
 
-    def postprocess_content(self, file_upload):
+    def postprocess_content_file(self, file_upload):
         # validate extension
         ext = get_extension(file_upload.filename)
         valid = request.app.config['content.allowed_upload_extensions']
@@ -95,10 +95,10 @@ class ContentForm(form.Form):
 
         return file_upload
 
-    def postprocess_path(self, value):
-        template = request.app.config['content.content_path_template']
+    def postprocess_url(self, value):
+        template = request.app.config['content.url_template']
         content_url = template.format(value)
-        if get_content_by_url(content_url):
+        if get_content_by(url=content_url):
             message = _("The chosen path is already in use.")
             raise form.ValidationError(message, {})
 
@@ -110,4 +110,8 @@ class ContentForm(form.Form):
         secret_key = request.app.config.get('app.secret_key')
         if signature != sign(content_id, secret_key):
             message = _("Form data missing or has been tampered with.")
+            raise form.ValidationError(message, {})
+
+        if get_content_by(content_id=content_id):
+            message = _("Form expired, please retry the submission.")
             raise form.ValidationError(message, {})

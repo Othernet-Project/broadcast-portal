@@ -34,12 +34,12 @@
                         % endif
                         <span class="field-help">${_("Use All Rights Reserved if you want to keep all rights to yourself, and here is a good starting point if you feel it's important that users have more freedom.")}</span>
                     </p>
-                    <p class="field form-input-required content-path">
-                        ${form.path.label}
-                        <input type="text" readonly class="path-prefix" value="${path_prefix}" />
-                        ${form.path}
-                        % if form.path.error:
-                        ${form.path.error}
+                    <p class="field form-input-required content-url">
+                        ${form.url.label}
+                        <input type="text" readonly class="url-prefix" value="${url_prefix}" />
+                        ${form.url}
+                        % if form.url.error:
+                        ${form.url.error}
                         % endif
                         <span class="field-help preview"></span>
                         <span class="field-help">${_("This will be the direct link to your content on Outernet. It's similar to a regular internet link. You are free to use any URL provided that it only consists of letters (a-z), numbers (0-9), dashes (-), underscores (_) and slashes (/).")}</span>

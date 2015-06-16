@@ -8,6 +8,7 @@ bottle-utils-form
 bottle-utils-html
 bottle-utils-lazy
 mandrill
+stripe
 gevent
 outernet-metadata==0.5.post3
 pbkdf2==1.3

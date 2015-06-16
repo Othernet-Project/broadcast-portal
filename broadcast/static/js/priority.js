@@ -29,12 +29,12 @@
                 paymentForm.prepend(formErrors);
             }
             formErrors.append($('<li></li>').text(response.error.message));
-            paymentForm.find('button').prop('disabled', false);
+            self.attachHandler();
         } else {
             tokenEl = $('<input type="hidden" name="stripe_token" />').val(response.id);
             paymentForm.append(tokenEl);
             paymentForm.find("[data-stripe=number]").remove();
-            paymentForm.find("[data-stripe=cvv]").remove();
+            paymentForm.find("[data-stripe=cvc]").remove();
             paymentForm.find("[data-stripe=exp-year]").remove();
             paymentForm.find("[data-stripe=exp-month]").remove();
             paymentForm.get(0).submit();
