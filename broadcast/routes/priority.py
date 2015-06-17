@@ -39,6 +39,19 @@ def item_owner_or_404(func):
     return wrapper
 
 
+def guard_free_mode(func):
+    @wraps(func)
+    def wrapper(item, **kwargs):
+        if not item.has_free_mode:
+            priority_url = request.app.get_url('broadcast_priority_form',
+                                               item_type=item.type,
+                                               item_id=item.id)
+            redirect(priority_url)
+
+        return func(item=item, **kwargs)
+    return wrapper
+
+
 def guard_already_charged(func):
     @wraps(func)
     def wrapper(item, **kwargs):
@@ -56,6 +69,7 @@ def guard_already_charged(func):
 @view('free')
 @item_owner_or_404
 @guard_already_charged
+@guard_free_mode
 def show_broadcast_free_form(item):
     return dict(mode='free', item=item)
 

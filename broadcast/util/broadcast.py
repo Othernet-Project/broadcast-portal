@@ -99,6 +99,10 @@ class BaseItem(object):
     def priority_price(self):
         return self.humanize_amount(self.calculate_price())
 
+    @property
+    def has_free_mode(self):
+        return request.app.config['{0}.allow_free'.format(self.type)]
+
     def _charge(self, token, description):
         stripe.api_key = request.app.config['stripe.secret_key']
         currency = request.app.config['charge.currency']

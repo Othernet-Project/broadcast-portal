@@ -2,7 +2,9 @@
 <%namespace name='priority_switch' file='_priority_switch.tpl'/>
 
 <%block name="main">
+% if item.has_free_mode:
 ${priority_switch.body()}
+% endif
 
 <div class="grid">
     <div class="grid-container">
