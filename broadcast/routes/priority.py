@@ -123,7 +123,8 @@ def show_broadcast_priority_scheduled(item):
 
 
 def route(conf):
-    pre = '/broadcast/<item_type:re:content|twitter>/<item_id:re:[0-9a-f]{32}>'
+    types = '|'.join(conf['app.broadcast_types'])
+    pre = '/broadcast/<item_type:re:%s>/<item_id:re:[0-9a-f]{32}>' % types
     return (
         (
             '{0}/free/'.format(pre),

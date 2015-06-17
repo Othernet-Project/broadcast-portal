@@ -30,6 +30,10 @@ def sign(data, secret_key):
     return hmac.new(secret_key, data, hashlib.sha256).hexdigest()
 
 
+def row_to_dict(row):
+    return dict((key, row[key]) for key in row.keys())
+
+
 def get_item(table, **kwargs):
     db = request.db.main
     query = db.Select(sets=table)
@@ -42,11 +46,28 @@ def get_item(table, **kwargs):
     if row is not None:
         for wrapper_cls in BaseItem.__subclasses__():
             if wrapper_cls.type == table:
-                return wrapper_cls(**dict((key, row[key])
-                                   for key in row.keys()))
+                return wrapper_cls(**row_to_dict(row))
 
     # no wrapper specified
     return row
+
+
+def get_items(table, **kwargs):
+    db = request.db.main
+    query = db.Select(sets=table, order=['date(created)'])
+    for name in kwargs:
+        query.where += '{0} = :{0}'.format(name)
+
+    db.query(query, **kwargs)
+    rows = db.results
+
+    if rows:
+        for wrapper_cls in BaseItem.__subclasses__():
+            if wrapper_cls.type == table:
+                return [wrapper_cls(**row_to_dict(row)) for row in rows]
+
+    # no wrapper specified
+    return rows
 
 
 class ChargeError(ValidationError):
@@ -66,6 +87,15 @@ class BaseItem(object):
             cls_name = self.__class__.__name__
             msg = "'{0}' object has no attribute '{1}'".format(cls_name, name)
             raise AttributeError(msg)
+
+    def __getitem__(self, name):
+        return self.data[name]
+
+    def keys(self):
+        return self.data.keys()
+
+    def items(self):
+        return self.data.items()
 
     def save(self):
         query = self.db.Insert(self.type, cols=self.data.keys())
