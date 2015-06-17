@@ -13,7 +13,7 @@ from .signal_handlers import on_interrupt
 class Application:
     LOOP_INTERVAL = 5  # in seconds
 
-    def __init__(self, config, root):
+    def __init__(self, config, args, root):
         self.server = None
         self.background_hooks = []
         self.stop_hooks = []
@@ -24,6 +24,7 @@ class Application:
         self.configure(config)
         self.config['root'] = root
         self.config['bottle'] = self.app
+        self.config['args'] = args
 
         # Register application hooks
         self.pre_init(self.config['stack.pre_init'])
