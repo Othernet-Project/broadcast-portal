@@ -122,6 +122,14 @@ class ContentForm(form.Form):
             raise form.ValidationError(message, {})
 
 
+class TwitterHandle(form.Validator):
+
+    def validate(self, data):
+        if not data.startswith('@'):
+            message = _("A twitter handle must begin with the @ character.")
+            raise form.ValidationError(message, {})
+
+
 class TwitterForm(form.Form):
     type = TwitterItem.type
 
@@ -131,7 +139,7 @@ class TwitterForm(form.Form):
     # Translators, used as label for twitter handle(username)
     handle = form.StringField(_("Twitter handle"),
                               placeholder=_('@handle'),
-                              validators=[form.Required()])
+                              validators=[form.Required(), TwitterHandle()])
     # Translators, used as label for payment plan
     plan = form.SelectField(_("Payment plan"),
                             choices=PAYMENT_PLANS,

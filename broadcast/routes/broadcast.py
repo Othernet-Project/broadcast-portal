@@ -81,7 +81,7 @@ def broadcast_twitter():
                                    plan=form.processed_data['plan'],
                                    id=get_unique_id())
         twitter_item.save()
-        next_url = request.app.get_url('broadcast_free_form',
+        next_url = request.app.get_url('broadcast_priority_form',
                                        item_type=twitter_item.type,
                                        item_id=twitter_item.id)
         redirect(next_url)

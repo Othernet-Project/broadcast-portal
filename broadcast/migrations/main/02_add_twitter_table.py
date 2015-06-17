@@ -2,14 +2,12 @@ SQL = """
 create table twitter
 (
     id varchar primary_key unique not null,
-    email varchar not null,
-    name varchar not null,
-    handle varchar not null,            -- twitter handle
-    plan varchar not null,              -- payment plan
     created timestamp not null,         -- timestamp when content object was created
-    charge_id varchar,                  -- stripe charge object id, if set content has priority
-    charged_at timestamp,               -- timestamp of funds reservation
-    captured_at timestamp               -- timestamp when funds actually arrived
+    email varchar not null,             -- email of user who created the object
+    name varchar not null,              -- username of user who created the object
+    handle varchar not null,            -- twitter handle
+    plan varchar not null,              -- payment plan, also determines whether charge_id is a subscription or fixed payment
+    charge_id varchar                   -- stripe charge or subscription object id, if set content has priority
 );
 """
 
