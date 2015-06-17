@@ -18,7 +18,7 @@ from bottle_utils.i18n import lazy_gettext as _
 
 from outernet_metadata.values import LICENSE_PAIRS
 
-from ..util.broadcast import sign, get_content_by
+from ..util.broadcast import sign, get_item, ContentItem, TwitterItem
 
 
 def get_extension(filepath):
@@ -49,7 +49,9 @@ def list_zipfile(zip_filepath):
 
 
 class ContentForm(form.Form):
-    content_id = form.HiddenField(validators=[form.Required()])
+    type = ContentItem.type
+
+    id = form.HiddenField(validators=[form.Required()])
     signature = form.HiddenField(validators=[form.Required()])
     # Translators, used as label for content file upload field
     content_file = form.FileField(_("Content"),
@@ -78,10 +80,13 @@ class ContentForm(form.Form):
 
         # validate file size
         allowed_size = request.app.config['content.size_limit']
-        if get_file_size(file_upload.file, limit=allowed_size) > allowed_size:
+        file_size = get_file_size(file_upload.file, limit=allowed_size)
+        if file_size > allowed_size:
             h_size = html.hsize(allowed_size)
             msg = _("Files larger than {0} are not allowed.").format(h_size)
             raise form.ValidationError(msg, {})
+
+        self.processed_data['file_size'] = file_size
 
         # validate contents
         is_html_file = lambda filename: any(filename.endswith(ext)
@@ -98,20 +103,36 @@ class ContentForm(form.Form):
     def postprocess_url(self, value):
         template = request.app.config['content.url_template']
         content_url = template.format(value)
-        if get_content_by(url=content_url):
+        if get_item('content', url=content_url):
             message = _("The chosen path is already in use.")
             raise form.ValidationError(message, {})
 
         return content_url
 
     def validate(self):
-        content_id = self.processed_data['content_id']
+        id = self.processed_data['id']
         signature = self.processed_data['signature']
         secret_key = request.app.config.get('app.secret_key')
-        if signature != sign(content_id, secret_key):
+        if signature != sign(id, secret_key):
             message = _("Form data missing or has been tampered with.")
             raise form.ValidationError(message, {})
 
-        if get_content_by(content_id=content_id):
+        if get_item('content', id=id):
             message = _("Form expired, please retry the submission.")
             raise form.ValidationError(message, {})
+
+
+class TwitterForm(form.Form):
+    type = TwitterItem.type
+
+    PAYMENT_PLANS = (
+        ('lifetime', _("Lifetime")),
+    )
+    # Translators, used as label for twitter handle(username)
+    handle = form.StringField(_("Twitter handle"),
+                              placeholder=_('@handle'),
+                              validators=[form.Required()])
+    # Translators, used as label for payment plan
+    plan = form.SelectField(_("Payment plan"),
+                            choices=PAYMENT_PLANS,
+                            validators=[form.Required()])

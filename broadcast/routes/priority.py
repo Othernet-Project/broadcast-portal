@@ -16,129 +16,121 @@ from bottle_utils.i18n import lazy_gettext as _
 
 from ..forms.priority import PaymentForm
 from ..util.auth import login_required
-from ..util.broadcast import get_content_by
-from ..util.priority import (ChargeError,
-                             calculate_price,
-                             charge,
-                             humanize_amount)
+from ..util.broadcast import get_item, ChargeError
 from ..util.template import view
 
 
-def content_owner_or_404(func):
+def item_owner_or_404(func):
     @wraps(func)
     def wrapper(**kwargs):
-        content_id = kwargs.pop('content_id', None)
-        if not content_id:
-            abort(404, _("The specified content was not found."))
+        item_type = kwargs.pop('item_type', None)
+        item_id = kwargs.pop('item_id', None)
+        if not item_type or not item_id:
+            abort(404, _("The specified item was not found."))
 
-        content = get_content_by(content_id=content_id)
-        if not content:
-            abort(404, _("The specified content was not found."))
+        item = get_item(item_type, id=item_id)
+        if not item:
+            abort(404, _("The specified item was not found."))
 
-        if content.email != request.user.email:
-            abort(404, _("The specified content was not found."))
+        if item.email != request.user.email:
+            abort(404, _("The specified item was not found."))
 
-        return func(content=content, **kwargs)
+        return func(item=item, **kwargs)
     return wrapper
 
 
 def guard_already_charged(func):
     @wraps(func)
-    def wrapper(content, **kwargs):
-        if content.charge_id:
+    def wrapper(item, **kwargs):
+        if item.charge_id:
             scheduled_url = request.app.get_url('broadcast_priority_scheduled',
-                                                content_id=content.content_id)
+                                                item_type=item.type,
+                                                item_id=item.id)
             redirect(scheduled_url)
 
-        return func(content=content, **kwargs)
+        return func(item=item, **kwargs)
     return wrapper
 
 
 @login_required()
 @view('free')
-@content_owner_or_404
+@item_owner_or_404
 @guard_already_charged
-def show_broadcast_free_form(content):
-    priority_price = humanize_amount(calculate_price(content.file_size))
-    return dict(mode='free', priority_price=priority_price, content=content)
+def show_broadcast_free_form(item):
+    return dict(mode='free', item=item)
 
 
 @login_required()
 @view('priority')
 @csrf_token
-@content_owner_or_404
+@item_owner_or_404
 @guard_already_charged
-def show_broadcast_priority_form(content):
-    priority_price = humanize_amount(calculate_price(content.file_size))
+def show_broadcast_priority_form(item):
     stripe_public_key = request.app.config['stripe.public_key']
     form = PaymentForm({'stripe_public_key': stripe_public_key})
-    return dict(mode='priority',
-                priority_price=priority_price,
-                content=content,
-                form=form)
+    return dict(mode='priority', item=item, form=form)
 
 
 @login_required()
 @view('priority')
 @csrf_protect
-@content_owner_or_404
+@item_owner_or_404
 @guard_already_charged
-def broadcast_priority(content):
-    priority_price = humanize_amount(calculate_price(content.file_size))
+def broadcast_priority(item):
     form = PaymentForm(request.forms)
 
     if form.is_valid():
         token = form.processed_data['stripe_token']
         try:
-            charge(content, token)
+            item.charge(token)
         except ChargeError as exc:
             form.error = exc
         else:
             scheduled_url = request.app.get_url('broadcast_priority_scheduled',
-                                                content_id=content.content_id)
+                                                item_type=item.type,
+                                                item_id=item.id)
             redirect(scheduled_url)
 
-    return dict(mode='priority',
-                priority_price=priority_price,
-                content=content,
-                form=form)
+    return dict(mode='priority', item=item, form=form)
 
 
 @login_required()
 @view('priority_scheduled')
-@content_owner_or_404
-def show_broadcast_priority_scheduled(content):
-    if content.charge_id is None:
+@item_owner_or_404
+def show_broadcast_priority_scheduled(item):
+    if item.charge_id is None:
         # attempted access to success-page, while not charged
         priority_url = request.app.get_url('broadcast_priority_form',
-                                           content_id=content.content_id)
+                                           item_type=item.type,
+                                           item_id=item.id)
         redirect(priority_url)
 
-    return dict(content=content)
+    return dict(item=item)
 
 
 def route(conf):
+    pre = '/broadcast/<item_type:re:content|twitter>/<item_id:re:[0-9a-f]{32}>'
     return (
         (
-            '/broadcast/<content_id:re:[0-9a-f]{32}>/free/',
+            '{0}/free/'.format(pre),
             'GET',
             show_broadcast_free_form,
             'broadcast_free_form',
             {}
         ), (
-            '/broadcast/<content_id:re:[0-9a-f]{32}>/priority/',
+            '{0}/priority/'.format(pre),
             'GET',
             show_broadcast_priority_form,
             'broadcast_priority_form',
             {}
         ), (
-            '/broadcast/<content_id:re:[0-9a-f]{32}>/priority/',
+            '{0}/priority/'.format(pre),
             'POST',
             broadcast_priority,
             'broadcast_priority',
             {}
         ), (
-            '/broadcast/<content_id:re:[0-9a-f]{32}>/scheduled/',
+            '{0}/scheduled/'.format(pre),
             'GET',
             show_broadcast_priority_scheduled,
             'broadcast_priority_scheduled',

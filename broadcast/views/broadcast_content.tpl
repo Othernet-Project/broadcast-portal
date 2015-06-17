@@ -1,16 +1,19 @@
 <%inherit file='base.tpl'/>
+<%namespace name='broadcast_switch' file='_broadcast_switch.tpl'/>
 
 <%block name="main">
+${broadcast_switch.body()}
+
 <div class="grid">
     <div class="grid-container">
         <div class="grid-row broadcast">
             <div class="col content">
-                ${h.form('post', action=url('broadcast'), enctype="multipart/form-data")}
+                ${h.form('post', action=url('broadcast_content'), enctype="multipart/form-data")}
                     % if form.error:
                     ${form.error}
                     % endif
                     ${csrf_tag()}
-                    ${form.content_id}
+                    ${form.id}
                     ${form.signature}
                     <p class="field form-input-required form-input-file">
                         ${form.content_file.label}

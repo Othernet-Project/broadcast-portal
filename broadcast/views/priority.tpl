@@ -10,7 +10,7 @@ ${priority_switch.body()}
             <div class="col">
                 <h2>${_("Please provide your creditcard details")}</h2>
 
-                ${h.form('post', _id='payment-form', action=url('broadcast_priority', content_id=content.content_id))}
+                ${h.form('post', _id='payment-form', action=url('broadcast_priority', item_type=item.type, item_id=item.id))}
                     % if form.error:
                     ${form.error}
                     % endif
@@ -43,7 +43,7 @@ ${priority_switch.body()}
                         </p>
                     </div>
                     <p>
-                        <a class="button primary">${_('Charge me %s') % priority_price}</a>
+                        <a class="button primary">${_('Charge me %s') % item.priority_price}</a>
                     </p>
                 </form>
             </div>
