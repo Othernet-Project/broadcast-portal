@@ -30,14 +30,16 @@
   }
 }
 
-
-$icons: sprite-map('icons/1x/*.png', $spacing: 30px);
-$icons-2x: sprite-map('icons/2x/*.png', $spacing: 60px);
-@mixin icon($name, $dimensions: yes) {
+@mixin sprite($map, $map-2x, $name, $dimensions: yes) {
   @if $dimensions == yes {
     display: inline-block;
     vertical-align: middle;
   }
-  @include named-sprite($icons, $icons-2x, $name, $dimensions);
+  @include named-sprite($map, $map-2x, $name, $dimensions);
 }
 
+$icons: sprite-map('icons/1x/*.png', $spacing: 30px);
+$icons-2x: sprite-map('icons/2x/*.png', $spacing: 60px);
+@mixin icon($name, $dimensions: yes) {
+  @include sprite($icons, $icons-2x, $name, $dimensions);
+}

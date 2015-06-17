@@ -9,6 +9,8 @@
  * http://www.gnu.org/licenses/gpl.txt.
  */
 
+@import "compass/css3";
+
 $gutter: 20px;
 $col-count: 12;
 $col-width: 100% / $col-count;
@@ -39,6 +41,11 @@ $col-width: 100% / $col-count;
     width: 100%;
     clear: left;
   }
+}
+
+@mixin single-cell-grid() {
+  @include row;
+  padding: $gutter;
 }
 
 @mixin simple-row {
