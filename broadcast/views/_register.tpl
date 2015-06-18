@@ -32,7 +32,7 @@ ${h.form('post', action=url('register'))}
         ${registration_form.password2.error}
         % endif
     </p>
-    <p>
-        <button type="submit"><span class="icon"></span> ${_('Register')}</button>
+    <p class="buttons">
+        <button type="submit" class="primary"><span class="icon"></span> ${_('Register')}</button>
     </p>
 </form>
