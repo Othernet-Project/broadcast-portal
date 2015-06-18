@@ -54,7 +54,7 @@ class ContentForm(form.Form):
     id = form.HiddenField(validators=[form.Required()])
     signature = form.HiddenField(validators=[form.Required()])
     # Translators, used as label for content file upload field
-    content_file = form.FileField(_("Content"),
+    content_file = form.FileField(_("Content file"),
                                   placeholder=_('content'),
                                   validators=[form.Required()])
     # Translators, used as label for content title field
