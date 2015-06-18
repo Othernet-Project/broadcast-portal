@@ -1,17 +1,17 @@
-.broadcast {
+.content {
     .content-url {
         .url-prefix {
             width: 50%;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
+            @include border-top-right-radius(0);
+            @include border-bottom-right-radius(0);
             border-right: 0 none;
             float: left;
             background-color: $earth;
         }
         #id_url {
             width: 50%;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
+            @include border-top-left-radius(0);
+            @include border-bottom-left-radius(0);
         }
         .field-help.preview {
             font-weight: bold;

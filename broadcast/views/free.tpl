@@ -4,13 +4,9 @@
 <%block name="main">
 ${priority_switch.body()}
 
-<div class="grid">
-    <div class="grid-container">
-        <div class="grid-row free">
-            <div class="col">
-                <h2>${_("Share your broadcast to skip the queue")}</h2>
-            </div>
-        </div>
+<div class="full-page-form">
+    <div class="free">
+        <h2>${_("Share your broadcast to skip the queue")}</h2>
     </div>
 </div>
 </%block>

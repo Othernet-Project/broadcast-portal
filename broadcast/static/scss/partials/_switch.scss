@@ -1,0 +1,36 @@
+.switch {
+  max-width: 650px;
+  min-height: 60px;
+  margin: 0 auto;
+  .left, .right {
+    border: 1px solid $border;
+    padding: 10px 0;
+    width: 50%;
+    float: left;
+    background-color: $white;
+    @include box-sizing(border-box);
+    @include link-cta;
+  }
+  .left {
+    border-right: 0 none;
+    @include border-radius(100px 0 0 100px);
+  }
+  .right {
+    @include border-radius(0 100px 100px 0);
+  }
+  .icon {
+    display: inline-block;
+    visibility: hidden;
+    vertical-align: middle;
+    background-position: center center;
+    background-repeat: no-repeat;
+    @include with-hdpi('icons', 'checkmark', yes);
+  }
+  .active {
+    background-color: $earth;
+    @include link-confirm;
+    .icon {
+      visibility: visible;
+    }
+  }
+}

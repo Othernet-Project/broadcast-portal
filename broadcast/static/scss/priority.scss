@@ -1,14 +1,3 @@
-.choose-priority {
-    .switch-priority {
-        .free {
-            @include link-confirm;
-        }
-        .priority {
-            @include link-cta;
-        }
-    }
-}
-
 #payment-form {
     .inline-fields .field {
         display: inline-block;

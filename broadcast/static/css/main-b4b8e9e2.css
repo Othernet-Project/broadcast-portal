@@ -1741,7 +1741,7 @@ body {
   max-width: 100%;
   width: 100%; }
 /* line 50, ../scss/partials/_common.scss */
-.full-page-form .buttons {
+.full-page-form .buttons, .full-page-form .help {
   padding-top: 1.5em;
   text-align: center; }
 
@@ -1935,63 +1935,93 @@ footer .copyright {
   font-size: 87.5%;
   line-height: 137.5%; }
 
-/* line 2, ../scss/login.scss */
-.auth .col {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-right: 10px;
-  padding-left: 10px;
+/* line 1, ../scss/partials/_switch.scss */
+.switch {
+  max-width: 650px;
+  min-height: 60px;
+  margin: 0 auto; }
+/* line 5, ../scss/partials/_switch.scss */
+.switch .left, .switch .right {
+  border: 1px solid #dddddd;
+  padding: 10px 0;
+  width: 50%;
   float: left;
+  background-color: #ffffff;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  -moz-transition: width 0.5s;
-  -o-transition: width 0.5s;
-  -webkit-transition: width 0.5s;
-  transition: width 0.5s;
-  width: 50%; }
-/* line 4, ../scss/login.scss */
-.auth .col form {
+  color: #e17502; }
+/* line 36, ../scss/outernet/mixins/_hyperlinks.scss */
+.switch .left:visited, .switch .right:visited {
+  color: #e17502; }
+/* line 14, ../scss/partials/_switch.scss */
+.switch .left {
+  border-right: 0 none;
+  -moz-border-radius: 100px 0 0 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px 0 0 100px; }
+/* line 18, ../scss/partials/_switch.scss */
+.switch .right {
+  -moz-border-radius: 0 100px 100px 0;
+  -webkit-border-radius: 0;
+  border-radius: 0 100px 100px 0; }
+/* line 21, ../scss/partials/_switch.scss */
+.switch .icon {
   display: inline-block;
-  text-align: left; }
-/* line 9, ../scss/login.scss */
-.auth .col.login {
-  text-align: right; }
-/* line 12, ../scss/login.scss */
-.auth .col.registration {
-  text-align: left; }
+  visibility: hidden;
+  vertical-align: middle;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url('../img/icons/1x/checkmark.png?1434540728');
+  width: 25px;
+  height: 25px; }
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
+  /* line 21, ../scss/partials/_switch.scss */
+  .switch .icon {
+    background-image: url('../img/icons/2x/checkmark.png?1434540728');
+    -moz-background-size: 25px, 25px;
+    -o-background-size: 25px, 25px;
+    -webkit-background-size: 25px, 25px;
+    background-size: 25px, 25px; } }
+/* line 29, ../scss/partials/_switch.scss */
+.switch .active {
+  background-color: #eeeeee;
+  color: #058120; }
+/* line 36, ../scss/outernet/mixins/_hyperlinks.scss */
+.switch .active:visited {
+  color: #058120; }
+/* line 32, ../scss/partials/_switch.scss */
+.switch .active .icon {
+  visibility: visible; }
 
 /* line 3, ../scss/broadcast.scss */
-.broadcast .content-url .url-prefix {
+.content .content-url .url-prefix {
   width: 50%;
+  -moz-border-radius-topright: 0;
+  -webkit-border-top-right-radius: 0;
   border-top-right-radius: 0;
+  -moz-border-radius-bottomright: 0;
+  -webkit-border-bottom-right-radius: 0;
   border-bottom-right-radius: 0;
   border-right: 0 none;
   float: left;
   background-color: #eeeeee; }
 /* line 11, ../scss/broadcast.scss */
-.broadcast .content-url #id_url {
+.content .content-url #id_url {
   width: 50%;
+  -moz-border-radius-topleft: 0;
+  -webkit-border-top-left-radius: 0;
   border-top-left-radius: 0;
+  -moz-border-radius-bottomleft: 0;
+  -webkit-border-bottom-left-radius: 0;
   border-bottom-left-radius: 0; }
 /* line 16, ../scss/broadcast.scss */
-.broadcast .content-url .field-help.preview {
+.content .content-url .field-help.preview {
   font-weight: bold; }
 
-/* line 3, ../scss/priority.scss */
-.choose-priority .switch-priority .free {
-  color: #058120; }
-/* line 36, ../scss/outernet/mixins/_hyperlinks.scss */
-.choose-priority .switch-priority .free:visited {
-  color: #058120; }
-/* line 6, ../scss/priority.scss */
-.choose-priority .switch-priority .priority {
-  color: #e17502; }
-/* line 36, ../scss/outernet/mixins/_hyperlinks.scss */
-.choose-priority .switch-priority .priority:visited {
-  color: #e17502; }
-
-/* line 13, ../scss/priority.scss */
+/* line 2, ../scss/priority.scss */
 #payment-form .inline-fields .field {
   display: inline-block; }
-/* line 16, ../scss/priority.scss */
+/* line 5, ../scss/priority.scss */
 #payment-form .inline-fields input {
   width: auto; }
