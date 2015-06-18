@@ -31,7 +31,7 @@ ${priority_switch.body()}
                     ${form.cvc.error}
                     % endif
                 </p>
-                <p class="field form-input-required">
+                <p class="field form-input-required expiration">
                     ${form.exp_month.label}
                     ${form.exp_month}
                     ${form.exp_year}

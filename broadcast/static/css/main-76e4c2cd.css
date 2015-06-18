@@ -2020,8 +2020,16 @@ footer .copyright {
   font-weight: bold; }
 
 /* line 2, ../scss/priority.scss */
+#payment-form .inline-fields {
+  white-space: nowrap; }
+/* line 4, ../scss/priority.scss */
 #payment-form .inline-fields .field {
+  white-space: normal;
   display: inline-block; }
-/* line 5, ../scss/priority.scss */
-#payment-form .inline-fields input {
-  width: auto; }
+/* line 7, ../scss/priority.scss */
+#payment-form .inline-fields .field input {
+  width: 150px;
+  min-width: 0; }
+/* line 12, ../scss/priority.scss */
+#payment-form .inline-fields .field.expiration {
+  float: right; }

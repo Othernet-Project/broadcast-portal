@@ -1,8 +1,16 @@
 #payment-form {
-    .inline-fields .field {
-        display: inline-block;
+  .inline-fields {
+    white-space: nowrap;
+    .field {
+      white-space: normal;
+      display: inline-block;
+      input {
+        width: 150px;
+        min-width: 0;
+      }
     }
-    .inline-fields input {
-        width: auto;
+    .field.expiration {
+      float: right;
     }
+  }
 }
