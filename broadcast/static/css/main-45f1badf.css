@@ -1994,6 +1994,36 @@ footer .copyright {
 .switch .active .icon {
   visibility: visible; }
 
+/* line 1, ../scss/partials/_tab.scss */
+.tab {
+  background-color: #ffffff; }
+/* line 3, ../scss/partials/_tab.scss */
+.tab .tab-link {
+  color: #bbbbbb;
+  border-bottom: 1px solid #bbbbbb;
+  border-right: 1px solid #bbbbbb;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  float: left; }
+/* line 12, ../scss/partials/_tab.scss */
+.tab .tab-link:hover {
+  text-decoration: none; }
+/* line 15, ../scss/partials/_tab.scss */
+.tab .tab-link:last-child {
+  border-right: 0 none; }
+/* line 18, ../scss/partials/_tab.scss */
+.tab .tab-link.active {
+  color: #555555;
+  font-weight: bold;
+  border-bottom: 3px solid #bbbbbb; }
+
+/* line 24, ../scss/partials/_tab.scss */
+.clear {
+  clear: both; }
+
 /* line 3, ../scss/broadcast.scss */
 .content .content-url .url-prefix {
   width: 50%;
