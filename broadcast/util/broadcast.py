@@ -158,7 +158,7 @@ class BaseItem(object):
                                                       plan=plan,
                                                       email=self.email)
         except Exception:
-            message = _("Subscription to the chosen failed.")
+            message = _("Subscription to the chosen plan failed.")
             raise ChargeError(message, {}, is_form=True)
         else:
             self.save_charge_id(subscription_obj)
