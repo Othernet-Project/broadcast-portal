@@ -1,4 +1,3 @@
-
 """
 template.py: Mako template renderer, based on bottle's class but includes
              optimizations that otherwise cannot be applied.
