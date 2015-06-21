@@ -34,7 +34,9 @@
         </%block>
 
         <div class="section body">
-        <%block name="main"/>
+        <%block name="main">
+            ${self.body()}
+        </%block>
         </div>
 
         <%block name="footer">
