@@ -52,3 +52,16 @@ body {
     text-align: center;
   }
 }
+
+.single {
+  text-align: center;
+  @include heading-5;
+
+  &.confirm {
+    color: $forest;
+  }
+
+  &.error {
+    color: $fire;
+  }
+}
