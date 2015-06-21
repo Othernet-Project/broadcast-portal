@@ -15,28 +15,40 @@
             <p class="field form-input-required form-input-file">
                 ${form.content_file.label}
                 ${form.content_file}
+                <span class="field-help">
+                Package your content into a zip file containing at least a 
+                single HTML page.
+                </span>
                 % if form.content_file.error:
                 ${form.content_file.error}
                 % endif
             </p>
-            <p class="field form-input-required">
+            <p class="field form-input-required required">
                 ${form.title.label}
                 ${form.title}
                 % if form.title.error:
                 ${form.title.error}
                 % endif
             </p>
-            <p class="field form-input-required form-select">
+            <p class="field form-input-required required">
+                ${form.language.label}
+                ${form.language}
+                % if form.language.error:
+                ${form.language.error}
+                % endif
+            </p>
+            <p class="field form-input-required form-select required">
                 ${form.license.label}
                 ${form.license}
                 % if form.license.error:
                 ${form.license.error}
                 % endif
-                <span class="field-help">${_("Use All Rights Reserved if you want to keep all rights to yourself, and here is a good starting point if you feel it's important that users have more freedom.")}</span>
+                <span class="field-help">
+                ${_("Use All rights reserved if unusure. If you are the author, we recommend Creative Commons Attribution")}
+                </span>
             </p>
-            <p class="field form-input-required content-url">
+            <p class="field form-input-required content-url required">
                 ${form.url.label}
-                <input type="text" readonly class="url-prefix" value="${url_prefix}" />
                 ${form.url}
                 % if form.url.error:
                 ${form.url.error}
