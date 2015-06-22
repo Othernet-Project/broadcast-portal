@@ -120,7 +120,7 @@ class BaseItem(object):
         currency = conf['charge.currency']
         multiplier = conf['charge.basic_monetary_unit_multiplier']
         basic_unit = decimal.Decimal(cent_amount) / multiplier
-        return "{0:,.2f} {1}".format(basic_unit, currency)
+        return "{} {:,.2f}".format(currency, basic_unit)
 
     def calculate_price(self):
         raise NotImplementedError()
