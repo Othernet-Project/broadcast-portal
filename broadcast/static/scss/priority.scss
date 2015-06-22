@@ -1,6 +1,13 @@
+@import "outernet/mixins/media_query";
+
 #payment-form {
+  .form-errors {
+    display: none;
+  }
+
   .inline-fields {
     white-space: nowrap;
+
     .field {
       white-space: normal;
       display: inline-block;
@@ -8,9 +15,34 @@
         width: 150px;
         min-width: 0;
       }
+
+      @include phone-portrait-wide {
+        display: block;
+      }
     }
-    .field.expiration {
+
+    .cvc {
+      float: left;
+
+      @include phone-portrait-wide {
+        float: none;
+      }
+    }
+
+    .expiration {
       float: right;
+
+      @include phone-portrait-wide {
+        float: none;
+
+        input {
+          width: 44%;
+        }
+      }
     }
+  }
+
+  .buttons {
+    clear: both;
   }
 }
