@@ -8,11 +8,20 @@ ${priority_switch.body()}
 
 <div class="full-page-form">
     <div class="priority">
-        <h2>${_("Please provide your creditcard details")}</h2>
+        <p>
+        ${_('''After completing the payment, your content will be reviewed by 
+        Outernet staff and broadcast during the working hours (week days
+        between 11am and 7pm Chicago time.''')}
+        ${_('''Your card will be charged %(amount)s after content is
+        broadcast.''') % {'amount': item.priority_price}}
+        </p>
 
         ${h.form('post', _id='payment-form', action=url('broadcast_priority', item_type=item.type, item_id=item.id))}
             % if form.error:
             ${form.error}
+            % else: 
+            <ul class="form-errors">
+            </ul>
             % endif
             ${csrf_tag()}
             ${form.stripe_public_key}
@@ -24,7 +33,7 @@ ${priority_switch.body()}
                 % endif
             </p>
             <div class="inline-fields">
-                <p class="field form-input-required">
+                <p class="field form-input-required cvc">
                     ${form.cvc.label}
                     ${form.cvc}
                     % if form.cvc.error:
@@ -43,7 +52,7 @@ ${priority_switch.body()}
                 </p>
             </div>
             <p class="buttons">
-                <a class="button primary">${_('Charge me %s') % item.priority_price}</a>
+                <button class="primary">${_('Broadcast')}</button>
             </p>
         </form>
     </div>
