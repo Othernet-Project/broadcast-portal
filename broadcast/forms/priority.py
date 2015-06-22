@@ -23,7 +23,7 @@ class PaymentForm(form.Form):
     cvc = form.IntegerField(_("CVC"),
                             **{'data-stripe': 'cvc', 'size': 4})
     # Translators, used as label for credit card expiration month field
-    exp_month = form.IntegerField(_("Expiration (MM/YYYY)"),
+    exp_month = form.IntegerField(_("Expiration (MM/YY)"),
                                   **{'data-stripe': 'exp-month', 'size': 2})
     # Translators, used as label for credit card expiration year field
     exp_year = form.IntegerField(_("Expiration (MM/YYYY)"),
