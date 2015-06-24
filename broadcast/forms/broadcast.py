@@ -186,29 +186,53 @@ def list_zipfile(zip_filepath):
 
 
 class ContentForm(form.Form):
+    messages = {
+        # Translators, upload form error when data is tampered with
+        'tampered': _('Form data missing or has been tampered with.'),
+        # Translators, upload form error when form expires
+        'expired': _('Form expired, please retry the submission.'),
+    }
+
     type = ContentItem.type
 
     id = form.HiddenField(validators=[form.Required()])
     signature = form.HiddenField(validators=[form.Required()])
-    # Translators, used as label for content file upload field
-    content_file = form.FileField(_("Content file"),
-                                  placeholder=_('content'),
-                                  validators=[form.Required()])
-    # Translators, used as label for content title field
-    title = form.StringField(_("Content title"),
-                             placeholder=_('content title'),
-                             validators=[form.Required()])
-    # Translators, used as label for content license field
-    license = form.SelectField(_("License"),
-                               choices=LICENSE_CHOICES,
-                               validators=[form.Required()])
-    # Translators, used as label for content language field
-    language = form.SelectField(_("Language"),
-                                choices=LOCALE_CHOICES,
-                                validators=[form.Required()])
-    # Translators, used as label for content link field
-    url = form.StringField(_("Choose your content link"),
-                           validators=[form.Required()])
+    content_file = form.FileField(
+        # Translators, used as label for content file upload field
+        _("Content file"),
+        placeholder=_('content'),
+        validators=[form.Required()],
+        messages={
+            # Translators, upload form error, do not translate '{formats}'
+            'file_format': _('Only {formats} files are allowed.'),
+            # Translators, upload form error, do not translate '{size}'
+            'file_size': _('Files larger than {size} are not allowed.'),
+            # Translators, upload form error, do not translate '{filename}'
+            'index': _('No HTML file found in {filename}'),
+        })
+    title = form.StringField(
+        # Translators, used as label for content title field
+        _("Content title"),
+        placeholder=_('content title'),
+        validators=[form.Required()])
+    license = form.SelectField(
+        # Translators, used as label for content license field
+        _("License"),
+        choices=LICENSE_CHOICES,
+        validators=[form.Required()])
+    language = form.SelectField(
+        # Translators, used as label for content language field
+        _("Language"),
+        choices=LOCALE_CHOICES,
+        validators=[form.Required()])
+    url = form.StringField(
+        # Translators, used as label for content link field
+        _("Your content link"),
+        validators=[form.Required()],
+        messages={
+            # Translators, upload form error message
+            'url': _('The chosen link is already in use.'),
+        })
 
     def postprocess_content_file(self, file_upload):
         # validate extension
@@ -216,16 +240,16 @@ class ContentForm(form.Form):
         valid = request.app.config['content.allowed_upload_extensions']
 
         if ext not in valid:
-            msg = _("Only {0} files are allowed.").format(",".join(valid))
-            raise form.ValidationError(msg, {})
+            formats = ",".join(valid)
+            raise form.ValidationError('file_format', {'formats': formats})
 
         # validate file size
         allowed_size = request.app.config['content.size_limit']
         file_size = get_file_size(file_upload.file, limit=allowed_size)
+
         if file_size > allowed_size:
             h_size = html.hsize(allowed_size)
-            msg = _("Files larger than {0} are not allowed.").format(h_size)
-            raise form.ValidationError(msg, {})
+            raise form.ValidationError('file_size', {'size': h_size})
 
         self.processed_data['file_size'] = file_size
 
@@ -234,8 +258,8 @@ class ContentForm(form.Form):
                                             for ext in ('htm', 'html'))
         files = list_zipfile(file_upload.file)
         if not any(is_html_file(filename) for filename in files):
-            msg = _("No HTML file found in: {0}").format(file_upload.filename)
-            raise form.ValidationError(msg, {})
+            filename = file_upload.filename
+            raise form.ValidationError('index', {'filename': filename})
         # must seek to the beginning of file so it can be saved
         file_upload.file.seek(0)
 
@@ -245,8 +269,7 @@ class ContentForm(form.Form):
         template = request.app.config['content.url_template']
         content_url = template.format(value)
         if get_item('content', url=content_url):
-            message = _("The chosen path is already in use.")
-            raise form.ValidationError(message, {})
+            raise form.ValidationError('url', {})
 
         return content_url
 
@@ -255,20 +278,9 @@ class ContentForm(form.Form):
         signature = self.processed_data['signature']
         secret_key = request.app.config.get('app.secret_key')
         if signature != sign(id, secret_key):
-            message = _("Form data missing or has been tampered with.")
-            raise form.ValidationError(message, {})
-
+            raise form.ValidationError('tampered', {})
         if get_item('content', id=id):
-            message = _("Form expired, please retry the submission.")
-            raise form.ValidationError(message, {})
-
-
-class TwitterHandle(form.Validator):
-
-    def validate(self, data):
-        if not data.startswith('@'):
-            message = _("A twitter handle must begin with the @ character.")
-            raise form.ValidationError(message, {})
+            raise form.ValidationError('expired', {})
 
 
 class TwitterForm(form.Form):
@@ -277,11 +289,18 @@ class TwitterForm(form.Form):
     PAYMENT_PLANS = (
         ('lifetime', _("Lifetime")),
     )
-    # Translators, used as label for twitter handle(username)
-    handle = form.StringField(_("Twitter handle"),
-                              placeholder=_('@handle'),
-                              validators=[form.Required(), TwitterHandle()])
-    # Translators, used as label for payment plan
-    plan = form.SelectField(_("Payment plan"),
-                            choices=PAYMENT_PLANS,
-                            validators=[form.Required()])
+    handle = form.StringField(
+        # Translators, used as label for twitter handle(username)
+        _("Twitter handle"),
+        placeholder=_('@handle'),
+        validators=[form.Required()])
+    plan = form.SelectField(
+        # Translators, used as label for payment plan
+        _("Payment plan"),
+        choices=PAYMENT_PLANS,
+        validators=[form.Required()])
+
+    def postprocess_handle(self, value):
+        if value and not value.startswith('@'):
+            return '@' + value
+        return value
