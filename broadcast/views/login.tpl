@@ -27,9 +27,12 @@
             </p>
             <p class="buttons">
                 <button type="submit" class="primary"><span class="icon"></span> ${_('Login')}</button>
+                ## Translators, appears as separator between Login button and
+                ## Register now button.
+                ${_('or')}
+                <a class="button" href="${url('register')}">${_("Register now")}</a>
             </p>
             <p class="help">
-                <a href="${url('register')}">${_("Register now!")}</a>
                 <a href="${url('send_confirmation_form')}">${_("Didn't receive the confirmation e-mail?")}</a>
             </p>
         </form>

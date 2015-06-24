@@ -17,6 +17,11 @@ from ..util import auth
 
 
 class LoginForm(form.Form):
+    messages = {
+        # Translators, error shown when log in attempt fails
+        'invalid': _("Please enter the correct username and password."),
+    }
+
     # Translators, used as label for a login field
     username = form.StringField(_("Username or E-mail"),
                                 placeholder=_('username or e-mail'),
@@ -31,42 +36,63 @@ class LoginForm(form.Form):
         password = self.processed_data['password']
 
         if not auth.login_user(username, password):
-            message = _("Please enter the correct username and password.")
-            raise form.ValidationError(message, {})
+            raise form.ValidationError('invalid', {})
 
 
 class RegistrationForm(form.Form):
-    # Translators, used as label in create user form
-    username = form.StringField(_("Username"),
-                                validators=[form.Required()],
-                                placeholder=_('username'))
-    # Translators, used as label in create user form
-    email = form.StringField(_("E-mail"),
-                             validators=[form.Required()],
-                             placeholder=_('e-mail'))
-    # Translators, used as label in create user form
-    password1 = form.PasswordField(_("Password"),
-                                   validators=[form.Required()],
-                                   placeholder=_('password'))
-    # Translators, used as label in create user form
-    password2 = form.PasswordField(_("Confirm Password"),
-                                   validators=[form.Required()],
-                                   placeholder=_('confirm password'))
+    min_password_length = 4
+    messages = {
+        'pwmatch': _("The entered passwords do not match."),
+    }
+
+    username = form.StringField(
+        # Translators, used as label in create user form
+        _("Username"),
+        validators=[form.Required()],
+        placeholder=_('username'),
+        messages={
+            'username_taken': _("Username already taken."),
+        })
+    email = form.StringField(
+        # Translators, used as label in create user form
+        _("Email"),
+        validators=[form.Required()],
+        placeholder=_('Email'),
+        messages={
+            'email_invalid': _("Invalid e-mail address entered."),
+            'email_taken': _("E-mail address already registered."),
+        })
+    password1 = form.PasswordField(
+        # Translators, used as label in create user form
+        _("Password"),
+        validators=[form.Required()],
+        placeholder=_('password'),
+        messages={
+            'password_length': _('Must be longer than {length} characters.'),
+        })
+    password2 = form.PasswordField(
+        # Translators, used as label in create user form
+        _("Confirm Password"),
+        validators=[form.Required()],
+        placeholder=_('confirm password'))
+
+    def preprocess_password(self, value):
+        if len(value) < self.min_password_length:
+            raise form.ValidationError('password_length',
+                                       {'length': self.min_password_length})
 
     def postprocess_email(self, value):
         if not re.match(r'[^@]+@[^@]+\.[^@]+', value):
-            message = _("Invalid e-mail address entered.")
-            raise form.ValidationError(message, {})
+            raise form.ValidationError('email_invalid', {})
 
         if auth.get_user(value):
-            message = _("E-mail address already registered.")
-            raise form.ValidationError(message, {})
+            raise form.ValidationError('email_taken', {})
 
         return value
 
     def postprocess_username(self, value):
         if auth.get_user(value):
-            raise form.ValidationError(_("Username already taken."), {})
+            raise form.ValidationError('username_taken', {})
 
         return value
 
@@ -74,8 +100,7 @@ class RegistrationForm(form.Form):
         password1 = self.processed_data['password1']
         password2 = self.processed_data['password2']
         if password1 != password2:
-            message = _("The entered passwords do not match.")
-            raise form.ValidationError(message, {})
+            raise form.ValidationError('pwmatch', {})
 
 
 class ConfirmationForm(form.Form):
