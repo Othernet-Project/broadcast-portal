@@ -104,6 +104,9 @@ def broadcast_priority(item):
                                                 item_type=item.type,
                                                 item_id=item.id)
             redirect(scheduled_url)
+    else:
+        for field_name, field in form.fields.items():
+            print(field_name, field.error)
 
     return dict(mode='priority', item=item, form=form)
 

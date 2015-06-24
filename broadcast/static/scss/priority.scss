@@ -6,10 +6,7 @@
   }
 
   .inline-fields {
-    white-space: nowrap;
-
     .field {
-      white-space: normal;
       display: inline-block;
       input {
         width: 150px;
@@ -27,6 +24,10 @@
       @include phone-portrait-wide {
         float: none;
       }
+    }
+
+    .field-help {
+      clear: both;
     }
 
     .expiration {

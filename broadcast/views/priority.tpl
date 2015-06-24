@@ -50,6 +50,12 @@ ${priority_switch.body()}
                     ${form.exp_year.error}
                     % endif
                 </p>
+                <p class="field-help">
+                ${_('''CVC number is a 3-digit security code normally appears
+                on the back of the card towards the right edge of the signature
+                field, or 4-digit code just above the card number on the
+                right.''')}
+                </p>
             </div>
             <p class="buttons">
                 <button class="primary">${_('Broadcast')}</button>
@@ -61,6 +67,15 @@ ${priority_switch.body()}
 
 <%block name="extra_scripts">
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script type="text/javascript">
+    'use strict';
+    window.messages = {
+        cardError: "${_('Check the card number')}",
+        cvcError: "${_('Check the CVC number')}",
+        monthRangeError: "${_('Number entered for month is too small or too big')}",
+        dateError: "${_('Enter only numbers for expiry date')}",
+        expError: "${_('Check the expiration date on your card')}"
+    };
+    </script>
     <script src="${assets['js/priority']}"></script>
 </%block>
-

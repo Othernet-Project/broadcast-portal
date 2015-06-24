@@ -54,26 +54,48 @@
 
     checkCard = function () {
         var el = $(this).removeMarks(),
+            parent = el.parent('p'),
+            isCardValid,
             card = check.extractDigits(el.val());
+        parent.clearErrors();
         if (card.length < 16) {
             return;
         }
-        el.togglePositive(check.mod10check(card));
+        isCardValid = check.mod10check(card);
+        el.togglePositive(isCardValid);
+        if (!isCardValid) {
+            parent.markError(window.messages.cardError);
+        }
     };
 
     checkCvc = function () {
         var el = $(this).removeMarks(),
-            cvc = check.extractDigits(el.val());
+            parent = el.parent('p'),
+            card = check.extractDigits(cardField.val()),
+            cvc = check.extractDigits(el.val()),
+            isCvcValid;
+        parent.clearErrors();
         if (!cvc.length) {
             return;
         }
-        el.togglePositive(cvc.length === 3);
+        if (card) {
+            isCvcValid = check.cvcCheck(card, cvc);
+        } else {
+            isCvcValid = cvc.length === 3 || cvc.length === 4;
+        }
+        el.togglePositive(isCvcValid);
+        if (!isCvcValid) {
+            parent.markError(window.messages.cvcError);
+        }
     };
 
     checkExpiry = function () {
         var month = monthField.removeMarks().val(),
             year = yearField.removeMarks().val(),
+            parent = monthField.parent('p'),
             expiryOK;
+
+        parent.clearErrors();
 
         if (!month.toString().length || year.toString().length < 2) {
             return;
@@ -85,17 +107,25 @@
         if (isNaN(month) || isNaN(year)) {
             monthField.markNegative();
             yearField.markNegative();
+            parent.markError(window.messages.dateError);
             return;
         }
 
         if (month < 0 || month > 12) {
             monthField.markNegative();
             yearField.markNegative();
+            parent.markError(window.messages.monthRangeError);
             return;
         }
+
         expiryOK = check.expiry(month, year);
+
         monthField.togglePositive(expiryOK);
         yearField.togglePositive(expiryOK);
+
+        if (!expiryOK) {
+            parent.markError(window.messages.expError);
+        }
     };
 
     cardField.input(checkCard);
