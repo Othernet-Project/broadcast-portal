@@ -8,7 +8,7 @@
 </div>
 <div class="full-page-form">
     <p class="single confirm">
-    ${_("A confirmation link has been sent to %(email)s." % email}
+    ${_("A confirmation link has been sent to %(email)s.") % {'email': email}}
     </p>
 </div>
 </%block>
