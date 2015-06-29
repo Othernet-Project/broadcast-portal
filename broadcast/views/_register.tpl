@@ -32,6 +32,16 @@ ${h.form('post', action=url('register'))}
         ${registration_form.password2.error}
         % endif
     </p>
+    <p class="field form-input-agreements">
+        ${registration_form.tos_agree} ${registration_form.tos_agree.label % {'url': '/404'}}<br>
+        % if registration_form.tos_agree.error:
+        ${registration_form.tos_agree.error}
+        %endif
+        ${registration_form.priv_read} ${registration_form.priv_read.label % {'url': '/404'}}<br>
+        % if registration_form.priv_read.error:
+        ${registration_form.priv_read.error}
+        %endif
+    </p>
     <p class="buttons">
         <button type="submit" class="primary"><span class="icon"></span> ${_('Register')}</button>
     </p>
