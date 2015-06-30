@@ -879,7 +879,7 @@ input[type="checkbox"] + label:before {
   padding: 0.2em;
   vertical-align: middle;
   position: relative;
-  margin: 0 2px 0 4.5px;
+  margin: 0 6px 0 4.5px;
   padding: 0;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -1765,16 +1765,62 @@ table form button {
  * COPYING file that comes with the source code, or
  * http://www.gnu.org/licenses/gpl.txt.
  */
-/* line 5, ../scss/partials/_common.scss */
+/**
+ * _sprites.scss: sprite images with high-dpi display support
+ *
+ * Copyright 2014-2015, Outernet Inc.
+ * Some rights reserved.
+ *
+ * This software is free software licensed under the terms of GPLv3. See
+ * COPYING file that comes with the source code, or
+ * http://www.gnu.org/licenses/gpl.txt.
+ */
+/**
+ * _hdpi_images.scss: helpers for high-dpi display support
+ *
+ * Copyright 2014-2015, Outernet Inc.
+ * Some rights reserved.
+ *
+ * This software is free software licensed under the terms of GPLv3. See
+ * COPYING file that comes with the source code, or
+ * http://www.gnu.org/licenses/gpl.txt.
+ */
+/* line 7, ../scss/partials/_common.scss */
 body {
   padding-top: 60px;
   background: #333333; }
 
-/* line 10, ../scss/partials/_common.scss */
+/* line 12, ../scss/partials/_common.scss */
 .main, .body {
   background: #ffffff; }
 
-/* line 20, ../scss/partials/_common.scss */
+/* line 22, ../scss/partials/_common.scss */
+.menu {
+  background: #ffffff; }
+/* line 25, ../scss/partials/_common.scss */
+.menu .logo-broadcast {
+  display: inline-block;
+  vertical-align: middle;
+  background-image: url('../img/misc/1x-s08665caf1e.png');
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  width: 73px;
+  height: 22px;
+  text-indent: -119988px;
+  overflow: hidden;
+  text-align: left;
+  text-transform: capitalize; }
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
+  /* line 25, ../scss/partials/_common.scss */
+  .menu .logo-broadcast {
+    background-image: url('../img/misc/2x-se6ed19fb02.png');
+    background-position: 0 0;
+    -moz-background-size: 260px 255px;
+    -o-background-size: 260px 255px;
+    -webkit-background-size: 260px 255px;
+    background-size: 260px 255px; } }
+
+/* line 31, ../scss/partials/_common.scss */
 .h-bar {
   padding: 20px;
   text-align: center;
@@ -1782,7 +1828,7 @@ body {
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #dddddd; }
 
-/* line 26, ../scss/partials/_common.scss */
+/* line 37, ../scss/partials/_common.scss */
 .h-top-bar {
   padding: 10px;
   text-align: right;
@@ -1790,32 +1836,36 @@ body {
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #dddddd; }
 
-/* line 38, ../scss/partials/_common.scss */
+/* line 49, ../scss/partials/_common.scss */
 .full-page-form {
   max-width: 560px;
   margin: 0 auto;
   padding: 60px 20px; }
-/* line 41, ../scss/partials/_common.scss */
+/* line 52, ../scss/partials/_common.scss */
 .full-page-form input[type="text"], .full-page-form input[type="numeric"], .full-page-form input[type="email"], .full-page-form input[type="file"], .full-page-form input[type="password"], .full-page-form select, .full-page-form textarea {
   min-width: 200px;
   max-width: 100%;
   width: 100%; }
-/* line 54, ../scss/partials/_common.scss */
+/* line 65, ../scss/partials/_common.scss */
 .full-page-form .buttons, .full-page-form .help {
   padding-top: 1.5em;
   text-align: center; }
 
-/* line 60, ../scss/partials/_common.scss */
+/* line 71, ../scss/partials/_common.scss */
 .single {
   text-align: center;
   font-size: 125%;
   line-height: 130%; }
-/* line 64, ../scss/partials/_common.scss */
+/* line 75, ../scss/partials/_common.scss */
 .single.confirm {
   color: #058120; }
-/* line 68, ../scss/partials/_common.scss */
+/* line 79, ../scss/partials/_common.scss */
 .single.error {
   color: #c41414; }
+
+/* line 84, ../scss/partials/_common.scss */
+.center {
+  text-align: center; }
 
 /**
  * _media_query.scss: media query support
@@ -1915,29 +1965,32 @@ body {
   text-transform: capitalize;
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/misc/1x-sa2c70d9bab.png');
-  background-position: 0 -181px;
+  background-image: url('../img/misc/1x-s08665caf1e.png');
+  background-position: 0 -233px;
   background-repeat: no-repeat;
   width: 152px;
   height: 22px; }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 8, ../scss/partials/_mainmenu.scss */
   .menu .logo {
-    background-image: url('../img/misc/2x-s8f76f1acdc.png');
-    background-position: 0 -181px;
-    -moz-background-size: 260px 203px;
-    -o-background-size: 260px 203px;
-    -webkit-background-size: 260px 203px;
-    background-size: 260px 203px; } }
+    background-image: url('../img/misc/2x-se6ed19fb02.png');
+    background-position: 0 -233px;
+    -moz-background-size: 260px 255px;
+    -o-background-size: 260px 255px;
+    -webkit-background-size: 260px 255px;
+    background-size: 260px 255px; } }
+/* line 13, ../scss/partials/_mainmenu.scss */
+.menu #nav a:hover {
+  color: #555555; }
 
-/* line 15, ../scss/partials/_mainmenu.scss */
+/* line 19, ../scss/partials/_mainmenu.scss */
 .alt-menu .icon {
   width: 30px;
   margin-right: 0.5em; }
-/* line 20, ../scss/partials/_mainmenu.scss */
+/* line 24, ../scss/partials/_mainmenu.scss */
 .alt-menu .label {
   display: inline-block; }
-/* line 24, ../scss/partials/_mainmenu.scss */
+/* line 28, ../scss/partials/_mainmenu.scss */
 .alt-menu .level2-lang .selected {
   background: #e7f3e9;
   background-image: url('../img/icons/1x/form_positive.png?1434436248');
@@ -1945,7 +1998,7 @@ body {
   background-position: right 20px top 50%;
   color: #058120; }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 24, ../scss/partials/_mainmenu.scss */
+  /* line 28, ../scss/partials/_mainmenu.scss */
   .alt-menu .level2-lang .selected {
     background-image: url('../img/icons/2x/form_positive.png?1434436346');
     -moz-background-size: 25px, 25px;
@@ -1983,8 +2036,8 @@ footer {
 footer .logo {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/misc/1x-sa2c70d9bab.png');
-  background-position: 0 0;
+  background-image: url('../img/misc/1x-s08665caf1e.png');
+  background-position: 0 -52px;
   background-repeat: no-repeat;
   width: 260px;
   height: 60px;
@@ -1996,27 +2049,48 @@ footer .logo {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 10, ../scss/partials/_footer.scss */
   footer .logo {
-    background-image: url('../img/misc/2x-s8f76f1acdc.png');
-    background-position: 0 0;
-    -moz-background-size: 260px 203px;
-    -o-background-size: 260px 203px;
-    -webkit-background-size: 260px 203px;
-    background-size: 260px 203px; } }
+    background-image: url('../img/misc/2x-se6ed19fb02.png');
+    background-position: 0 -52px;
+    -moz-background-size: 260px 255px;
+    -o-background-size: 260px 255px;
+    -webkit-background-size: 260px 255px;
+    background-size: 260px 255px; } }
 /* line 16, ../scss/partials/_footer.scss */
 footer .copyright {
   font-size: 87.5%;
   line-height: 137.5%; }
 
-/* line 1, ../scss/partials/_switch.scss */
+/**
+ * _colors.scss: color definitions
+ *
+ * Copyright 2014-2015, Outernet Inc.
+ * Some rights reserved.
+ *
+ * This software is free software licensed under the terms of GPLv3. See
+ * COPYING file that comes with the source code, or
+ * http://www.gnu.org/licenses/gpl.txt.
+ */
+/**
+ * _media_query.scss: media query support
+ *
+ * Copyright 2014-2015, Outernet Inc.
+ * Some rights reserved.
+ *
+ * This software is free software licensed under the terms of GPLv3. See
+ * COPYING file that comes with the source code, or
+ * http://www.gnu.org/licenses/gpl.txt.
+ */
+/* line 4, ../scss/partials/_switch.scss */
 .switch {
   max-width: 650px;
   min-height: 60px;
   margin: 0 auto; }
-/* line 5, ../scss/partials/_switch.scss */
+/* line 8, ../scss/partials/_switch.scss */
 .switch .left, .switch .right {
   border: 1px solid #dddddd;
   padding: 10px 0;
   width: 50%;
+  height: 44px;
   float: left;
   background-color: #ffffff;
   -moz-box-sizing: border-box;
@@ -2026,18 +2100,39 @@ footer .copyright {
 /* line 36, ../scss/outernet/mixins/_hyperlinks.scss */
 .switch .left:visited, .switch .right:visited {
   color: #e17502; }
-/* line 14, ../scss/partials/_switch.scss */
+@media only screen and (max-width: 640px) {
+  /* line 8, ../scss/partials/_switch.scss */
+  .switch .left, .switch .right {
+    float: none;
+    display: block;
+    margin-bottom: 1em;
+    width: 100%; } }
+/* line 25, ../scss/partials/_switch.scss */
 .switch .left {
   border-right: 0 none;
   -moz-border-radius: 100px 0 0 100px;
   -webkit-border-radius: 100px;
   border-radius: 100px 0 0 100px; }
-/* line 18, ../scss/partials/_switch.scss */
+@media only screen and (max-width: 640px) {
+  /* line 25, ../scss/partials/_switch.scss */
+  .switch .left {
+    border: 1px solid #dddddd;
+    -moz-border-radius: 100px;
+    -webkit-border-radius: 100px;
+    border-radius: 100px; } }
+/* line 34, ../scss/partials/_switch.scss */
 .switch .right {
   -moz-border-radius: 0 100px 100px 0;
   -webkit-border-radius: 0;
   border-radius: 0 100px 100px 0; }
-/* line 21, ../scss/partials/_switch.scss */
+@media only screen and (max-width: 640px) {
+  /* line 34, ../scss/partials/_switch.scss */
+  .switch .right {
+    border: 1px solid #dddddd;
+    -moz-border-radius: 100px;
+    -webkit-border-radius: 100px;
+    border-radius: 100px; } }
+/* line 42, ../scss/partials/_switch.scss */
 .switch .icon {
   display: inline-block;
   visibility: hidden;
@@ -2048,23 +2143,115 @@ footer .copyright {
   width: 25px;
   height: 25px; }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 21, ../scss/partials/_switch.scss */
+  /* line 42, ../scss/partials/_switch.scss */
   .switch .icon {
     background-image: url('../img/icons/2x/checkmark.png?1434645425');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
     background-size: 25px, 25px; } }
-/* line 29, ../scss/partials/_switch.scss */
+/* line 50, ../scss/partials/_switch.scss */
 .switch .active {
   background-color: #eeeeee;
   color: #058120; }
 /* line 36, ../scss/outernet/mixins/_hyperlinks.scss */
 .switch .active:visited {
   color: #058120; }
-/* line 32, ../scss/partials/_switch.scss */
+/* line 53, ../scss/partials/_switch.scss */
 .switch .active .icon {
   visibility: visible; }
+
+/**
+ * _sprites.scss: sprite images with high-dpi display support
+ *
+ * Copyright 2014-2015, Outernet Inc.
+ * Some rights reserved.
+ *
+ * This software is free software licensed under the terms of GPLv3. See
+ * COPYING file that comes with the source code, or
+ * http://www.gnu.org/licenses/gpl.txt.
+ */
+/**
+ * _hdpi_images.scss: helpers for high-dpi display support
+ *
+ * Copyright 2014-2015, Outernet Inc.
+ * Some rights reserved.
+ *
+ * This software is free software licensed under the terms of GPLv3. See
+ * COPYING file that comes with the source code, or
+ * http://www.gnu.org/licenses/gpl.txt.
+ */
+/* line 3, ../scss/partials/_feedback.scss */
+.feedback {
+  padding-top: 3em;
+  padding-bottom: 4em;
+  text-align: center; }
+/* line 9, ../scss/partials/_feedback.scss */
+.feedback .icon {
+  display: inline-block;
+  margin-bottom: 1em; }
+/* line 14, ../scss/partials/_feedback.scss */
+.feedback.success .icon {
+  display: inline-block;
+  vertical-align: middle;
+  background-image: url('../img/icons/1x-sf4b31e0c47.png');
+  background-position: 0 -1835px;
+  background-repeat: no-repeat;
+  width: 100px;
+  height: 100px; }
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
+  /* line 14, ../scss/partials/_feedback.scss */
+  .feedback.success .icon {
+    background-image: url('../img/icons/2x-s6d0f401e5d.png');
+    background-position: 0 -1835px;
+    -moz-background-size: 100px 4594px;
+    -o-background-size: 100px 4594px;
+    -webkit-background-size: 100px 4594px;
+    background-size: 100px 4594px; } }
+/* line 18, ../scss/partials/_feedback.scss */
+.feedback.error .icon {
+  display: inline-block;
+  vertical-align: middle;
+  background-image: url('../img/icons/1x-sf4b31e0c47.png');
+  background-position: 0 -2535px;
+  background-repeat: no-repeat;
+  width: 100px;
+  height: 100px; }
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
+  /* line 18, ../scss/partials/_feedback.scss */
+  .feedback.error .icon {
+    background-image: url('../img/icons/2x-s6d0f401e5d.png');
+    background-position: 0 -2535px;
+    -moz-background-size: 100px 4594px;
+    -o-background-size: 100px 4594px;
+    -webkit-background-size: 100px 4594px;
+    background-size: 100px 4594px; } }
+/* line 22, ../scss/partials/_feedback.scss */
+.feedback.email .icon {
+  display: inline-block;
+  vertical-align: middle;
+  background-image: url('../img/icons/1x-sf4b31e0c47.png');
+  background-position: 0 -2405px;
+  background-repeat: no-repeat;
+  width: 100px;
+  height: 100px; }
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
+  /* line 22, ../scss/partials/_feedback.scss */
+  .feedback.email .icon {
+    background-image: url('../img/icons/2x-s6d0f401e5d.png');
+    background-position: 0 -2405px;
+    -moz-background-size: 100px 4594px;
+    -o-background-size: 100px 4594px;
+    -webkit-background-size: 100px 4594px;
+    background-size: 100px 4594px; } }
+/* line 26, ../scss/partials/_feedback.scss */
+.feedback .main {
+  font-size: 125%;
+  line-height: 130%;
+  margin: 0; }
+/* line 31, ../scss/partials/_feedback.scss */
+.feedback .sub {
+  color: #bbbbbb; }
 
 /* line 1, ../scss/partials/_tab.scss */
 .tab {
@@ -2111,40 +2298,48 @@ footer .copyright {
  * COPYING file that comes with the source code, or
  * http://www.gnu.org/licenses/gpl.txt.
  */
-/* line 4, ../scss/priority.scss */
+/* line 3, ../scss/priority.scss */
+.priority-help {
+  color: #888888;
+  font-size: 87.5%;
+  line-height: 137.5%;
+  max-width: 640px;
+  margin: 0 auto; }
+
+/* line 11, ../scss/priority.scss */
 #payment-form .form-errors {
   display: none; }
-/* line 9, ../scss/priority.scss */
+/* line 16, ../scss/priority.scss */
 #payment-form .inline-fields .field {
   display: inline-block; }
-/* line 11, ../scss/priority.scss */
+/* line 18, ../scss/priority.scss */
 #payment-form .inline-fields .field input {
   width: 150px;
   min-width: 0; }
 @media only screen and (max-width: 640px) {
-  /* line 9, ../scss/priority.scss */
+  /* line 16, ../scss/priority.scss */
   #payment-form .inline-fields .field {
     display: block; } }
-/* line 21, ../scss/priority.scss */
+/* line 28, ../scss/priority.scss */
 #payment-form .inline-fields .cvc {
   float: left; }
 @media only screen and (max-width: 640px) {
-  /* line 21, ../scss/priority.scss */
+  /* line 28, ../scss/priority.scss */
   #payment-form .inline-fields .cvc {
     float: none; } }
-/* line 29, ../scss/priority.scss */
+/* line 36, ../scss/priority.scss */
 #payment-form .inline-fields .field-help {
   clear: both; }
-/* line 33, ../scss/priority.scss */
+/* line 40, ../scss/priority.scss */
 #payment-form .inline-fields .expiration {
   float: right; }
 @media only screen and (max-width: 640px) {
-  /* line 33, ../scss/priority.scss */
+  /* line 40, ../scss/priority.scss */
   #payment-form .inline-fields .expiration {
     float: none; }
-  /* line 39, ../scss/priority.scss */
+  /* line 46, ../scss/priority.scss */
   #payment-form .inline-fields .expiration input {
     width: 44%; } }
-/* line 46, ../scss/priority.scss */
+/* line 53, ../scss/priority.scss */
 #payment-form .buttons {
   clear: both; }
