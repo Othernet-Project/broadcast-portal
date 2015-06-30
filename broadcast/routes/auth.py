@@ -70,7 +70,14 @@ def send_confirmation(email=None):
                          text='email/confirm',
                          data={'confirmation_key': confirmation_key},
                          config=request.app.config)
-    return template('confirmation_sent', email=email)
+    return template('feedback',
+                    page_title=_('Account registration complete'),
+                    status='success',
+                    redirect_url=request.app.get_url('login'),
+                    message=_('Confirmation email has been sent to '
+                              '{address}. Check your inbox.').format(
+                                  address=email),
+                    redirect_target=_('log-in'))
 
 
 @view('confirmed')
