@@ -9,6 +9,10 @@
     @include hide-text;
     @include misc-icon(logo_menu, yes);
   }
+
+  #nav a:hover {
+    color: $base;
+  }
 }
 
 .alt-menu {
