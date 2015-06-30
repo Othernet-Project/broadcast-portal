@@ -1,3 +1,6 @@
+@import "outernet/mixins/colors";
+@import "outernet/mixins/media_query";
+
 .switch {
   max-width: 650px;
   min-height: 60px;
@@ -6,17 +9,35 @@
     border: 1px solid $border;
     padding: 10px 0;
     width: 50%;
+    height: 44px;
     float: left;
     background-color: $white;
     @include box-sizing(border-box);
     @include link-cta;
+
+    @include phone-portrait-wide {
+      float: none;
+      display: block;
+      margin-bottom: 1em;
+      width: 100%;
+    }
   }
   .left {
     border-right: 0 none;
     @include border-radius(100px 0 0 100px);
+
+    @include phone-portrait-wide {
+      border: 1px solid $border;
+      @include border-radius(100px);
+    }
   }
   .right {
     @include border-radius(0 100px 100px 0);
+
+    @include phone-portrait-wide {
+      border: 1px solid $border;
+      @include border-radius(100px);
+    }
   }
   .icon {
     display: inline-block;
