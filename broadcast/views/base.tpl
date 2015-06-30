@@ -5,8 +5,8 @@
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title><%block name="title">Broadcast your content</%block> - Outernet</title>
-        % if redirect is not UNDEFINED:
-        <meta http-equiv="refresh" content="5; url=${redirect}">
+        % if redirect_url is not UNDEFINED:
+        <meta http-equiv="refresh" content="5; url=${redirect_url}">
         % endif
         <link rel="stylesheet" href="${assets['css/main']}">
         <%block name="extra_head"/>
@@ -16,6 +16,7 @@
         <header class="menu">
             <div class="menu-subblock">
                 <a class="logo" href="${url('main')}"><span lang="en">Outernet</span></a>
+                <a class="logo-broadcast" href="${url('main')}"></span>${_('Broadcast center')}</span></a>
             </div>
             <div class="menu-block-right">
                 <nav id="nav" class="menu-subblock toolbar">
@@ -46,6 +47,18 @@
         </footer>
         </%block>
 
+        <script type="text/template" id="menu">
+            <nav class="alt-menu">
+                <div class="level1" id="top">
+                    % if request.user.is_authenticated:
+                    <a href="${url('logout')}" class="logout"><span class="label">${_("Log out")}</span></a>
+                    % else:
+                    <a href="${url('login')}" class="login"><span class="label">${_("Login")}</span></a>
+                    <a href="${url('register_form')}" class="register"><span class="label">${_("Register")}</span></a>
+                    % endif
+                </div>
+            </nav>
+        </script>
         <script src="${assets['js/ui']}"></script>
         <%block name="extra_scripts"/>
     </body>
