@@ -20,5 +20,20 @@
             </span>
             % endif
         </div>
+        <p class="priority-help">
+        % if mode == 'free':
+        ${_('''Your content will be reviewed by staff and broadcast at earliest
+        occasion possible. This depends on total volume of content being
+        submitted by other users.''')}
+        % else:
+        ${_('''After completing the payment, your content will be reviewed by 
+        Outernet staff and broadcast during Outernet's working hours (week days
+        between 11am and 7pm Chicago time).''')}
+        <strong>
+            ${_('''Your card will be charged %(amount)s after content is
+            broadcast.''') % {'amount': item.priority_price}}
+        </strong>
+        % endif
+        </p>
     </div>
 </div>

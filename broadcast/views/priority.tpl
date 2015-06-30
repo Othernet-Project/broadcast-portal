@@ -8,16 +8,6 @@ ${priority_switch.body()}
 
 <div class="full-page-form">
     <div class="priority">
-        <p>
-        ${_('''After completing the payment, your content will be reviewed by 
-        Outernet staff and broadcast during the working hours (week days
-        between 11am and 7pm Chicago time.''')}
-        <strong>
-            ${_('''Your card will be charged %(amount)s after content is
-            broadcast.''') % {'amount': item.priority_price}}
-        </strong>
-        </p>
-
         ${h.form('post', _id='payment-form', action=url('broadcast_priority', item_type=item.type, item_id=item.id))}
             % if form.error:
             ${form.error}

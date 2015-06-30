@@ -4,15 +4,9 @@
 ${priority_switch.body()}
 
 <div class="full-page-form">
-    <div class="free">
-        <p>
-        ${_('''Your content will be reviewed by staff and broadcast at earliest
-        occasion possible. This depends on total volume of content being
-        submitted by other users.''')}
-        </p>
-        <p>
-        <a class="button primary" href="${url('broadcast_content_form')}">
-            ${_('Broadcast something else')}
+    <div class="free center">
+        <a class="button" href="${url('broadcast_content_form')}">
+            <span class="icon"></span> ${_('Broadcast something else')}
         </a>
         </p>
     </div>
