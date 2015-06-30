@@ -3,7 +3,7 @@
 <%block name="main">
 <div class="full-page-form">
     <div class="password-reset">
-        ${h.form('post', action=url('password_reset'))}
+        ${h.form('post', action=url('password_reset', key=form.key.value))}
             % if form.error:
             ${form.error}
             % endif
