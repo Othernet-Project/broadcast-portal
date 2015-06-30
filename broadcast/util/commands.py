@@ -14,6 +14,7 @@ import sys
 
 from . import auth
 from .squery import DatabaseContainer
+from .static import rebuild_assets
 
 
 COMMANDS = dict()
@@ -54,6 +55,13 @@ def create_superuser(config):
         print("Invalid user credentials, please try again.")
         create_superuser(config)
 
+    sys.exit(0)
+
+
+@command('assets')
+def assets(config):
+    print("Rebuilding assets")
+    rebuild_assets(config)
     sys.exit(0)
 
 

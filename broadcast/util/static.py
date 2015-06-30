@@ -1,7 +1,10 @@
 import os
+import glob
+import logging
 import functools
 
 import webassets
+from webassets.script import CommandLineEnvironment
 
 from bottle import request, BaseTemplate
 
@@ -119,7 +122,8 @@ def parse_bundle(bundle):
     return bundle_name, bundle_content
 
 
-def pre_init(config):
+def make_assets(config):
+    """ Create Assets instance from dict-like config object """
     assets_dir = os.path.join(PKGDIR, config['assets.directory'])
     assets_url = config['assets.url']
     assets_debug = config['assets.debug']
@@ -134,7 +138,25 @@ def pre_init(config):
                    for b in config.get('assets.css_bundles', [])]
     for name, contents in css_bundles:
         assets.add_css_bundle(name, contents)
+    return assets
 
+
+def rebuild_assets(config):
+    config = config.copy()
+    config['assets.debug'] = True
+    assets = make_assets(config)
+    assets_dir = assets.env.directory
+    # Remove existing assets
+    for name, bundle in assets.env._named_bundles.items():
+        path = os.path.join(assets_dir, bundle.output) % {'version': '*'}
+        for p in glob.iglob(path):
+            os.unlink(p)
+    cmdenv = CommandLineEnvironment(assets.env, logging.getLogger('assets'))
+    cmdenv.invoke('build', {})
+
+
+def pre_init(config):
+    assets = make_assets(config)
     config['assets.manager'] = assets
 
 

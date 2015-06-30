@@ -21,6 +21,7 @@ def main():
     parser.add_argument('--conf', '-c', help='alternative configuration path',
                         default=CONF)
     parser.add_argument('--su', action='store_true', help='create superuser')
+    parser.add_argument('--assets', action='store_true', help='rebuild assets')
     args = parser.parse_args()
     start(args.conf, args)
 
