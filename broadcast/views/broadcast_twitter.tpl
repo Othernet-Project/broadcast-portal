@@ -2,8 +2,10 @@
 <%namespace name='broadcast_switch' file='_broadcast_switch.tpl'/>
 
 <%block name="main">
-<div class="full-page-form">
+<div class="h-bar">
     ${broadcast_switch.body()}
+</div>
+<div class="full-page-form">
     <div class="twitter">
         ${h.form('post', action=url('broadcast_twitter'), enctype="multipart/form-data")}
             % if form.error:
