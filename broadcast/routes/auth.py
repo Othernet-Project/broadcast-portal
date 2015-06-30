@@ -85,17 +85,30 @@ def send_confirmation(email=None):
                     redirect_target=_('log-in'))
 
 
-@view('confirmed')
+@view('feedback')
 def confirm(key):
     try:
         email = confirm_user(key)
     except KeyExpired:
-        return {'error': _("The confirmation key has already expired.")}
+        return {'message': _("The confirmation key has already expired."),
+                'page_title': _("Confirmation"),
+                'status': 'error',
+                'redirect_url': request.app.get_url('login'),
+                'redirect_target': _('log-in')}
     except KeyNotFound:
-        return {'error': _("The confirmation key is not valid.")}
+        return {'message': _("The confirmation key is not valid."),
+                'page_title': _("Confirmation"),
+                'status': 'error',
+                'redirect_url': request.app.get_url('login'),
+                'redirect_target': _('log-in')}
     else:
         login_user_no_auth(email)
-        return {'error': None}
+        return {'message': _("E-mail address successfully confirmed. You have "
+                             "been automatically logged in."),
+                'page_title': _("Confirmation"),
+                'status': 'success',
+                'redirect_url': request.app.get_url('main'),
+                'redirect_target': _('the main page')}
 
 
 @view('password_reset_request')
