@@ -1,6 +1,8 @@
+@import "compass/typography";
 @import "outernet/mixins/colors";
 @import "outernet/mixins/grid";
 @import "outernet/mixins/media_query";
+@import "sprites";
 
 body {
   padding-top: 60px;
@@ -15,6 +17,15 @@ body {
   background: $earth;
   border-top: 1px solid $border;
   border-bottom: 1px solid $border;
+}
+
+.menu {
+  background: $white;
+
+  .logo-broadcast {  
+    @include misc-icon('broadcastcenter');
+    @include hide-text;
+  }
 }
 
 .h-bar {
