@@ -33,7 +33,6 @@
     }
 
     function previewPath() {
-      console.log(prefix + url.val());
       var absUrl = prefix + url.val();
       preview.text(absUrl);
     }
