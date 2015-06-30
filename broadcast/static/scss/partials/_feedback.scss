@@ -19,6 +19,10 @@
     @include icon('error');
   }
 
+  &.email .icon {
+    @include icon('emailsent');
+  }
+
   .main {
     @include heading-5;
     margin: 0;

@@ -72,7 +72,7 @@ def send_confirmation(email=None):
                          config=request.app.config)
     return template('feedback',
                     page_title=_('Account registration complete'),
-                    status='success',
+                    status='email',
                     redirect_url=request.app.get_url('login'),
                     message=_('Confirmation email has been sent to '
                               '{address}. Check your inbox.').format(
