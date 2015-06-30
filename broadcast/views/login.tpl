@@ -1,7 +1,9 @@
 <%inherit file="base.tpl"/>
 <%namespace name='register_form' file='_register.tpl'/>
 
-<%block name="main">
+<div class="h-bar">
+    <h2>${_('Log in')}</h2>
+</div>
 <div class="full-page-form">
     <div class="login">
         ${h.form('post', action=url('login'))}
@@ -26,7 +28,7 @@
                 % endif
             </p>
             <p class="buttons">
-                <button type="submit" class="primary"><span class="icon"></span> ${_('Login')}</button>
+                <button type="submit" class="primary"><span class="icon"></span> ${_('Log in')}</button>
                 ## Translators, appears as separator between Login button and
                 ## Register now button.
                 ${_('or')}
@@ -38,4 +40,3 @@
         </form>
     </div>
 </div>
-</%block>
