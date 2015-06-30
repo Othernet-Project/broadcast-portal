@@ -112,7 +112,7 @@ def broadcast_priority(item):
 
 
 @login_required()
-@view('priority_scheduled')
+@view('feedback')
 @item_owner_or_404
 def show_broadcast_priority_scheduled(item):
     if item.charge_id is None:
@@ -121,8 +121,13 @@ def show_broadcast_priority_scheduled(item):
                                            item_type=item.type,
                                            item_id=item.id)
         redirect(priority_url)
-
-    return dict(item=item)
+    return dict(item=item,
+                status='success',
+                page_title='',
+                message=_('Priority broadcast has been successfully '
+                          'scheduled.'),
+                redirect_url=request.app.get_url('main'),
+                redirect_target=_('main page'))
 
 
 def route(conf):
