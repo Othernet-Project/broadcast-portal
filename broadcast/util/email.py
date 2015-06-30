@@ -18,9 +18,11 @@ except ImportError:
     from urlparse import urlparse
 
 import mandrill
-from bottle import request
-
-from .template import template
+# mako_template must be used because simplates do not support multiline strings
+# and our custom template function has the request object in it's context,
+# which for deferred tasks such as email sending causes the:
+# 'This request is not connected to an application' error.
+from bottle import request, mako_template as template
 
 
 def send_multiple(to_list, subject, text=None, html=None, data={},
@@ -49,11 +51,14 @@ def send_multiple(to_list, subject, text=None, html=None, data={},
     })
 
     logging.debug("Prepared message: %s" % message)
-
-    if text:
-        message['text'] = ''.join(template(text, **data))
-    if html:
-        message['html'] = ''.join(template(html, **data))
+    try:
+        if text:
+            message['text'] = ''.join(template(text, **data))
+        if html:
+            message['html'] = ''.join(template(html, **data))
+    except Exception as exc:
+        print(exc)
+        raise
 
     if use_template:
         try:
