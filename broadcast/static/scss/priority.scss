@@ -1,5 +1,12 @@
 @import "outernet/mixins/media_query";
 
+.priority-help {
+  color: $sub;
+  @include sub;
+  max-width: $phone-portrait-wide;
+  margin: 0 auto;
+}
+
 #payment-form {
   .form-errors {
     display: none;
