@@ -2,7 +2,7 @@
 
 <%block name="main">
 <div class="full-page-form">
-    <div class="confirm">
+    <div class="password-reset-request">
         ${h.form('post', action=url('password_reset_request'))}
             % if form.error:
             ${form.error}

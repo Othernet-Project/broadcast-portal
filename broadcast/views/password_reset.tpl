@@ -2,25 +2,25 @@
 
 <%block name="main">
 <div class="full-page-form">
-    <div class="confirm">
-        ${h.form('post', action=url('send_confirmation'))}
+    <div class="password-reset">
+        ${h.form('post', action=url('password_reset'))}
             % if form.error:
             ${form.error}
             % endif
             ${csrf_tag()}
             ${form.key}
             <p class="field form-input-required">
-                ${registration_form.new_password1.label}
-                ${registration_form.new_password1}
-                % if registration_form.new_password1.error:
-                ${registration_form.new_password1.error}
+                ${form.new_password1.label}
+                ${form.new_password1}
+                % if form.new_password1.error:
+                ${form.new_password1.error}
                 % endif
             </p>
             <p class="field form-input-required">
-                ${registration_form.new_password2.label}
-                ${registration_form.new_password2}
-                % if registration_form.new_password2.error:
-                ${registration_form.new_password2.error}
+                ${form.new_password2.label}
+                ${form.new_password2}
+                % if form.new_password2.error:
+                ${form.new_password2.error}
                 % endif
             </p>
             <p class="buttons">
