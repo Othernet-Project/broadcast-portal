@@ -129,7 +129,7 @@ class RegistrationForm(form.Form):
             raise form.ValidationError('pwmatch', {})
 
 
-class ConfirmationForm(form.Form):
+class EmailForm(form.Form):
     # Translators, used as label in create user form
     email = form.StringField(_("E-mail"),
                              validators=[form.Required()],
@@ -145,3 +145,46 @@ class ConfirmationForm(form.Form):
             raise form.ValidationError(message, {})
 
         return value
+
+
+class PasswordResetForm(form.Form):
+    min_password_length = 4
+    messages = {
+        # Translators, error shown when password reset fails
+        'pwmatch': _("The entered passwords do not match."),
+        'key_expired': _("The password reset key has already expired."),
+        'key_invalid': _("The password reset key is not valid.")
+    }
+    key = form.HiddenField()
+    new_password1 = form.PasswordField(
+        # Translators, used as label in password reset form
+        _("New Password"),
+        validators=[form.Required()],
+        placeholder=_('password'),
+        messages={
+            'password_length': _('Must be longer than {length} characters.'),
+        }
+    )
+    new_password2 = form.PasswordField(
+        # Translators, used as label in password reset form
+        _("Confirm New Password"),
+        validators=[form.Required()],
+        placeholder=_('password'),
+        messages={
+            'password_length': _('Must be longer than {length} characters.'),
+        }
+    )
+
+    def validate(self):
+        key = self.processed_data['key']
+        try:
+            auth.verify_temporary_key(key)
+        except auth.KeyExpired:
+            raise form.ValidationError('key_expired', {})
+        except auth.KeyNotFound:
+            raise form.ValidationError('key_invalid', {})
+
+        new_password1 = self.processed_data['new_password1']
+        new_password2 = self.processed_data['new_password2']
+        if new_password1 != new_password2:
+            raise form.ValidationError('pwmatch', {})

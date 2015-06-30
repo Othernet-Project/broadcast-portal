@@ -8,18 +8,22 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-from bottle import request, redirect, abort
+from bottle import request, redirect
 from bottle_utils.csrf import csrf_protect, csrf_token
 from bottle_utils.i18n import dummy_gettext as _
 
-from ..forms.auth import LoginForm, RegistrationForm, ConfirmationForm
+from ..forms.auth import (LoginForm,
+                          RegistrationForm,
+                          EmailForm,
+                          PasswordResetForm)
 from ..util.auth import (create_user,
                          get_user,
-                         create_confirmation,
+                         create_temporary_key,
                          confirm_user,
+                         reset_password,
                          login_user_no_auth,
-                         ConfirmationExpired,
-                         ConfirmationNotFound)
+                         KeyExpired,
+                         KeyNotFound)
 from ..util.email import send_mail
 from ..util.http import http_redirect
 from ..util.template import view, template
@@ -49,20 +53,20 @@ def login():
 @view('confirmation')
 @csrf_token
 def send_confirmation_form():
-    return dict(form=ConfirmationForm())
+    return dict(form=EmailForm())
 
 
 @csrf_protect
 def send_confirmation(email=None):
     if email is None:
-        form = ConfirmationForm(request.params)
+        form = EmailForm(request.params)
         if not form.is_valid():
             return template('confirmation', form=form)
 
         email = form.processed_data['email']
 
     expiration = request.app.config['authentication.confirmation_expires']
-    confirmation_key = create_confirmation(email, expiration)
+    confirmation_key = create_temporary_key(email, expiration)
     request.app.config['app.url'] = request.url
     task_runner = request.app.config['task.runner']
     task_runner.schedule(send_mail,
@@ -85,13 +89,69 @@ def send_confirmation(email=None):
 def confirm(key):
     try:
         email = confirm_user(key)
-    except ConfirmationExpired:
+    except KeyExpired:
         return {'error': _("The confirmation key has already expired.")}
-    except ConfirmationNotFound:
+    except KeyNotFound:
         return {'error': _("The confirmation key is not valid.")}
     else:
         login_user_no_auth(email)
         return {'error': None}
+
+
+@view('password_reset_request')
+@csrf_token
+def password_reset_request_form():
+    return dict(form=EmailForm())
+
+
+@csrf_protect
+def password_reset_request():
+    form = EmailForm(request.params)
+    if not form.is_valid():
+        return template('password_reset_request', form=form)
+
+    email = form.processed_data['email']
+    expiration = request.app.config['authentication.password_reset_expires']
+    reset_key = create_temporary_key(email, expiration)
+    request.app.config['app.url'] = request.url
+    task_runner = request.app.config['task.runner']
+    task_runner.schedule(send_mail,
+                         email,
+                         _("Reset Password"),
+                         text='email/password_reset',
+                         data={'reset_key': reset_key},
+                         config=request.app.config)
+    return template('feedback',
+                    page_title=_('Password reset email sent'),
+                    status='email',
+                    redirect_url=request.app.get_url('login'),
+                    message=_('An email with a password reset link has been '
+                              'sent to {address}. Check your inbox.').format(
+                                  address=email),
+                    redirect_target=_('log-in'))
+
+
+@view('password_reset')
+@csrf_token
+def password_reset_form(key):
+    return dict(form=PasswordResetForm({'key': key}))
+
+
+@csrf_protect
+def password_reset(key):
+    form = PasswordResetForm(request.forms)
+    if not form.is_valid():
+        return template('password_reset', form=form)
+
+    key = form.processed_data['key']
+    new_password = form.processed_data['new_password1']
+    reset_password(key, new_password)
+    return template('feedback',
+                    page_title=_('Password reset successful'),
+                    status='success',
+                    redirect_url=request.app.get_url('login'),
+                    message=_('You have successfully reset your password.'),
+                    redirect_target=_('log-in'))
 
 
 @view('register')
@@ -146,5 +206,9 @@ def route(conf):
         ('/confirm/', 'GET', send_confirmation_form, 'send_confirmation_form', {}),
         ('/confirm/', 'POST', send_confirmation, 'send_confirmation', {}),
         ('/confirm/<key:re:[0-9a-f]{32}>', 'GET', confirm, 'confirm', {}),
+        ('/password-reset/', 'GET', password_reset_request_form, 'password_reset_request_form', {}),
+        ('/password-reset/', 'POST', password_reset_request, 'password_reset_request', {}),
+        ('/password-reset/<key:re:[0-9a-f]{32}>', 'GET', password_reset_form, 'password_reset_form', {}),
+        ('/password-reset/<key:re:[0-9a-f]{32}>', 'POST', password_reset, 'password_reset', {}),
         ('/logout/', 'GET', logout, 'logout', {}),
     )

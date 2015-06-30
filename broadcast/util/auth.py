@@ -30,11 +30,11 @@ class InvalidUserCredentials(Exception):
     pass
 
 
-class ConfirmationNotFound(Exception):
+class KeyNotFound(Exception):
     pass
 
 
-class ConfirmationExpired(Exception):
+class KeyExpired(Exception):
     pass
 
 
@@ -189,19 +189,19 @@ def create_user(username, password, email, is_superuser=False,
         raise UserAlreadyExists()
 
 
-def create_confirmation(email, expiration, db=None):
-    confirmation_key = uuid.uuid4().hex
+def create_temporary_key(email, expiration, db=None):
+    key = uuid.uuid4().hex
     expires = datetime.datetime.utcnow() + datetime.timedelta(days=expiration)
-    data = {'key': confirmation_key,
+    data = {'key': key,
             'email': email,
             'expires': expires}
     db = db or request.db.sessions
     query = db.Insert('confirmations', cols=('key', 'email', 'expires'))
     db.execute(query, data)
-    return confirmation_key
+    return key
 
 
-def delete_confirmation(key, db=None):
+def delete_temporary_key(key, db=None):
     db = db or request.db.sessions
     db.query(db.Delete('confirmations', where='key = :key'), key=key)
 
@@ -212,19 +212,50 @@ def confirm_user(key, db=None):
     db.execute(query, dict(key=key))
     confirmation = db.result
     if not confirmation:
-        raise ConfirmationNotFound()
+        raise KeyNotFound()
 
     now = datetime.datetime.utcnow()
     if confirmation.expires < now:
-        delete_confirmation(key, db=db)
-        raise ConfirmationExpired()
+        delete_temporary_key(key, db=db)
+        raise KeyExpired()
 
     query = db.Update('users',
                       confirmed=':confirmed',
                       where='email = :email')
     db.query(query, confirmed=now, email=confirmation.email)
-    delete_confirmation(key, db=db)
+    delete_temporary_key(key, db=db)
     return confirmation.email
+
+
+def verify_temporary_key(key, db=None):
+    db = db or request.db.sessions
+    query = db.Select(sets='confirmations', where='key = :key')
+    db.execute(query, dict(key=key))
+    temp_key = db.result
+    if not temp_key:
+        raise KeyNotFound()
+
+    now = datetime.datetime.utcnow()
+    if temp_key.expires < now:
+        delete_temporary_key(key, db=db)
+        raise KeyExpired()
+
+
+def reset_password(key, new_password, db=None):
+    db = db or request.db.sessions
+    query = db.Select(sets='confirmations', where='key = :key')
+    db.execute(query, dict(key=key))
+    temp_key = db.result
+    change_password(temp_key.email, new_password, db=db)
+
+
+def change_password(email, new_password, db=None):
+    db = db or request.db.sessions
+    query = db.Update('users',
+                      password=':password',
+                      where='email = :email')
+    encrypted_password = encrypt_password(new_password)
+    db.query(query, password=encrypted_password, email=email)
 
 
 def get_user(username_or_email):
