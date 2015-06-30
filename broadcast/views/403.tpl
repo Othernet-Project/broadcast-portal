@@ -1,4 +1,4 @@
-<%inherit file='base.tpl'/>
+<%inherit file='skeleton.tpl'/>
 
 <%block name="main">
 <div class="h-bar">
