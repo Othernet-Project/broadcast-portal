@@ -201,6 +201,11 @@ def create_confirmation(email, expiration, db=None):
     return confirmation_key
 
 
+def delete_confirmation(key, db=None):
+    db = db or request.db.sessions
+    db.query(db.Delete('confirmations', where='key = :key'), key=key)
+
+
 def confirm_user(key, db=None):
     db = db or request.db.sessions
     query = db.Select(sets='confirmations', where='key = :key')
@@ -211,13 +216,14 @@ def confirm_user(key, db=None):
 
     now = datetime.datetime.utcnow()
     if confirmation.expires < now:
-        db.query(db.Delete('confirmations', where='key = :key'), key=key)
+        delete_confirmation(key, db=db)
         raise ConfirmationExpired()
 
     query = db.Update('users',
                       confirmed=':confirmed',
                       where='email = :email')
     db.query(query, confirmed=now, email=confirmation.email)
+    delete_confirmation(key, db=db)
 
 
 def get_user(username_or_email):
