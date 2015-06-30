@@ -17,6 +17,7 @@ from ..util.auth import (create_user,
                          get_user,
                          create_confirmation,
                          confirm_user,
+                         login_user_no_auth,
                          ConfirmationExpired,
                          ConfirmationNotFound)
 from ..util.email import send_mail
@@ -83,12 +84,13 @@ def send_confirmation(email=None):
 @view('confirmed')
 def confirm(key):
     try:
-        confirm_user(key)
+        email = confirm_user(key)
     except ConfirmationExpired:
         return {'error': _("The confirmation key has already expired.")}
     except ConfirmationNotFound:
         return {'error': _("The confirmation key is not valid.")}
     else:
+        login_user_no_auth(email)
         return {'error': None}
 
 

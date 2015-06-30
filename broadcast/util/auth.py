@@ -224,6 +224,7 @@ def confirm_user(key, db=None):
                       where='email = :email')
     db.query(query, confirmed=now, email=confirmation.email)
     delete_confirmation(key, db=db)
+    return confirmation.email
 
 
 def get_user(username_or_email):
@@ -232,6 +233,20 @@ def get_user(username_or_email):
                       where='username = :username OR email = :email')
     db.query(query, username=username_or_email, email=username_or_email)
     return db.result
+
+
+def login_user_no_auth(username_or_email):
+    """Makes the user of the passed in username or email logged in, with no
+    security verification whatsoever."""
+    user = get_user(username_or_email)
+    if user:
+        request.user = User(username=user.username,
+                            email=user.email,
+                            is_superuser=user.is_superuser,
+                            confirmed=user.confirmed,
+                            created=user.created,
+                            options=user.options)
+        request.session.rotate()
 
 
 def login_user(username_or_email, password):
