@@ -18,7 +18,9 @@ except ImportError:
     from urlparse import urlparse
 
 import mandrill
-from bottle import template, request
+from bottle import request
+
+from .template import template
 
 
 def send_multiple(to_list, subject, text=None, html=None, data={},
