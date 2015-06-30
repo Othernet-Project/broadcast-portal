@@ -17,4 +17,5 @@ def pre_init(config):
         'url': app.get_url,
         'csrf_tag': bottle_utils.csrf.csrf_tag,
         '_': lambda x: x,
+        'REDIRECT_DELAY': config['app.redirect_delay'],
     })
