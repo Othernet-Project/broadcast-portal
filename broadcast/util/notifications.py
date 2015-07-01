@@ -17,8 +17,34 @@ from .email import send_multiple
 from .squery import Database
 
 
+def add_time(source, **kwargs):
+    source_datetime = datetime.datetime.combine(datetime.date.today(), source)
+    return (source_datetime + datetime.timedelta(**kwargs)).time()
+
+
+def sub_time(source, **kwargs):
+    source_datetime = datetime.datetime.combine(datetime.date.today(), source)
+    return (source_datetime - datetime.timedelta(**kwargs)).time()
+
+
 def is_sending_time(send_at):
-    return True
+    hour, minute = map(int, send_at.split(':'))
+    send_at_time = datetime.time(hour, minute)
+    start = sub_time(send_at_time, minutes=5)
+    end = add_time(send_at_time, minutes=5)
+    timestamp = datetime.datetime.now().time()
+    return start <= timestamp <= end
+
+
+def is_already_sent(db):
+    for item_type in ('content', 'twitter'):
+        query = db.Select(sets=item_type,
+                          where="notified > date('now', 'start of day')")
+        db.query(query)
+        if db.results:
+            return True
+
+    return False
 
 
 def get_new_broadcast_entries(db):
@@ -38,12 +64,16 @@ def mark_notified(broadcast_entries, db):
 
 
 def send_notifications(app):
-    if not is_sending_time(app.config['notifications.send_at']):
-        return
-
     debug = app.config['server.debug']
     db_conn = app.config['database.connections']['main']
     db = Database(db_conn, debug=debug)
+    # check if we're within sending time range
+    if not is_sending_time(app.config['notifications.send_at']):
+        return
+    # check if we already sent it today
+    if is_already_sent(db):
+        return
+
     broadcast_entries = get_new_broadcast_entries(db)
     recipients = app.config['notifications.recipients']
     send_multiple([(email, email) for email in recipients],
