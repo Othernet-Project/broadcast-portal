@@ -235,31 +235,14 @@ class ContentForm(form.Form):
         })
 
     def postprocess_content_file(self, file_upload):
-        # validate extension
-        ext = get_extension(file_upload.filename)
-        valid = request.app.config['content.allowed_upload_extensions']
-
-        if ext not in valid:
-            formats = ",".join(valid)
-            raise form.ValidationError('file_format', {'formats': formats})
-
         # validate file size
         allowed_size = request.app.config['content.size_limit']
         file_size = get_file_size(file_upload.file, limit=allowed_size)
-
         if file_size > allowed_size:
             h_size = html.hsize(allowed_size)
             raise form.ValidationError('file_size', {'size': h_size})
 
         self.processed_data['file_size'] = file_size
-
-        # validate contents
-        is_html_file = lambda filename: any(filename.endswith(ext)
-                                            for ext in ('htm', 'html'))
-        files = list_zipfile(file_upload.file)
-        if not any(is_html_file(filename) for filename in files):
-            filename = file_upload.filename
-            raise form.ValidationError('index', {'filename': filename})
         # must seek to the beginning of file so it can be saved
         file_upload.file.seek(0)
 
