@@ -51,14 +51,10 @@ def send_multiple(to_list, subject, text=None, html=None, data={},
     })
 
     logging.debug("Prepared message: %s" % message)
-    try:
-        if text:
-            message['text'] = ''.join(template(text, **data))
-        if html:
-            message['html'] = ''.join(template(html, **data))
-    except Exception as exc:
-        print(exc)
-        raise
+    if text:
+        message['text'] = ''.join(template(text, **data))
+    if html:
+        message['html'] = ''.join(template(html, **data))
 
     if use_template:
         try:
