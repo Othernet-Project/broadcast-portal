@@ -37,8 +37,9 @@ def row_to_dict(row):
 def get_item(table, db=None, **kwargs):
     db = db or request.db.main
     query = db.Select(sets=table)
-    for name in kwargs:
-        query.where += '{0} = :{0}'.format(name)
+    for name, value in kwargs.items():
+        op = 'IS' if value is None else '='
+        query.where += '{0} {1} :{0}'.format(name, op)
 
     db.query(query, **kwargs)
     row = db.result
@@ -46,7 +47,7 @@ def get_item(table, db=None, **kwargs):
     if row is not None:
         for wrapper_cls in BaseItem.__subclasses__():
             if wrapper_cls.type == table:
-                return wrapper_cls(**row_to_dict(row))
+                return wrapper_cls(db=db, **row_to_dict(row))
 
     # no wrapper specified
     return row
@@ -55,8 +56,9 @@ def get_item(table, db=None, **kwargs):
 def filter_items(table, db=None, **kwargs):
     db = db or request.db.main
     query = db.Select(sets=table, order=['date(created)'])
-    for name in kwargs:
-        query.where += '{0} = :{0}'.format(name)
+    for name, value in kwargs.items():
+        op = 'IS' if value is None else '='
+        query.where += '{0} {1} :{0}'.format(name, op)
 
     db.query(query, **kwargs)
     rows = db.results
@@ -64,7 +66,7 @@ def filter_items(table, db=None, **kwargs):
     if rows:
         for wrapper_cls in BaseItem.__subclasses__():
             if wrapper_cls.type == table:
-                return [wrapper_cls(**row_to_dict(row)) for row in rows]
+                return [wrapper_cls(db=db, **row_to_dict(row)) for row in rows]
 
     # no wrapper specified
     return rows
