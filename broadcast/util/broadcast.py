@@ -34,8 +34,8 @@ def row_to_dict(row):
     return dict((key, row[key]) for key in row.keys())
 
 
-def get_item(table, **kwargs):
-    db = request.db.main
+def get_item(table, db=None, **kwargs):
+    db = db or request.db.main
     query = db.Select(sets=table)
     for name in kwargs:
         query.where += '{0} = :{0}'.format(name)
@@ -52,8 +52,8 @@ def get_item(table, **kwargs):
     return row
 
 
-def get_items(table, **kwargs):
-    db = request.db.main
+def filter_items(table, db=None, **kwargs):
+    db = db or request.db.main
     query = db.Select(sets=table, order=['date(created)'])
     for name in kwargs:
         query.where += '{0} = :{0}'.format(name)
