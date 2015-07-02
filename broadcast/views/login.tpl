@@ -35,10 +35,10 @@
                 <a class="button" href="${url('register')}">${_("Register now")}</a>
             </p>
             <p class="help">
-                <a href="${url('send_confirmation_form')}">${_("Didn't receive the confirmation e-mail?")}</a>
+                <a href="${url('password_reset_request')}">${_("Forgot your password?")}</a>
             </p>
             <p class="help">
-                <a href="${url('password_reset_request')}">${_("Forgot your password?")}</a>
+                <a href="${url('send_confirmation_form')}">${_("Didn't receive the confirmation e-mail?")}</a>
             </p>
         </form>
     </div>
