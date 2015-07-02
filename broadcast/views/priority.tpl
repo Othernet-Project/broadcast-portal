@@ -11,7 +11,9 @@ ${priority_switch.body()}
         ${h.form('post', _id='payment-form', action=url('broadcast_priority', item_type=item.type, item_id=item.id))}
             % if form.error:
             ${form.error}
-            % else: 
+            % elif charge_error:
+            ${charge_error}
+            % else:
             <ul class="form-errors">
             </ul>
             % endif

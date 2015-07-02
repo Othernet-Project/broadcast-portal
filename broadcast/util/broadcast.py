@@ -8,6 +8,7 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
+import datetime
 import decimal
 import hmac
 import hashlib
@@ -19,7 +20,9 @@ import stripe
 
 from bottle import request
 from bottle_utils.form import ValidationError
-from bottle_utils.i18n import lazy_gettext as _
+from bottle_utils.i18n import dummy_gettext as _
+
+from .email import send_mail
 
 
 def get_unique_id():
@@ -72,6 +75,51 @@ def filter_items(table, db=None, **kwargs):
     return rows
 
 
+def humanize_amount(cent_amount, config):
+    currency = config['charge.currency']
+    multiplier = config['charge.basic_monetary_unit_multiplier']
+    basic_unit = decimal.Decimal(cent_amount) / multiplier
+    return "{} {:,.2f}".format(currency, basic_unit)
+
+
+def send_payment_confirmation(item, stripe_obj, username, email, config):
+    interval_types = {
+        'month': _("monthly"),
+        'year': _("annual")
+    }
+    item_types = {
+        'twitter': _("twitter feed"),
+        'content': _("content")
+    }
+    is_subscription = stripe_obj.object == 'customer'
+    if is_subscription:
+        card = stripe_obj.sources.data[-1]
+        last4digits = card.last4
+        subscription = stripe_obj.subscriptions.data[-1]
+        interval = interval_types[subscription.plan.interval]
+        timestamp = subscription.start
+        amount = subscription.plan.amount
+    else:
+        last4digits = stripe_obj.source.last4
+        interval = None
+        timestamp = stripe_obj.created
+        amount = stripe_obj.amount
+
+    context_data = {'username': username,
+                    'email': email,
+                    'item_type': item_types[item.type],
+                    'last4digits': last4digits,
+                    'timestamp': datetime.datetime.fromtimestamp(timestamp),
+                    'total_amount': humanize_amount(amount, config=config),
+                    'interval': interval,
+                    'is_subscription': is_subscription}
+    send_mail(email,
+              _("Payment Confirmation"),
+              text='email/payment_confirmation',
+              data=context_data,
+              config=config)
+
+
 class ChargeError(ValidationError):
     pass
 
@@ -117,19 +165,12 @@ class BaseItem(object):
         # store charge object id on content table
         self.save_charge_id(charge_obj)
 
-    def humanize_amount(self, cent_amount):
-        conf = request.app.config
-        currency = conf['charge.currency']
-        multiplier = conf['charge.basic_monetary_unit_multiplier']
-        basic_unit = decimal.Decimal(cent_amount) / multiplier
-        return "{} {:,.2f}".format(currency, basic_unit)
-
     def calculate_price(self):
         raise NotImplementedError()
 
     @property
     def priority_price(self):
-        return self.humanize_amount(self.calculate_price())
+        return humanize_amount(self.calculate_price(), config=request.config)
 
     @property
     def has_free_mode(self):
@@ -152,6 +193,7 @@ class BaseItem(object):
             raise ChargeError(message, {}, is_form=True)
         else:
             self.save_charge_object(charge_obj)
+            return charge_obj
 
     def _subscribe(self, token, plan):
         stripe.api_key = request.app.config['stripe.secret_key']
@@ -164,6 +206,7 @@ class BaseItem(object):
             raise ChargeError(message, {}, is_form=True)
         else:
             self.save_charge_id(subscription_obj)
+            return subscription_obj
 
 
 class ContentItem(BaseItem):
@@ -209,19 +252,19 @@ class ContentItem(BaseItem):
         human_size = '{0} MB'.format(self.calculate_chargeable_size())
         description = request.app.config['content.description_template']
         description = description.format(human_size)
-        self._charge(token, description)
+        return self._charge(token, description)
 
 
 class TwitterItem(BaseItem):
     type = 'twitter'
 
     def calculate_price(self):
-        return request.app.config['twitter.price_{0}'.format(self.plan)]
+        return request.app.config['twitter.prices'][self.plan]
 
     def charge(self, token):
         if self.plan in request.app.config['twitter.subscription_plans']:
-            self._subscribe(token, self.plan)
+            return self._subscribe(token, self.plan)
         else:
             description = request.app.config['twitter.description_template']
             description = description.format(self.plan)
-            self._charge(token, description)
+            return self._charge(token, description)

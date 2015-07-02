@@ -32,7 +32,7 @@
 
     $.fn.markPositive = function () {
         var el = $(this);
-        
+
         el.addClass('positive').removeClass('negative');
         return el;
     };
@@ -173,5 +173,8 @@
         paymentForm.off('submit', self.submitPayment);
     };
 
+    if ($('.form-errors').children().length > 0) {
+        $('.form-errors').show();
+    }
     self.attachHandler();
 }(this, this.jQuery, this.Stripe));

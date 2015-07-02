@@ -12,11 +12,11 @@ from functools import wraps
 
 from bottle import request, redirect, abort
 from bottle_utils.csrf import csrf_protect, csrf_token
-from bottle_utils.i18n import lazy_gettext as _
+from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.priority import PaymentForm
 from ..util.auth import login_required
-from ..util.broadcast import get_item, ChargeError
+from ..util.broadcast import get_item, send_payment_confirmation, ChargeError
 from ..util.template import view
 
 
@@ -92,23 +92,27 @@ def show_broadcast_priority_form(item):
 @guard_already_charged
 def broadcast_priority(item):
     form = PaymentForm(request.forms)
-
+    error = None
     if form.is_valid():
         token = form.processed_data['stripe_token']
         try:
-            item.charge(token)
+            stripe_obj = item.charge(token)
         except ChargeError as exc:
-            form.error = exc
+            error = exc
         else:
+            task_runner = request.app.config['task.runner']
+            task_runner.schedule(send_payment_confirmation,
+                                 item,
+                                 stripe_obj,
+                                 request.user.username,
+                                 request.user.email,
+                                 request.app.config)
             scheduled_url = request.app.get_url('broadcast_priority_scheduled',
                                                 item_type=item.type,
                                                 item_id=item.id)
             redirect(scheduled_url)
-    else:
-        for field_name, field in form.fields.items():
-            print(field_name, field.error)
 
-    return dict(mode='priority', item=item, form=form)
+    return dict(mode='priority', item=item, form=form, charge_error=error)
 
 
 @login_required()
