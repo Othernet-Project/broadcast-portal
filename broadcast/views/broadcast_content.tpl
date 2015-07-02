@@ -18,7 +18,7 @@
                 ${form.content_file.label}
                 ${form.content_file}
                 <span class="field-help">
-                Package your content into a zip file containing at least a 
+                Package your content into a zip file containing at least a
                 single HTML page.
                 </span>
                 % if form.content_file.error:
@@ -46,7 +46,7 @@
                 ${form.license.error}
                 % endif
                 <span class="field-help">
-                ${_("Use All rights reserved if unusure. If you are the author, we recommend Creative Commons Attribution")}
+                ${_("Use All rights reserved if unsure. If you are the author, we recommend Creative Commons Attribution")}
                 </span>
             </p>
             <p class="field form-input-required content-url required">
