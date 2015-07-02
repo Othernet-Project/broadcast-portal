@@ -125,11 +125,15 @@ def show_broadcast_priority_scheduled(item):
                                            item_type=item.type,
                                            item_id=item.id)
         redirect(priority_url)
+
+    messages = {
+        'content': _('Priority broadcast has been successfully scheduled.'),
+        'twitter': _('Twitter feed broadcast has been successfully scheduled.')
+    }
     return dict(item=item,
                 status='success',
                 page_title='',
-                message=_('Priority broadcast has been successfully '
-                          'scheduled.'),
+                message=messages[item.type],
                 redirect_url=request.app.get_url('main'),
                 redirect_target=_('main page'))
 
