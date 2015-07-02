@@ -170,7 +170,8 @@ class BaseItem(object):
 
     @property
     def priority_price(self):
-        return humanize_amount(self.calculate_price(), config=request.config)
+        return humanize_amount(self.calculate_price(),
+                               config=request.app.config)
 
     @property
     def has_free_mode(self):
