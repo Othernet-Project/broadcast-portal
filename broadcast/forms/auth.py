@@ -129,20 +129,49 @@ class RegistrationForm(form.Form):
             raise form.ValidationError('pwmatch', {})
 
 
-class EmailForm(form.Form):
+class ConfirmationForm(form.Form):
     # Translators, used as label in create user form
-    email = form.StringField(_("E-mail"),
-                             validators=[form.Required()],
-                             placeholder=_('e-mail'))
+    email = form.StringField(
+        _("E-mail"),
+        validators=[form.Required()],
+        placeholder=_('e-mail'),
+        messages={
+            # Translators, used as error messages for invalid email addresses
+            # in send email confirmation form
+            'invalid_email': _("Invalid e-mail address entered."),
+            'not_registered': _("E-mail address not registered.")
+        }
+    )
 
     def postprocess_email(self, value):
         if not re.match(r'[^@]+@[^@]+\.[^@]+', value):
-            message = _("Invalid e-mail address entered.")
-            raise form.ValidationError(message, {})
+            raise form.ValidationError('invalid_email', {})
 
         if not auth.get_user(value):
-            message = _("E-mail address not registered.")
-            raise form.ValidationError(message, {})
+            raise form.ValidationError('not_registered', {})
+
+        return value
+
+
+class PasswordResetRequestForm(form.Form):
+    messages = {
+        'invalid_email': _("Invalid e-mail address entered."),
+    }
+    # Translators, used as label in create user form
+    email = form.StringField(
+        _("E-mail"),
+        validators=[form.Required()],
+        placeholder=_('e-mail'),
+        messages={
+            # Translators, used as error messages for invalid email addresses
+            # in password reset form
+            'invalid_email': _("Invalid e-mail address entered."),
+        }
+    )
+
+    def postprocess_email(self, value):
+        if not re.match(r'[^@]+@[^@]+\.[^@]+', value):
+            raise form.ValidationError('invalid_email', {})
 
         return value
 

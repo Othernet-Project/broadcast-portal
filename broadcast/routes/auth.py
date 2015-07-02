@@ -14,7 +14,8 @@ from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.auth import (LoginForm,
                           RegistrationForm,
-                          EmailForm,
+                          ConfirmationForm,
+                          PasswordResetRequestForm,
                           PasswordResetForm)
 from ..util.auth import (create_user,
                          get_user,
@@ -53,13 +54,13 @@ def login():
 @view('confirmation')
 @csrf_token
 def send_confirmation_form():
-    return dict(form=EmailForm())
+    return dict(form=ConfirmationForm())
 
 
 @csrf_protect
 def send_confirmation(email=None):
     if email is None:
-        form = EmailForm(request.params)
+        form = ConfirmationForm(request.params)
         if not form.is_valid():
             return template('confirmation', form=form)
 
@@ -114,26 +115,26 @@ def confirm(key):
 @view('password_reset_request')
 @csrf_token
 def password_reset_request_form():
-    return dict(form=EmailForm())
+    return dict(form=PasswordResetRequestForm())
 
 
 @csrf_protect
 def password_reset_request():
-    form = EmailForm(request.params)
+    form = PasswordResetRequestForm(request.params)
     if not form.is_valid():
         return template('password_reset_request', form=form)
 
     email = form.processed_data['email']
-    expiration = request.app.config['authentication.password_reset_expires']
-    reset_key = create_temporary_key(email, expiration)
-    request.app.config['app.url'] = request.url
-    task_runner = request.app.config['task.runner']
-    task_runner.schedule(send_mail,
-                         email,
-                         _("Reset Password"),
-                         text='email/password_reset',
-                         data={'reset_key': reset_key},
-                         config=request.app.config)
+    if get_user(email):
+        expires = request.app.config['authentication.password_reset_expires']
+        reset_key = create_temporary_key(email, expires)
+        task_runner = request.app.config['task.runner']
+        task_runner.schedule(send_mail,
+                             email,
+                             _("Reset Password"),
+                             text='email/password_reset',
+                             data={'reset_key': reset_key},
+                             config=request.app.config)
     return template('feedback',
                     page_title=_('Password reset email sent'),
                     status='email',
