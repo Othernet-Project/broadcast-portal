@@ -46,6 +46,6 @@ ${h.form('post', action=url('register'))}
     <p class="buttons">
         <button type="submit" class="primary"><span class="icon"></span> ${_('Register')}</button>
         ${_('or')}
-        <a class="button" href="${url('login')}">${_('Log in')}</a>
+        <a class="button" href="${url('login') + h.set_qparam(next=next_path).to_qs()}">${_('Log in')}</a>
     </p>
 </form>
