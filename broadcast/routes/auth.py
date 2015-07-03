@@ -68,9 +68,16 @@ def send_confirmation(email=None, next_path=None):
         email = form.processed_data['email']
 
     next_path = next_path or request.params.get('next', '/')
+    if request.user.is_authenticated:
+        redirect_url = next_path
+        redirect_target = _("your previous location")
+    else:
+        login_path = request.app.get_url('login')
+        redirect_url = get_redirect_path(login_path, next_path)
+        redirect_target = _('log-in')
+
     expiration = request.app.config['authentication.confirmation_expires']
     confirmation_key = create_temporary_key(email, expiration)
-    request.app.config['app.url'] = request.url
     task_runner = request.app.config['task.runner']
     task_runner.schedule(send_mail,
                          email,
@@ -82,11 +89,11 @@ def send_confirmation(email=None, next_path=None):
     return template('feedback',
                     page_title=_('Account registration complete'),
                     status='email',
-                    redirect_url=request.app.get_url('login'),
+                    redirect_url=redirect_url,
                     message=_('Confirmation email has been sent to '
                               '{address}. Check your inbox.').format(
                                   address=email),
-                    redirect_target=_('log-in'))
+                    redirect_target=redirect_target)
 
 
 @view('feedback')
@@ -202,6 +209,7 @@ def register():
                     password=password,
                     email=email,
                     db=request.db.sessions)
+        login_user_no_auth(email)
         return send_confirmation(email, next_path)
 
     return template(template_name,
