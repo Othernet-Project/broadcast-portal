@@ -75,6 +75,15 @@ def filter_items(table, db=None, **kwargs):
     return rows
 
 
+def cleanup(table, db=None, config=None):
+    db = db or request.db.main
+    config = config or request.app.config
+    days = config['{0}.remove_orphans_after'.format(table)]
+    query = db.Delete(table,
+                      where="created < date('now', '-{0} days')".format(days))
+    db.query(query)
+
+
 def humanize_amount(cent_amount, config):
     currency = config['charge.currency']
     multiplier = config['charge.basic_monetary_unit_multiplier']

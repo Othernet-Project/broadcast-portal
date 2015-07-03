@@ -12,7 +12,7 @@ import datetime
 
 from bottle_utils.i18n import dummy_gettext as _
 
-from .broadcast import filter_items
+from .broadcast import filter_items, cleanup
 from .email import send_multiple
 from .squery import Database
 
@@ -36,8 +36,8 @@ def is_sending_time(send_at):
     return start <= timestamp <= end
 
 
-def is_already_sent(db):
-    for item_type in ('content', 'twitter'):
+def is_already_sent(db, broadcast_types):
+    for item_type in broadcast_types:
         query = db.Select(sets=item_type,
                           where="notified > date('now', 'start of day')")
         db.query(query)
@@ -47,9 +47,9 @@ def is_already_sent(db):
     return False
 
 
-def get_new_broadcast_entries(db):
-    return dict(content=filter_items('content', notified=None, db=db),
-                twitter=filter_items('twitter', notified=None, db=db))
+def get_new_broadcast_entries(db, broadcast_types):
+    return dict((item_type, filter_items(item_type, notified=None, db=db))
+                for item_type in broadcast_types)
 
 
 def mark_notified(broadcast_entries, db):
@@ -67,14 +67,19 @@ def send_notifications(app):
     debug = app.config['server.debug']
     db_conn = app.config['database.connections']['main']
     db = Database(db_conn, debug=debug)
+    broadcast_types = app.config['app.broadcast_types']
     # check if we're within sending time range
     if not is_sending_time(app.config['notifications.send_at']):
         return
     # check if we already sent it today
-    if is_already_sent(db):
+    if is_already_sent(db, broadcast_types):
         return
 
-    broadcast_entries = get_new_broadcast_entries(db)
+    # remove orphans before sending notifications
+    for item_type in broadcast_types:
+        cleanup(item_type, db=db, config=app.config)
+
+    broadcast_entries = get_new_broadcast_entries(db, broadcast_types)
     recipients = app.config['notifications.recipients']
     send_multiple([(email, email) for email in recipients],
                   _("Notification"),
