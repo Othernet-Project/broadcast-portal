@@ -249,12 +249,10 @@ class ContentForm(form.Form):
         return file_upload
 
     def postprocess_url(self, value):
-        template = request.app.config['content.url_template']
-        content_url = template.format(value)
-        if get_item('content', url=content_url):
+        if get_item('content', url=value):
             raise form.ValidationError('url', {})
 
-        return content_url
+        return value
 
     def validate(self):
         id = self.processed_data['id']

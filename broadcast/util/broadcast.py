@@ -15,6 +15,7 @@ import hashlib
 import math
 import os
 import uuid
+import urlparse
 
 import stripe
 
@@ -238,6 +239,12 @@ class ContentItem(BaseItem):
                                               **kwargs)
         else:
             super(ContentItem, self).__init__(id=id, **kwargs)
+
+    @property
+    def url(self):
+        url_template = request.app.config['content.url_template']
+        base_url = url_template.format(self.name)
+        return urlparse.urljoin(base_url, self.data['url'])
 
     @property
     def unit_price(self):

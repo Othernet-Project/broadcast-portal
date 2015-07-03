@@ -12,6 +12,7 @@ import datetime
 
 from bottle import request, redirect
 from bottle_utils.csrf import csrf_protect, csrf_token
+from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.broadcast import ContentForm, TwitterForm
 from ..util.broadcast import ContentItem, TwitterItem, get_unique_id, sign
@@ -22,7 +23,7 @@ from ..util.template import view
 @csrf_token
 def show_broadcast_content_form():
     url_template = request.app.config['content.url_template']
-    url_prefix = url_template.format(request.user.username)
+    url_prefix = url_template.format(_("your-username"))
     id = get_unique_id()
     signature = sign(id, secret_key=request.app.config['app.secret_key'])
     initial_data = {'id': id, 'signature': signature}
@@ -33,7 +34,7 @@ def show_broadcast_content_form():
 @view('broadcast_content')
 def broadcast_content():
     url_template = request.app.config['content.url_template']
-    url_prefix = url_template.format(request.user.username)
+    url_prefix = url_template.format(_("your-username"))
     form_data = request.forms.decode()
     form_data.update(request.files)
     form = ContentForm(form_data)
