@@ -8,7 +8,8 @@ create table twitter
     handle varchar not null,            -- twitter handle
     plan varchar not null,              -- payment plan, also determines whether charge_id is a subscription or fixed payment
     charge_id varchar,                  -- stripe charge or subscription object id, if set content has priority
-    notified timestamp                  -- time when notification about this item was sent
+    notified timestamp,                 -- time when notification about this item was sent
+    status varchar                      -- status representing current state of request
 );
 """
 

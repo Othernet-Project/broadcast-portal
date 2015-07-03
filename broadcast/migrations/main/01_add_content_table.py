@@ -11,7 +11,8 @@ create table content
     license varchar not null,           -- content license chosen by user
     url varchar not null,               -- content url chosen by user
     charge_id varchar,                  -- stripe charge object id, if set content has priority
-    notified timestamp                  -- time when notification about this item was sent
+    notified timestamp,                 -- time when notification about this item was sent
+    status varchar                      -- status representing current state of request
 );
 """
 
