@@ -20,7 +20,7 @@ from ..util.broadcast import get_item, send_payment_confirmation, ChargeError
 from ..util.template import view
 
 
-def item_exists_or_404(func):
+def item_owner_or_404(func):
     @wraps(func)
     def wrapper(**kwargs):
         item_type = kwargs.pop('item_type', None)
@@ -30,6 +30,9 @@ def item_exists_or_404(func):
 
         item = get_item(item_type, id=item_id)
         if not item:
+            abort(404, _("The specified item was not found."))
+
+        if item.email != request.user.email:
             abort(404, _("The specified item was not found."))
 
         return func(item=item, **kwargs)
@@ -64,7 +67,7 @@ def guard_already_charged(func):
 
 @login_required()
 @view('free')
-@item_exists_or_404
+@item_owner_or_404
 @guard_already_charged
 @guard_free_mode
 def show_broadcast_free_form(item):
@@ -74,7 +77,7 @@ def show_broadcast_free_form(item):
 @login_required()
 @view('priority')
 @csrf_token
-@item_exists_or_404
+@item_owner_or_404
 @guard_already_charged
 def show_broadcast_priority_form(item):
     stripe_public_key = request.app.config['stripe.public_key']
@@ -85,7 +88,7 @@ def show_broadcast_priority_form(item):
 @login_required()
 @view('priority')
 @csrf_protect
-@item_exists_or_404
+@item_owner_or_404
 @guard_already_charged
 def broadcast_priority(item):
     form = PaymentForm(request.forms)
@@ -114,7 +117,7 @@ def broadcast_priority(item):
 
 @login_required()
 @view('feedback')
-@item_exists_or_404
+@item_owner_or_404
 def show_broadcast_priority_scheduled(item):
     if item.charge_id is None:
         # attempted access to success-page, while not charged
