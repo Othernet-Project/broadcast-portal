@@ -32,6 +32,11 @@ def item_owner_or_404(func):
         if not item:
             abort(404, _("The specified item was not found."))
 
+        if not item.email:
+            # if it has no owner so far, the first access to the object will
+            # associate the current user as the object's owner
+            item.update(email=request.user.email, name=request.user.username)
+
         if item.email != request.user.email:
             abort(404, _("The specified item was not found."))
 

@@ -147,8 +147,12 @@ class BaseItem(object):
     def items(self):
         return self.data.items()
 
+    def update(self, **kwargs):
+        self.data.update(kwargs)
+        self.save()
+
     def save(self):
-        query = self.db.Insert(self.type, cols=self.data.keys())
+        query = self.db.Replace(self.type, cols=self.data.keys())
         self.db.execute(query, self.data)
 
     def save_charge_id(self, obj):
