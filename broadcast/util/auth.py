@@ -247,6 +247,7 @@ def reset_password(key, new_password, db=None):
     db.execute(query, dict(key=key))
     temp_key = db.result
     change_password(temp_key.email, new_password, db=db)
+    delete_temporary_key(key, db=db)
 
 
 def change_password(email, new_password, db=None):
