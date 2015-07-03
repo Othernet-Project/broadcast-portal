@@ -79,8 +79,8 @@ def cleanup(table, db=None, config=None):
     db = db or request.db.main
     config = config or request.app.config
     days = config['{0}.remove_orphans_after'.format(table)]
-    query = db.Delete(table,
-                      where="created < date('now', '-{0} days')".format(days))
+    where = "email IS NULL AND created < date('now', '-{0} days')".format(days)
+    query = db.Delete(table, where=where)
     db.query(query)
 
 
