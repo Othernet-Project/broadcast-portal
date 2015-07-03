@@ -270,8 +270,8 @@ class TwitterForm(form.Form):
     type = TwitterItem.type
 
     PAYMENT_PLANS = (
-        ('twitter_monthly', _("Monthly - $3 per month")),
-        ('twitter_annual', _("Annual - $30 per year")),
+        ('bc_twitter_monthly', _("Monthly - USD 3 per month")),
+        ('bc_twitter_annual', _("Annual - USD 30 per year")),
     )
     handle = form.StringField(
         # Translators, used as label for twitter handle(username)

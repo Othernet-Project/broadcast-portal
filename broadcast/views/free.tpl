@@ -1,7 +1,9 @@
 <%inherit file='base.tpl'/>
 <%namespace name='priority_switch' file='_priority_switch.tpl'/>
 
-${priority_switch.body()}
+<div class="h-bar">
+    ${priority_switch.body()}
+</div>
 
 <div class="full-page-form">
     <div class="free center">

@@ -183,7 +183,8 @@ class BaseItem(object):
 
     @property
     def priority_price(self):
-        return humanize_amount(self.calculate_price(), config=request.config)
+        return humanize_amount(self.calculate_price(),
+                               config=request.app.config)
 
     @property
     def has_free_mode(self):
@@ -238,6 +239,11 @@ class ContentItem(BaseItem):
         else:
             super(ContentItem, self).__init__(id=id, **kwargs)
 
+    @property
+    def unit_price(self):
+        return humanize_amount(request.app.config['content.price_per_mb'],
+                               request.app.config)
+
     def save(self):
         if self.content_file:
             # make sure folder with id exists
@@ -271,8 +277,17 @@ class ContentItem(BaseItem):
 class TwitterItem(BaseItem):
     type = 'twitter'
 
+    PLAN_PERIODS = {
+        'bc_twitter_monthly': _('every month'),
+        'bc_twitter_annual': _('every year'),
+    }
+
     def calculate_price(self):
-        return request.app.config['twitter.prices'][self.plan]
+        for plan in request.app.config['twitter.prices']:
+            name, amt = plan.split(':')
+            if name == self.plan:
+                return int(amt)
+        raise KeyError('No plan found for {}'.format(self.plan))
 
     def charge(self, token):
         if self.plan in request.app.config['twitter.subscription_plans']:
@@ -281,3 +296,12 @@ class TwitterItem(BaseItem):
             description = request.app.config['twitter.description_template']
             description = description.format(self.plan)
             return self._charge(token, description)
+
+    @property
+    def plan_period(self):
+        return self.PLAN_PERIODS[self.plan]
+
+    @property
+    def plan_price(self):
+        return humanize_amount(self.calculate_price(),
+                               request.app.config)

@@ -7,6 +7,14 @@
   margin: 0 auto;
 }
 
+.subtotal {
+  padding: 1em;
+  text-align: center;
+  border: 1px solid $sky25d;
+  background: $sky6;
+  color: $sky;
+}
+
 #payment-form {
   .form-errors {
     display: none;

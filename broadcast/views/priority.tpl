@@ -2,11 +2,38 @@
 <%namespace name='priority_switch' file='_priority_switch.tpl'/>
 
 <%block name="main">
-% if item.has_free_mode:
-${priority_switch.body()}
-% endif
+<div class="h-bar">
+    % if item.has_free_mode:
+        ${priority_switch.body()}
+    % else:
+        <h2>${_('Complete the payment')}</h2>
+        <p class="priority-help">
+        ${_('''After completing the payment, your feed will be reviewed by 
+        Outernet staff and start broadcasting during Outernet's working hours
+        (week days between 11am and 7pm Chicago time). You can always 
+        unsubscribe by emailing us at {email}.'''
+        ).format(email='<a href="mailto:hello@outernet.is">hello@outernet.is</a>')}
+        </p>
+    % endif
+</div>
 
 <div class="full-page-form">
+    % if item.type == 'content':
+        <p class="subtotal">
+        <strong>
+            ${_('''Your card will be charged {amount} after content is
+            broadcast.''').format(amount=item.priority_price)}
+        </strong>
+        </p>
+    % elif item.type == 'twitter':
+        <p class="subtotal">
+        <strong>
+            ${_('''Your card will be charged {amount} {period} until 
+            unsubscribed.''').format(amount=item.plan_price, 
+            period=item.plan_period)}
+        </strong>
+        </p>
+    % endif
     <div class="priority">
         ${h.form('post', _id='payment-form', action=url('broadcast_priority', item_type=item.type, item_id=item.id))}
             % if form.error:
@@ -45,10 +72,10 @@ ${priority_switch.body()}
                     % endif
                 </p>
                 <p class="field-help">
-                ${_('''CVC number is a 3-digit security code normally appears
-                on the back of the card towards the right edge of the signature
-                field, or 4-digit code just above the card number on the
-                right.''')}
+                ${_('''CVC number is a 3-digit security code and normally
+                appears on the back of the card towards the right edge of the
+                signature field, or 4-digit code just above the card number on
+                the right.''')}
                 </p>
             </div>
             <p class="buttons">
