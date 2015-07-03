@@ -8,6 +8,7 @@
             ${form.error}
             % endif
             ${csrf_tag()}
+            <input type="hidden" name="next" value="${next_path}">
             ${form.key}
             <p class="field form-input-required">
                 ${form.new_password1.label}

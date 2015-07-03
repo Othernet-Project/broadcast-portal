@@ -8,6 +8,7 @@
             ${form.error}
             % endif
             ${csrf_tag()}
+            <input type="hidden" name="next" value="${next_path}">
             <p>
                 ${form.email.label}
                 ${form.email}

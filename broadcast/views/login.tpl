@@ -32,10 +32,10 @@
                 ## Translators, appears as separator between Login button and
                 ## Register now button.
                 ${_('or')}
-                <a class="button" href="${url('register')}">${_("Register now")}</a>
+                <a class="button" href="${url('register') + h.set_qparam(next=next_path).to_qs()}">${_("Register now")}</a>
             </p>
             <p class="help">
-                <a href="${url('password_reset_request')}">${_("Forgot your password?")}</a>
+                <a href="${url('password_reset_request') + h.set_qparam(next=next_path).to_qs()}">${_("Forgot your password?")}</a>
             </p>
             <p class="help">
                 <a href="${url('send_confirmation_form')}">${_("Didn't receive the confirmation e-mail?")}</a>

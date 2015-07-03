@@ -11,4 +11,4 @@ Click the link below to reset your password:
 --
 Outernet Team
 hello@outernet.is
-""") % {'link': host_url + url('password_reset', key=reset_key)} }
+""") % {'link': host_url + url('password_reset', key=reset_key) + '?next=' + next_path} }

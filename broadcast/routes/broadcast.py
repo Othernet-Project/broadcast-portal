@@ -14,12 +14,10 @@ from bottle import request, redirect
 from bottle_utils.csrf import csrf_protect, csrf_token
 
 from ..forms.broadcast import ContentForm, TwitterForm
-from ..util.auth import login_required
 from ..util.broadcast import ContentItem, TwitterItem, get_unique_id, sign
 from ..util.template import view
 
 
-@login_required()
 @view('broadcast_content')
 @csrf_token
 def show_broadcast_content_form():
@@ -32,7 +30,6 @@ def show_broadcast_content_form():
 
 
 @csrf_protect
-@login_required()
 @view('broadcast_content')
 def broadcast_content():
     url_template = request.app.config['content.url_template']
@@ -42,8 +39,6 @@ def broadcast_content():
     form = ContentForm(form_data)
     if form.is_valid():
         content_item = ContentItem(
-            email=request.user.email,
-            name=request.user.username,
             created=datetime.datetime.utcnow(),
             title=form.processed_data['title'],
             license=form.processed_data['license'],
@@ -61,7 +56,6 @@ def broadcast_content():
     return dict(form=form, url_prefix=url_prefix)
 
 
-@login_required()
 @view('broadcast_twitter')
 @csrf_token
 def show_broadcast_twitter_form():
@@ -69,14 +63,11 @@ def show_broadcast_twitter_form():
 
 
 @csrf_protect
-@login_required()
 @view('broadcast_twitter')
 def broadcast_twitter():
     form = TwitterForm(request.forms)
     if form.is_valid():
-        twitter_item = TwitterItem(email=request.user.email,
-                                   name=request.user.username,
-                                   created=datetime.datetime.utcnow(),
+        twitter_item = TwitterItem(created=datetime.datetime.utcnow(),
                                    handle=form.processed_data['handle'],
                                    plan=form.processed_data['plan'],
                                    id=get_unique_id())

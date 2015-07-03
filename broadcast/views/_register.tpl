@@ -4,6 +4,7 @@ ${h.form('post', action=url('register'))}
     % endif
 
     ${csrf_tag()}
+    <input type="hidden" name="next" value="${next_path}">
     <p class="field form-input-required">
         ${registration_form.username.label}
         ${registration_form.username}
@@ -43,7 +44,7 @@ ${h.form('post', action=url('register'))}
         %endif
     </p>
     <p class="buttons">
-        <button type="submit" class="primary"><span class="icon"></span> ${_('Register')}</button> 
+        <button type="submit" class="primary"><span class="icon"></span> ${_('Register')}</button>
         ${_('or')}
         <a class="button" href="${url('login')}">${_('Log in')}</a>
     </p>

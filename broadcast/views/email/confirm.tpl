@@ -10,4 +10,4 @@ email address:
 --
 Outernet Team
 hello@outernet.is
-""") % {'link': host_url + url('confirm', key=confirmation_key)} }
+""") % {'link': host_url + url('confirm', key=confirmation_key) + '?next=' + next_path} }
