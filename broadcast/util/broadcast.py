@@ -34,10 +34,13 @@ def sign(data, secret_key):
 
 
 def row_to_dict(row):
+    if not row:
+        return row
+
     return dict((key, row[key]) for key in row.keys())
 
 
-def get_item(table, db=None, **kwargs):
+def get_item(table, db=None, raw=False, **kwargs):
     db = db or request.db.main
     query = db.Select(sets=table)
     for name, value in kwargs.items():
@@ -45,18 +48,18 @@ def get_item(table, db=None, **kwargs):
         query.where += '{0} {1} :{0}'.format(name, op)
 
     db.query(query, **kwargs)
-    row = db.result
+    row = row_to_dict(db.result)
 
-    if row is not None:
+    if not raw and row is not None:
         for wrapper_cls in BaseItem.__subclasses__():
             if wrapper_cls.type == table:
-                return wrapper_cls(db=db, **row_to_dict(row))
+                return wrapper_cls(db=db, **row)
 
     # no wrapper specified
     return row
 
 
-def filter_items(table, db=None, **kwargs):
+def filter_items(table, db=None, raw=False, **kwargs):
     db = db or request.db.main
     query = db.Select(sets=table, order=['date(created)'])
     for name, value in kwargs.items():
@@ -64,12 +67,12 @@ def filter_items(table, db=None, **kwargs):
         query.where += '{0} {1} :{0}'.format(name, op)
 
     db.query(query, **kwargs)
-    rows = db.results
+    rows = map(row_to_dict, db.results)
 
-    if rows:
+    if not raw and rows:
         for wrapper_cls in BaseItem.__subclasses__():
             if wrapper_cls.type == table:
-                return [wrapper_cls(db=db, **row_to_dict(row)) for row in rows]
+                return [wrapper_cls(db=db, **row) for row in rows]
 
     # no wrapper specified
     return rows
