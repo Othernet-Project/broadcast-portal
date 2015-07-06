@@ -39,6 +39,7 @@ def broadcast_content():
     form = ContentForm(form_data)
     if form.is_valid():
         content_item = ContentItem(
+            status=ContentItem.PROCESSING,
             created=datetime.datetime.utcnow(),
             title=form.processed_data['title'],
             license=form.processed_data['license'],
@@ -67,7 +68,8 @@ def show_broadcast_twitter_form():
 def broadcast_twitter():
     form = TwitterForm(request.forms)
     if form.is_valid():
-        twitter_item = TwitterItem(created=datetime.datetime.utcnow(),
+        twitter_item = TwitterItem(status=TwitterItem.PROCESSING,
+                                   created=datetime.datetime.utcnow(),
                                    handle=form.processed_data['handle'],
                                    plan=form.processed_data['plan'],
                                    id=get_unique_id())

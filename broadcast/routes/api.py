@@ -8,7 +8,9 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-from bottle import request, HTTPError
+from functools import wrap
+
+from bottle import request, response, HTTPError, HTTP_CODES
 
 from ..util.broadcast import get_item, filter_items
 
@@ -16,7 +18,19 @@ from ..util.broadcast import get_item, filter_items
 HTTP_200_OK = 200
 HTTP_201_CREATED = 201
 HTTP_204_NO_CONTENT = 204
+HTTP_400_BAD_REQUEST = 400
+HTTP_404_NOT_FOUND = 404
 HTTP_405_METHOD_NOT_ALLOWED = 405
+
+
+def json_required(func):
+    @wrap(func)
+    def wrapper(*args, **kwargs):
+        if request.json is None:
+            response.status = HTTP_400_BAD_REQUEST
+            return {'error': 'No JSON data found.'}
+        return func(*args, **kwargs)
+    return wrapper
 
 
 class BaseAPI(object):
@@ -25,16 +39,19 @@ class BaseAPI(object):
     def create(cls):
         return cls()
 
-    def to_json(self, item):
+    def error(self, status_code):
+        raise HTTPError(status_code, HTTP_CODES[status_code])
+
+    def to_json(self, obj):
         # using getattr so that values generated in a property will be included
-        return dict((key, getattr(item, key)) for key in item.keys())
+        return dict((key, getattr(obj, key)) for key in obj.keys())
 
     def __call__(self, *args, **kwargs):
         instance = self.create()
         try:
             handler = getattr(instance, request.method.lower())
         except AttributeError:
-            raise HTTPError(HTTP_405_METHOD_NOT_ALLOWED, "Method not allowed")
+            self.error(HTTP_405_METHOD_NOT_ALLOWED)
         else:
             return handler(*args, **kwargs)
 
@@ -48,23 +65,35 @@ class BaseListAPI(BaseAPI):
 
 class BaseDetailAPI(BaseAPI):
 
-    def get(self, id):
-        item = get_item(self.table, id=id)
-        return self.to_json(item)
+    def get_object(self, id):
+        obj = get_item(self.table, id=id)
+        if obj is None:
+            self.error(HTTP_404_NOT_FOUND)
+        return obj
 
+    def get(self, id):
+        obj = self.get_object(id)
+        return self.to_json(obj)
+
+    @json_required
     def patch(self, id):
-        item = get_item(self.table, id=id)
+        obj = get_item(self.table, id=id)
         # None is a possible incoming value, so we cannot rely on using
         # `request.json.get`
         patch_data = dict()
-        for key in self.modifieable_fields:
+        for key in obj.modifieable_fields:
             try:
                 patch_data[key] = request.json[key]
             except KeyError:
                 pass
 
-        item.update(**patch_data)
-        return self.to_json(item)
+        try:
+            obj.update(**patch_data)
+        except ValueError as exc:
+            response.status = HTTP_400_BAD_REQUEST
+            return {'error': str(exc)}
+        else:
+            return self.to_json(obj)
 
 
 def route(conf):

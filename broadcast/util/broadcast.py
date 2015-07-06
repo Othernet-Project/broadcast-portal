@@ -138,6 +138,9 @@ class ChargeError(ValidationError):
 
 
 class BaseItem(object):
+    PROCESSING = 'PROCESSING'
+    ACCEPTED = 'ACCEPTED'
+    REJECTED = 'REJECTED'
 
     def __init__(self, db=None, **kwargs):
         self.db = db or request.db.main
@@ -160,7 +163,15 @@ class BaseItem(object):
     def items(self):
         return self.data.items()
 
+    def validate(self, data):
+        valid_statuses = (self.PROCESSING, self.ACCEPTED, self.REJECTED)
+        if 'status' in data and data['status'] not in valid_statuses:
+            msg = ("Value of `status` can only be one of the following: "
+                   "{0}".format(valid_statuses))
+            raise ValueError(msg)
+
     def update(self, **kwargs):
+        self.validate(kwargs)
         self.data.update(kwargs)
         self.save()
 
@@ -229,6 +240,7 @@ class BaseItem(object):
 
 class ContentItem(BaseItem):
     type = 'content'
+    modifieable_fields = ('status',)
 
     def __init__(self, id, content_file=None, upload_root=None, **kwargs):
         self.content_file = content_file
@@ -286,6 +298,7 @@ class ContentItem(BaseItem):
 
 class TwitterItem(BaseItem):
     type = 'twitter'
+    modifieable_fields = ('status',)
 
     PLAN_PERIODS = {
         'bc_twitter_monthly': _('every month'),
