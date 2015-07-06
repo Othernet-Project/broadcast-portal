@@ -8,10 +8,11 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-from functools import wrap
+from functools import wraps
 
-from bottle import request, response, HTTPError, HTTP_CODES
+from bottle import request, response, auth_basic, HTTPError, HTTP_CODES
 
+from ..util.auth import login_user
 from ..util.broadcast import get_item, filter_items
 
 
@@ -23,8 +24,14 @@ HTTP_404_NOT_FOUND = 404
 HTTP_405_METHOD_NOT_ALLOWED = 405
 
 
+def check_auth(username, password):
+    if login_user(username, password):
+        return request.user.is_superuser
+    return False
+
+
 def json_required(func):
-    @wrap(func)
+    @wraps(func)
     def wrapper(*args, **kwargs):
         if request.json is None:
             response.status = HTTP_400_BAD_REQUEST
@@ -46,6 +53,7 @@ class BaseAPI(object):
         # using getattr so that values generated in a property will be included
         return dict((key, getattr(obj, key)) for key in obj.keys())
 
+    @auth_basic(check_auth)
     def __call__(self, *args, **kwargs):
         instance = self.create()
         try:
