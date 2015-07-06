@@ -35,10 +35,13 @@ def sign(data, secret_key):
 
 
 def row_to_dict(row):
+    if not row:
+        return row
+
     return dict((key, row[key]) for key in row.keys())
 
 
-def get_item(table, db=None, **kwargs):
+def get_item(table, db=None, raw=False, **kwargs):
     db = db or request.db.main
     query = db.Select(sets=table)
     for name, value in kwargs.items():
@@ -46,18 +49,18 @@ def get_item(table, db=None, **kwargs):
         query.where += '{0} {1} :{0}'.format(name, op)
 
     db.query(query, **kwargs)
-    row = db.result
+    row = row_to_dict(db.result)
 
-    if row is not None:
+    if not raw and row is not None:
         for wrapper_cls in BaseItem.__subclasses__():
             if wrapper_cls.type == table:
-                return wrapper_cls(db=db, **row_to_dict(row))
+                return wrapper_cls(db=db, **row)
 
     # no wrapper specified
     return row
 
 
-def filter_items(table, db=None, **kwargs):
+def filter_items(table, db=None, raw=False, **kwargs):
     db = db or request.db.main
     query = db.Select(sets=table, order=['date(created)'])
     for name, value in kwargs.items():
@@ -65,12 +68,12 @@ def filter_items(table, db=None, **kwargs):
         query.where += '{0} {1} :{0}'.format(name, op)
 
     db.query(query, **kwargs)
-    rows = db.results
+    rows = map(row_to_dict, db.results)
 
-    if rows:
+    if not raw and rows:
         for wrapper_cls in BaseItem.__subclasses__():
             if wrapper_cls.type == table:
-                return [wrapper_cls(db=db, **row_to_dict(row)) for row in rows]
+                return [wrapper_cls(db=db, **row) for row in rows]
 
     # no wrapper specified
     return rows
@@ -135,6 +138,9 @@ class ChargeError(ValidationError):
 
 
 class BaseItem(object):
+    PROCESSING = 'PROCESSING'
+    ACCEPTED = 'ACCEPTED'
+    REJECTED = 'REJECTED'
 
     def __init__(self, db=None, **kwargs):
         self.db = db or request.db.main
@@ -157,7 +163,15 @@ class BaseItem(object):
     def items(self):
         return self.data.items()
 
+    def validate(self, data):
+        valid_statuses = (self.PROCESSING, self.ACCEPTED, self.REJECTED)
+        if 'status' in data and data['status'] not in valid_statuses:
+            msg = ("Value of `status` can only be one of the following: "
+                   "{0}".format(valid_statuses))
+            raise ValueError(msg)
+
     def update(self, **kwargs):
+        self.validate(kwargs)
         self.data.update(kwargs)
         self.save()
 
@@ -226,6 +240,7 @@ class BaseItem(object):
 
 class ContentItem(BaseItem):
     type = 'content'
+    modifieable_fields = ('status',)
 
     def __init__(self, id, content_file=None, upload_root=None, **kwargs):
         self.content_file = content_file
@@ -243,7 +258,7 @@ class ContentItem(BaseItem):
     @property
     def url(self):
         url_template = request.app.config['content.url_template']
-        base_url = url_template.format(self.name)
+        base_url = url_template.format(self.data['name'])
         return urlparse.urljoin(base_url, self.data['url'])
 
     @property
@@ -283,6 +298,7 @@ class ContentItem(BaseItem):
 
 class TwitterItem(BaseItem):
     type = 'twitter'
+    modifieable_fields = ('status',)
 
     PLAN_PERIODS = {
         'bc_twitter_monthly': _('every month'),
