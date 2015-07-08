@@ -20,7 +20,7 @@ from outernet_metadata.values import LICENSES, LICENSE_NAMES
 
 from ..util.broadcast import sign, get_item, ContentItem, TwitterItem
 
-LICENSE_CHOICES = ((None, _('Select the content license')),)
+LICENSE_CHOICES = (('', _('Select the content license')),)
 LICENSE_CHOICES += tuple(zip(LICENSES, LICENSE_NAMES))
 
 # These are locales used for language filtering and similar cases. We want them
@@ -154,7 +154,7 @@ LOCALES = {
     'sg': u'S\xe4ng\xf6',
     'se': u'davvis\xe1megiella'
 }
-LOCALE_CHOICES = ((None, _('Select the content language')),) + tuple(
+LOCALE_CHOICES = (('', _('Select the content language')),) + tuple(
     sorted(LOCALES.items(), key=lambda x: x[0]))
 
 
