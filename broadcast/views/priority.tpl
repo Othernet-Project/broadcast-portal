@@ -1,6 +1,10 @@
 <%inherit file='base.tpl'/>
 <%namespace name='priority_switch' file='_priority_switch.tpl'/>
 
+<%block name="title">
+    ${_("Payment")}
+</%block>
+
 <%block name="main">
 <div class="h-bar">
     % if item.has_free_mode:
@@ -8,9 +12,9 @@
     % else:
         <h2>${_('Complete the payment')}</h2>
         <p class="priority-help">
-        ${_('''After completing the payment, your feed will be reviewed by 
+        ${_('''After completing the payment, your feed will be reviewed by
         Outernet staff and start broadcasting during Outernet's working hours
-        (week days between 11am and 7pm Chicago time). You can always 
+        (week days between 11am and 7pm Chicago time). You can always
         unsubscribe by emailing us at {email}.'''
         ).format(email='<a href="mailto:hello@outernet.is">hello@outernet.is</a>')}
         </p>
@@ -28,8 +32,8 @@
     % elif item.type == 'twitter':
         <p class="subtotal">
         <strong>
-            ${_('''Your card will be charged {amount} {period} until 
-            unsubscribed.''').format(amount=item.plan_price, 
+            ${_('''Your card will be charged {amount} {period} until
+            unsubscribed.''').format(amount=item.plan_price,
             period=item.plan_period)}
         </strong>
         </p>

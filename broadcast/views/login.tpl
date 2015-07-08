@@ -1,6 +1,10 @@
 <%inherit file="base.tpl"/>
 <%namespace name='register_form' file='_register.tpl'/>
 
+<%block name="title">
+    ${_("Login")}
+</%block>
+
 <div class="h-bar">
     <h2>${_('Log in')}</h2>
 </div>
