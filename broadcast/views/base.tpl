@@ -17,6 +17,7 @@
             <div class="menu-subblock">
                 <a class="logo" href="${url('main')}"><span lang="en">Outernet</span></a>
                 <a class="logo-broadcast" href="${url('main')}"></span>${_('Broadcast center')}</span></a>
+                <a class="homepage" href="http://www.outernet.is/"><span class="label">${_("Outernet Homepage")}</span></a>
             </div>
             <div class="menu-block-right">
                 <nav id="nav" class="menu-subblock toolbar">
