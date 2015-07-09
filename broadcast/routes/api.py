@@ -8,9 +8,15 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-from functools import wraps
+import functools
+import os
 
-from bottle import request, response, auth_basic, HTTPError, HTTP_CODES
+from bottle import (request,
+                    response,
+                    auth_basic,
+                    static_file,
+                    HTTPError,
+                    HTTP_CODES)
 
 from ..util.auth import login_user
 from ..util.broadcast import get_item, filter_items
@@ -31,7 +37,7 @@ def check_auth(username, password):
 
 
 def json_required(func):
-    @wraps(func)
+    @functools.wraps(func)
     def wrapper(*args, **kwargs):
         if request.json is None:
             response.status = HTTP_400_BAD_REQUEST
@@ -104,6 +110,17 @@ class BaseDetailAPI(BaseAPI):
             return self.to_json(obj)
 
 
+@auth_basic(check_auth)
+def download_content_file(id):
+    obj = get_item('content', id=id)
+    if obj is None:
+        raise HTTPError(HTTP_404_NOT_FOUND, HTTP_CODES[HTTP_404_NOT_FOUND])
+
+    return static_file(obj.file_path,
+                       root=request.app.config['content.upload_root'],
+                       download=os.path.basename(obj.file_path))
+
+
 def route(conf):
     generated_routes = []
     for item_type in conf['app.broadcast_types']:
@@ -133,4 +150,12 @@ def route(conf):
             '{0}_detail'.format(item_type),
             {}
         )])
+
+    generated_routes.append((
+        '/api/content/<id>/file/',
+        ['GET'],
+        download_content_file,
+        'download_content_file',
+        {}
+    ))
     return generated_routes
