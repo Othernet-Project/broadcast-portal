@@ -1,9 +1,9 @@
-from ..util.template import view
+from bottle import request, redirect
 
 
-@view('main')
 def show_main():
-    return {}
+    broadcast_url = request.app.get_url('broadcast_content_form')
+    redirect(broadcast_url)
 
 
 def route(conf):
