@@ -137,7 +137,7 @@ def show_broadcast_priority_scheduled(item):
     }
     return dict(item=item,
                 status='success',
-                page_title='',
+                page_title=_('Broadcast Scheduled'),
                 message=messages[item.type],
                 redirect_url=request.app.get_url('main'),
                 redirect_target=_('main page'))

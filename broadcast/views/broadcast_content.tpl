@@ -1,6 +1,10 @@
 <%inherit file='base.tpl'/>
 <%namespace name='broadcast_switch' file='_broadcast_switch.tpl'/>
 
+<%block name="title">
+    ${_("Upload content")}
+</%block>
+
 <%block name="main">
 <div class="h-bar">
     ${broadcast_switch.body()}

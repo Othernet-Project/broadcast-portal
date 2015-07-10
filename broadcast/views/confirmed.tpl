@@ -1,5 +1,9 @@
 <%inherit file='base.tpl'/>
 
+<%block name="title">
+    ${_("Confirmation")}
+</%block>
+
 <%block name="main">
 <div class="full-page-form">
     <div class="confirmed">

@@ -1,6 +1,10 @@
 <%inherit file='base.tpl'/>
 <%namespace name='priority_switch' file='_priority_switch.tpl'/>
 
+<%block name="title">
+    ${_("Free broadcast")}
+</%block>
+
 <div class="h-bar">
     ${priority_switch.body()}
 </div>
