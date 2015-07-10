@@ -217,7 +217,7 @@ class ContentForm(form.Form):
         validators=[form.Required()])
     license = form.SelectField(
         # Translators, used as label for content license field
-        _("License"),
+        _("Copyright"),
         choices=LICENSE_CHOICES,
         validators=[form.Required()])
     language = form.SelectField(

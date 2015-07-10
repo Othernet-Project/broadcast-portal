@@ -50,7 +50,7 @@
                 ${form.license.error}
                 % endif
                 <span class="field-help">
-                ${_("Use All rights reserved if unsure. If you are the author, we recommend Creative Commons Attribution")}
+                ${_("Use All rights reserved if unsure. If you are the author, we recommend Creative Commons Attribution. Get more information about licenses %(link)s.") % {'link': '<a target="_blank" href="http://wiki.outernet.is/wiki/Content_license">here</a>'}}
                 </span>
             </p>
             <p class="field form-input-required content-url required">
