@@ -27,21 +27,18 @@
     @include border-radius(100px 0 0 100px);
 
     @include phone-portrait-wide {
-      border: 1px solid $border;
       @include border-radius(100px);
     }
   }
   .right {
+    border-left: 0 none;
     @include border-radius(0 100px 100px 0);
 
     @include phone-portrait-wide {
-      border: 1px solid $border;
       @include border-radius(100px);
     }
   }
   .center {
-    border-left: 0 none;
-    border-right: 0 none;
     @include phone-portrait-wide {
       border: 1px solid $border;
       @include border-radius(100px);
