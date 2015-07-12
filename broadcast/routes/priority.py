@@ -79,6 +79,7 @@ def show_broadcast_priority_scheduled(item):
 
     messages = {
         'content': _('Priority broadcast has been successfully scheduled.'),
+        'tv': _('Priority broadcast has been successfully scheduled.'),
         'twitter': _('Twitter feed broadcast has been successfully scheduled.')
     }
     return dict(item=item,

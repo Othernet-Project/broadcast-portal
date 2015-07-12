@@ -5,10 +5,10 @@
   max-width: 650px;
   min-height: 60px;
   margin: 0 auto;
-  .left, .right {
+  .left, .center, .right {
     border: 1px solid $border;
     padding: 10px 0;
-    width: 50%;
+    width: 33%;
     height: 44px;
     float: left;
     background-color: $white;
@@ -34,6 +34,14 @@
   .right {
     @include border-radius(0 100px 100px 0);
 
+    @include phone-portrait-wide {
+      border: 1px solid $border;
+      @include border-radius(100px);
+    }
+  }
+  .center {
+    border-left: 0 none;
+    border-right: 0 none;
     @include phone-portrait-wide {
       border: 1px solid $border;
       @include border-radius(100px);

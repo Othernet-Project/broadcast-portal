@@ -53,9 +53,9 @@ def get_item(table, db=None, raw=False, **kwargs):
     row = row_to_dict(db.result)
 
     if not raw and row is not None:
-        for wrapper_cls in BaseItem.__subclasses__():
-            if wrapper_cls.type == table:
-                return wrapper_cls(db=db, **row)
+        (wrapper_cls,) = [cls for cls in (ContentItem, TVItem, TwitterItem)
+                          if cls.type == table]
+        return wrapper_cls(db=db, **row)
 
     # no wrapper specified
     return row
@@ -72,9 +72,9 @@ def filter_items(table, db=None, raw=False, **kwargs):
     rows = map(row_to_dict, db.results)
 
     if not raw and rows:
-        for wrapper_cls in BaseItem.__subclasses__():
-            if wrapper_cls.type == table:
-                return [wrapper_cls(db=db, **row) for row in rows]
+        (wrapper_cls,) = [cls for cls in (ContentItem, TVItem, TwitterItem)
+                          if cls.type == table]
+        return [wrapper_cls(db=db, **row) for row in rows]
 
     # no wrapper specified
     return rows
@@ -238,32 +238,34 @@ class BaseItem(object):
             return subscription_obj
 
 
-class ContentItem(BaseItem):
-    type = 'content'
+class BaseUploadItem(BaseItem):
     modifieable_fields = ('status',)
 
     def __init__(self, id, content_file=None, upload_root=None, **kwargs):
         self.content_file = content_file
         if self.content_file:
             conf = request.app.config
-            upload_root = upload_root or conf['content.upload_root']
+            upload_root = upload_root or conf[self.ckey('upload_root')]
             file_path = os.path.join(id, self.content_file.filename)
             self.upload_path = os.path.join(upload_root, file_path)
-            super(ContentItem, self).__init__(id=id,
-                                              file_path=file_path,
-                                              **kwargs)
+            super(BaseUploadItem, self).__init__(id=id,
+                                                 file_path=file_path,
+                                                 **kwargs)
         else:
-            super(ContentItem, self).__init__(id=id, **kwargs)
+            super(BaseUploadItem, self).__init__(id=id, **kwargs)
+
+    def ckey(self, name):
+        return '{0}.{1}'.format(self.type, name)
 
     @property
     def url(self):
-        url_template = request.app.config['content.url_template']
+        url_template = request.app.config[self.ckey('url_template')]
         base_url = url_template.format(self.data['name'])
         return urlparse.urljoin(base_url, self.data['url'])
 
     @property
     def unit_price(self):
-        return humanize_amount(request.app.config['content.price_per_mb'],
+        return humanize_amount(request.app.config[self.ckey('price_per_mb')],
                                request.app.config)
 
     def save(self):
@@ -279,21 +281,29 @@ class ContentItem(BaseItem):
 
             self.content_file.save(self.upload_path)
 
-        super(ContentItem, self).save()
+        super(BaseUploadItem, self).save()
 
     def calculate_chargeable_size(self):
         return int(math.ceil(float(self.file_size) / 1024 / 1024))
 
     def calculate_price(self):
         chargeable_size = self.calculate_chargeable_size()
-        price_per_mb_cents = request.app.config['content.price_per_mb']
+        price_per_mb_cents = request.app.config[self.ckey('price_per_mb')]
         return chargeable_size * price_per_mb_cents
 
     def charge(self, token):
         human_size = '{0} MB'.format(self.calculate_chargeable_size())
-        description = request.app.config['content.description_template']
+        description = request.app.config[self.ckey('description_template')]
         description = description.format(human_size)
         return self._charge(token, description)
+
+
+class ContentItem(BaseUploadItem):
+    type = 'content'
+
+
+class TVItem(BaseUploadItem):
+    type = 'tv'
 
 
 class TwitterItem(BaseItem):

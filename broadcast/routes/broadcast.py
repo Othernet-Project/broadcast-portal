@@ -15,8 +15,13 @@ from bottle_utils.csrf import csrf_protect, csrf_token
 from bottle_utils.html import set_qparam
 from bottle_utils.i18n import dummy_gettext as _
 
-from ..forms.broadcast import ContentForm, ContentDetailsForm, TwitterForm
+from ..forms.broadcast import (ContentForm,
+                               ContentDetailsForm,
+                               TVForm,
+                               TVDetailsForm,
+                               TwitterForm)
 from ..util.broadcast import (ContentItem,
+                              TVItem,
                               TwitterItem,
                               get_unique_id,
                               sign,
@@ -26,23 +31,28 @@ from ..util.template import template, view
 
 @view('broadcast_content')
 @csrf_token
-def show_broadcast_content_form():
-    url_template = request.app.config['content.url_template']
+def show_broadcast_content_form(item_type):
+    url_template = request.app.config['{0}.url_template'.format(item_type)]
     id = get_unique_id()
     signature = sign(id, secret_key=request.app.config['app.secret_key'])
     initial_data = {'id': id, 'signature': signature}
-    return dict(form=ContentForm(initial_data), url_prefix=url_template)
+    form_cls = {'content': ContentForm, 'tv': TVForm}[item_type]
+    return dict(form=form_cls(initial_data),
+                url_prefix=url_template,
+                item_type=item_type)
 
 
 @csrf_protect
 @view('broadcast_content')
-def broadcast_content():
-    url_template = request.app.config['content.url_template']
+def broadcast_content(item_type):
+    url_template = request.app.config['{0}.url_template'.format(item_type)]
     form_data = request.forms.decode()
     form_data.update(request.files)
-    form = ContentForm(form_data)
+    form_cls = {'content': ContentForm, 'tv': TVForm}[item_type]
+    form = form_cls(form_data)
     if form.is_valid():
-        content_item = ContentItem(
+        item_cls = {'content': ContentItem, 'tv': TVItem}[item_type]
+        item = item_cls(
             created=datetime.datetime.utcnow(),
             title=form.processed_data['title'],
             url=form.processed_data['url'],
@@ -50,13 +60,13 @@ def broadcast_content():
             content_file=form.processed_data['content_file'],
             file_size=form.processed_data['file_size']
         )
-        content_item.save()
+        item.save()
         next_url = request.app.get_url('broadcast_content_details_form',
-                                       item_type=content_item.type,
-                                       item_id=content_item.id)
+                                       item_type=item.type,
+                                       item_id=item.id)
         redirect(next_url + set_qparam(mode='free').to_qs())
 
-    return dict(form=form, url_prefix=url_template)
+    return dict(form=form, url_prefix=url_template, item_type=item_type)
 
 
 @view('broadcast_content_details')
@@ -70,15 +80,18 @@ def show_broadcast_content_details_form(item):
                     'signature': signature,
                     'language': item.language,
                     'license': item.license}
-    return dict(item=item, mode=mode, form=ContentDetailsForm(initial_data))
+    form_cls = {'content': ContentDetailsForm, 'tv': TVDetailsForm}[item.type]
+    return dict(item=item, mode=mode, form=form_cls(initial_data))
 
 
 @csrf_protect
 @fetch_item
 def broadcast_content_details(item):
-    form = ContentDetailsForm(request.forms)
+    form_cls = {'content': ContentDetailsForm, 'tv': TVDetailsForm}[item.type]
+    form = form_cls(request.forms)
     if form.is_valid():
-        item.update(status=ContentItem.PROCESSING,
+        item_cls = {'content': ContentItem, 'tv': TVItem}[item.type]
+        item.update(status=item_cls.PROCESSING,
                     language=form.processed_data['language'],
                     license=form.processed_data['license'])
         if form.processed_data['mode'] == 'priority':
@@ -129,25 +142,25 @@ def broadcast_twitter():
 def route(conf):
     return (
         (
-            '/broadcast/content/',
+            '/broadcast/<item_type:re:content|tv>/',
             'GET',
             show_broadcast_content_form,
             'broadcast_content_form',
             {}
         ), (
-            '/broadcast/content/',
+            '/broadcast/<item_type:re:content|tv>/',
             'POST',
             broadcast_content,
             'broadcast_content',
             {}
         ), (
-            '/broadcast/<item_type:re:content>/<item_id:re:[0-9a-f]{32}>/details/',
+            '/broadcast/<item_type:re:content|tv>/<item_id:re:[0-9a-f]{32}>/details/',
             'GET',
             show_broadcast_content_details_form,
             'broadcast_content_details_form',
             {}
         ), (
-            '/broadcast/<item_type:re:content>/<item_id:re:[0-9a-f]{32}>/details/',
+            '/broadcast/<item_type:re:content|tv>/<item_id:re:[0-9a-f]{32}>/details/',
             'POST',
             broadcast_content_details,
             'broadcast_content_details',

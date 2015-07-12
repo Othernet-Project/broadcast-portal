@@ -11,7 +11,7 @@
 </div>
 <div class="full-page-form">
     <div class="content">
-        ${h.form('post', action=url('broadcast_content'), enctype="multipart/form-data")}
+        ${h.form('post', action=url('broadcast_content', item_type=item_type), enctype="multipart/form-data")}
             % if form.error:
             ${form.error}
             % endif

@@ -18,7 +18,7 @@ from bottle_utils.i18n import lazy_gettext as _
 
 from outernet_metadata.values import LICENSES, LICENSE_NAMES
 
-from ..util.broadcast import sign, get_item, ContentItem, TwitterItem
+from ..util.broadcast import sign, get_item, ContentItem, TVItem, TwitterItem
 
 LICENSE_CHOICES = (('', _('Select the content license')),)
 LICENSE_CHOICES += tuple(zip(LICENSES, LICENSE_NAMES))
@@ -185,15 +185,13 @@ def list_zipfile(zip_filepath):
         return zf.namelist()
 
 
-class BaseContentForm(form.Form):
+class BaseUploadForm(form.Form):
     messages = {
         # Translators, upload form error when data is tampered with
         'tampered': _('Form data missing or has been tampered with.'),
         # Translators, upload form error when form expires
         'expired': _('Form expired, please retry the submission.'),
     }
-
-    type = ContentItem.type
 
     id = form.HiddenField()
     signature = form.HiddenField()
@@ -206,7 +204,50 @@ class BaseContentForm(form.Form):
             raise form.ValidationError('tampered', {})
 
 
-class ContentForm(BaseContentForm):
+class UploadForm(BaseUploadForm):
+    title = form.StringField(
+        # Translators, used as label for content title field
+        _("Title"),
+        placeholder=_('title'),
+        validators=[form.Required()])
+    url = form.StringField(
+        # Translators, used as label for content link field
+        _("Your content link"),
+        validators=[form.Required()],
+        messages={
+            # Translators, upload form error message
+            'url': _('The chosen link is already in use.'),
+        })
+
+    def postprocess_content_file(self, file_upload):
+        # validate file size
+        allowed_size = request.app.config['{0}.size_limit'.format(self.type)]
+        file_size = get_file_size(file_upload.file, limit=allowed_size)
+        if file_size > allowed_size:
+            h_size = html.hsize(allowed_size)
+            raise form.ValidationError('file_size', {'size': h_size})
+
+        self.processed_data['file_size'] = file_size
+        # must seek to the beginning of file so it can be saved
+        file_upload.file.seek(0)
+
+        return file_upload
+
+    def postprocess_url(self, value):
+        if get_item(self.type, url=value):
+            raise form.ValidationError('url', {})
+
+        return value
+
+    def validate(self):
+        super(UploadForm, self).validate()
+        id = self.processed_data['id']
+        if get_item(self.type, id=id):
+            raise form.ValidationError('expired', {})
+
+
+class ContentForm(UploadForm):
+    type = ContentItem.type
     content_file = form.FileField(
         # Translators, used as label for content file upload field
         _("Content file"),
@@ -220,48 +261,26 @@ class ContentForm(BaseContentForm):
             # Translators, upload form error, do not translate '{filename}'
             'index': _('No HTML file found in {filename}'),
         })
-    title = form.StringField(
-        # Translators, used as label for content title field
-        _("Content title"),
-        placeholder=_('content title'),
-        validators=[form.Required()])
-    url = form.StringField(
-        # Translators, used as label for content link field
-        _("Your content link"),
+
+
+class TVForm(UploadForm):
+    type = TVItem.type
+    content_file = form.FileField(
+        # Translators, used as label for content file upload field
+        _("Audio / Video file"),
+        placeholder=_('audio / video'),
         validators=[form.Required()],
         messages={
-            # Translators, upload form error message
-            'url': _('The chosen link is already in use.'),
+            # Translators, upload form error, do not translate '{formats}'
+            'file_format': _('Only {formats} files are allowed.'),
+            # Translators, upload form error, do not translate '{size}'
+            'file_size': _('Files larger than {size} are not allowed.'),
+            # Translators, upload form error, do not translate '{filename}'
+            'index': _('No HTML file found in {filename}'),
         })
 
-    def postprocess_content_file(self, file_upload):
-        # validate file size
-        allowed_size = request.app.config['content.size_limit']
-        file_size = get_file_size(file_upload.file, limit=allowed_size)
-        if file_size > allowed_size:
-            h_size = html.hsize(allowed_size)
-            raise form.ValidationError('file_size', {'size': h_size})
 
-        self.processed_data['file_size'] = file_size
-        # must seek to the beginning of file so it can be saved
-        file_upload.file.seek(0)
-
-        return file_upload
-
-    def postprocess_url(self, value):
-        if get_item('content', url=value):
-            raise form.ValidationError('url', {})
-
-        return value
-
-    def validate(self):
-        super(ContentForm, self).validate()
-        id = self.processed_data['id']
-        if get_item('content', id=id):
-            raise form.ValidationError('expired', {})
-
-
-class ContentDetailsForm(BaseContentForm):
+class DetailsForm(BaseUploadForm):
     mode = form.HiddenField()
     license = form.SelectField(
         # Translators, used as label for content license field
@@ -275,9 +294,17 @@ class ContentDetailsForm(BaseContentForm):
         validators=[form.Required()])
 
     def validate(self):
-        super(ContentDetailsForm, self).validate()
+        super(DetailsForm, self).validate()
         if self.processed_data['mode'] not in ('free', 'priority'):
             raise form.ValidationError('tampered', {})
+
+
+class ContentDetailsForm(DetailsForm):
+    type = ContentItem.type
+
+
+class TVDetailsForm(DetailsForm):
+    type = TVItem.type
 
 
 class TwitterForm(form.Form):
