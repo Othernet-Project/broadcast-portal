@@ -9,6 +9,7 @@ create table content
     file_size integer,                  -- file size in bytes
     title varchar,                      -- content title chosen by user
     license varchar,                    -- content license chosen by user
+    language varchar,                   -- content language chosen by user
     url varchar,                        -- content url chosen by user
     charge_id varchar,                  -- stripe charge object id, if set content has priority
     notified timestamp,                 -- time when notification about this item was sent
