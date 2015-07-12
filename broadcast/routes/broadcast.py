@@ -28,11 +28,10 @@ from ..util.template import template, view
 @csrf_token
 def show_broadcast_content_form():
     url_template = request.app.config['content.url_template']
-    url_prefix = url_template.format(_("your-username"))
     id = get_unique_id()
     signature = sign(id, secret_key=request.app.config['app.secret_key'])
     initial_data = {'id': id, 'signature': signature}
-    return dict(form=ContentForm(initial_data), url_prefix=url_prefix)
+    return dict(form=ContentForm(initial_data), url_prefix=url_template)
 
 
 @csrf_protect

@@ -96,7 +96,7 @@ def humanize_amount(cent_amount, config):
     return "{} {:,.2f}".format(currency, basic_unit)
 
 
-def send_payment_confirmation(item, stripe_obj, username, email, config):
+def send_payment_confirmation(item, stripe_obj, email, config):
     interval_types = {
         'month': _("monthly"),
         'year': _("annual")
@@ -119,8 +119,7 @@ def send_payment_confirmation(item, stripe_obj, username, email, config):
         timestamp = stripe_obj.created
         amount = stripe_obj.amount
 
-    context_data = {'username': username,
-                    'email': email,
+    context_data = {'email': email,
                     'item_type': item_types[item.type],
                     'last4digits': last4digits,
                     'timestamp': datetime.datetime.fromtimestamp(timestamp),

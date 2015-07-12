@@ -16,7 +16,8 @@ from ..forms.priority import PaymentForm
 from ..util.broadcast import (fetch_item,
                               guard_already_charged,
                               send_payment_confirmation,
-                              ChargeError)
+                              ChargeError,
+                              TwitterItem)
 from ..util.template import view
 
 
@@ -27,6 +28,8 @@ from ..util.template import view
 def show_broadcast_priority_form(item):
     stripe_public_key = request.app.config['stripe.public_key']
     form = PaymentForm({'stripe_public_key': stripe_public_key})
+    if not isinstance(item, TwitterItem):
+        form.email.validators = []
     return dict(mode='priority', item=item, form=form)
 
 
@@ -36,21 +39,26 @@ def show_broadcast_priority_form(item):
 @guard_already_charged
 def broadcast_priority(item):
     form = PaymentForm(request.forms)
+    if not isinstance(item, TwitterItem):
+        form.email.validators = []
+
     error = None
     if form.is_valid():
         token = form.processed_data['stripe_token']
+        item.update(email=form.processed_data['email'])
         try:
             stripe_obj = item.charge(token)
         except ChargeError as exc:
             error = exc
         else:
-            task_runner = request.app.config['task.runner']
-            task_runner.schedule(send_payment_confirmation,
-                                 item,
-                                 stripe_obj,
-                                 request.user.username,
-                                 request.user.email,
-                                 request.app.config)
+            if item.email:
+                task_runner = request.app.config['task.runner']
+                task_runner.schedule(send_payment_confirmation,
+                                     item,
+                                     stripe_obj,
+                                     item.email,
+                                     request.app.config)
+
             scheduled_url = request.app.get_url('broadcast_priority_scheduled',
                                                 item_type=item.type,
                                                 item_id=item.id)

@@ -8,6 +8,7 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
+import re
 
 from bottle_utils import form
 from bottle_utils.i18n import lazy_gettext as _
@@ -21,7 +22,15 @@ class PaymentForm(form.Form):
 
     stripe_public_key = form.HiddenField()
     stripe_token = form.HiddenField()
-
+    email = form.StringField(
+        # Translators, used as label for email field
+        _("Email"),
+        placeholder=_('Email'),
+        validators=[form.Required()],
+        messages={
+            'email_invalid': _("Invalid e-mail address entered."),
+        }
+    )
     # Translators, used as label for credit card number field
     card_number = form.StringField(_("Card Number"), autocomplete='off',
                                    placeholder='XXXX XXXX XXXX XXXX',
@@ -39,6 +48,12 @@ class PaymentForm(form.Form):
                                  # Translators, used as placeholder for year
                                  placeholder='YY', autocomplete='off',
                                  **{'data-stripe': 'exp-year', 'size': 4})
+
+    def postprocess_email(self, value):
+        if value and not re.match(r'[^@]+@[^@]+\.[^@]+', value):
+            raise form.ValidationError('email_invalid', {})
+
+        return value
 
     def validate(self):
         if not self.processed_data['stripe_token']:

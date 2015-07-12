@@ -50,6 +50,13 @@
             % endif
             ${csrf_tag()}
             ${form.stripe_public_key}
+            <p class="field">
+                ${form.email.label}
+                ${form.email}
+                % if form.email.error:
+                ${form.email.error}
+                % endif
+            </p>
             <p class="field form-input-required">
                 ${form.card_number.label}
                 ${form.card_number}
