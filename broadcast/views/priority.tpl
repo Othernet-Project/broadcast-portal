@@ -44,7 +44,7 @@
             % endif
             ${csrf_tag()}
             ${form.stripe_public_key}
-            <p class="field">
+            <p class="field form-input-required">
                 ${form.email.label}
                 ${form.email}
                 % if form.email.error:

@@ -27,6 +27,13 @@
                 ${_("Use All rights reserved if unsure. If you are the author, we recommend Creative Commons Attribution. Get more information about licenses %(link)s.") % {'link': '<a target="_blank" href="http://wiki.outernet.is/wiki/Content_license">here</a>'}}
                 </span>
             </p>
+            <p class="field">
+                ${form.email.label}
+                ${form.email}
+                % if form.email.error:
+                ${form.email.error}
+                % endif
+            </p>
             <div class="buttons">
                 <div class="left">
                     <button type="submit" class="primary" name="mode" value="priority"><span class="icon"></span> ${_("Today (%(amount)s)") % {'amount': item.priority_price}}</button>

@@ -89,7 +89,8 @@ def broadcast_content_details(item):
     if form.is_valid():
         item_cls = {'content': ContentItem, 'tv': TVItem}[item.type]
         item.update(status=item_cls.PROCESSING,
-                    license=form.processed_data['license'])
+                    license=form.processed_data['license'],
+                    email=form.processed_data['email'])
         if form.processed_data['mode'] == 'priority':
             next_url = request.app.get_url('broadcast_priority_form',
                                            item_type=item.type,

@@ -9,6 +9,7 @@ file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
 import os
+import re
 import zipfile
 
 from bottle import request
@@ -292,6 +293,20 @@ class DetailsForm(BaseUploadForm):
         _("Copyright"),
         choices=LICENSE_CHOICES,
         validators=[form.Required()])
+    email = form.StringField(
+        # Translators, used as label for email field
+        _("Email"),
+        placeholder=_('Email'),
+        messages={
+            'email_invalid': _("Invalid e-mail address entered."),
+        }
+    )
+
+    def postprocess_email(self, value):
+        if value and not re.match(r'[^@]+@[^@]+\.[^@]+', value):
+            raise form.ValidationError('email_invalid', {})
+
+        return value
 
     def validate(self):
         super(DetailsForm, self).validate()

@@ -16,8 +16,7 @@ from ..forms.priority import PaymentForm
 from ..util.broadcast import (fetch_item,
                               guard_already_charged,
                               send_payment_confirmation,
-                              ChargeError,
-                              TwitterItem)
+                              ChargeError)
 from ..util.template import view
 
 
@@ -27,9 +26,8 @@ from ..util.template import view
 @guard_already_charged
 def show_broadcast_priority_form(item):
     stripe_public_key = request.app.config['stripe.public_key']
-    form = PaymentForm({'stripe_public_key': stripe_public_key})
-    if not isinstance(item, TwitterItem):
-        form.email.validators = []
+    form = PaymentForm({'stripe_public_key': stripe_public_key,
+                        'email': item.email})
     return dict(mode='priority', item=item, form=form)
 
 
@@ -39,9 +37,6 @@ def show_broadcast_priority_form(item):
 @guard_already_charged
 def broadcast_priority(item):
     form = PaymentForm(request.forms)
-    if not isinstance(item, TwitterItem):
-        form.email.validators = []
-
     error = None
     if form.is_valid():
         token = form.processed_data['stripe_token']
