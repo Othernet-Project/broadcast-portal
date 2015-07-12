@@ -17,13 +17,6 @@
             ${csrf_tag()}
             ${form.id}
             ${form.signature}
-            <p class="field form-input-required required">
-                ${form.language.label}
-                ${form.language}
-                % if form.language.error:
-                ${form.language.error}
-                % endif
-            </p>
             <p class="field form-input-required form-select required">
                 ${form.license.label}
                 ${form.license}

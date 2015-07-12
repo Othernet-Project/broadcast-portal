@@ -218,6 +218,11 @@ class UploadForm(BaseUploadForm):
             # Translators, upload form error message
             'url': _('The chosen link is already in use.'),
         })
+    language = form.SelectField(
+        # Translators, used as label for content language field
+        _("Language"),
+        choices=LOCALE_CHOICES,
+        validators=[])
 
     def postprocess_content_file(self, file_upload):
         # validate file size
@@ -286,11 +291,6 @@ class DetailsForm(BaseUploadForm):
         # Translators, used as label for content license field
         _("Copyright"),
         choices=LICENSE_CHOICES,
-        validators=[form.Required()])
-    language = form.SelectField(
-        # Translators, used as label for content language field
-        _("Language"),
-        choices=LOCALE_CHOICES,
         validators=[form.Required()])
 
     def validate(self):

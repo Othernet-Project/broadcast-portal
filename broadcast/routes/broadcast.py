@@ -55,6 +55,7 @@ def broadcast_content(item_type):
             created=datetime.datetime.utcnow(),
             title=form.processed_data['title'],
             url=form.processed_data['url'],
+            language=form.processed_data['language'],
             id=form.processed_data['id'],
             content_file=form.processed_data['content_file'],
             file_size=form.processed_data['file_size']
@@ -75,7 +76,6 @@ def show_broadcast_content_details_form(item):
     signature = sign(item.id, secret_key=request.app.config['app.secret_key'])
     initial_data = {'id': item.id,
                     'signature': signature,
-                    'language': item.language,
                     'license': item.license}
     form_cls = {'content': ContentDetailsForm, 'tv': TVDetailsForm}[item.type]
     return dict(item=item, form=form_cls(initial_data))
@@ -89,7 +89,6 @@ def broadcast_content_details(item):
     if form.is_valid():
         item_cls = {'content': ContentItem, 'tv': TVItem}[item.type]
         item.update(status=item_cls.PROCESSING,
-                    language=form.processed_data['language'],
                     license=form.processed_data['license'])
         if form.processed_data['mode'] == 'priority':
             next_url = request.app.get_url('broadcast_priority_form',

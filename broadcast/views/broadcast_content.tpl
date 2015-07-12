@@ -42,6 +42,13 @@
                 <span class="field-help preview" data-prefix="${url_prefix}">${url_prefix}</span>
                 <span class="field-help">${_("This will be the direct link to your content on Outernet. It's similar to a regular internet link. You are free to use any URL provided that it only consists of letters (a-z), numbers (0-9), dashes (-), underscores (_) and slashes (/).")}</span>
             </p>
+            <p class="field">
+                ${form.language.label}
+                ${form.language}
+                % if form.language.error:
+                ${form.language.error}
+                % endif
+            </p>
             <p class="buttons">
                 <button type="submit" class="primary"><span class="icon"></span> ${_('Continue')}</button>
             </p>
