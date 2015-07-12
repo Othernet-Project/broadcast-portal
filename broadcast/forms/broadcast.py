@@ -185,7 +185,7 @@ def list_zipfile(zip_filepath):
         return zf.namelist()
 
 
-class ContentForm(form.Form):
+class BaseContentForm(form.Form):
     messages = {
         # Translators, upload form error when data is tampered with
         'tampered': _('Form data missing or has been tampered with.'),
@@ -195,8 +195,18 @@ class ContentForm(form.Form):
 
     type = ContentItem.type
 
-    id = form.HiddenField(validators=[form.Required()])
-    signature = form.HiddenField(validators=[form.Required()])
+    id = form.HiddenField()
+    signature = form.HiddenField()
+
+    def validate(self):
+        id = self.processed_data['id']
+        signature = self.processed_data['signature']
+        secret_key = request.app.config.get('app.secret_key')
+        if signature != sign(id, secret_key):
+            raise form.ValidationError('tampered', {})
+
+
+class ContentForm(BaseContentForm):
     content_file = form.FileField(
         # Translators, used as label for content file upload field
         _("Content file"),
@@ -214,16 +224,6 @@ class ContentForm(form.Form):
         # Translators, used as label for content title field
         _("Content title"),
         placeholder=_('content title'),
-        validators=[form.Required()])
-    license = form.SelectField(
-        # Translators, used as label for content license field
-        _("Copyright"),
-        choices=LICENSE_CHOICES,
-        validators=[form.Required()])
-    language = form.SelectField(
-        # Translators, used as label for content language field
-        _("Language"),
-        choices=LOCALE_CHOICES,
         validators=[form.Required()])
     url = form.StringField(
         # Translators, used as label for content link field
@@ -255,13 +255,29 @@ class ContentForm(form.Form):
         return value
 
     def validate(self):
+        super(ContentForm, self).validate()
         id = self.processed_data['id']
-        signature = self.processed_data['signature']
-        secret_key = request.app.config.get('app.secret_key')
-        if signature != sign(id, secret_key):
-            raise form.ValidationError('tampered', {})
         if get_item('content', id=id):
             raise form.ValidationError('expired', {})
+
+
+class ContentDetailsForm(BaseContentForm):
+    mode = form.HiddenField()
+    license = form.SelectField(
+        # Translators, used as label for content license field
+        _("Copyright"),
+        choices=LICENSE_CHOICES,
+        validators=[form.Required()])
+    language = form.SelectField(
+        # Translators, used as label for content language field
+        _("Language"),
+        choices=LOCALE_CHOICES,
+        validators=[form.Required()])
+
+    def validate(self):
+        super(ContentDetailsForm, self).validate()
+        if self.processed_data['mode'] not in ('free', 'priority'):
+            raise form.ValidationError('tampered', {})
 
 
 class TwitterForm(form.Form):

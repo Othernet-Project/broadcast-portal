@@ -21,10 +21,7 @@
             <p class="field form-input-required form-input-file">
                 ${form.content_file.label}
                 ${form.content_file}
-                <span class="field-help">
-                Package your content into a zip file containing at least a
-                single HTML page.
-                </span>
+                <span class="field-help">${_("Package your content into a zip file containing at least a single HTML page.")}</span>
                 % if form.content_file.error:
                 ${form.content_file.error}
                 % endif
@@ -36,23 +33,6 @@
                 ${form.title.error}
                 % endif
             </p>
-            <p class="field form-input-required required">
-                ${form.language.label}
-                ${form.language}
-                % if form.language.error:
-                ${form.language.error}
-                % endif
-            </p>
-            <p class="field form-input-required form-select required">
-                ${form.license.label}
-                ${form.license}
-                % if form.license.error:
-                ${form.license.error}
-                % endif
-                <span class="field-help">
-                ${_("Use All rights reserved if unsure. If you are the author, we recommend Creative Commons Attribution. Get more information about licenses %(link)s.") % {'link': '<a target="_blank" href="http://wiki.outernet.is/wiki/Content_license">here</a>'}}
-                </span>
-            </p>
             <p class="field form-input-required content-url required">
                 ${form.url.label}
                 ${form.url}
@@ -60,7 +40,7 @@
                 ${form.url.error}
                 % endif
                 <span class="field-help preview" data-prefix="${url_prefix}">${url_prefix}</span>
-                <span class="field-help">${_("This will be the direct link to your content on Outernet. 'your-username' will be replaced by your username after you register your account in the next step. It's similar to a regular internet link. You are free to use any URL provided that it only consists of letters (a-z), numbers (0-9), dashes (-), underscores (_) and slashes (/).")}</span>
+                <span class="field-help">${_("This will be the direct link to your content on Outernet. It's similar to a regular internet link. You are free to use any URL provided that it only consists of letters (a-z), numbers (0-9), dashes (-), underscores (_) and slashes (/).")}</span>
             </p>
             <p class="buttons">
                 <button type="submit" class="primary"><span class="icon"></span> ${_('Continue')}</button>

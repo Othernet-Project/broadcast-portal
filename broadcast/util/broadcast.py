@@ -10,6 +10,7 @@ file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 
 import datetime
 import decimal
+import functools
 import hmac
 import hashlib
 import math
@@ -19,7 +20,7 @@ import urlparse
 
 import stripe
 
-from bottle import request
+from bottle import request, redirect, abort
 from bottle_utils.form import ValidationError
 from bottle_utils.i18n import dummy_gettext as _
 
@@ -328,3 +329,32 @@ class TwitterItem(BaseItem):
     def plan_price(self):
         return humanize_amount(self.calculate_price(),
                                request.app.config)
+
+
+def fetch_item(func):
+    @functools.wraps(func)
+    def wrapper(**kwargs):
+        item_type = kwargs.pop('item_type', None)
+        item_id = kwargs.pop('item_id', None)
+        if not item_type or not item_id:
+            abort(404, _("The specified item was not found."))
+
+        item = get_item(item_type, id=item_id)
+        if not item:
+            abort(404, _("The specified item was not found."))
+
+        return func(item=item, **kwargs)
+    return wrapper
+
+
+def guard_already_charged(func):
+    @functools.wraps(func)
+    def wrapper(item, **kwargs):
+        if item.charge_id:
+            scheduled_url = request.app.get_url('broadcast_priority_scheduled',
+                                                item_type=item.type,
+                                                item_id=item.id)
+            redirect(scheduled_url)
+
+        return func(item=item, **kwargs)
+    return wrapper

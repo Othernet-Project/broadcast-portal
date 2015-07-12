@@ -21,12 +21,6 @@
             <div class="menu-block-right">
                 <nav id="nav" class="menu-subblock toolbar">
                     <a href="http://www.outernet.is/" class="homepage"><span class="label">${_("Outernet Homepage")}</span></a>
-                    % if request.user.is_authenticated:
-                    <a href="${url('logout')}" class="logout"><span class="label">${_("Log out")}</span></a>
-                    % else:
-                    <a href="${url('login')}" class="login"><span class="label">${_("Login")}</span></a>
-                    <a href="${url('register_form')}" class="register"><span class="label">${_("Register")}</span></a>
-                    % endif
                 </nav>
                 <div class="hamburger">
                     <a href="#nav">Site menu</a>

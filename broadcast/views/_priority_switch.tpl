@@ -6,11 +6,11 @@
             <span class="icon"></span>
             ${_("Wait in line")}
         </span>
-        <a href="${url('broadcast_priority_form', item_type=item.type, item_id=item.id)}" class="right priority">
+        <a href="${url('broadcast_content_details_form', item_type=item.type, item_id=item.id) + h.set_qparam(mode='priority').to_qs()}" class="right priority">
             ${_("Today (%(amount)s)") % {'amount': item.priority_price}}
         </a>
         % else:
-        <a href="${url('broadcast_free_form', item_type=item.type, item_id=item.id)}" class="left free">
+        <a href="${url('broadcast_content_details_form', item_type=item.type, item_id=item.id) + h.set_qparam(mode='free').to_qs()}" class="left free">
             ${_("Wait in line")}
         </a>
         <span class="right active priority">
@@ -25,7 +25,7 @@
     occasion possible. This depends on total volume of content being
     submitted by other users.''')}
     % else:
-    ${_('''After completing the payment, your content will be reviewed by 
+    ${_('''After completing the payment, your content will be reviewed by
     Outernet staff and broadcast during Outernet's working hours (week days
     between 11am and 7pm Chicago time).''')} <br>
     <strong>
