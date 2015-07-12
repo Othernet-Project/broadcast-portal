@@ -2298,6 +2298,11 @@ footer .copyright {
 /* line 3, ../scss/broadcast.scss */
 .content .content-url .field-help.preview {
   font-weight: bold; }
+/* line 8, ../scss/broadcast.scss */
+.content .buttons .left, .content .buttons .right {
+  width: 50%;
+  display: inline-block;
+  vertical-align: top; }
 
 /**
  * _media_query.scss: media query support

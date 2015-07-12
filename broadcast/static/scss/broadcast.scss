@@ -4,4 +4,11 @@
             font-weight: bold;
         }
     }
+    .buttons {
+        .left, .right {
+            width: 50%;
+            display: inline-block;
+            vertical-align: top;
+        }
+    }
 }

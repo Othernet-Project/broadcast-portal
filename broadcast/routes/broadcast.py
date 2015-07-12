@@ -12,7 +12,6 @@ import datetime
 
 from bottle import request, redirect
 from bottle_utils.csrf import csrf_protect, csrf_token
-from bottle_utils.html import set_qparam
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.broadcast import (ContentForm,
@@ -64,7 +63,7 @@ def broadcast_content(item_type):
         next_url = request.app.get_url('broadcast_content_details_form',
                                        item_type=item.type,
                                        item_id=item.id)
-        redirect(next_url + set_qparam(mode='free').to_qs())
+        redirect(next_url)
 
     return dict(form=form, url_prefix=url_template, item_type=item_type)
 
@@ -73,15 +72,13 @@ def broadcast_content(item_type):
 @fetch_item
 @csrf_token
 def show_broadcast_content_details_form(item):
-    mode = request.params.get('mode', 'free')
     signature = sign(item.id, secret_key=request.app.config['app.secret_key'])
-    initial_data = {'mode': mode,
-                    'id': item.id,
+    initial_data = {'id': item.id,
                     'signature': signature,
                     'language': item.language,
                     'license': item.license}
     form_cls = {'content': ContentDetailsForm, 'tv': TVDetailsForm}[item.type]
-    return dict(item=item, mode=mode, form=form_cls(initial_data))
+    return dict(item=item, form=form_cls(initial_data))
 
 
 @csrf_protect
@@ -108,10 +105,7 @@ def broadcast_content_details(item):
                             message=message,
                             redirect_url=request.app.get_url('main'),
                             redirect_target=_('main page'))
-    return template('broadcast_content_details',
-                    item=item,
-                    form=form,
-                    mode=form.processed_data['mode'])
+    return template('broadcast_content_details', item=item, form=form)
 
 
 @view('broadcast_twitter')

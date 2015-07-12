@@ -7,17 +7,11 @@
 
 <%block name="main">
 <div class="h-bar">
-    % if item.has_free_mode:
-        ${priority_switch.body()}
+    <h2>${_('Complete the payment')}</h2>
+    % if item.type == 'twitter':
+        <p class="priority-help">${_("After completing the payment, your feed will be reviewed by Outernet staff and start broadcasting during Outernet's working hours (week days between 11am and 7pm Chicago time). You can always unsubscribe by emailing us at {email}.").format(email='<a href="mailto:hello@outernet.is">hello@outernet.is</a>')}</p>
     % else:
-        <h2>${_('Complete the payment')}</h2>
-        <p class="priority-help">
-        ${_('''After completing the payment, your feed will be reviewed by
-        Outernet staff and start broadcasting during Outernet's working hours
-        (week days between 11am and 7pm Chicago time). You can always
-        unsubscribe by emailing us at {email}.'''
-        ).format(email='<a href="mailto:hello@outernet.is">hello@outernet.is</a>')}
-        </p>
+        <p class="priority-help">${_("After completing the payment, your content will be reviewed by Outernet staff and broadcast during Outernet's working hours (week days between 11am and 7pm Chicago time)")}</p>
     % endif
 </div>
 

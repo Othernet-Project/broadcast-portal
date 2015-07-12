@@ -1,5 +1,4 @@
 <%inherit file='base.tpl'/>
-<%namespace name='priority_switch' file='_priority_switch.tpl'/>
 
 <%block name="title">
     ${_("Upload content")}
@@ -7,7 +6,7 @@
 
 <%block name="main">
 <div class="h-bar">
-    ${priority_switch.body()}
+    <h1>${_('Broadcast schedule')}</h1>
 </div>
 <div class="full-page-form">
     <div class="content">
@@ -18,7 +17,6 @@
             ${csrf_tag()}
             ${form.id}
             ${form.signature}
-            ${form.mode}
             <p class="field form-input-required required">
                 ${form.language.label}
                 ${form.language}
@@ -36,9 +34,18 @@
                 ${_("Use All rights reserved if unsure. If you are the author, we recommend Creative Commons Attribution. Get more information about licenses %(link)s.") % {'link': '<a target="_blank" href="http://wiki.outernet.is/wiki/Content_license">here</a>'}}
                 </span>
             </p>
-            <p class="buttons">
-                <button type="submit" class="primary"><span class="icon"></span> ${_('Continue')}</button>
-            </p>
+            <div class="buttons">
+                <div class="left">
+                    <button type="submit" class="primary" name="mode" value="priority"><span class="icon"></span> ${_("Today (%(amount)s)") % {'amount': item.priority_price}}</button>
+                    <p class="help">${_("After completing the payment, your content will be reviewed by Outernet staff and broadcast during Outernet's working hours (week days between 11am and 7pm Chicago time)")}
+                        <br />
+                        <strong>${_('Pricing for priority content broadcast is {price} per MB').format(price=item.unit_price)}</strong>
+                    </p>
+                </div><div class="right">
+                    <button type="submit" class="secondary" name="mode" value="free"><span class="icon"></span> ${_("Wait in line")}</button>
+                    <p class="help">${_('Your content will be reviewed by staff and broadcast at earliest occasion possible. This depends on total volume of content being submitted by other users.')}</p>
+                </div>
+            </div>
         </form>
     </div>
 </div>
