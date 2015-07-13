@@ -31,20 +31,16 @@ from ..util.template import template, view
 @view('broadcast_content')
 @csrf_token
 def show_broadcast_content_form(item_type):
-    url_template = request.app.config['{0}.url_template'.format(item_type)]
     id = get_unique_id()
     signature = sign(id, secret_key=request.app.config['app.secret_key'])
     initial_data = {'id': id, 'signature': signature}
     form_cls = {'content': ContentForm, 'tv': TVForm}[item_type]
-    return dict(form=form_cls(initial_data),
-                url_prefix=url_template,
-                item_type=item_type)
+    return dict(form=form_cls(initial_data), item_type=item_type)
 
 
 @csrf_protect
 @view('broadcast_content')
 def broadcast_content(item_type):
-    url_template = request.app.config['{0}.url_template'.format(item_type)]
     form_data = request.forms.decode()
     form_data.update(request.files)
     form_cls = {'content': ContentForm, 'tv': TVForm}[item_type]
@@ -54,7 +50,6 @@ def broadcast_content(item_type):
         item = item_cls(
             created=datetime.datetime.utcnow(),
             title=form.processed_data['title'],
-            url=form.processed_data['url'],
             language=form.processed_data['language'],
             id=form.processed_data['id'],
             content_file=form.processed_data['content_file'],
@@ -66,7 +61,7 @@ def broadcast_content(item_type):
                                        item_id=item.id)
         redirect(next_url)
 
-    return dict(form=form, url_prefix=url_template, item_type=item_type)
+    return dict(form=form, item_type=item_type)
 
 
 @view('broadcast_content_details')

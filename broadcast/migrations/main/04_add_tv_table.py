@@ -10,7 +10,6 @@ create table tv
     title varchar,                      -- tv title chosen by user
     license varchar,                    -- tv license chosen by user
     language varchar,                   -- tv language chosen by user
-    url varchar,                        -- tv url chosen by user
     charge_id varchar,                  -- stripe charge object id, if set tv has priority
     notified timestamp,                 -- time when notification about this item was sent
     status varchar                      -- status representing current state of request

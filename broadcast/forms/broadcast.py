@@ -211,14 +211,6 @@ class UploadForm(BaseUploadForm):
         _("Title"),
         placeholder=_('title'),
         validators=[form.Required()])
-    url = form.StringField(
-        # Translators, used as label for content link field
-        _("Your content link"),
-        validators=[form.Required()],
-        messages={
-            # Translators, upload form error message
-            'url': _('The chosen link is already in use.'),
-        })
     language = form.SelectField(
         # Translators, used as label for content language field
         _("Language"),
@@ -238,12 +230,6 @@ class UploadForm(BaseUploadForm):
         file_upload.file.seek(0)
 
         return file_upload
-
-    def postprocess_url(self, value):
-        if get_item(self.type, url=value):
-            raise form.ValidationError('url', {})
-
-        return value
 
     def validate(self):
         super(UploadForm, self).validate()
