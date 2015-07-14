@@ -16,7 +16,7 @@
 </div>
 
 <div class="full-page-form">
-    % if item.type == 'content':
+    % if item.type in ('content', 'tv'):
         <p class="subtotal">
         <strong>
             ${_('''Your card will be charged {amount} after content is
