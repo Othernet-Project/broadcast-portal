@@ -1,14 +1,17 @@
 .content {
-    .content-url {
-        .field-help.preview {
-            font-weight: bold;
-        }
-    }
     .buttons {
-        .left, .right {
-            width: 50%;
-            display: inline-block;
-            vertical-align: top;
-        }
+      .left, .right {
+        width: 50%;
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+    .hidden {
+      display: none;
+    }
+    .file-wrapper {
+      .button {
+        margin-right: 10px;
+      }
     }
 }

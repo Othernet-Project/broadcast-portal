@@ -2291,13 +2291,16 @@ footer .copyright {
   clear: both; }
 
 /* line 3, ../scss/broadcast.scss */
-.content .content-url .field-help.preview {
-  font-weight: bold; }
-/* line 8, ../scss/broadcast.scss */
 .content .buttons .left, .content .buttons .right {
   width: 50%;
   display: inline-block;
   vertical-align: top; }
+/* line 9, ../scss/broadcast.scss */
+.content .hidden {
+  display: none; }
+/* line 13, ../scss/broadcast.scss */
+.content .file-wrapper .button {
+  margin-right: 10px; }
 
 /**
  * _media_query.scss: media query support
