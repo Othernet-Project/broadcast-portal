@@ -21,7 +21,6 @@
             <p class="field form-input-required form-input-file">
                 ${form.content_file.label}
                 ${form.content_file}
-                <span class="field-help">${_("Package your content into a zip file containing at least a single HTML page.")}</span>
                 % if form.content_file.error:
                 ${form.content_file.error}
                 % endif
