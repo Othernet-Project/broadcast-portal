@@ -32,16 +32,16 @@
         <a class="button primary" href="${url('broadcast_content_form', item_type='content')}">${_("Continue")}</a>
     </p>
     % elif item_type == 'tv':
-    <p>${_("Place high-quality public domain or Creative Commons video content on the Outernet TV channel.")}</p>
+    <p>${_("Place high-quality public domain or Creative Commons video content on the Outernet TV channel. You can also share audio files.")}</p>
     <p class="buttons">
         <a class="button primary" href="${url('broadcast_content_form', item_type='tv')}">${_("Continue")}</a>
     </p>
     % elif item_type == 'twitter':
-    <p>${_("Send your updates to the far corners of the world.")}</p>
+    <p>${_("Send your updates to the far corners of the world. We take a feed of your tweets and regularly uplink them to our global satellite network.")}</p>
     <p class="buttons">
         <a class="button primary" href="${url('broadcast_twitter_form')}">${_("Continue")}</a>
     </p>
     % else:
-    <p>${_("Use the Outernet Satellite Uplink Center to share information with the world.  Fill Outernet's library with your favorite content, tweets, video that everyone should have access to. Any shared content through the OSUC will be transmitted over our global network of geostationary satellites.")}</p>
+    <p>${_("Share your favorite content with the world.  Fill Outernet's library in space with your favorite ebooks, applications, blog posts, and videos. Help us collect news, information, and education to share with the entire world. Content uploaded through the Uplink Center will be transmitted over a network of 7 geostationary satellites.")}</p>
     % endif
 </div>
