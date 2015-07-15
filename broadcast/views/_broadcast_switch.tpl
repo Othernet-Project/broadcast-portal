@@ -1,5 +1,5 @@
 <div class="choose-broadcast-type">
-    <h2>${_('What would you like to broadcast?')}</h2>
+    <h2>${_('What would you like to share from space?')}</h2>
     <div class="switch">
         % if form.type == 'content':
         <span class="left active content"><span class="icon"></span> ${_("Content")}</span>
