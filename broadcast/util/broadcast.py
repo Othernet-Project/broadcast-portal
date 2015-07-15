@@ -103,7 +103,8 @@ def send_payment_confirmation(item, stripe_obj, email, config):
     }
     item_types = {
         'twitter': _("twitter feed"),
-        'content': _("content")
+        'content': _("content"),
+        'tv': _("tv")
     }
     is_subscription = stripe_obj.object == 'customer'
     if is_subscription:
