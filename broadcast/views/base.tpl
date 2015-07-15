@@ -37,7 +37,7 @@
 
         <%block name="footer">
         <footer>
-            <p class="logo"><span lang="en">Outernet</span>: ${_("Humanity's public library")}</p>
+            <p class="logo"><span lang="en">Outernet</span>: ${_("Humanity's Public Library")}</p>
             <p class="copyright">2014-2015 <span lang="en">Outernet Inc</span></p>
         </footer>
         </%block>
