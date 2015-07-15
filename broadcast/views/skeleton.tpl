@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title><%block name="title">Uplink your content</%block> - Outernet</title>
+        <title><%block name="title">Share your content</%block> - Outernet</title>
         <link rel="stylesheet" href="${assets['css/main']}">
     </head>
     <body>
