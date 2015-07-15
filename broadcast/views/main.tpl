@@ -42,6 +42,6 @@
         <a class="button primary" href="${url('broadcast_twitter_form')}">${_("Continue")}</a>
     </p>
     % else:
-    <p>${_("Share your favorite content with the world.  Fill Outernet's library in space with your favorite ebooks, applications, blog posts, and videos. Help us collect news, information, and education to share with the entire world. Content uploaded through the Uplink Center will be transmitted over a network of <a href="https://wiki.outernet.is/wiki/Coverage_and_transponder_settings">7 geostationary satellites.</a>")}</p>
+    <p>${_("Share your favorite content with the world.  Fill Outernet's library in space with your favorite ebooks, applications, blog posts, and videos. Help us collect news, information, and education to share with the entire world. Content uploaded through the Uplink Center may be transmitted over a network of <a href="https://wiki.outernet.is/wiki/Coverage_and_transponder_settings">7 geostationary satellites.</a>")}</p>
     % endif
 </div>
