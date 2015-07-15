@@ -2293,7 +2293,71 @@ footer .copyright {
 /* line 13, ../scss/broadcast.scss */
 .content .file-wrapper .button {
   margin-right: 10px; }
-
+/* line 17, ../scss/broadcast.scss */
+.content .progress-feedback {
+  visibility: hidden; }
+/* line 19, ../scss/broadcast.scss */
+.content .progress-feedback .help-text {
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 0; }
+/* line 25, ../scss/broadcast.scss */
+.content .progress-feedback .loader {
+  font-size: 10px;
+  margin: 0 auto;
+  text-indent: -9999em;
+  width: 7em;
+  height: 7em;
+  border-radius: 50%;
+  background: #3584cf;
+  background: -moz-linear-gradient(left, #3584cf 10%, rgba(255, 255, 255, 0) 42%);
+  background: -webkit-linear-gradient(left, #3584cf 10%, rgba(255, 255, 255, 0) 42%);
+  background: -o-linear-gradient(left, #3584cf 10%, rgba(255, 255, 255, 0) 42%);
+  background: -ms-linear-gradient(left, #3584cf 10%, rgba(255, 255, 255, 0) 42%);
+  background: linear-gradient(to right, #3584cf 10%, rgba(255, 255, 255, 0) 42%);
+  position: relative;
+  -webkit-animation: load3 1.4s infinite linear;
+  animation: load3 1.4s infinite linear;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0); }
+/* line 45, ../scss/broadcast.scss */
+.content .progress-feedback .loader:before {
+  width: 50%;
+  height: 50%;
+  background: #3584cf;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: ''; }
+/* line 55, ../scss/broadcast.scss */
+.content .progress-feedback .loader:after {
+  background: #ffffff;
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  content: '';
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+@-webkit-keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+@keyframes load3 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
 /**
  * _media_query.scss: media query support
  *

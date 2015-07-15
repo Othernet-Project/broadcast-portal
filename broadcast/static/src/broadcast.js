@@ -29,4 +29,10 @@
         fileWrapper.append(fileProxy).append(fileValue);
         input.after(fileWrapper);
     });
+
+    $('form').on('submit', function () {
+        var form = $(this);
+        form.find('button').attr('disabled', 'disabled');
+        $('.progress-feedback').css('visibility', 'visible');
+    });
 }(this, this.jQuery));

@@ -43,6 +43,10 @@
             <p class="buttons">
                 <button type="submit" class="primary"><span class="icon"></span> ${_('Continue')}</button>
             </p>
+            <div class="progress-feedback">
+                <div class="loader"></div>
+                <p class="help-text">${_("Uploading, please wait...")}</p>
+            </div>
         </form>
     </div>
 </div>
