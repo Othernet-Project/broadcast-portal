@@ -50,7 +50,3 @@
     </div>
 </div>
 </%block>
-
-<%block name="extra_scripts">
-    <script src="${assets['js/broadcast']}"></script>
-</%block>
