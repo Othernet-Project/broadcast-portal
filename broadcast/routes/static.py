@@ -12,9 +12,15 @@ def serve_static(path):
     return response
 
 
+def serve_favicon():
+    return serve_static('img/favicon.ico')
+
+
 def route(config):
     url = config['assets.url']
     return (
         ('{}<path:path>'.format(url), 'GET', serve_static, 'static',
+         {'skip': ['sessions']}),
+        ('/favicon.ico', 'GET', serve_favicon, 'favicon',
          {'skip': ['sessions']}),
     )
