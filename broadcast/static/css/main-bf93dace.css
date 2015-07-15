@@ -1799,28 +1799,16 @@ body {
   background: #ffffff; }
 /* line 25, ../scss/partials/_common.scss */
 .menu .logo-broadcast {
+  text-transform: uppercase;
+  font-size: 75%;
+  white-space: normal;
+  width: 50px;
   display: inline-block;
+  line-height: 1.0em;
   vertical-align: middle;
-  background-image: url('../img/misc/1x-s08665caf1e.png');
-  background-position: 0 0;
-  background-repeat: no-repeat;
-  width: 73px;
-  height: 22px;
-  text-indent: -119988px;
-  overflow: hidden;
-  text-align: left;
-  text-transform: capitalize; }
-@media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 25, ../scss/partials/_common.scss */
-  .menu .logo-broadcast {
-    background-image: url('../img/misc/2x-se6ed19fb02.png');
-    background-position: 0 0;
-    -moz-background-size: 260px 255px;
-    -o-background-size: 260px 255px;
-    -webkit-background-size: 260px 255px;
-    background-size: 260px 255px; } }
+  text-shadow: 1px 1px 1px #969696; }
 
-/* line 31, ../scss/partials/_common.scss */
+/* line 37, ../scss/partials/_common.scss */
 .h-bar {
   padding: 20px;
   text-align: center;
@@ -1828,7 +1816,7 @@ body {
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #dddddd; }
 
-/* line 37, ../scss/partials/_common.scss */
+/* line 43, ../scss/partials/_common.scss */
 .h-top-bar {
   padding: 10px;
   text-align: right;
@@ -1836,34 +1824,34 @@ body {
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #dddddd; }
 
-/* line 49, ../scss/partials/_common.scss */
+/* line 55, ../scss/partials/_common.scss */
 .full-page-form {
   max-width: 560px;
   margin: 0 auto;
   padding: 60px 20px; }
-/* line 52, ../scss/partials/_common.scss */
+/* line 58, ../scss/partials/_common.scss */
 .full-page-form input[type="text"], .full-page-form input[type="numeric"], .full-page-form input[type="email"], .full-page-form input[type="file"], .full-page-form input[type="password"], .full-page-form select, .full-page-form textarea {
   min-width: 200px;
   max-width: 100%;
   width: 100%; }
-/* line 65, ../scss/partials/_common.scss */
+/* line 71, ../scss/partials/_common.scss */
 .full-page-form .buttons, .full-page-form .help {
   padding-top: 1.5em;
   text-align: center; }
 
-/* line 71, ../scss/partials/_common.scss */
+/* line 77, ../scss/partials/_common.scss */
 .single {
   text-align: center;
   font-size: 125%;
   line-height: 130%; }
-/* line 75, ../scss/partials/_common.scss */
+/* line 81, ../scss/partials/_common.scss */
 .single.confirm {
   color: #058120; }
-/* line 79, ../scss/partials/_common.scss */
+/* line 85, ../scss/partials/_common.scss */
 .single.error {
   color: #c41414; }
 
-/* line 84, ../scss/partials/_common.scss */
+/* line 90, ../scss/partials/_common.scss */
 .center {
   text-align: center; }
 

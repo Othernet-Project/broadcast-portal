@@ -22,9 +22,15 @@ body {
 .menu {
   background: $white;
 
-  .logo-broadcast {  
-    @include misc-icon('broadcastcenter');
-    @include hide-text;
+  .logo-broadcast {
+    text-transform: uppercase;
+    font-size: 75%;
+    white-space: normal;
+    width: 50px;
+    display: inline-block;
+    line-height: 1.0em;
+    vertical-align: middle;
+    text-shadow: 1px 1px 1px rgba(150, 150, 150, 1);
   }
 }
 
