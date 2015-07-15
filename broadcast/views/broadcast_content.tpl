@@ -44,7 +44,7 @@
             </p>
             <div class="progress-feedback">
                 <div class="loader"></div>
-                <p class="help-text">${_("Uploading, please wait...")}</p>
+                <p class="help-text">${_("Uplinking to teleport, please wait...")}</p>
             </div>
         </form>
     </div>
