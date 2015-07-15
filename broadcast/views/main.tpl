@@ -32,16 +32,16 @@
         <a class="button primary" href="${url('broadcast_content_form', item_type='content')}">${_("Continue")}</a>
     </p>
     % elif item_type == 'tv':
-    <p>${_("Place high-quality public domain or Creative Commons video content on the Outernet TV channel. You can also share audio files.")}</p>
+    <p>${_("Place high-quality public domain or Creative Commons videos on the Outernet TV channel, which airs on <a href="https://wiki.outernet.is/wiki/Coverage_and_transponder_settings">IS-10</a>.")}</p>
     <p class="buttons">
         <a class="button primary" href="${url('broadcast_content_form', item_type='tv')}">${_("Continue")}</a>
     </p>
     % elif item_type == 'twitter':
-    <p>${_("Send your updates to the far corners of the world. We take a feed of your tweets and regularly uplink them to our global satellite network.")}</p>
+    <p>${_("Send your tweets to the far corners of the world. We take your Twitter feed and regularly uplink them to our <a href="https://wiki.outernet.is/wiki/Coverage_and_transponder_settings">global satellite network.</a>")}</p>
     <p class="buttons">
         <a class="button primary" href="${url('broadcast_twitter_form')}">${_("Continue")}</a>
     </p>
     % else:
-    <p>${_("Share your favorite content with the world.  Fill Outernet's library in space with your favorite ebooks, applications, blog posts, and videos. Help us collect news, information, and education to share with the entire world. Content uploaded through the Uplink Center will be transmitted over a network of 7 geostationary satellites.")}</p>
+    <p>${_("Share your favorite content with the world.  Fill Outernet's library in space with your favorite ebooks, applications, blog posts, and videos. Help us collect news, information, and education to share with the entire world. Content uploaded through the Uplink Center will be transmitted over a network of <a href="https://wiki.outernet.is/wiki/Coverage_and_transponder_settings">7 geostationary satellites.</a>")}</p>
     % endif
 </div>
