@@ -12,6 +12,7 @@ import datetime
 
 from bottle import request, redirect
 from bottle_utils.csrf import csrf_protect, csrf_token
+from bottle_utils.html import hsize
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.broadcast import (ContentForm,
@@ -35,7 +36,10 @@ def show_broadcast_content_form(item_type):
     signature = sign(id, secret_key=request.app.config['app.secret_key'])
     initial_data = {'id': id, 'signature': signature}
     form_cls = {'content': ContentForm, 'tv': TVForm}[item_type]
-    return dict(form=form_cls(initial_data), item_type=item_type)
+    size_limit = hsize(request.app.config['{0}.size_limit'.format(item_type)])
+    return dict(form=form_cls(initial_data),
+                item_type=item_type,
+                size_limit=size_limit)
 
 
 @csrf_protect
@@ -61,7 +65,8 @@ def broadcast_content(item_type):
                                        item_id=item.id)
         redirect(next_url)
 
-    return dict(form=form, item_type=item_type)
+    size_limit = hsize(request.app.config['{0}.size_limit'.format(item_type)])
+    return dict(form=form, item_type=item_type, size_limit=size_limit)
 
 
 @view('broadcast_content_details')

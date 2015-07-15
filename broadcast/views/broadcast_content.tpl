@@ -21,6 +21,7 @@
             <p class="field form-input-required form-input-file">
                 ${form.content_file.label}
                 ${form.content_file}
+                <span class="field-help">${_("The file should not be larger than %(limit)s" % {'limit': size_limit})}</span>
                 % if form.content_file.error:
                 ${form.content_file.error}
                 % endif
