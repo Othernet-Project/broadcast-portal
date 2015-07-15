@@ -21,13 +21,13 @@
     </div>
     <p class="priority-help">
     % if mode == 'free':
-    ${_('''Your content will be reviewed by staff and uplinked at earliest
-    occasion possible. This depends on total volume of content being
+    ${_('''Your content will be reviewed by staff and scheduled for delivery at the earliest
+    occasion possible. Time to deliver depends on total volume of content being
     submitted by other users.''')}
     % else:
-    ${_('''After submitting payment, your content will be reviewed by Outernet staff and uplinked during business hours (Monday-Friday 0900-1700 PDT).''')} <br>
+    ${_('''After completing the payment process, your content will be scheduled for delivery within 48 hours.''')}<br/>
     <strong>
-    ${_('Pricing for priority content uplinked is {price}/MB').format(price=item.unit_price)}
+    ${_('Pricing for priority content delivery is {price}/MB').format(price=item.unit_price)}
     </strong>
     % endif
     </p>
