@@ -1,12 +1,12 @@
 ${ _("""Dear user,
 
-Thank you for using Outernet Broadcast Center. This is a payment confirmation message. Your card has not been charged yet, and is awaiting approval of your %(item_type)s from staff. Please keep this email for the record:
+Thank you for using Outernet Uplink Center. This is a payment confirmation message. Your card has not been charged yet, and is awaiting approval of your %(item_type)s from staff. Please keep this email for the record:
 
 Email: %(email)s
 Card: **** %(last4digits)s
 Time: %(timestamp)s GMT
 Total: %(total_amount)s
-Service: %(item_type)s broadcast
+Service: %(item_type)s uplink
 """) % {'email': email,
         'item_type': item_type,
         'last4digits': last4digits,

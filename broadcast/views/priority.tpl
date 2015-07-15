@@ -9,9 +9,9 @@
 <div class="h-bar">
     <h2>${_('Complete the payment')}</h2>
     % if item.type == 'twitter':
-        <p class="priority-help">${_("After completing the payment, your feed will be reviewed by Outernet staff and start broadcasting during Outernet's working hours (week days between 11am and 7pm Chicago time). You can always unsubscribe by emailing us at {email}.").format(email='<a href="mailto:hello@outernet.is">hello@outernet.is</a>')}</p>
+        <p class="priority-help">${_("After completing the payment, your feed will be reviewed by Outernet staff and uplinked during Outernet's business hours (Monday-Friday 0900-1700 PDT). You can always unsubscribe by emailing us at {email}.").format(email='<a href="mailto:hello@outernet.is">hello@outernet.is</a>')}</p>
     % else:
-        <p class="priority-help">${_("After completing the payment, your content will be reviewed by Outernet staff and broadcast during Outernet's working hours (week days between 11am and 7pm Chicago time)")}</p>
+        <p class="priority-help">${_("After submitting payment, your content will be reviewed by Outernet staff and uplinked during business hours (Monday-Friday 0900-1700 PDT).")}</p>
     % endif
 </div>
 
@@ -20,7 +20,7 @@
         <p class="subtotal">
         <strong>
             ${_('''Your card will be charged {amount} after content is
-            broadcast.''').format(amount=item.priority_price)}
+            uplinked.''').format(amount=item.priority_price)}
         </strong>
         </p>
     % elif item.type == 'twitter':
@@ -84,7 +84,7 @@
                 </p>
             </div>
             <p class="buttons">
-                <button class="primary">${_('Broadcast')}</button>
+                <button class="primary">${_('Uplink')}</button>
             </p>
         </form>
     </div>

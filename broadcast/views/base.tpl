@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title><%block name="title">Broadcast your content</%block> - Outernet</title>
+        <title><%block name="title">Share your content</%block> - Outernet</title>
         % if redirect_url is not UNDEFINED:
         <meta http-equiv="refresh" content="5; url=${redirect_url}">
         % endif
@@ -16,7 +16,7 @@
         <header class="menu">
             <div class="menu-subblock">
                 <a class="logo" href="${url('main')}"><span lang="en">Outernet</span></a>
-                <a class="logo-broadcast" href="${url('main')}"></span>${_('Broadcast center')}</span></a>
+                <a class="logo-broadcast" href="${url('main')}"></span>${_('Uplink center')}</span></a>
             </div>
             <div class="menu-block-right">
                 <nav id="nav" class="menu-subblock toolbar">

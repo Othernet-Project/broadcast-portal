@@ -1,5 +1,5 @@
 <div class="choose-priority">
-    <h1>${_('Broadcast schedule:')}</h1>
+    <h1>${_('Uplink schedule:')}</h1>
     <div class="switch">
         % if mode == 'free':
         <span class="left active free">
@@ -21,15 +21,13 @@
     </div>
     <p class="priority-help">
     % if mode == 'free':
-    ${_('''Your content will be reviewed by staff and broadcast at earliest
+    ${_('''Your content will be reviewed by staff and uplinked at earliest
     occasion possible. This depends on total volume of content being
     submitted by other users.''')}
     % else:
-    ${_('''After completing the payment, your content will be reviewed by
-    Outernet staff and broadcast during Outernet's working hours (week days
-    between 11am and 7pm Chicago time).''')} <br>
+    ${_('''After submitting payment, your content will be reviewed by Outernet staff and uplinked during business hours (Monday-Friday 0900-1700 PDT).''')} <br>
     <strong>
-    ${_('Pricing for priority content broadcast is {price} per MB').format(price=item.unit_price)}
+    ${_('Pricing for priority content uplinked is {price}/MB').format(price=item.unit_price)}
     </strong>
     % endif
     </p>

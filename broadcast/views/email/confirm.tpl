@@ -1,6 +1,6 @@
 ${ _("""Dear user,
 
-Thank you registering at the Outernet Broadcast Center.
+Thank you registering at the Outernet Uplink Center.
 
 In order to complete the registration, please follow this link and verify your
 email address:

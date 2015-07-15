@@ -2,7 +2,7 @@
 <%namespace name='priority_switch' file='_priority_switch.tpl'/>
 
 <%block name="title">
-    ${_("Free broadcast")}
+    ${_("Free uplink")}
 </%block>
 
 <div class="h-bar">
@@ -12,7 +12,7 @@
 <div class="full-page-form">
     <div class="free center">
         <a class="button" href="${url('broadcast_content_form')}">
-            <span class="icon"></span> ${_('Broadcast something else')}
+            <span class="icon"></span> ${_('Share something else')}
         </a>
         </p>
     </div>

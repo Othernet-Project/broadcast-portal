@@ -92,11 +92,11 @@ def broadcast_content_details(item):
                                            item_id=item.id)
             redirect(next_url)
         else:
-            message = _('Free broadcast has been successfully scheduled.')
+            message = _('Free uplink has been successfully scheduled.')
             return template('feedback',
                             item=item,
                             status='success',
-                            page_title=_('Broadcast Scheduled'),
+                            page_title=_('Uplink Scheduled'),
                             message=message,
                             redirect_url=request.app.get_url('main'),
                             redirect_target=_('main page'))

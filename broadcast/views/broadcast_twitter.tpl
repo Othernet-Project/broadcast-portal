@@ -2,7 +2,7 @@
 <%namespace name='broadcast_switch' file='_broadcast_switch.tpl'/>
 
 <%block name="title">
-    ${_("Broadcast Twitter feed")}
+    ${_("Share Twitter feed")}
 </%block>
 
 <%block name="main">

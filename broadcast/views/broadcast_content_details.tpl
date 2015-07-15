@@ -6,7 +6,7 @@
 
 <%block name="main">
 <div class="h-bar">
-    <h1>${_('Broadcast schedule')}</h1>
+    <h1>${_('Uplink schedule')}</h1>
 </div>
 <div class="full-page-form">
     <div class="content">
@@ -37,13 +37,13 @@
             <div class="buttons">
                 <div class="left">
                     <button type="submit" class="primary" name="mode" value="priority"><span class="icon"></span> ${_("Today (%(amount)s)") % {'amount': item.priority_price}}</button>
-                    <p class="help">${_("After completing the payment, your content will be reviewed by Outernet staff and broadcast during Outernet's working hours (week days between 11am and 7pm Chicago time)")}
+                    <p class="help">${_("After completing the payment, your content will be reviewed by Outernet staff and uplinked during Outernet's business hours (Monday-Friday 0900-1700 PDT).")}
                         <br />
-                        <strong>${_('Pricing for priority content broadcast is {price} per MB').format(price=item.unit_price)}</strong>
+                        <strong>${_('Pricing for priority content uplinked is {price}/MB').format(price=item.unit_price)}</strong>
                     </p>
                 </div><div class="right">
                     <button type="submit" class="secondary" name="mode" value="free"><span class="icon"></span> ${_("Wait in line")}</button>
-                    <p class="help">${_('Your content will be reviewed by staff and broadcast at earliest occasion possible. This depends on total volume of content being submitted by other users.')}</p>
+                    <p class="help">${_('Your content will be reviewed by staff and uplinked at earliest occasion possible. This depends on total volume of content being submitted by other users.')}</p>
                 </div>
             </div>
         </form>
