@@ -2279,8 +2279,9 @@ footer .copyright {
   clear: both; }
 
 /* line 1, ../scss/homepage.scss */
-.main {
-  text-align: center; }
+.help-text {
+  max-width: 650px;
+  margin: 0 auto 2em auto; }
 
 /* line 3, ../scss/broadcast.scss */
 .content .buttons .left, .content .buttons .right {
