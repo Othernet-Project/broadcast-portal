@@ -28,6 +28,7 @@ def pre_init(config):
     bottle.TEMPLATE_PATH.insert(0, os.path.join(
         config['root'], config['app.view_path']))
     bottle.BaseTemplate.defaults.update({
+        'DEBUG': bottle.DEBUG,
         'request': bottle.request,
         'h': bottle_utils.html,
         'url': app.get_url,
