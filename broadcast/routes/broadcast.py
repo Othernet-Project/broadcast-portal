@@ -39,7 +39,7 @@ def show_broadcast_content_form(item_type):
     size_limit = hsize(request.app.config['{0}.size_limit'.format(item_type)])
     return dict(form=form_cls(initial_data),
                 item_type=item_type,
-                size_limit=size_limit)
+                size_limit=size_limit.replace('.00', ''))
 
 
 @csrf_protect
@@ -66,7 +66,9 @@ def broadcast_content(item_type):
         redirect(next_url)
 
     size_limit = hsize(request.app.config['{0}.size_limit'.format(item_type)])
-    return dict(form=form, item_type=item_type, size_limit=size_limit)
+    return dict(form=form,
+                item_type=item_type,
+                size_limit=size_limit.replace('.00', ''))
 
 
 @view('broadcast_content_details')
