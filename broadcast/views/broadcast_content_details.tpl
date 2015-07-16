@@ -37,10 +37,7 @@
             <div class="buttons">
                 <div class="left">
                     <button type="submit" class="primary" name="mode" value="priority"><span class="icon"></span> ${_("Today (%(amount)s)") % {'amount': item.priority_price}}</button>
-                    <p class="help">${_("After completing the payment, your content will be reviewed by Outernet staff and uplinked during Outernet's business hours (Monday-Friday 0900-1700 PDT).")}
-                        <br />
-                        <strong>${_('Pricing for priority content uplinked is {price}/MB').format(price=item.unit_price)}</strong>
-                    </p>
+                    <p class="help"><strong>${_('Pricing for priority content uplinked is {price}/MB').format(price=item.unit_price)}</strong></p>
                 </div><div class="right">
                     <button type="submit" class="secondary" name="mode" value="free"><span class="icon"></span> ${_("Wait in line")}</button>
                     <p class="help">${_('Your content will be reviewed by staff and uplinked at earliest occasion possible. This depends on total volume of content being submitted by other users.')}</p>
