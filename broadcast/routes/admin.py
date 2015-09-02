@@ -8,7 +8,7 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-from bottle import request
+from bottle import request, static_file
 
 from ..util.auth import login_required
 from ..util.broadcast import get_item, filter_items
@@ -22,7 +22,7 @@ def scheduled_list():
     for item_type in request.app.config['app.broadcast_types']:
         items.extend(filter_items(item_type))
 
-    return dict(items=sorted(items, key=lambda x: x.created))
+    return dict(items=sorted(items, key=lambda x: x.created, reverse=True))
 
 
 @login_required(superuser_only=True)
@@ -37,6 +37,12 @@ def scheduled_type_list(item_type):
 def scheduled_detail(item_type, item_id):
     item = get_item(item_type, id=item_id)
     return dict(item=item)
+
+
+def scheduled_file(id, filename):
+    upload_root = request.app.config['content.upload_root']
+    root = upload_root + '/' + id
+    return static_file(filename, root=root)
 
 
 def route(conf):
