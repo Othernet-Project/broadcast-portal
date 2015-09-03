@@ -9,7 +9,11 @@
                     % for name, value in item.items():
                     <tr>
                         <td>${name}</td>
-                        <td>${value}</td>
+                        % if name == "file_path":
+                            <td><a href="http://127.0.0.1:8080/admin/content/${value}">${value}</a></td>
+                        % else:
+                            <td>${value}</td>
+                        % endif
                     </tr>
                     % endfor
                 </table>
