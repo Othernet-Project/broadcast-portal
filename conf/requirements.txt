@@ -7,9 +7,9 @@ bottle-utils-csrf
 bottle-utils-form>=0.3.10
 bottle-utils-html
 bottle-utils-lazy
+bottle-utils-i18n
 mandrill
 stripe
 gevent
 outernet-metadata==0.5.post3
 pbkdf2==1.3
-i18n
