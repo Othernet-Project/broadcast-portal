@@ -5,6 +5,10 @@
     <div class="grid-container">
         <div class="grid-row scheduled-list">
             <div class="col">
+                % for item in items:
+                    ${item}
+                    ${type(item)}
+                % endfor
                 % if items:
                 <table>
                     <tr>
@@ -13,6 +17,7 @@
                         <th>E-mail</th>
                         <th>Created</th>
                         <th>Charge ID</th>
+                        <th>Submitted content</th>
                     </tr>
                     % for item in items:
                     <tr>
@@ -21,6 +26,11 @@
                         <td>${item.email}</td>
                         <td>${item.created}</td>
                         <td>${item.charge_id}</td>
+                        % if item.type == "content":
+                            <td><a href="http://127.0.0.1:8080/admin/content/${item.file_path}">${item.file_path}</a></td>
+                        % elif item.type == "twitter": 
+                            <td><a href="http://twitter.com/${item.handle}">${item.handle}</a></td>
+                        % endif
                     </tr>
                     % endfor
                 </table>
