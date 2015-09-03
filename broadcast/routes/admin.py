@@ -29,7 +29,7 @@ def scheduled_list():
 @view('scheduled_list')
 def scheduled_type_list(item_type):
     items = filter_items(item_type)
-    return dict(items=items)
+    return dict(items=sorted(items, key=lambda x: x.created, reverse=True))
 
 
 @login_required(superuser_only=True)
