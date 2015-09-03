@@ -8,7 +8,7 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-from bottle import request
+from bottle import redirect, request, static_file
 
 from ..util.auth import login_required
 from ..util.broadcast import get_item, filter_items
@@ -22,7 +22,7 @@ def scheduled_list():
     for item_type in request.app.config['app.broadcast_types']:
         items.extend(filter_items(item_type))
 
-    return dict(items=sorted(items, key=lambda x: x.created))
+    return dict(items=sorted(items, key=lambda x: x.created, reverse=True))
 
 
 @login_required(superuser_only=True)
@@ -37,6 +37,20 @@ def scheduled_type_list(item_type):
 def scheduled_detail(item_type, item_id):
     item = get_item(item_type, id=item_id)
     return dict(item=item)
+
+
+def expose_content(item_type, item_id, name):
+    print('{} - {} - {}'.format(item_type, item_id, name))
+    if item_type != "twitter":
+        return scheduled_file(item_id, name)
+    url = "https://twitter.com/{}".format(name)
+    redirect(url)
+
+
+def scheduled_file(item_id, filename):
+    upload_root = request.app.config['content.upload_root']
+    root = upload_root + '/' + item_id
+    return static_file(filename, root=root)
 
 
 def route(conf):
@@ -59,6 +73,12 @@ def route(conf):
             'GET',
             scheduled_detail,
             'scheduled_detail',
+            {}
+        ), (
+            '/admin/<item_type:re:%s>/<item_id:re:[0-9a-f]{32}>/<name>' % types,
+            'GET',
+            expose_content,
+            'expose_content',
             {}
         ),
     )
