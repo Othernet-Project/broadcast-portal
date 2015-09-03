@@ -8,7 +8,7 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-from bottle import request, static_file
+from bottle import redirect, request, static_file
 
 from ..util.auth import login_required
 from ..util.broadcast import get_item, filter_items
@@ -39,7 +39,14 @@ def scheduled_detail(item_type, item_id):
     return dict(item=item)
 
 
-def scheduled_file(id, filename):
+def expose_content(item_type, item_id, name):
+    if item_type != "twitter":
+        return scheduled_file(item_id, name)
+    url = "https://twitter.com/{}".format(name)
+    redirect(url)
+
+
+def scheduled_file(item_id, filename):
     upload_root = request.app.config['content.upload_root']
     root = upload_root + '/' + id
     return static_file(filename, root=root)
@@ -65,6 +72,12 @@ def route(conf):
             'GET',
             scheduled_detail,
             'scheduled_detail',
+            {}
+        ), (
+            '/admin/scheduled/<item_type:re:%s>/<item_id:re:[0-9a-f]{32}>/content/<path:path>',
+            'GET',
+            expose_content,
+            'expose_content',
             {}
         ),
     )
