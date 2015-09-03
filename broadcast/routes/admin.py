@@ -39,14 +39,15 @@ def scheduled_detail(item_type, item_id):
     return dict(item=item)
 
 
+@login_required(superuser_only=True)
 def expose_content(item_type, item_id, name):
-    print('{} - {} - {}'.format(item_type, item_id, name))
     if item_type != "twitter":
         return scheduled_file(item_id, name)
     url = "https://twitter.com/{}".format(name)
     redirect(url)
 
 
+@login_required(superuser_only=True)
 def scheduled_file(item_id, filename):
     upload_root = request.app.config['content.upload_root']
     root = upload_root + '/' + item_id

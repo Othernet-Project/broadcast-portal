@@ -258,6 +258,10 @@ class BaseUploadItem(BaseItem):
     def ckey(self, name):
         return '{0}.{1}'.format(self.type, name)
 
+    def content(self):
+        path, filename = self.file_path.split('/', 1)
+        return filename
+
     @property
     def url(self):
         url_template = request.app.config[self.ckey('url_template')]
@@ -315,6 +319,9 @@ class TwitterItem(BaseItem):
         'bc_twitter_monthly': _('every month'),
         'bc_twitter_annual': _('every year'),
     }
+
+    def content(self):
+        return self.handle
 
     def calculate_price(self):
         for plan in request.app.config['twitter.prices']:

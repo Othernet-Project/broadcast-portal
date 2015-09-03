@@ -16,6 +16,10 @@
                         % endif
                     </tr>
                     % endfor
+                    <tr>
+                        <td>Content</td>
+                        <td><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">${item.content()}</a></td>
+                    </tr>
                 </table>
             </div>
         </div>

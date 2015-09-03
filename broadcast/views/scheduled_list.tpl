@@ -13,6 +13,7 @@
                         <th>E-mail</th>
                         <th>Created</th>
                         <th>Charge ID</th>
+                        <th>Submitted content</th>
                     </tr>
                     % for item in items:
                     <tr>
@@ -21,6 +22,7 @@
                         <td>${item.email}</td>
                         <td>${item.created}</td>
                         <td>${item.charge_id}</td>
+                        <td><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">${item.content()}</a></td>
                     </tr>
                     % endfor
                 </table>
