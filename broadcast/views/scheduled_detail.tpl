@@ -9,12 +9,13 @@
                     % for name, value in item.items():
                     <tr>
                         <td>${name}</td>
-                        % if value == "file_path":
-                            <td><a href="https://uplink.outernet.is/admin/scheduled/${value}>${value}</a></td>
-                        % endif
                         <td>${value}</td>
                     </tr>
                     % endfor
+                    <tr>
+                        <td>Content</td>
+                        <td><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">${item.content()}</a></td>
+                    </tr>
                 </table>
             </div>
         </div>
