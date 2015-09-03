@@ -29,7 +29,7 @@ def scheduled_list():
 @view('scheduled_list')
 def scheduled_type_list(item_type):
     items = filter_items(item_type)
-    return dict(items=items)
+    return dict(items=sorted(items, key=lambda x: x.created, reverse=True))
 
 
 @login_required(superuser_only=True)
@@ -39,6 +39,7 @@ def scheduled_detail(item_type, item_id):
     return dict(item=item)
 
 
+@login_required(superuser_only=True)
 def expose_content(item_type, item_id, name):
     if item_type != "twitter":
         return scheduled_file(item_id, name)
@@ -46,9 +47,10 @@ def expose_content(item_type, item_id, name):
     redirect(url)
 
 
+@login_required(superuser_only=True)
 def scheduled_file(item_id, filename):
     upload_root = request.app.config['content.upload_root']
-    root = upload_root + '/' + id
+    root = upload_root + '/' + item_id
     return static_file(filename, root=root)
 
 
@@ -74,7 +76,7 @@ def route(conf):
             'scheduled_detail',
             {}
         ), (
-            '/admin/scheduled/<item_type:re:%s>/<item_id:re:[0-9a-f]{32}>/content/<path:path>',
+            '/admin/<item_type:re:%s>/<item_id:re:[0-9a-f]{32}>/<name>' % types,
             'GET',
             expose_content,
             'expose_content',
