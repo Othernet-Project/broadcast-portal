@@ -2453,9 +2453,15 @@ footer .copyright {
   width: 50px; }
 /* line 85, ../scss/outernet/mixins/_tables.scss */
 .scheduled-list div table th:nth-of-type(3) {
-  width: 160px; }
+  width: 232px; }
 /* line 89, ../scss/outernet/mixins/_tables.scss */
 .scheduled-list div table td:nth-of-type(3) {
+  width: 232px; }
+/* line 85, ../scss/outernet/mixins/_tables.scss */
+.scheduled-list div table th:nth-of-type(6) {
+  width: 160px; }
+/* line 89, ../scss/outernet/mixins/_tables.scss */
+.scheduled-list div table td:nth-of-type(6) {
   width: 160px; }
 /* line 85, ../scss/outernet/mixins/_tables.scss */
 .scheduled-list div table th:nth-of-type(4) {
