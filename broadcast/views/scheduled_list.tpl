@@ -22,7 +22,7 @@
                         <td>${h.trunc(item.email, 32)}</td>
                         <td>${item.created.strftime('%Y-%m-%d %H:%M')}</td>
                         <td>${h.yesno(item.charge_id)}</td>
-                        <td><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">${h.trunc(item.content(), 64)}</a></td>
+                        <td><a class="button small" href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">Download</a></td>
                     </tr>
                     % endfor
                 </table>
