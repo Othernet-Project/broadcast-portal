@@ -8,11 +8,14 @@
   $type-width: 70px;
   $paid: 5;
   $paid-width: 50px;
+  $email: 3;
+  $email-width: 160px;
   $created: 4;
   $created-width: 100px;
 
   @include table-col-width($id, $id-width);
   @include table-col-width($type, $type-width);
   @include table-col-width($paid, $paid-width);
+  @include table-col-width($email, $email-width);
   @include table-col-width($created, $created-width);
 }

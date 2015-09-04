@@ -2452,6 +2452,12 @@ footer .copyright {
 .scheduled-list div table td:nth-of-type(5) {
   width: 50px; }
 /* line 85, ../scss/outernet/mixins/_tables.scss */
+.scheduled-list div table th:nth-of-type(3) {
+  width: 160px; }
+/* line 89, ../scss/outernet/mixins/_tables.scss */
+.scheduled-list div table td:nth-of-type(3) {
+  width: 160px; }
+/* line 85, ../scss/outernet/mixins/_tables.scss */
 .scheduled-list div table th:nth-of-type(4) {
   width: 100px; }
 /* line 89, ../scss/outernet/mixins/_tables.scss */
