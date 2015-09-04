@@ -25,7 +25,7 @@
                         <td><a
                         % if item.type == "twitter":
                             href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">
-                            ${h.trunc(item.content(), 12)}
+                            ${item.content()}
                         % else:
                             class="button small" href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">
                             Download
