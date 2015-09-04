@@ -9,7 +9,9 @@
   $paid: 5;
   $paid-width: 50px;
   $email: 3;
-  $email-width: 160px;
+  $email-width: 232px;
+  $content: 6;
+  $content-width: 160px;
   $created: 4;
   $created-width: 100px;
 
@@ -17,5 +19,6 @@
   @include table-col-width($type, $type-width);
   @include table-col-width($paid, $paid-width);
   @include table-col-width($email, $email-width);
+  @include table-col-width($content, $content-width);
   @include table-col-width($created, $created-width);
 }
