@@ -24,7 +24,7 @@
                         <td>${h.yesno(item.charge_id)}</td>
                         <td><a class="button small" href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">
                         % if item.type == "twitter":
-                            ${item.content()}
+                            ${h.trunc(item.content(), 24)}
                         % else:
                             Download
                         % endif
