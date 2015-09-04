@@ -1,0 +1,18 @@
+@import "outernet/mixins/tables";
+
+
+.scheduled-list div table {
+  $id: 1;
+  $id-width: 300px;
+  $type: 2;
+  $type-width: 70px;
+  $paid: 5;
+  $paid-width: 50px;
+  $created: 4;
+  $created-width: 100px;
+
+  @include table-col-width($id, $id-width);
+  @include table-col-width($type, $type-width);
+  @include table-col-width($paid, $paid-width);
+  @include table-col-width($created, $created-width);
+}
