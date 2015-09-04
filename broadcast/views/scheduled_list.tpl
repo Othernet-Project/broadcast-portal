@@ -19,10 +19,10 @@
                     <tr>
                         <td><a href="${url('scheduled_detail', item_type=item.type, item_id=item.id)}">${item.id}</a></td>
                         <td>${item.type}</td>
-                        <td>${item.email}</td>
-                        <td>${item.created}</td>
+                        <td>${h.trunc(item.email, 32)}</td>
+                        <td>${item.created.strftime('%Y-%m-%d %H:%M')}</td>
                         <td>${h.yesno(item.charge_id)}</td>
-                        <td><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">${item.content()}</a></td>
+                        <td><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">${h.trunc(item.content(), 64)}</a></td>
                     </tr>
                     % endfor
                 </table>
