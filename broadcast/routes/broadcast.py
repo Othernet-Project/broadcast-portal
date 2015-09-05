@@ -17,11 +17,8 @@ from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.broadcast import (ContentForm,
                                ContentDetailsForm,
-                               TVForm,
-                               TVDetailsForm,
                                TwitterForm)
 from ..util.broadcast import (ContentItem,
-                              TVItem,
                               TwitterItem,
                               get_unique_id,
                               sign,
@@ -35,7 +32,7 @@ def show_broadcast_content_form(item_type):
     id = get_unique_id()
     signature = sign(id, secret_key=request.app.config['app.secret_key'])
     initial_data = {'id': id, 'signature': signature}
-    form_cls = {'content': ContentForm, 'tv': TVForm}[item_type]
+    form_cls = {'content': ContentForm, }[item_type]
     size_limit = hsize(request.app.config['{0}.size_limit'.format(item_type)])
     return dict(form=form_cls(initial_data),
                 item_type=item_type,
@@ -47,10 +44,10 @@ def show_broadcast_content_form(item_type):
 def broadcast_content(item_type):
     form_data = request.forms.decode()
     form_data.update(request.files)
-    form_cls = {'content': ContentForm, 'tv': TVForm}[item_type]
+    form_cls = {'content': ContentForm}[item_type]
     form = form_cls(form_data)
     if form.is_valid():
-        item_cls = {'content': ContentItem, 'tv': TVItem}[item_type]
+        item_cls = {'content': ContentItem}[item_type]
         item = item_cls(
             created=datetime.datetime.utcnow(),
             title=form.processed_data['title'],
@@ -79,17 +76,17 @@ def show_broadcast_content_details_form(item):
     initial_data = {'id': item.id,
                     'signature': signature,
                     'license': item.license}
-    form_cls = {'content': ContentDetailsForm, 'tv': TVDetailsForm}[item.type]
+    form_cls = {'content': ContentDetailsForm}[item.type]
     return dict(item=item, form=form_cls(initial_data))
 
 
 @csrf_protect
 @fetch_item
 def broadcast_content_details(item):
-    form_cls = {'content': ContentDetailsForm, 'tv': TVDetailsForm}[item.type]
+    form_cls = {'content': ContentDetailsForm}[item.type]
     form = form_cls(request.forms)
     if form.is_valid():
-        item_cls = {'content': ContentItem, 'tv': TVItem}[item.type]
+        item_cls = {'content': ContentItem}[item.type]
         item.update(status=item_cls.PROCESSING,
                     license=form.processed_data['license'],
                     email=form.processed_data['email'])
@@ -138,25 +135,25 @@ def broadcast_twitter():
 def route(conf):
     return (
         (
-            '/broadcast/<item_type:re:content|tv>/',
+            '/broadcast/<item_type:re:content>/',
             'GET',
             show_broadcast_content_form,
             'broadcast_content_form',
             {}
         ), (
-            '/broadcast/<item_type:re:content|tv>/',
+            '/broadcast/<item_type:re:content>/',
             'POST',
             broadcast_content,
             'broadcast_content',
             {}
         ), (
-            '/broadcast/<item_type:re:content|tv>/<item_id:re:[0-9a-f]{32}>/details/',
+            '/broadcast/<item_type:re:content>/<item_id:re:[0-9a-f]{32}>/details/',
             'GET',
             show_broadcast_content_details_form,
             'broadcast_content_details_form',
             {}
         ), (
-            '/broadcast/<item_type:re:content|tv>/<item_id:re:[0-9a-f]{32}>/details/',
+            '/broadcast/<item_type:re:content>/<item_id:re:[0-9a-f]{32}>/details/',
             'POST',
             broadcast_content_details,
             'broadcast_content_details',
