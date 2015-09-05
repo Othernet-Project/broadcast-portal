@@ -10,11 +10,6 @@
             <p class="buttons">
                 <a class="button primary" href="${url('broadcast_content_form', item_type='content')}">${_("Continue")}</a>
             </p>
-            % elif item_type == 'tv':
-            <p>${_("Place high-quality public domain or Creative Commons videos on the Outernet TV channel, which airs on %(link)s.") % {'link': '<a href="https://wiki.outernet.is/wiki/Coverage_and_transponder_settings">IS-10</a>'}}</p>
-            <p class="buttons">
-                <a class="button primary" href="${url('broadcast_content_form', item_type='tv')}">${_("Continue")}</a>
-            </p>
             % elif item_type == 'twitter':
             <p>${_("Send your tweets to the far corners of the world. We take your Twitter feed and regularly uplink them to our %(link)s.") % {'link': '<a href="https://wiki.outernet.is/wiki/Coverage_and_transponder_settings">global satellite network</a>'}}</p>
             <p class="buttons">
@@ -28,19 +23,12 @@
         <div class="switch">
             % if item_type == 'content':
             <span class="left active content"><span class="icon"></span> ${_("Content")}</span>
-            <a class="center tv" href="${url('main') + h.set_qparam(item_type='tv').to_qs()}">${_("TV")}</a>
-            <a class="right twitter" href="${url('main') + h.set_qparam(item_type='twitter').to_qs()}">${_("Tweets")}</a>
-            % elif item_type == 'tv':
-            <a class="left content" href="${url('main') + h.set_qparam(item_type='content').to_qs()}">${_("Content")}</a>
-            <span class="center active tv"><span class="icon"></span> ${_("TV")}</span>
             <a class="right twitter" href="${url('main') + h.set_qparam(item_type='twitter').to_qs()}">${_("Tweets")}</a>
             % elif item_type == 'twitter':
             <a class="left content" href="${url('main') + h.set_qparam(item_type='content').to_qs()}">${_("Content")}</a>
-            <a class="center tv" href="${url('main') + h.set_qparam(item_type='tv').to_qs()}">${_("TV")}</a>
             <span class="right active twitter"><span class="icon"></span> ${_("Tweets")}</span>
             % else:
             <a class="left content" href="${url('main') + h.set_qparam(item_type='content').to_qs()}">${_("Content")}</a>
-            <a class="center tv" href="${url('main') + h.set_qparam(item_type='tv').to_qs()}">${_("TV")}</a>
             <a class="right twitter" href="${url('main') + h.set_qparam(item_type='twitter').to_qs()}">${_("Tweets")}</a>
             % endif
         </div>

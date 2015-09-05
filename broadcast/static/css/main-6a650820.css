@@ -835,11 +835,11 @@ input[type="text"].positive, input[type="numeric"].positive, input[type="email"]
   padding-right: 50px;
   background-position: right 12.5px top 50%;
   background-repeat: no-repeat;
-  background-image: url('../img/icons/1x/form_positive.png?1440511947'); }
+  background-image: url('../img/icons/1x/form_positive.png?1441467319'); }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 63, ../scss/outernet/partial/_forms.scss */
   input[type="text"].positive, input[type="numeric"].positive, input[type="email"].positive, input[type="password"].positive, input[type="file"].positive {
-    background-image: url('../img/icons/2x/form_positive.png?1440511947');
+    background-image: url('../img/icons/2x/form_positive.png?1441467319');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
@@ -849,11 +849,11 @@ input[type="text"].negative, input[type="numeric"].negative, input[type="email"]
   padding-right: 50px;
   background-position: right 12.5px top 50%;
   background-repeat: no-repeat;
-  background-image: url('../img/icons/1x/form_negative.png?1440511947'); }
+  background-image: url('../img/icons/1x/form_negative.png?1441467319'); }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 67, ../scss/outernet/partial/_forms.scss */
   input[type="text"].negative, input[type="numeric"].negative, input[type="email"].negative, input[type="password"].negative, input[type="file"].negative {
-    background-image: url('../img/icons/2x/form_negative.png?1440511947');
+    background-image: url('../img/icons/2x/form_negative.png?1441467319');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
@@ -902,11 +902,11 @@ input[type="checkbox"]:checked + label:before {
   transition: color 0.3s, background-color 0.3s, border-color 0.3s;
   background-position: center center;
   background-repeat: no-repeat;
-  background-image: url('../img/icons/1x/checkmark.png?1440511947'); }
+  background-image: url('../img/icons/1x/checkmark.png?1441467319'); }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 88, ../scss/outernet/partial/_forms.scss */
   input[type="checkbox"]:checked + label:before {
-    background-image: url('../img/icons/2x/checkmark.png?1440511947');
+    background-image: url('../img/icons/2x/checkmark.png?1441467319');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
@@ -931,11 +931,11 @@ input[type="checkbox"]:focus + label:before {
 input[type="checkbox"]:focus:checked + label:before {
   background-position: center center;
   background-repeat: no-repeat;
-  background-image: url('../img/icons/1x/checkmark_active.png?1440511947'); }
+  background-image: url('../img/icons/1x/checkmark_active.png?1441467319'); }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 101, ../scss/outernet/partial/_forms.scss */
   input[type="checkbox"]:focus:checked + label:before {
-    background-image: url('../img/icons/2x/checkmark_active.png?1440511947');
+    background-image: url('../img/icons/2x/checkmark_active.png?1441467319');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
@@ -964,25 +964,25 @@ select {
   padding-right: 50px;
   background-repeat: no-repeat;
   background-position: right 10px top 50%;
-  background-image: url('../img/icons/1x/dropdown_open.png?1440511947'); }
+  background-image: url('../img/icons/1x/dropdown_open.png?1441467319'); }
 /* line 125, ../scss/outernet/mixins/_forms.scss */
 select::-ms-expand {
   display: none; }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 115, ../scss/outernet/partial/_forms.scss */
   select {
-    background-image: url('../img/icons/2x/dropdown_open.png?1440511947');
+    background-image: url('../img/icons/2x/dropdown_open.png?1441467319');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
     background-size: 25px, 25px; } }
 /* line 123, ../scss/outernet/partial/_forms.scss */
 select:hover {
-  background-image: url('../img/icons/1x/dropdown_open_hover.png?1440511947'); }
+  background-image: url('../img/icons/1x/dropdown_open_hover.png?1441467319'); }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 123, ../scss/outernet/partial/_forms.scss */
   select:hover {
-    background-image: url('../img/icons/2x/dropdown_open_hover.png?1440511947');
+    background-image: url('../img/icons/2x/dropdown_open_hover.png?1441467319');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
@@ -1602,11 +1602,11 @@ table form button {
   text-transform: capitalize;
   background-position: center center;
   background-repeat: no-repeat;
-  background-image: url('../img/icons/1x/hamburger.png?1440511947'); }
+  background-image: url('../img/icons/1x/hamburger.png?1441467319'); }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 136, ../scss/outernet/widgets/_menu.scss */
   .menu .hamburger a {
-    background-image: url('../img/icons/2x/hamburger.png?1440511947');
+    background-image: url('../img/icons/2x/hamburger.png?1441467319');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
@@ -1640,11 +1640,11 @@ table form button {
 /* line 174, ../scss/outernet/widgets/_menu.scss */
 .alt-menu .level2-trigger {
   background-position: right 10px top 50%;
-  background-image: url('../img/icons/1x/arrow_right.png?1440511947'); }
+  background-image: url('../img/icons/1x/arrow_right.png?1441467319'); }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 174, ../scss/outernet/widgets/_menu.scss */
   .alt-menu .level2-trigger {
-    background-image: url('../img/icons/2x/arrow_right.png?1440511947');
+    background-image: url('../img/icons/2x/arrow_right.png?1441467319');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
@@ -1652,12 +1652,12 @@ table form button {
 /* line 179, ../scss/outernet/widgets/_menu.scss */
 .alt-menu .top-trigger {
   background-position: left 10px top 50%;
-  background-image: url('../img/icons/1x/arrow_left.png?1440511947');
+  background-image: url('../img/icons/1x/arrow_left.png?1441467319');
   padding-left: 40px; }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 179, ../scss/outernet/widgets/_menu.scss */
   .alt-menu .top-trigger {
-    background-image: url('../img/icons/2x/arrow_left.png?1440511947');
+    background-image: url('../img/icons/2x/arrow_left.png?1441467319');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
@@ -1981,14 +1981,14 @@ body {
 /* line 28, ../scss/partials/_mainmenu.scss */
 .alt-menu .level2-lang .selected {
   background: #e7f3e9;
-  background-image: url('../img/icons/1x/form_positive.png?1440511947');
+  background-image: url('../img/icons/1x/form_positive.png?1441467319');
   background-repeat: no-repeat;
   background-position: right 20px top 50%;
   color: #058120; }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 28, ../scss/partials/_mainmenu.scss */
   .alt-menu .level2-lang .selected {
-    background-image: url('../img/icons/2x/form_positive.png?1440511947');
+    background-image: url('../img/icons/2x/form_positive.png?1441467319');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
@@ -2072,9 +2072,9 @@ footer .copyright {
 .switch {
   max-width: 650px;
   min-height: 60px;
-  margin: 0 auto; }
+  margin: 0 220px auto auto; }
 /* line 8, ../scss/partials/_switch.scss */
-.switch .left, .switch .center, .switch .right {
+.switch .left, .switch .right {
   border: 1px solid #dddddd;
   padding: 10px 0;
   width: 33%;
@@ -2086,11 +2086,11 @@ footer .copyright {
   box-sizing: border-box;
   color: #e17502; }
 /* line 36, ../scss/outernet/mixins/_hyperlinks.scss */
-.switch .left:visited, .switch .center:visited, .switch .right:visited {
+.switch .left:visited, .switch .right:visited {
   color: #e17502; }
 @media only screen and (max-width: 640px) {
   /* line 8, ../scss/partials/_switch.scss */
-  .switch .left, .switch .center, .switch .right {
+  .switch .left, .switch .right {
     float: none;
     display: block;
     margin-bottom: 1em;
@@ -2119,39 +2119,32 @@ footer .copyright {
     -moz-border-radius: 100px;
     -webkit-border-radius: 100px;
     border-radius: 100px; } }
-@media only screen and (max-width: 640px) {
-  /* line 41, ../scss/partials/_switch.scss */
-  .switch .center {
-    border: 1px solid #dddddd;
-    -moz-border-radius: 100px;
-    -webkit-border-radius: 100px;
-    border-radius: 100px; } }
-/* line 47, ../scss/partials/_switch.scss */
+/* line 41, ../scss/partials/_switch.scss */
 .switch .icon {
   display: inline-block;
   visibility: hidden;
   vertical-align: middle;
   background-position: center center;
   background-repeat: no-repeat;
-  background-image: url('../img/icons/1x/checkmark.png?1440511947');
+  background-image: url('../img/icons/1x/checkmark.png?1441467319');
   width: 25px;
   height: 25px; }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 47, ../scss/partials/_switch.scss */
+  /* line 41, ../scss/partials/_switch.scss */
   .switch .icon {
-    background-image: url('../img/icons/2x/checkmark.png?1440511947');
+    background-image: url('../img/icons/2x/checkmark.png?1441467319');
     -moz-background-size: 25px, 25px;
     -o-background-size: 25px, 25px;
     -webkit-background-size: 25px, 25px;
     background-size: 25px, 25px; } }
-/* line 55, ../scss/partials/_switch.scss */
+/* line 49, ../scss/partials/_switch.scss */
 .switch .active {
   background-color: #eeeeee;
   color: #058120; }
 /* line 36, ../scss/outernet/mixins/_hyperlinks.scss */
 .switch .active:visited {
   color: #058120; }
-/* line 58, ../scss/partials/_switch.scss */
+/* line 52, ../scss/partials/_switch.scss */
 .switch .active .icon {
   visibility: visible; }
 
@@ -2459,10 +2452,10 @@ footer .copyright {
   width: 232px; }
 /* line 85, ../scss/outernet/mixins/_tables.scss */
 .scheduled-list div table th:nth-of-type(6) {
-  width: 262px; }
+  width: 50px; }
 /* line 89, ../scss/outernet/mixins/_tables.scss */
 .scheduled-list div table td:nth-of-type(6) {
-  width: 262px; }
+  width: 50px; }
 /* line 85, ../scss/outernet/mixins/_tables.scss */
 .scheduled-list div table th:nth-of-type(4) {
   width: 100px; }
