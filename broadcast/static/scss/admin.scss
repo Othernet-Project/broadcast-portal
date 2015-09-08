@@ -1,5 +1,22 @@
 @import "outernet/mixins/tables";
+@import "partials/sprites";
 
+
+.paid {
+  @include misc-icon(paid);
+}
+
+.unpaid {
+  @include misc-icon(unpaid);
+}
+
+.content {
+  @include misc-icon(document);
+}
+
+.twitter {
+  @include misc-icon(twitter);
+}
 
 .scheduled-list div table {
   $id: 1;

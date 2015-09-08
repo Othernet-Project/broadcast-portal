@@ -24,10 +24,17 @@
                             ${item.title}
                         % endif
                         </a></td>
-                        <td>${item.type}</td>
+                        <td class="${item.type}"></td>
                         <td>${h.trunc(item.email or '', 32)}</td>
                         <td>${item.created.strftime('%Y-%m-%d %H:%M')}</td>
-                        <td>${h.yesno(item.charge_id)}</td>
+                        <td class="
+                        % if bool(item.charge_id):
+                            paid
+                        % else:
+                            unpaid
+                        % endif
+                        ">
+                        </td>
                         <td><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}"> ${item.content()} </a></td>
                     </tr>
                     % endfor
