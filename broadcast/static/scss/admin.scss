@@ -2,40 +2,44 @@
 @import "partials/sprites";
 
 
-.paid {
+.paid-icon {
   @include misc-icon(paid);
 }
 
-.unpaid {
+.unpaid-icon {
   @include misc-icon(unpaid);
 }
 
-.content {
+.content-icon {
   @include misc-icon(document);
 }
 
-.twitter {
+.twitter-icon {
   @include misc-icon(twitter);
 }
 
+.datestamp {
+  white-space: nowrap;
+}
+
 .scheduled-list div table {
-  $id: 1;
-  $id-width: 300px;
+  $paid: 1;
+  $paid-width: 0px;
   $type: 2;
-  $type-width: 70px;
-  $paid: 5;
-  $paid-width: 50px;
-  $email: 3;
-  $email-width: 232px;
+  $type-width: 0px;
+  $title: 3;
+  $title-width: 330px;
+  $email: 4;
+  $email-width: 330px;
   $content: 6;
-  $content-width: 262px;
-  $created: 4;
+  $content-width: 25%;
+  $created: 5;
   $created-width: 100px;
 
-  @include table-col-width($id, $id-width);
   @include table-col-width($type, $type-width);
   @include table-col-width($paid, $paid-width);
   @include table-col-width($email, $email-width);
-  @include table-col-width($content, $content-width);
+  @include table-col-width($title, $title-width);
+  /*@include table-col-width($content, $content-width);*/
   @include table-col-width($created, $created-width);
 }

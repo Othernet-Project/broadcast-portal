@@ -8,33 +8,32 @@
                 % if items:
                 <table>
                     <tr>
-                        <th>Title/Handle</th>
+                        <th>Paid</th>
                         <th>Type</th>
+                        <th>Title/Handle</th>
                         <th>E-mail</th>
                         <th>Created</th>
-                        <th>Charged</th>
                         <th>Submitted content</th>
                     </tr>
                     % for item in items:
                     <tr>
+                        <td><span class="
+                        % if bool(item.charge_id):
+                            paid-icon
+                        % else:
+                            unpaid-icon
+                        % endif
+                        "></span> </td>
+                        <td><span class="${item.type}-icon"></span></td>
                         <td><a href="${url('scheduled_detail', item_type=item.type, item_id=item.id)}">
                         % if item.type == "twitter":
                             ${item.content()}
                         % else:
-                            ${item.title}
+                            ${h.trunc(item.title, 24)}
                         % endif
                         </a></td>
-                        <td class="${item.type}"></td>
-                        <td>${h.trunc(item.email or '', 32)}</td>
-                        <td>${item.created.strftime('%Y-%m-%d %H:%M')}</td>
-                        <td class="
-                        % if bool(item.charge_id):
-                            paid
-                        % else:
-                            unpaid
-                        % endif
-                        ">
-                        </td>
+                        <td>${h.trunc(item.email or '', 24)}</td>
+                        <td class="datestamp">${item.created.strftime('%Y-%m-%d %H:%M')}</td>
                         <td><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}"> ${item.content()} </a></td>
                     </tr>
                     % endfor
