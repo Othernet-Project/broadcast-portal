@@ -9,10 +9,10 @@
                 <table>
                     <tr>
                         <th>Paid</th>
-                        <th>Type</th>
                         <th>Title/Handle</th>
                         <th>E-mail</th>
                         <th>Created</th>
+                        <th>Type</th>
                         <th>Submitted content</th>
                     </tr>
                     % for item in items:
@@ -24,7 +24,6 @@
                             unpaid-icon
                         % endif
                         "></span> </td>
-                        <td><span class="${item.type}-icon"></span></td>
                         <td class="trunc"><a href="${url('scheduled_detail', item_type=item.type, item_id=item.id)}">
                         % if item.type == "twitter":
                             ${item.content()}
@@ -34,6 +33,7 @@
                         </a></td>
                         <td class="trunc">${item.email}</td>
                         <td class="datestamp">${item.created.strftime('%Y-%m-%d %H:%M')}</td>
+                        <td><span class="${item.type}-icon"></span></td>
                         <td class="trunc"><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}"> ${item.content()} </a></td>
                     </tr>
                     % endfor

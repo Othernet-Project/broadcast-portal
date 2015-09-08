@@ -3,18 +3,22 @@
 
 
 .paid-icon {
+  margin-left: 5px;
   @include misc-icon(paid);
 }
 
 .unpaid-icon {
+  margin-left: 5px;
   @include misc-icon(unpaid);
 }
 
 .content-icon {
+  margin-left: 9px;
   @include misc-icon(document);
 }
 
 .twitter-icon {
+  margin-left: 9px;
   @include misc-icon(twitter);
 }
 
@@ -29,16 +33,22 @@
 }
 
 .scheduled-list div table {
+  th,td {
+    /* Adjust that stupid padding */
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
   $paid: 1;
-  $paid-width: 10px;
-  $type: 2;
-  $type-width: 10px;
-  $title: 3;
+  $paid-width: 35px;
+  $type: 5;
+  $type-width: 35px;
+  $title: 2;
   $title-width: 25%;
-  $email: 4;
+  $email: 3;
   $email-width: 25%;
-  $created: 5;
-  $created-width: 100px;
+  $created: 4;
+  $created-width: 120px;
 
   @include table-col-width($paid, $paid-width);
   @include table-col-width($type, $type-width);
