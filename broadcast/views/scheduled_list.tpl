@@ -8,7 +8,7 @@
                 % if items:
                 <table>
                     <tr>
-                        <th>ID</th>
+                        <th>Title/Handle</th>
                         <th>Type</th>
                         <th>E-mail</th>
                         <th>Created</th>
@@ -17,20 +17,18 @@
                     </tr>
                     % for item in items:
                     <tr>
-                        <td><a href="${url('scheduled_detail', item_type=item.type, item_id=item.id)}">${item.id}</a></td>
+                        <td><a href="${url('scheduled_detail', item_type=item.type, item_id=item.id)}">
+                        % if item.type == "twitter":
+                            ${item.content()}
+                        % else:
+                            ${item.title}
+                        % endif
+                        </a></td>
                         <td>${item.type}</td>
                         <td>${h.trunc(item.email or '', 32)}</td>
                         <td>${item.created.strftime('%Y-%m-%d %H:%M')}</td>
                         <td>${h.yesno(item.charge_id)}</td>
-                        <td><a
-                        % if item.type == "twitter":
-                            href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">
-                            ${item.content()}
-                        % else:
-                            class="button small" href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}">
-                            Download
-                        % endif
-                        </a></td>
+                        <td><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}"> ${item.content()} </a></td>
                     </tr>
                     % endfor
                 </table>
