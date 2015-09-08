@@ -2535,17 +2535,17 @@ footer .copyright {
   text-overflow: ellipsis; }
 
 /* line 85, ../scss/outernet/mixins/_tables.scss */
-.scheduled-list div table th:nth-of-type(2) {
-  width: 0px; }
-/* line 89, ../scss/outernet/mixins/_tables.scss */
-.scheduled-list div table td:nth-of-type(2) {
-  width: 0px; }
-/* line 85, ../scss/outernet/mixins/_tables.scss */
 .scheduled-list div table th:nth-of-type(1) {
-  width: 0px; }
+  width: 10px; }
 /* line 89, ../scss/outernet/mixins/_tables.scss */
 .scheduled-list div table td:nth-of-type(1) {
-  width: 0px; }
+  width: 10px; }
+/* line 85, ../scss/outernet/mixins/_tables.scss */
+.scheduled-list div table th:nth-of-type(2) {
+  width: 10px; }
+/* line 89, ../scss/outernet/mixins/_tables.scss */
+.scheduled-list div table td:nth-of-type(2) {
+  width: 10px; }
 /* line 85, ../scss/outernet/mixins/_tables.scss */
 .scheduled-list div table th:nth-of-type(4) {
   width: 25%; }
