@@ -22,17 +22,21 @@
   white-space: nowrap;
 }
 
+.trunc {
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow:ellipsis;
+}
+
 .scheduled-list div table {
   $paid: 1;
   $paid-width: 0px;
   $type: 2;
   $type-width: 0px;
   $title: 3;
-  $title-width: 330px;
+  $title-width: 25%;
   $email: 4;
-  $email-width: 330px;
-  $content: 6;
-  $content-width: 25%;
+  $email-width: 25%;
   $created: 5;
   $created-width: 100px;
 
@@ -40,6 +44,5 @@
   @include table-col-width($paid, $paid-width);
   @include table-col-width($email, $email-width);
   @include table-col-width($title, $title-width);
-  /*@include table-col-width($content, $content-width);*/
   @include table-col-width($created, $created-width);
 }

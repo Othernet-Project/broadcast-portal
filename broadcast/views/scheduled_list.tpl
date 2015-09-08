@@ -25,16 +25,16 @@
                         % endif
                         "></span> </td>
                         <td><span class="${item.type}-icon"></span></td>
-                        <td><a href="${url('scheduled_detail', item_type=item.type, item_id=item.id)}">
+                        <td class="trunc"><a href="${url('scheduled_detail', item_type=item.type, item_id=item.id)}">
                         % if item.type == "twitter":
                             ${item.content()}
                         % else:
-                            ${h.trunc(item.title, 24)}
+                            ${item.title}
                         % endif
                         </a></td>
-                        <td>${h.trunc(item.email or '', 24)}</td>
+                        <td class="trunc">${item.email}</td>
                         <td class="datestamp">${item.created.strftime('%Y-%m-%d %H:%M')}</td>
-                        <td><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}"> ${item.content()} </a></td>
+                        <td class="trunc"><a href="${url('expose_content', item_type=item.type, item_id=item.id, name=item.content())}"> ${item.content()} </a></td>
                     </tr>
                     % endfor
                 </table>
