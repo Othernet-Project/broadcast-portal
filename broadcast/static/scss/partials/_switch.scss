@@ -4,7 +4,7 @@
 .switch {
   max-width: 650px;
   min-height: 60px;
-  margin: 0 220px auto auto;
+  margin: 0px auto;
   .left, .right {
     border: 1px solid $border;
     padding: 10px 0;
@@ -23,7 +23,9 @@
     }
   }
   .left {
-    border-right: 0 none;
+    /* margin to force alignment */
+    margin-left: 16.5%;
+    border-right: 1px solid $border;
     @include border-radius(100px 0 0 100px);
 
     @include phone-portrait-wide {
