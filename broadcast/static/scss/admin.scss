@@ -30,9 +30,9 @@
 
 .scheduled-list div table {
   $paid: 1;
-  $paid-width: 0px;
+  $paid-width: 10px;
   $type: 2;
-  $type-width: 0px;
+  $type-width: 10px;
   $title: 3;
   $title-width: 25%;
   $email: 4;
@@ -40,8 +40,8 @@
   $created: 5;
   $created-width: 100px;
 
-  @include table-col-width($type, $type-width);
   @include table-col-width($paid, $paid-width);
+  @include table-col-width($type, $type-width);
   @include table-col-width($email, $email-width);
   @include table-col-width($title, $title-width);
   @include table-col-width($created, $created-width);
