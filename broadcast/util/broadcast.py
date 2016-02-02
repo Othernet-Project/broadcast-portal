@@ -263,7 +263,7 @@ class BaseUploadItem(BaseItem):
         return filename
 
     @property
-    def url(self):
+    def internal_url(self):
         url_template = request.app.config[self.ckey('url_template')]
         base_url = url_template.format(self.data['name'])
         return urlparse.urljoin(base_url, self.data['url'])

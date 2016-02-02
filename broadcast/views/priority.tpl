@@ -1,4 +1,5 @@
 <%inherit file='base.tpl'/>
+<%namespace name="forms" file="/ui/forms.tpl"/>
 <%namespace name='priority_switch' file='_priority_switch.tpl'/>
 
 <%block name="title">
@@ -35,54 +36,23 @@
     <div class="priority">
         ${h.form('post', _id='payment-form', action=url('broadcast_priority', item_type=item.type, item_id=item.id))}
             % if form.error:
-            ${form.error}
+            ${forms.form_errors([form.error])}
             % elif charge_error:
-            ${charge_error}
-            % else:
-            <ul class="form-errors">
-            </ul>
+            ${forms.form_errors([charge_error])}
             % endif
             ${csrf_tag()}
-            ${form.stripe_public_key}
-            <p class="field form-input-required">
-                ${form.email.label}
-                ${form.email}
-                % if form.email.error:
-                ${form.email.error}
-                % endif
-            </p>
-            <p class="field form-input-required">
-                ${form.card_number.label}
-                ${form.card_number}
-                % if form.card_number.error:
-                ${form.card_number.error}
-                % endif
-            </p>
-            <div class="inline-fields">
-                <p class="field form-input-required cvc">
-                    ${form.cvc.label}
-                    ${form.cvc}
-                    % if form.cvc.error:
-                    ${form.cvc.error}
-                    % endif
-                </p>
-                <p class="field form-input-required expiration">
-                    ${form.exp_month.label}
-                    ${form.exp_month}
-                    ${form.exp_year}
-                    % if form.exp_month.error:
-                    ${form.exp_month.error}
-                    % elif form.exp_year.error:
-                    ${form.exp_year.error}
-                    % endif
-                </p>
-                <p class="field-help">
+            ${forms.field(form.stripe_public_key)}
+            ${forms.field(form.email)}
+            ${forms.field(form.card_number)}
+            ${forms.field(form.cvc)}
+            ${forms.field(form.exp_month)}
+            ${forms.field(form.exp_year)}
+            <p class="field-help">
                 ${_('''CVC number is a 3-digit security code and normally
                 appears on the back of the card towards the right edge of the
                 signature field, or 4-digit code just above the card number on
                 the right.''')}
-                </p>
-            </div>
+            </p>
             <p class="buttons">
                 <button class="primary">${_('Uplink')}</button>
             </p>

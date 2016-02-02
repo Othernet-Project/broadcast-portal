@@ -1,11 +1,8 @@
-from bottle import request
-
-from ..util.template import view
+from bottle import redirect, request
 
 
-@view('main')
 def show_main():
-    return dict(item_type=request.query.get('item_type', None))
+    redirect(request.app.get_url('broadcast_content_form', item_type='content'))
 
 
 def route(conf):
