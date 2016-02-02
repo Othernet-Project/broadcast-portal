@@ -3,11 +3,7 @@ mako
 webassets
 pyScss
 sqlize
-bottle-utils-csrf
-bottle-utils-form>=0.3.10
-bottle-utils-html
-bottle-utils-lazy
-bottle-utils-i18n
+bottle-utils
 mandrill
 stripe
 gevent
