@@ -72,17 +72,11 @@ def show_broadcast_priority_scheduled(item):
                                            item_id=item.id)
         redirect(priority_url)
 
-    messages = {
-        'content': _('Priority uplink has been successfully scheduled.'),
-        'tv': _('Priority uplink has been successfully scheduled.'),
-        'twitter': _('Twitter feed uplink has been successfully scheduled.')
-    }
     return dict(item=item,
                 status='success',
-                page_title=_('Uplink Scheduled'),
-                message=messages[item.type],
-                redirect_url=request.app.get_url('main'),
-                redirect_target=_('main page'))
+                page_title=_('Thank You'),
+                message=_('Your payment has been completed. Your will receive'
+                          ' an email with your receipt shortly.'))
 
 
 def route(conf):
