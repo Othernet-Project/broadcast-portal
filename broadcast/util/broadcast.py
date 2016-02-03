@@ -13,7 +13,6 @@ import decimal
 import functools
 import hmac
 import hashlib
-import math
 import os
 import uuid
 import urlparse
@@ -53,7 +52,7 @@ def get_item(table, db=None, raw=False, **kwargs):
     row = row_to_dict(db.result)
 
     if not raw and row is not None:
-        (wrapper_cls,) = [cls for cls in (ContentItem, TVItem, TwitterItem)
+        (wrapper_cls,) = [cls for cls in (ContentItem, TwitterItem)
                           if cls.type == table]
         return wrapper_cls(db=db, **row)
 
@@ -72,7 +71,7 @@ def filter_items(table, db=None, raw=False, **kwargs):
     rows = map(row_to_dict, db.results)
 
     if not raw and rows:
-        (wrapper_cls,) = [cls for cls in (ContentItem, TVItem, TwitterItem)
+        (wrapper_cls,) = [cls for cls in (ContentItem, TwitterItem)
                           if cls.type == table]
         return [wrapper_cls(db=db, **row) for row in rows]
 
@@ -104,7 +103,6 @@ def send_payment_confirmation(item, stripe_obj, email, config):
     item_types = {
         'twitter': _("twitter feed"),
         'content': _("content"),
-        'tv': _("tv")
     }
     is_subscription = stripe_obj.object == 'customer'
     if is_subscription:
@@ -270,7 +268,7 @@ class BaseUploadItem(BaseItem):
 
     @property
     def unit_price(self):
-        return humanize_amount(request.app.config[self.ckey('price_per_mb')],
+        return humanize_amount(request.app.config[self.ckey('review_price')],
                                request.app.config)
 
     def save(self):
@@ -288,13 +286,8 @@ class BaseUploadItem(BaseItem):
 
         super(BaseUploadItem, self).save()
 
-    def calculate_chargeable_size(self):
-        return int(math.ceil(float(self.file_size) / 1024 / 1024))
-
     def calculate_price(self):
-        chargeable_size = self.calculate_chargeable_size()
-        price_per_mb_cents = request.app.config[self.ckey('price_per_mb')]
-        return chargeable_size * price_per_mb_cents
+        return request.app.config[self.ckey('review_price')]
 
     def charge(self, token):
         human_size = '{0} MB'.format(self.calculate_chargeable_size())
@@ -305,10 +298,6 @@ class BaseUploadItem(BaseItem):
 
 class ContentItem(BaseUploadItem):
     type = 'content'
-
-
-class TVItem(BaseUploadItem):
-    type = 'tv'
 
 
 class TwitterItem(BaseItem):

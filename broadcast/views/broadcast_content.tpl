@@ -2,7 +2,7 @@
 <%namespace name="forms" file="/ui/forms.tpl"/>
 
 <%block name="title">
-    ${_("Upload content")}
+    ${_("Share your files")}
 </%block>
 
 <%block name="main">
@@ -22,12 +22,14 @@
             <p class="buttons">
                 <button type="submit" name="mode" value="free" class="primary"><span class="icon"></span> ${_('Share')}</button>
             </p>
+            <p>${_("or")}</p>
             <p class="buttons">
-                <button type="submit" name="mode" value="priority" class="primary"><span class="icon"></span> ${_('Rocket Share')}</button>
+                <button type="submit" name="mode" value="priority" class="primary"><span class="icon"></span> ${_('Fast Share')}</button>
             </p>
+            <p>${_("Fast Share is a paid option with a one-time accelerated review fee of $5")}</p>
             <div class="progress-feedback">
                 <div class="loader"></div>
-                <p class="help-text">${_("Uplinking to teleport, please wait...")}</p>
+                <p class="help-text">${_("Uplinking, please wait...")}</p>
             </div>
         </form>
     </div>

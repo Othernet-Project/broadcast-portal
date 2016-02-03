@@ -210,7 +210,7 @@ class ContentForm(BaseUploadForm):
     mode = form.HiddenField()
     content_file = form.FileField(
         # Translators, used as label for content file upload field
-        _("Content file"),
+        _("Upload"),
         placeholder=_('content'),
         validators=[form.Required()],
         messages={
@@ -220,29 +220,33 @@ class ContentForm(BaseUploadForm):
             'file_size': _('Files larger than {size} are not allowed.'),
             # Translators, upload form error, do not translate '{filename}'
             'index': _('No HTML file found in {filename}'),
-        })
+        }
+    )
     title = form.StringField(
         # Translators, used as label for content title field
         _("Title"),
         placeholder=_('title'),
-        validators=[])
+        validators=[],
+        help_text=_("(OPTIONAL) Give your file a title that will appear in the"
+                    " library. The title will also be used for searching.")
+    )
     language = form.SelectField(
         # Translators, used as label for content language field
         _("Language"),
         choices=LOCALE_CHOICES,
-        validators=[])
+        validators=[],
+        help_text=_("(OPTIONAL) If your file is a text document (PDF, HTML,"
+                    " plain text, etc), specify the content language.")
+    )
     license = form.SelectField(
         # Translators, used as label for content license field
         _("License"),
         choices=LICENSE_CHOICES,
-        validators=[])
-    email = form.StringField(
-        # Translators, used as label for email field
-        _("Your Email"),
-        placeholder=_('Email'),
-        messages={
-            'email_invalid': _("Invalid e-mail address entered."),
-        }
+        validators=[],
+        help_text=_("(OPTIONAL) Every creative work is copyrighted by default,"
+                    " so find out whether you have permission to share your "
+                    "file. This needs to be verified before the file is "
+                    "uplinked to Outernet.")
     )
     url = form.StringField(
         # Translators, used as label for url field
@@ -250,7 +254,18 @@ class ContentForm(BaseUploadForm):
         placeholder=_('Source URL'),
         messages={
             'url_invalid': _("Invalid URL entered."),
-        }
+        },
+        help_text=_("(OPTIONAL) If your file originated on the Web, please"
+                    " specify the source address of the file.")
+    )
+    email = form.StringField(
+        # Translators, used as label for email field
+        _("Your Email"),
+        placeholder=_('Email'),
+        messages={
+            'email_invalid': _("Invalid e-mail address entered."),
+        },
+        help_text=_("(OPTIONAL) If you do not intend to use Fast Share.")
     )
 
     def postprocess_email(self, value):
