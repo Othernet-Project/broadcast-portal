@@ -30,12 +30,12 @@
             <div class="inline-fields">
                 <p class="o-field field form-input-required cvc">
                     ${forms.label(form.cvc.label, id=form.cvc.name)}
-                    ${forms.input(form.cvc.name, type=form.cvc.type, placeholder=form.cvc.options.get('placeholder'), value=form.cvc.value)}
+                    ${forms.input(form.cvc.name, type=form.cvc.type, value=form.cvc.value, **form.cvc.options)}
                 </p>
                 <p class="o-field field form-input-required expiration">
                     ${forms.label(form.exp_month.label, id=form.exp_month.name)}
-                    ${forms.input(form.exp_month.name, type=form.exp_month.type, placeholder=form.exp_month.options.get('placeholder'), value=form.exp_month.value)}
-                    ${forms.input(form.exp_year.name, type=form.exp_year.type, placeholder=form.exp_year.options.get('placeholder'), value=form.exp_year.value)}
+                    ${forms.input(form.exp_month.name, type=form.exp_month.type, value=form.exp_month.value, **form.exp_month.options)}
+                    ${forms.input(form.exp_year.name, type=form.exp_year.type, value=form.exp_year.value, **form.exp_year.options)}
                     % if form.exp_month.error:
                         ${forms.field_error(form.exp_month.error)}
                     % elif form.exp_year.error:

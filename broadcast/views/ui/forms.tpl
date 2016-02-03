@@ -3,6 +3,11 @@
 
 <%def name="pholder_attr(text=None)">${u' placeholder="{}"'.format(esc(text)) if text else ''}</%def>
 
+## Render all optional attributes
+##
+
+<%def name="opt_attrs(**kwargs)">${u' '.join([u'{}={}'.format(k, v) for (k, v) in kwargs.items()]) | h}</%def>
+
 ## Select list option
 ##
 
@@ -34,22 +39,22 @@
 ## Generic input
 ##
 
-<%def name="input(name, type='text', placeholder=None, value=None, id=None, has_error=False)">
+<%def name="input(name, type='text', placeholder=None, value=None, id=None, has_error=False, **kwargs)">
     <% current_value = h.to_unicode(value or request.params.get(name, '')) %>
-    <input type="${type | h}" name="${name | h}" id="${id or name | h}" value="${current_value | h}"${self.pholder_attr(placeholder)}>
+    <input type="${type | h}" name="${name | h}" id="${id or name | h}" value="${current_value | h}"${self.pholder_attr(placeholder)}${self.opt_attrs(**kwargs)}>
 </%def>
 
 ## Hidden input
 ##
 
-<%def name="hidden(name, value, id=None)">
+<%def name="hidden(name, value, id=None, **kwargs)">
     ${self.input(name, 'hidden', value=value, id=id or name)}
 </%def>
 
 ## Text input
 ##
 
-<%def name="text(name, placeholder=None, value=None, id=None)">
+<%def name="text(name, placeholder=None, value=None, id=None, **kwargs)">
     ${self.input(name, 'text', placeholder=placeholder, value=value, id=id)}
 </%def>
 
@@ -132,9 +137,9 @@
 
         ## Field
         % if fld.type in ['text', 'email', 'date', 'password', 'file']:
-            ${self.input(fld.name, type=fld.type, placeholder=fld.options.get('placeholder'), value=fld.value, id=id)}
+            ${self.input(fld.name, type=fld.type, value=fld.value, id=id, **fld.options)}
         % elif fld.type == 'hidden':
-            ${self.hidden(fld.name, value=fld.value, id=id)}
+            ${self.hidden(fld.name, value=fld.value, id=id, **fld.options)}
         % elif fld.type in ['checkbox', 'radio']:
             ${self.checkbox(fld.name, value=fld.expected_value, is_checked=fld.value, id=id)}
         % elif fld.type == 'textarea':

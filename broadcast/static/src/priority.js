@@ -14,15 +14,15 @@
 
     var self = {},
         check = window.check,
-        pubKey = $('#id_stripe_public_key').val(),
+        pubKey = $('#stripe_public_key').val(),
         paymentForm = $('#payment-form'),
         checkCard,
         checkCvc,
         checkExpiry,
-        cardField = $('#id_card_number'),
-        yearField = $('#id_exp_year'),
-        monthField = $('#id_exp_month'),
-        cvcField = $('#id_cvc');
+        cardField = $('#card_number'),
+        yearField = $('#exp_year'),
+        monthField = $('#exp_month'),
+        cvcField = $('#cvc');
 
     $.fn.markNegative = function () {
         var el = $(this);
