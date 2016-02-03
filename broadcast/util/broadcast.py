@@ -13,6 +13,7 @@ import decimal
 import functools
 import hmac
 import hashlib
+import math
 import os
 import uuid
 import urlparse
@@ -288,6 +289,9 @@ class BaseUploadItem(BaseItem):
 
     def calculate_price(self):
         return request.app.config[self.ckey('review_price')]
+
+    def calculate_chargeable_size(self):
+        return int(math.ceil(float(self.file_size) / 1024 / 1024))
 
     def charge(self, token):
         human_size = '{0} MB'.format(self.calculate_chargeable_size())
