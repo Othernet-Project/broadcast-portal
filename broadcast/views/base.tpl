@@ -30,7 +30,9 @@
             </div>
             <div class="menu-block-right">
                 <nav id="nav" class="menu-subblock toolbar">
-                    <a href="http://www.outernet.is/" class="homepage"><span class="label">${_("Outernet Homepage")}</span></a>
+                    <a href="http://www.outernet.is/" class="homepage"><span class="label">${_("Home")}</span></a>
+                    <a href="#" class="homepage"><span class="label">${_("Contact Us")}</span></a>
+                    <a href="#" class="homepage"><span class="label">${_("Guaranteed Delivery")}</span></a>
                 </nav>
                 <div class="hamburger">
                     <a href="#nav">Site menu</a>
