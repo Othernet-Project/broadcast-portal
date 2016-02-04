@@ -26,7 +26,7 @@ from ..util.auth import (create_user,
                          login_user_no_auth,
                          KeyExpired,
                          KeyNotFound)
-from ..util.email import send_mail
+from ..util.sendmail import send_mail
 from ..util.http import http_redirect
 from ..util.template import view, template
 

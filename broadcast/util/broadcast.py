@@ -24,7 +24,7 @@ from bottle import request, redirect, abort
 from bottle_utils.form import ValidationError
 from bottle_utils.i18n import dummy_gettext as _
 
-from .email import send_mail
+from .sendmail import send_mail
 
 
 def get_unique_id():
