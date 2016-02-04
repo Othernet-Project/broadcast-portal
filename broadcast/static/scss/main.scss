@@ -1,11 +1,6 @@
-@import "outernet/ui";
-@import "partials/common";
-@import "partials/mainmenu";
+@import "compass/reset";
+@import "partials/base";
+@import "partials/buttons";
+@import "partials/header";
 @import "partials/footer";
-@import "partials/switch";
-@import "partials/feedback";
-@import "partials/tab";
-@import "homepage";
-@import "broadcast";
-@import "priority";
-@import "admin";
+@import "partials/body";

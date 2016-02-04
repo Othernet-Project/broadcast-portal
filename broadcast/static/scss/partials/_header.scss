@@ -1,0 +1,58 @@
+@import "compass/css3";
+@import "compass/typography/text/replacement";
+@import "sprites";
+
+header {
+  overflow: hidden;
+  
+  // layout
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 1;
+
+  // decoration
+  background-image: image-url('header_bg.jpg');
+  background-position: center top;
+
+  .header-logo {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+
+    a {
+      @include sprite-image('logo');
+      @include hide-text;
+    }
+  }
+
+  .header-links {
+    position: absolute;
+    right: 1rem;
+    top: 1.2rem;
+
+    a {
+      display: inline-block;
+      font-size: 114%;
+      text-transform: uppercase;
+      color: $base-text;
+      margin-left: 1rem;
+      overflow: hidden;
+
+      &:hover {
+        color: $link;
+        text-decoration: none;
+      }
+    }
+
+
+
+    .hamburger {
+      display: none;
+    }
+  }
+}
+
+

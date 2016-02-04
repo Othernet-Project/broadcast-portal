@@ -1,0 +1,39 @@
+.body {
+  padding-top: 60px;
+}
+
+.hero {
+  // layout
+  min-height: 480px;
+
+  // decoration
+  background-image: image-url('content_bg.jpg');
+  background-position: center top;
+
+  .overlay {
+    // text formatting
+    text-align: center;
+
+    // layout
+    padding-top: 6.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+
+    h2 {
+      font-size: 214%;
+    }
+
+    .buttons {
+      margin: 4rem 0;
+
+      a:first-child {
+        margin-right: 1.5rem;
+      }
+
+      a:last-child {
+        margin-left: 1.5rem;
+      } 
+    }
+  }
+}
+
