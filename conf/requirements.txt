@@ -13,5 +13,4 @@ i18n
 urllib3
 pyOpenSSL==0.15.1
 google-api-python-client==1.4.2
-gdata==2.0.18
-
+gspread==0.3.0
