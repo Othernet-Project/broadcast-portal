@@ -13,7 +13,7 @@ import datetime
 from bottle_utils.i18n import dummy_gettext as _
 
 from .broadcast import filter_items, cleanup
-from .email import send_multiple
+from .sendmail import send_multiple
 from .squery import Database
 
 
