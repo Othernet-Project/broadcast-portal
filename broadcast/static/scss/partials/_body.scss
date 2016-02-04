@@ -1,3 +1,5 @@
+$single-column-cutoff: 700px;
+
 .body {
   padding-top: 60px;
 }
@@ -10,29 +12,57 @@
   background-image: image-url('content_bg.jpg');
   background-position: center top;
 
+  @include narrower-than($single-column-cutoff) {
+    min-height: 0;
+  }
+
   .overlay {
     // text formatting
     text-align: center;
 
     // layout
     padding-top: 6.2rem;
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
+
+    @include narrower-than($single-column-cutoff) {
+      padding: 2rem 1rem 3rem;
+    }
 
     h2 {
       font-size: 214%;
+      line-height: 130%;
     }
 
     .buttons {
       margin: 4rem 0;
 
+      @include narrower-than($single-column-cutoff) {
+        margin: 1.5rem 0;
+
+        a {
+          display: block;
+          width: 100%;
+        }
+      }
+
       a:first-child {
         margin-right: 1.5rem;
+
+        @include narrower-than($single-column-cutoff) {
+          margin: 0 0 1em;
+        }
       }
 
       a:last-child {
         margin-left: 1.5rem;
+
+        @include narrower-than($single-column-cutoff) {
+          margin: 0;
+        }
       } 
+
+
     }
   }
 }

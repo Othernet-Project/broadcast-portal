@@ -28,7 +28,7 @@
                 <a class="logo" href="${url('main')}">${_("Outernet Uplink Center")}</a>
             </h1>
             <div class="header-links">
-                <nav id="nav" class="menu-subblock toolbar">
+                <nav id="nav" class="nav">
                     <a href="http://www.outernet.is/" class="homepage"><span class="label">${_("Home")}</span></a>
                     <a href="#" class="homepage"><span class="label">${_("Contact Us")}</span></a>
                     <a href="#" class="homepage"><span class="label">${_("Rocket Service")}</span></a>
