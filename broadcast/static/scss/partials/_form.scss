@@ -1,0 +1,182 @@
+@import "compass/css3";
+@import "colors";
+@import "mixins/media_query";
+
+@include keyframes(autoclose) {
+  from {
+    max-height: 200px;
+    opacity: 1;
+  }
+  to {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+// Form page
+
+.form {
+  background: $background;
+  padding: 4rem 0 1rem;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  form {
+    display: block;
+    max-width: 348px;
+    margin: 0 auto;
+
+    @include narrower-than(390px) {
+      padding: 0 1rem;
+    }
+  } 
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+select {
+  width: 100%;
+  min-width: 200px;
+  padding: 0.5rem 1rem;
+  @include box-sizing(border-box);
+
+  border: 1px solid $form-field;
+  background: $form-field;
+  color: $footer;
+
+  font-family: 'Brandon Text', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+label {
+  display: block;
+  text-transform: uppercase;
+  font-size: 92%;
+  margin-bottom: 0.3rem;
+
+  &::after {
+    content: ':';
+    display: inline;
+  }
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.file {
+  margin-bottom: 2rem;
+  text-align: center;
+
+  label, input {
+    display: none;
+  }
+
+  .file-wrapper {
+    display: block;
+    text-align: center;
+
+    .button {
+      text-align: center;
+      width: auto;
+      padding: 0 30px;
+      height: 30px;
+      font-size: 100%;
+      line-height: 30px;
+    }
+
+    .filename {
+      display: block;
+      text-align: center;
+    }
+  }
+}
+
+.field-help-message,
+.field-error-message {
+  display: inline-block;
+  margin-top: 0.2rem;
+  font-size: 92%;
+}
+
+.field-help-message {
+  color: $help-text;
+}
+
+.field-error-message {
+  color: $form-error;
+}
+
+.buttons {
+  text-align: center;
+  margin: 3rem 0;
+  
+  span {
+    display: block;
+    margin: 0 auto;
+    max-width: 340px;
+  }
+
+  .separator {
+    color: $help-text;
+    margin: 0.5rem auto;
+  }
+
+  .field-help-message {
+    margin: 0.5rem auto 0;
+  }
+}
+
+.field-error {
+  label {
+    color: $form-error;
+  }
+
+  input, select {
+    border-color: $form-error;
+    background-color: lighten($form-error, 20);
+  }
+
+  .button {
+    border-color: $form-error;
+    color: $form-error;
+  }
+}
+
+.form-errors {
+  border: 1px solid $form-error;
+  padding: 0.5rem;
+  color: $form-error;
+
+  li {
+    list-style: disc;
+    margin-left: 1rem;
+  }
+}
+
+.priority-help {
+  background-color: lighten($background, 20);
+  padding: 2rem 20%;
+  text-align: center;
+  font-size: 120%;
+  line-height: 140%;
+  margin-bottom: 1rem;
+  overflow: hidden;
+
+  @include narrower-than(540px) {
+    font-size: 100%;
+    line-height: 140%;
+    padding: 1rem;
+  }
+
+  @include animation-name(autoclose);
+  @include animation-delay(10s);
+  @include animation-duration(1s);
+  @include animation-fill-mode(forwards);
+}

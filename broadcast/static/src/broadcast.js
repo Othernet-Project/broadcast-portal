@@ -14,8 +14,8 @@
 
     $('input[type="file"]').each(function () {
         var input = $(this),
-            fileProxy = $('<a class="button small">Choose File</a>'),
-            fileValue = $('<span>No file chosen</span>'),
+            fileProxy = $('<a class="button small">Upload</a>'),
+            fileValue = $('<span class="filename field-help-message">Up to 3MB</span>'),
             fileWrapper = $('<span class="file-wrapper"></span>');
 
         fileProxy.on('click', function () {
