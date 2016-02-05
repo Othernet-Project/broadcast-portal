@@ -24,6 +24,8 @@ from bottle import request, redirect, abort
 from bottle_utils.form import ValidationError
 from bottle_utils.i18n import dummy_gettext as _
 
+from .gdrive import DriveClient
+from .gsheet import SheetClient
 from .sendmail import send_mail
 
 
@@ -133,6 +135,16 @@ def send_payment_confirmation(item, stripe_obj, email, config):
               config=config)
 
 
+def upload_to_drive(item, config):
+    dc = DriveClient(config['google.service_credentials_path'])
+    file_data = dc.upload(item.upload_path,
+                          parent_id=config.get('google.parent_folder_id'))
+    sc = SheetClient(config['google.service_credentials_path'])
+    sc.insert(config['google.spreadsheet_id'],
+              config['google.worksheet_index'],
+              item.values() + [file_data['alternateLink'], file_data['id']])
+
+
 class ChargeError(ValidationError):
     pass
 
@@ -159,6 +171,9 @@ class BaseItem(object):
 
     def keys(self):
         return self.data.keys()
+
+    def values(self):
+        return self.data.values()
 
     def items(self):
         return self.data.items()

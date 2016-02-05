@@ -19,7 +19,8 @@ from ..forms.broadcast import ContentForm, TwitterForm
 from ..util.broadcast import (ContentItem,
                               TwitterItem,
                               get_unique_id,
-                              sign)
+                              sign,
+                              upload_to_drive)
 from ..util.template import template, view
 
 
@@ -61,6 +62,8 @@ def broadcast_content(item_type):
                                            item_id=item.id)
             redirect(next_url)
         else:
+            task_runner = request.app.config['task.runner']
+            task_runner.schedule(upload_to_drive, item, request.app.config)
             message = _('Free uplink has been successfully scheduled.')
             return template('feedback',
                             item=item,
