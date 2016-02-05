@@ -217,7 +217,7 @@ class ContentForm(BaseUploadForm):
             # Translators, upload form error, do not translate '{formats}'
             'file_format': _('Only {formats} files are allowed.'),
             # Translators, upload form error, do not translate '{size}'
-            'file_size': _('Files larger than {size} are not allowed.'),
+            'file_size': _('File is too large.'),
             # Translators, upload form error, do not translate '{filename}'
             'index': _('No HTML file found in {filename}'),
         }
@@ -225,7 +225,7 @@ class ContentForm(BaseUploadForm):
     title = form.StringField(
         # Translators, used as label for content title field
         _("Title"),
-        placeholder=_('title'),
+        placeholder=_('Title'),
         validators=[],
         help_text=_("(OPTIONAL) Give your file a title that will appear in the"
                     " library. The title will also be used for searching.")
