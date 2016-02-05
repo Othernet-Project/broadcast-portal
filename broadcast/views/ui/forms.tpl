@@ -87,20 +87,20 @@
 ##
 
 <%def name="label(label, inline=False, id=None)">
-    <label${' for="{}"'.format(id) if id else '' | h} class="o-field-label${' o-field-label-inline' if inline else ''}">${label}</label>
+    <label${' for="{}"'.format(id) if id else '' | h} class="field-label${' field-label-inline' if inline else ''}">${label}</label>
 </%def>
 
 ## Field supplemental information
 ##
 
 <%def name="field_help(message)">
-    <span class="o-field-help-message">
+    <span class="field-help-message">
         ${message | h}
     </span>
 </%def>
 
 <%def name="field_error(message)">
-    <span class="o-field-error-message">
+    <span class="field-error-message">
         ${message | h}
     </span>
 </%def>
@@ -124,7 +124,7 @@
         if help:
             fld.options['help_text'] = help
     %>
-    <p class="o-field${' o-field-error' if fld.error else ''}">
+    <p class="field${' field-error' if fld.error else ''}">
         ## Label
         % if fld.type not in ('checkbox', 'radio', 'hidden'):
             ${self.label(fld.label, id=id or fld.name)}

@@ -6,8 +6,8 @@
 </%block>
 
 <%block name="main">
-<div class="full-page-form">
-    <div class="twitter">
+    <div class="form">
+        <h2>${_('Share your tweets')}</h2>
         ${h.form('post', action=url('broadcast_twitter'), enctype="multipart/form-data")}
             ${forms.form_errors([form.error]) if form.error else ''}
             ${csrf_tag()}
@@ -18,5 +18,4 @@
             </p>
         </form>
     </div>
-</div>
 </%block>

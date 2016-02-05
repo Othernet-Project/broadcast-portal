@@ -6,17 +6,14 @@
 </%block>
 
 <%block name="main">
-<div class="h-bar">
-    <h2>${_('Payment')}</h2>
-    % if item.type == 'twitter':
-        <p class="priority-help">${_("{amount} will be charged {period} until you unsubscribe from this service. Your card will not be charged until the subscription is approved by Outernet staff.".format(amount=item.plan_price, period=item.plan_period))}</p>
-    % else:
-        <p class="priority-help">${_("A one time {amount} accelerated review fee will be charged immediately. Your submission will be reviewed within 24 hours after we receive your payment.".format(amount=item.priority_price))}</p>
-    % endif
-</div>
+    <div class="form">
+        <h2>${_('Payment')}</h2>
+        % if item.type == 'twitter':
+            <p class="priority-help">${_("{amount} will be charged {period} until you unsubscribe from this service. Your card will not be charged until the subscription is approved by Outernet staff.".format(amount=item.plan_price, period=item.plan_period))}</p>
+        % else:
+            <p class="priority-help">${_("A one time {amount} accelerated review fee will be charged immediately. Your submission will be reviewed within 24 hours after we receive your payment.".format(amount=item.priority_price))}</p>
+        % endif
 
-<div class="full-page-form">
-    <div class="priority">
         ${h.form('post', _id='payment-form', action=url('broadcast_priority', item_type=item.type, item_id=item.id))}
             % if form.error:
             ${forms.form_errors([form.error])}
@@ -54,7 +51,6 @@
             </p>
         </form>
     </div>
-</div>
 </%block>
 
 <%block name="extra_scripts">
