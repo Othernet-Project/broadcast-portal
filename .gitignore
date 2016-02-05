@@ -11,3 +11,5 @@ local.ini
 *.woff
 *.woff2
 *.css
+broadcast/static/js/*
+broadcast/static/css/*
