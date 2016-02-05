@@ -137,7 +137,9 @@ def send_payment_confirmation(item, stripe_obj, email, config):
 
 def upload_to_drive(item, config):
     dc = DriveClient(config['google.service_credentials_path'])
-    file_data = dc.upload(item.upload_path,
+    upload_root = config['{}.upload_root'.format(item.type)]
+    upload_path = os.path.join(upload_root, item.file_path)
+    file_data = dc.upload(upload_path,
                           parent_id=config.get('google.parent_folder_id'))
     sc = SheetClient(config['google.service_credentials_path'])
     sc.insert(config['google.spreadsheet_id'],
@@ -199,6 +201,7 @@ class BaseItem(object):
                                charge_id=':charge_id',
                                where='id = :id')
         self.db.query(query, id=self.id, charge_id=obj.id)
+        self.update(charge_id=obj.id)
 
     def save_charge_object(self, charge_obj):
         # create charge object
