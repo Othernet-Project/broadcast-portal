@@ -16,6 +16,7 @@ from ..forms.priority import PaymentForm
 from ..util.broadcast import (fetch_item,
                               guard_already_charged,
                               send_payment_confirmation,
+                              upload_to_drive,
                               ChargeError)
 from ..util.template import view
 
@@ -46,8 +47,10 @@ def broadcast_priority(item):
         except ChargeError as exc:
             error = exc
         else:
+            task_runner = request.app.config['task.runner']
+            if item.type == 'content':
+                task_runner.schedule(upload_to_drive, item, request.app.config)
             if item.email:
-                task_runner = request.app.config['task.runner']
                 task_runner.schedule(send_payment_confirmation,
                                      item,
                                      stripe_obj,
