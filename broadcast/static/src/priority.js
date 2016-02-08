@@ -104,7 +104,7 @@
         parent.clearErrors();
         issuer = check.getIssuer(card)
 
-        if (card.length < 16) {
+        if (card.length < 1) {
             return;
         }
         isCardValid = check.mod10check(card);
