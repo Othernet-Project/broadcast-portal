@@ -61,7 +61,8 @@
         cvcError: "${_('Check the CVC number')}",
         monthRangeError: "${_('Number entered for month is too small or too big')}",
         dateError: "${_('Enter only numbers for expiry date')}",
-        expError: "${_('Check the expiration date on your card')}"
+        expError: "${_('Check the expiration date on your card')}",
+        emailError: "${_('Please enter a valid email address')}"
     };
     </script>
     <script src="${assets['js/priority']}"></script>

@@ -23,14 +23,17 @@
     };
     var GENERIC_CARD = 'generic';
     var BAD_CARD = 'bad'
+    var EMAIL_RE = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum)\b/i
 
     var self = {},
         check = window.check,
         pubKey = $('#stripe_public_key').val(),
         paymentForm = $('#payment-form'),
+        checkEmail,
         checkCard,
         checkCvc,
         checkExpiry,
+        emailField = $('#email'),
         cardField = $('#card_number'),
         yearField = $('#exp_year'),
         monthField = $('#exp_month'),
@@ -79,16 +82,27 @@
         parent.addClass(issuerIcon);
     }
 
+    checkEmail = function () {
+        var el = $(this);
+        var parent = el.parents('.field');
+        var value = $.trim(el.val());
+        parent.clearErrors();
+        if (EMAIL_RE.test(value)) {
+            return;
+        }
+        console.log(window.messages.emailError);
+        parent.markError(window.messages.emailError);
+    }
+
     checkCard = function () {
         var el = $(this).markPositive(),
-            parent = el.parent('.field'),
+            parent = el.parents('.field'),
             isCardValid,
             issuer,
             card = check.extractDigits(el.val());
 
         parent.clearErrors();
         issuer = check.getIssuer(card)
-        el.setIcon(issuer);
 
         if (card.length < 16) {
             return;
@@ -98,12 +112,14 @@
         if (!isCardValid) {
             el.setIcon()
             parent.markError(window.messages.cardError);
+        } else {
+            el.setIcon(issuer);
         }
     };
 
     checkCvc = function () {
         var el = $(this).removeMarks(),
-            parent = el.parent('p'),
+            parent = el.parents('.field'),
             card = check.extractDigits(cardField.val()),
             cvc = check.extractDigits(el.val()),
             isCvcValid;
@@ -161,6 +177,7 @@
         }
     };
 
+    emailField.change(checkEmail);
     cardField.input(checkCard);
     cvcField.input(checkCvc);
     monthField.input(checkExpiry);
