@@ -265,7 +265,7 @@ class ContentForm(BaseUploadForm):
         messages={
             'email_invalid': _("Invalid e-mail address entered."),
         },
-        help_text=_("(OPTIONAL) If you do not intend to use Fast Share.")
+        help_text=_("(OPTIONAL) If you do not intend to use Rocket Share.")
     )
 
     def postprocess_email(self, value):
