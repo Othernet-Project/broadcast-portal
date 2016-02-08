@@ -119,15 +119,16 @@
 ## This def renders a bottle-utils Field instance.
 ##
 
-<%def name="field(fld, id=None, help=None)">
+<%def name="field(fld, id=None, help=None, required=False)">
     <%
         if help:
             fld.options['help_text'] = help
     %>
-    <p class="field${' field-error' if fld.error else ''}">
+    <p class="field${' field-error' if fld.error else ''}${' required' if required else ''}" id="field-${id or fld.name | h}">
         ## Label
         % if fld.type not in ('checkbox', 'radio', 'hidden'):
-            ${self.label(fld.label, id=id or fld.name)}
+            <% label = fld.label + ':' if not fld.label.endswith(':') else fld.label %>
+            ${self.label(label, id=id or fld.name)}
         % endif
 
         ## Help text for textarea is rendered above the field but below label
@@ -136,17 +137,19 @@
         % endif
 
         ## Field
-        % if fld.type in ['text', 'email', 'date', 'password', 'file']:
-            ${self.input(fld.name, type=fld.type, value=fld.value, id=id, **fld.options)}
-        % elif fld.type == 'hidden':
-            ${self.hidden(fld.name, value=fld.value, id=id, **fld.options)}
-        % elif fld.type in ['checkbox', 'radio']:
-            ${self.checkbox(fld.name, value=fld.expected_value, is_checked=fld.value, id=id)}
-        % elif fld.type == 'textarea':
-            ${self.textarea(fld.name, placeholder=fld.options.get('placeholder'), value=fld.value, id=id)}
-        % elif fld.type == 'select':
-            ${self.select(fld.name, fld.choices, value=fld.value, id=id)}
-        % endif
+        <span class="field-input">
+            % if fld.type in ['text', 'email', 'date', 'password', 'file']:
+                ${self.input(fld.name, type=fld.type, value=fld.value, id=id, **fld.options)}
+            % elif fld.type == 'hidden':
+                ${self.hidden(fld.name, value=fld.value, id=id, **fld.options)}
+            % elif fld.type in ['checkbox', 'radio']:
+                ${self.checkbox(fld.name, value=fld.expected_value, is_checked=fld.value, id=id)}
+            % elif fld.type == 'textarea':
+                ${self.textarea(fld.name, placeholder=fld.options.get('placeholder'), value=fld.value, id=id)}
+            % elif fld.type == 'select':
+                ${self.select(fld.name, fld.choices, value=fld.value, id=id)}
+            % endif
+        </span>
 
         ## Help text for non-textarea fields is rendered below the field
         % if fld.type not in ('textarea',):
