@@ -22,14 +22,14 @@
             % endif
             ${csrf_tag()}
             ${forms.field(form.stripe_public_key)}
-            ${forms.field(form.email)}
-            ${forms.field(form.card_number)}
+            ${forms.field(form.email, required=True)}
+            ${forms.field(form.card_number, required=True)}
             <div class="inline-fields">
-                <p class="o-field field form-input-required cvc">
+                <p class="field required" id="field-cvc">
                     ${forms.label(form.cvc.label, id=form.cvc.name)}
                     ${forms.input(form.cvc.name, type=form.cvc.type, value=form.cvc.value, **form.cvc.options)}
                 </p>
-                <p class="o-field field form-input-required expiration">
+                <p class="field required" id="field-expiration">
                     ${forms.label(form.exp_month.label, id=form.exp_month.name)}
                     ${forms.input(form.exp_month.name, type=form.exp_month.type, value=form.exp_month.value, **form.exp_month.options)}
                     ${forms.input(form.exp_year.name, type=form.exp_year.type, value=form.exp_year.value, **form.exp_year.options)}
@@ -39,13 +39,12 @@
                         ${forms.field_error(form.exp_year.error)}
                     % endif
                 </p>
-                <p class="field-help">
-                    ${_('''CVC number is a 3-digit security code and normally
-                    appears on the back of the card towards the right edge of the
-                    signature field, or 4-digit code just above the card number on
-                    the right.''')}
-                </p>
             </div>
+            <p class="field-help-message">
+                ${_('''CVC is a 3- or 4-digit security number found on the 
+                back of your card, usually in the top-right corner of 
+                the signature field.''')}
+            </p>
             <p class="buttons">
                 <button class="primary">${_('Finish')}</button>
             </p>

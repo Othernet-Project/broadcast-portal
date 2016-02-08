@@ -214,6 +214,33 @@ label {
   }
 }
 
+.inline-fields::after {
+  display: block;
+  content: '';
+  height: 0;
+  clear: both;
+}
+
+#field-cvc {
+  float: left;
+  width: 80px;
+
+  input {
+    width: 80px;
+    min-width: 0;
+  }
+}
+
+#field-expiration {
+  float: right;
+  width: 164px;
+
+  input {
+    width: 80px;
+    min-width: 0;
+  }
+}
+
 .priority-help {
   background-color: lighten($background, 20);
   padding: 2rem 20%;

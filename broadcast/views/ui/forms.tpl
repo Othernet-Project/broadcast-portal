@@ -87,6 +87,7 @@
 ##
 
 <%def name="label(label, inline=False, id=None)">
+    <% label = label + ':' if not label.endswith(':') else label %>
     <label${' for="{}"'.format(id) if id else '' | h} class="field-label${' field-label-inline' if inline else ''}">${label}</label>
 </%def>
 
@@ -127,8 +128,7 @@
     <p class="field${' field-error' if fld.error else ''}${' required' if required else ''}" id="field-${id or fld.name | h}">
         ## Label
         % if fld.type not in ('checkbox', 'radio', 'hidden'):
-            <% label = fld.label + ':' if not fld.label.endswith(':') else fld.label %>
-            ${self.label(label, id=id or fld.name)}
+            ${self.label(fld.label, id=id or fld.name)}
         % endif
 
         ## Help text for textarea is rendered above the field but below label
