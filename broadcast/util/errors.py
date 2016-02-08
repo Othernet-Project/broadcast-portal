@@ -1,5 +1,7 @@
 import logging
 
+from bottle import request
+
 from .template import view
 
 
@@ -14,8 +16,13 @@ def error404(*args, **kwargs):
 
 
 @view('500')
-def error500(*args, **kwargs):
-    logging.exception("Unhandled error")
+def error500(exc, *args, **kwargs):
+    traceback = exc.traceback or exc.body
+    logging.error("Unhandled error '%s' at %s %s:\n\n%s",
+                  exc.exception,
+                  request.method.upper(),
+                  request.path,
+                  traceback)
     return dict()
 
 
