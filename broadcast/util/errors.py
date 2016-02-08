@@ -1,3 +1,5 @@
+import logging
+
 from .template import view
 
 
@@ -13,6 +15,7 @@ def error404(*args, **kwargs):
 
 @view('500')
 def error500(*args, **kwargs):
+    logging.exception("Unhandled error")
     return dict()
 
 
