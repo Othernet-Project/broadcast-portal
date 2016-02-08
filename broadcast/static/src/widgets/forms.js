@@ -13,19 +13,18 @@
 
   $.fn.clearErrors = function () {
     var el = $(this);
-    el.find('input, select, textarea').removeClass('negative');
-    el.find('.field-error').remove();
+    el.removeClass('field-error');
+    el.find('.field-error-message').remove();
     return el;
   };
 
   $.fn.markError = function (message) {
     var el = $(this).clearErrors();
-    var input = el.find('input, select, textarea');
     var error = $('<span>');
     error.html(message);
-    error.addClass('field-error');
-    input.addClass('negative');
+    error.addClass('field-error-message');
     el.append(error);
+    el.addClass('field-error');
   }
 
 }(this, this.jQuery));
