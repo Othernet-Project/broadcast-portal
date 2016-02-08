@@ -12,6 +12,18 @@
 (function (window, $, Stripe) {
     'use strict';
 
+    var CARD_CLASSES_ARR = ['visa', 'master', 'amex', 'diners', 'discover', 
+        'generic', 'bad'];
+    var CARD_CLASSES = {
+        'Visa': 'visa',
+        'MasterCard': 'master',
+        'American Express': 'amex',
+        'Diners Club': 'diners',
+        'Discover': 'discover',
+    };
+    var GENERIC_CARD = 'generic';
+    var BAD_CARD = 'bad'
+
     var self = {},
         check = window.check,
         pubKey = $('#stripe_public_key').val(),
@@ -26,14 +38,15 @@
 
     $.fn.markNegative = function () {
         var el = $(this);
-        el.removeClass('positive').addClass('negative');
+        var parent = el.parents('.field');
+        parent.addClass('field-error');
         return el;
     };
 
     $.fn.markPositive = function () {
         var el = $(this);
-
-        el.addClass('positive').removeClass('negative');
+        var parent = el.parents('.field');
+        parent.removeClass('field-error');
         return el;
     };
 
@@ -41,29 +54,49 @@
         var el = $(this);
 
         if (val) {
-            el.markPositive();
-        } else {
-            el.markNegative();
+            return el.markPositive();
         }
-        return el;
+        
+        return el.markNegative();
     };
 
-    $.fn.removeMarks = function () {
-        return $(this).removeClass('positive').removeClass('negative');
-    };
+    $.fn.setIcon = function(issuer) {
+        var el = $(this);
+        var parent = el.parents('.field-input');
+        var issuerIcon;
+
+        if (issuer == null) {
+            issuerIcon = BAD_CARD;
+        } else if (issuer in CARD_CLASSES) {
+            issuerIcon = CARD_CLASSES[issuer];
+        } else {
+            issuerIcon = GENERIC_CARD;
+        }
+
+        CARD_CLASSES_ARR.forEach(function (c) {
+            parent.removeClass(c);
+        })
+        parent.addClass(issuerIcon);
+    }
 
     checkCard = function () {
-        var el = $(this).removeMarks(),
-            parent = el.parent('p'),
+        var el = $(this).markPositive(),
+            parent = el.parent('.field'),
             isCardValid,
+            issuer,
             card = check.extractDigits(el.val());
+
         parent.clearErrors();
+        issuer = check.getIssuer(card)
+        el.setIcon(issuer);
+
         if (card.length < 16) {
             return;
         }
         isCardValid = check.mod10check(card);
         el.togglePositive(isCardValid);
         if (!isCardValid) {
+            el.setIcon()
             parent.markError(window.messages.cardError);
         }
     };

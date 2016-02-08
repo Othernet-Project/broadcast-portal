@@ -1,6 +1,7 @@
 @import "compass/css3";
-@import "colors";
 @import "mixins/media_query";
+@import "colors";
+@import "sprites";
 
 @include keyframes(autoclose) {
   from {
@@ -186,6 +187,30 @@ label {
     text-align: center;
     font-size: 120%;
     @include box-sizing(border-box);
+  }
+}
+
+#field-card_number .field-input {
+  display: block;
+  position: relative;
+
+  input {
+    padding-right: 48px;
+  }
+
+  &::after {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.4rem;
+    display: inline-block;
+    content: '';
+    @include sprite-image(card_generic);
+  }
+
+  @each $card in visa, amex, discover, diners, bad {
+    &.#{$card}::after {
+      @include sprite-image(card_#{$card});
+    }
   }
 }
 
