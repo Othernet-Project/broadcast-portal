@@ -4,7 +4,9 @@
 ${page_title}
 </%block>
 
-<div class="feedback ${status}">
-    <h2>${page_title}</h2>
-    <p class="main">${message}</p>
-</div>
+<%block name="main">
+    <div class="feedback ${status}">
+        <h2>${page_title}</h2>
+        <p class="main">${message}</p>
+    </div>
+</%block>
