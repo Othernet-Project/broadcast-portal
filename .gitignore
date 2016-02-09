@@ -5,6 +5,7 @@
 /.ropeproject
 /tmp
 .webassets-cache
+.sass-cache
 local.ini
 *.eot
 *.ttf
