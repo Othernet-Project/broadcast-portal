@@ -30,8 +30,8 @@
             <div class="header-links">
                 <nav id="nav" class="nav">
                     <a href="http://www.outernet.is/" class="homepage"><span class="label">${_("Home")}</span></a>
-                    <a href="#" class="homepage"><span class="label">${_("Contact Us")}</span></a>
-                    <a href="${url('rocket_service')}" class="homepage"><span class="label">${_("Rocket Service")}</span></a>
+                    <a href="mailto:hello+uplink@outernet.is" class="homepage"><span class="label">${_("Contact Us")}</span></a>
+                    ${h.link_other(_("Rocket Service"), url('rocket_service'), request.path)}
                 </nav>
                 <div class="hamburger">
                     <a href="#nav">Site menu</a>

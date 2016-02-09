@@ -106,6 +106,16 @@ header {
       }
     }
 
+    .nav > span {
+      display: inline-block;
+      font-size: 114%;
+      text-transform: uppercase;
+      margin-left: 1rem;
+      overflow: hidden;
+      color: $link;
+      text-decoration: none;
+    }
+
     .hamburger {
       display: none;
 
