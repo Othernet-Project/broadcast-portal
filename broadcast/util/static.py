@@ -27,16 +27,12 @@ class Assets:
         if not debug:
             self.env.auto_rebuild = False
 
-        # Configure Compass
-        self.env.config['COMPASS_CONFIG'] = dict(
-            http_path='/static/',
-            css_dir='css',
-            sass_dir='scss',
-            images_dir='img',
-            javascripts_dir='js',
-            relative_assets=True,
-            output_style='compressed',
-        )
+    def add_static_source(self, path, url=None):
+        """
+        Third parties should call this method to register their own static
+        folders.
+        """
+        self.env.append_path(path, url=url)
 
     def add_js_bundle(self, out, assets):
         """
@@ -65,7 +61,7 @@ class Assets:
         """
         assets = [self._js_path(a) for a in assets]
         out_path = 'js/' + out + '-%(version)s.js'
-        bundle = webassets.Bundle(*assets, filters='uglifyjs', output=out_path)
+        bundle = webassets.Bundle(*assets, filters='rjsmin', output=out_path)
         self.env.register('js/' + out, bundle)
         return bundle
 
@@ -91,9 +87,7 @@ class Assets:
         """
         assets = [self._scss_path(a) for a in assets]
         out_path = 'css/' + out + '-%(version)s.css'
-        bundle = webassets.Bundle(*assets, filters='compass', output=out_path,
-                                  depends=('**/**/**/*.scss', '**/**/*.scss',
-                                           '**/*.scss'))
+        bundle = webassets.Bundle(*assets, filters='cssmin', output=out_path)
         self.env.register('css/' + out, bundle)
         return bundle
 
@@ -106,13 +100,13 @@ class Assets:
     @staticmethod
     def _js_path(s):
         if type(s) is str:
-            return 'src/' + s + '.js'
+            return s + '.js'
         return s
 
     @staticmethod
     def _scss_path(s):
         if type(s) is str:
-            return 'scss/' + s + '.scss'
+            return s + '.css'
         return s
 
 
@@ -127,7 +121,10 @@ def make_assets(config):
     assets_dir = os.path.join(PKGDIR, config['assets.directory'])
     assets_url = config['assets.url']
     assets_debug = config['assets.debug']
+
     assets = Assets(assets_dir, assets_url, assets_debug)
+    assets.add_static_source(os.path.join(assets_dir, 'css'), url=assets_url)
+    assets.add_static_source(os.path.join(assets_dir, 'js'), url=assets_url)
 
     js_bundles = [parse_bundle(b)
                   for b in config.get('assets.js_bundles', [])]

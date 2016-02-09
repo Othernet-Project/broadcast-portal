@@ -1,7 +1,7 @@
 bottle
 mako
 webassets
-pyScss
+cssmin==0.2.0
 sqlize
 bottle-utils
 mandrill
