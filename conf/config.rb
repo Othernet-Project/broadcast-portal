@@ -4,6 +4,7 @@ require 'compass/import-once/activate'
 basedir = "broadcast"
 
 # Set this to the root of your project when deployed:
+fonts_dir = "#{basedir}/static/fonts"
 http_path = "/static/"
 css_dir = "#{basedir}/static/css"
 sass_dir = "src/scss"
