@@ -66,22 +66,22 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 
 @font-face {
   font-family: "Brandon Grotesque";
-  src: url('../../../fonts/brandongrotesque-light-webfont.eot?315442800');
-  src: url('../../../fonts/brandongrotesque-light-webfont.eot?&315442800#iefix') format('embedded-opentype'), url('../../../fonts/brandongrotesque-light-webfont.eot?315442800') format('embedded-opentype'), url('../../../fonts/brandongrotesque-light-webfont.woff2?315442800') format('woff2'), url('../../../fonts/brandongrotesque-light-webfont.woff?315442800') format('woff'), url('../../../fonts/brandongrotesque-light-webfont.ttf?315442800') format('truetype');
+  src: url('../fonts/brandongrotesque-light-webfont.eot?315442800');
+  src: url('../fonts/brandongrotesque-light-webfont.eot?&315442800#iefix') format('embedded-opentype'), url('../fonts/brandongrotesque-light-webfont.eot?315442800') format('embedded-opentype'), url('../fonts/brandongrotesque-light-webfont.woff2?315442800') format('woff2'), url('../fonts/brandongrotesque-light-webfont.woff?315442800') format('woff'), url('../fonts/brandongrotesque-light-webfont.ttf?315442800') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: "Brandon Text";
-  src: url('../../../fonts/brandontext-regular-webfont.eot?315442800');
-  src: url('../../../fonts/brandontext-regular-webfont.eot?&315442800#iefix') format('embedded-opentype'), url('../../../fonts/brandontext-regular-webfont.eot?315442800') format('embedded-opentype'), url('../../../fonts/brandontext-regular-webfont.woff2?315442800') format('woff2'), url('../../../fonts/brandontext-regular-webfont.woff?315442800') format('woff'), url('../../../fonts/brandontext-regular-webfont.ttf?315442800') format('truetype');
+  src: url('../fonts/brandontext-regular-webfont.eot?315442800');
+  src: url('../fonts/brandontext-regular-webfont.eot?&315442800#iefix') format('embedded-opentype'), url('../fonts/brandontext-regular-webfont.eot?315442800') format('embedded-opentype'), url('../fonts/brandontext-regular-webfont.woff2?315442800') format('woff2'), url('../fonts/brandontext-regular-webfont.woff?315442800') format('woff'), url('../fonts/brandontext-regular-webfont.ttf?315442800') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: "Brandon Text";
-  src: url('../../../fonts/brandontext-regular-webfont.eot?315442800');
-  src: url('../../../fonts/brandontext-regular-webfont.eot?&315442800#iefix') format('embedded-opentype'), url('../../../fonts/brandontext-italic-webfont.eot?315442800') format('embedded-opentype'), url('../../../fonts/brandontext-italic-webfont.woff2?315442800') format('woff2'), url('../../../fonts/brandontext-italic-webfont.woff?315442800') format('woff'), url('../../../fonts/brandontext-italic-webfont.ttf?315442800') format('truetype');
+  src: url('../fonts/brandontext-regular-webfont.eot?315442800');
+  src: url('../fonts/brandontext-regular-webfont.eot?&315442800#iefix') format('embedded-opentype'), url('../fonts/brandontext-italic-webfont.eot?315442800') format('embedded-opentype'), url('../fonts/brandontext-italic-webfont.woff2?315442800') format('woff2'), url('../fonts/brandontext-italic-webfont.woff?315442800') format('woff'), url('../fonts/brandontext-italic-webfont.ttf?315442800') format('truetype');
   font-weight: normal;
   font-style: italic;
 }
