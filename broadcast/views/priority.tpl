@@ -18,7 +18,7 @@
             % if form.error:
             ${forms.form_errors([form.error])}
             % elif charge_error:
-            ${forms.form_errors([charge_error])}
+            ${forms.form_errors([charge_error.message])}
             % endif
             ${csrf_tag()}
             ${forms.field(form.stripe_public_key)}
