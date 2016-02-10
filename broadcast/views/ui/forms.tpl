@@ -166,9 +166,9 @@
     if not errors:
         return ''
     %>
-    <ul class="o-form-errors">
+    <ul class="form-errors">
         % for error in errors:
-            <li class="o-form-error">
+            <li class="form-error">
             ${error | h}
             </li>
         % endfor
