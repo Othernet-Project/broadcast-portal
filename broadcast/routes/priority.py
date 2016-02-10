@@ -78,7 +78,7 @@ def show_broadcast_priority_scheduled(item):
     return dict(item=item,
                 status='success',
                 page_title=_('Thank You'),
-                message=_('Your payment has been completed. Your will receive'
+                message=_('Your payment has been completed. You will receive'
                           ' an email with your receipt shortly.'))
 
 
