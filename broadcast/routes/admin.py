@@ -58,7 +58,7 @@ def route(conf):
     types = '|'.join(conf['app.broadcast_types'])
     return (
         (
-            '/admin/scheduled/',
+            '/admin/',
             'GET',
             scheduled_list,
             'scheduled_list',
