@@ -21,7 +21,7 @@
                             <span class="${'paid' if item.charge_id else 'unpaid'}"></span>
                         </td>
                         <td><span class="${item.type}-icon"></span></td>
-                        <td class="datestamp">${item.created.strftime('%b %d, %H:%M UTC')}</td>
+                        <td class="datestamp">${time_ago(item.created, '%b %d, %H:%M UTC')}</td>
                         <td class="trunc"><a href="${url('scheduled_detail', item_type=item.type, item_id=item.id)}">
                         % if item.type == "twitter":
                             ${item.content()}
