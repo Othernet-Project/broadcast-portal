@@ -4,6 +4,7 @@
 /*.egg-info
 /.ropeproject
 /tmp
+/.*pid
 .webassets-cache
 .webassets-manifest
 .sass-cache
