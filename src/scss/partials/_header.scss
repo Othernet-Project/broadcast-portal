@@ -66,11 +66,12 @@ header {
 
     a {
       display: inline-block;
-      font-size: 114%;
+      font-size: 90%;
       text-transform: uppercase;
       color: $base-text;
       margin-left: 1rem;
       overflow: hidden;
+      letter-spacing: 0.1rem;
 
       &:hover {
         color: $link;

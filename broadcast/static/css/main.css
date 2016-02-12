@@ -299,19 +299,20 @@ header .header-links {
 /* line 67, ../../../src/scss/partials/_header.scss */
 header .header-links a {
   display: inline-block;
-  font-size: 114%;
+  font-size: 90%;
   text-transform: uppercase;
   color: white;
   margin-left: 1rem;
   overflow: hidden;
+  letter-spacing: 0.1rem;
 }
-/* line 75, ../../../src/scss/partials/_header.scss */
+/* line 76, ../../../src/scss/partials/_header.scss */
 header .header-links a:hover {
   color: #2ad4ff;
   text-decoration: none;
 }
 @media only screen and (max-width: 700px) {
-  /* line 81, ../../../src/scss/partials/_header.scss */
+  /* line 82, ../../../src/scss/partials/_header.scss */
   header .header-links .nav {
     position: fixed;
     right: -260px;
@@ -335,17 +336,17 @@ header .header-links a:hover {
     background-image: -webkit-linear-gradient(left, #3b434d, #535d6c 1rem, #535d6c);
     background-image: linear-gradient(to right, #3b434d, #535d6c 1rem, #535d6c);
   }
-  /* line 98, ../../../src/scss/partials/_header.scss */
+  /* line 99, ../../../src/scss/partials/_header.scss */
   header .header-links .nav a {
     display: block;
     margin: 1rem 0 2rem;
   }
-  /* line 103, ../../../src/scss/partials/_header.scss */
+  /* line 104, ../../../src/scss/partials/_header.scss */
   .menu-open header .header-links .nav {
     right: 0;
   }
 }
-/* line 109, ../../../src/scss/partials/_header.scss */
+/* line 110, ../../../src/scss/partials/_header.scss */
 header .header-links .nav > span {
   display: inline-block;
   font-size: 114%;
@@ -355,17 +356,17 @@ header .header-links .nav > span {
   color: #2ad4ff;
   text-decoration: none;
 }
-/* line 119, ../../../src/scss/partials/_header.scss */
+/* line 120, ../../../src/scss/partials/_header.scss */
 header .header-links .hamburger {
   display: none;
 }
 @media only screen and (max-width: 700px) {
-  /* line 119, ../../../src/scss/partials/_header.scss */
+  /* line 120, ../../../src/scss/partials/_header.scss */
   header .header-links .hamburger {
     display: block;
   }
 }
-/* line 126, ../../../src/scss/partials/_header.scss */
+/* line 127, ../../../src/scss/partials/_header.scss */
 header .header-links .hamburger a {
   display: inline-block;
   vertical-align: middle;
@@ -383,7 +384,7 @@ header .header-links .hamburger a {
   top: -0.2rem;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 126, ../../../src/scss/partials/_header.scss */
+  /* line 127, ../../../src/scss/partials/_header.scss */
   header .header-links .hamburger a {
     background-image: url('../img/sprites/2x-sa3cbb4838c.png');
     background-position: 0 -541px;
