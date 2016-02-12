@@ -15,6 +15,10 @@ from ..util.broadcast import get_item, filter_items
 from ..util.template import view
 
 
+def scheduled_redirect():
+    return redirect(request.app.get_url('scheduled_list'))
+
+
 @login_required(superuser_only=True)
 @view('scheduled_list')
 def scheduled_list():
@@ -59,6 +63,12 @@ def route(conf):
     return (
         (
             '/admin/',
+            'GET',
+            scheduled_redirect,
+            'scheduled_redirect',
+            {}
+        ), (
+            '/admin/scheduled/',
             'GET',
             scheduled_list,
             'scheduled_list',
