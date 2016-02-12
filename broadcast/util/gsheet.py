@@ -23,5 +23,5 @@ class SheetClient(object):
     def insert(self, spreadsheet_id, worksheet_index, values):
         spreadsheet = self._service.open_by_key(spreadsheet_id)
         worksheet = spreadsheet.get_worksheet(worksheet_index)
-        worksheet.append_row(values)
+        worksheet.insert_row(values, index=1)
 
