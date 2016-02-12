@@ -972,31 +972,27 @@ input[type=checkbox] + label {
   background: #384d60;
 }
 /* line 21, ../../../src/scss/partials/_admin.scss */
-.submissions .paid-submission td {
-  background: #3e4837;
-}
-/* line 25, ../../../src/scss/partials/_admin.scss */
 .submissions th {
   background: #4a6781;
   font-size: 80%;
   text-transform: uppercase;
 }
-/* line 31, ../../../src/scss/partials/_admin.scss */
+/* line 27, ../../../src/scss/partials/_admin.scss */
 .submissions th:nth-child(1),
 .submissions td:nth-child(1) {
   width: 40px;
 }
-/* line 36, ../../../src/scss/partials/_admin.scss */
+/* line 32, ../../../src/scss/partials/_admin.scss */
 .submissions th:nth-child(2),
 .submissions td:nth-child(2) {
   width: 40px;
 }
-/* line 41, ../../../src/scss/partials/_admin.scss */
+/* line 37, ../../../src/scss/partials/_admin.scss */
 .submissions th:nth-child(3),
 .submissions td:nth-child(3) {
   width: 140px;
 }
-/* line 46, ../../../src/scss/partials/_admin.scss */
+/* line 42, ../../../src/scss/partials/_admin.scss */
 .submissions .content-icon {
   display: inline-block;
   vertical-align: middle;
@@ -1007,7 +1003,7 @@ input[type=checkbox] + label {
   height: 24px;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 46, ../../../src/scss/partials/_admin.scss */
+  /* line 42, ../../../src/scss/partials/_admin.scss */
   .submissions .content-icon {
     background-image: url('../img/sprites/2x-sa3cbb4838c.png');
     background-position: 0 -371px;
@@ -1017,7 +1013,7 @@ input[type=checkbox] + label {
     background-size: 266px 733px;
   }
 }
-/* line 50, ../../../src/scss/partials/_admin.scss */
+/* line 46, ../../../src/scss/partials/_admin.scss */
 .submissions .twitter-icon {
   display: inline-block;
   vertical-align: middle;
@@ -1028,7 +1024,7 @@ input[type=checkbox] + label {
   height: 24px;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 50, ../../../src/scss/partials/_admin.scss */
+  /* line 46, ../../../src/scss/partials/_admin.scss */
   .submissions .twitter-icon {
     background-image: url('../img/sprites/2x-sa3cbb4838c.png');
     background-position: 0 -655px;
@@ -1038,7 +1034,7 @@ input[type=checkbox] + label {
     background-size: 266px 733px;
   }
 }
-/* line 54, ../../../src/scss/partials/_admin.scss */
+/* line 50, ../../../src/scss/partials/_admin.scss */
 .submissions .paid {
   display: inline-block;
   vertical-align: middle;
@@ -1049,7 +1045,7 @@ input[type=checkbox] + label {
   height: 24px;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 54, ../../../src/scss/partials/_admin.scss */
+  /* line 50, ../../../src/scss/partials/_admin.scss */
   .submissions .paid {
     background-image: url('../img/sprites/2x-sa3cbb4838c.png');
     background-position: 0 -601px;
@@ -1059,7 +1055,7 @@ input[type=checkbox] + label {
     background-size: 266px 733px;
   }
 }
-/* line 58, ../../../src/scss/partials/_admin.scss */
+/* line 54, ../../../src/scss/partials/_admin.scss */
 .submissions .unpaid {
   display: inline-block;
   vertical-align: middle;
@@ -1070,7 +1066,7 @@ input[type=checkbox] + label {
   height: 24px;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 58, ../../../src/scss/partials/_admin.scss */
+  /* line 54, ../../../src/scss/partials/_admin.scss */
   .submissions .unpaid {
     background-image: url('../img/sprites/2x-sa3cbb4838c.png');
     background-position: 0 -709px;
