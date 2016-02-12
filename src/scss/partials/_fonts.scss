@@ -1,0 +1,38 @@
+@import "compass/css3/font-face";
+
+
+@include font-face(
+  'Brandon Grotesque', 
+  font-files(
+    'brandongrotesque-light-webfont.eot',
+    'brandongrotesque-light-webfont.woff2',
+    'brandongrotesque-light-webfont.woff',
+    'brandongrotesque-light-webfont.ttf'),
+  'brandongrotesque-light-webfont.eot',
+  normal,
+  normal);
+
+
+@include font-face(
+  'Brandon Text',
+  font-files(
+    'brandontext-regular-webfont.eot',
+    'brandontext-regular-webfont.woff2',
+    'brandontext-regular-webfont.woff',
+    'brandontext-regular-webfont.ttf'),
+  'brandontext-regular-webfont.eot',
+  normal,
+  normal);
+
+
+@include font-face(
+  'Brandon Text',
+  font-files(
+    'brandontext-italic-webfont.eot',
+    'brandontext-italic-webfont.woff2',
+    'brandontext-italic-webfont.woff',
+    'brandontext-italic-webfont.ttf'),
+  'brandontext-regular-webfont.eot',
+  normal,
+  italic);
+

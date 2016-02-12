@@ -5,4 +5,11 @@
 /.ropeproject
 /tmp
 .webassets-cache
+.webassets-manifest
+.sass-cache
 local.ini
+*.eot
+*.ttf
+*.woff
+*.woff2
+*.css

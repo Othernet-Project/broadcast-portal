@@ -16,6 +16,7 @@ from ..forms.priority import PaymentForm
 from ..util.broadcast import (fetch_item,
                               guard_already_charged,
                               send_payment_confirmation,
+                              upload_to_drive,
                               ChargeError)
 from ..util.template import view
 
@@ -46,8 +47,10 @@ def broadcast_priority(item):
         except ChargeError as exc:
             error = exc
         else:
+            task_runner = request.app.config['task.runner']
+            if item.type == 'content':
+                task_runner.schedule(upload_to_drive, item, request.app.config)
             if item.email:
-                task_runner = request.app.config['task.runner']
                 task_runner.schedule(send_payment_confirmation,
                                      item,
                                      stripe_obj,
@@ -72,17 +75,11 @@ def show_broadcast_priority_scheduled(item):
                                            item_id=item.id)
         redirect(priority_url)
 
-    messages = {
-        'content': _('Priority uplink has been successfully scheduled.'),
-        'tv': _('Priority uplink has been successfully scheduled.'),
-        'twitter': _('Twitter feed uplink has been successfully scheduled.')
-    }
     return dict(item=item,
                 status='success',
-                page_title=_('Uplink Scheduled'),
-                message=messages[item.type],
-                redirect_url=request.app.get_url('main'),
-                redirect_target=_('main page'))
+                page_title=_('Thank You'),
+                message=_('Your payment has been completed. You will receive'
+                          ' an email with your receipt shortly.'))
 
 
 def route(conf):

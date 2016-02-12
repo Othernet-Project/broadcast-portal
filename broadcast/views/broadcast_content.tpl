@@ -1,55 +1,34 @@
 <%inherit file='base.tpl'/>
-<%namespace name='broadcast_switch' file='_broadcast_switch.tpl'/>
+<%namespace name="forms" file="/ui/forms.tpl"/>
 
 <%block name="title">
-    ${_("Upload content")}
+    ${_("Share your files")}
 </%block>
 
 <%block name="main">
-<div class="h-bar">
-    ${broadcast_switch.body()}
-</div>
-<div class="full-page-form">
-    <div class="content">
+    <div class="form">
+        <h2>${_('Share your files')}</h2>
         ${h.form('post', action=url('broadcast_content', item_type=item_type), enctype="multipart/form-data")}
-            % if form.error:
-            ${form.error}
-            % endif
+            ${forms.form_errors([form.error]) if form.error else ''}
             ${csrf_tag()}
-            ${form.id}
-            ${form.signature}
-            <p class="field form-input-required form-input-file">
-                ${form.content_file.label}
-                ${form.content_file}
-                <span class="field-help">${_("The file should not be larger than %(limit)s") % {'limit': size_limit}}</span>
-                % if form.content_file.error:
-                ${form.content_file.error}
-                % endif
-            </p>
-            <p class="field form-input-required required">
-                ${form.title.label}
-                ${form.title}
-                % if form.title.error:
-                ${form.title.error}
-                % endif
-            </p>
-            <p class="field">
-                ${form.language.label}
-                ${form.language}
-                % if form.language.error:
-                ${form.language.error}
-                % endif
-            </p>
-            <p class="buttons">
-                <button type="submit" class="primary"><span class="icon"></span> ${_('Continue')}</button>
-            </p>
-            <div class="progress-feedback">
-                <div class="loader"></div>
-                <p class="help-text">${_("Uplinking to teleport, please wait...")}</p>
+            ${forms.field(form.id)}
+            ${forms.field(form.signature)}
+            <div class="file">
+                ${forms.field(form.content_file)}
             </div>
+            ${forms.field(form.title)}
+            ${forms.field(form.language)}
+            ${forms.field(form.license)}
+            ${forms.field(form.url)}
+            ${forms.field(form.email)}
+            <p class="buttons">
+                <button type="submit" name="mode" value="free" class="primary"><span class="icon"></span> ${_('Share')}</button>
+                <span class="separator">${_("or")}</span>
+                <button type="submit" name="mode" value="priority" class="primary"><span class="icon"></span> ${_('Rocket Share')}</button>
+                <span class="field-help-message">${_("Rocket share is a paid option with a one-time accelerated review fee of $5")}</span>
+            </p>
         </form>
     </div>
-</div>
 </%block>
 
 <%block name="extra_scripts">

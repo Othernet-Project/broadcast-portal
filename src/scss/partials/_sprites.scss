@@ -1,0 +1,7 @@
+@import "mixins/sprites";
+
+$misc: sprite-map('sprites/1x/*.png', $spacing: 30px);
+$misc-2x: sprite-map('sprites/2x/*.png', $spacing: 60px);
+@mixin sprite-image($name, $dimensions: yes) {
+  @include sprite($misc, $misc-2x, $name, $dimensions);
+}

@@ -19,7 +19,7 @@ from bottle_utils.i18n import lazy_gettext as _
 
 from outernet_metadata.values import LICENSES, LICENSE_NAMES
 
-from ..util.broadcast import sign, get_item, ContentItem, TVItem, TwitterItem
+from ..util.broadcast import sign, get_item, ContentItem, TwitterItem
 
 LICENSE_CHOICES = (('', _('Select the content license')),)
 LICENSE_CHOICES += tuple(zip(LICENSES, LICENSE_NAMES))
@@ -205,17 +205,74 @@ class BaseUploadForm(form.Form):
             raise form.ValidationError('tampered', {})
 
 
-class UploadForm(BaseUploadForm):
+class ContentForm(BaseUploadForm):
+    type = ContentItem.type
+    mode = form.HiddenField()
+    content_file = form.FileField(
+        # Translators, used as label for content file upload field
+        _("Upload"),
+        placeholder=_('content'),
+        validators=[form.Required()],
+        messages={
+            # Translators, upload form error, do not translate '{formats}'
+            'file_format': _('Only {formats} files are allowed.'),
+            # Translators, upload form error, do not translate '{size}'
+            'file_size': _('File is too large.'),
+            # Translators, upload form error, do not translate '{filename}'
+            'index': _('No HTML file found in {filename}'),
+        }
+    )
     title = form.StringField(
         # Translators, used as label for content title field
         _("Title"),
-        placeholder=_('title'),
-        validators=[form.Required()])
+        placeholder=_('Title'),
+        validators=[],
+        help_text=_("(OPTIONAL) Give your file a title that will appear in the"
+                    " library. The title will also be used for searching.")
+    )
     language = form.SelectField(
         # Translators, used as label for content language field
         _("Language"),
         choices=LOCALE_CHOICES,
-        validators=[])
+        validators=[],
+        help_text=_("(OPTIONAL) If your file is a text document (PDF, HTML,"
+                    " plain text, etc), specify the content language.")
+    )
+    license = form.SelectField(
+        # Translators, used as label for content license field
+        _("License"),
+        choices=LICENSE_CHOICES,
+        validators=[],
+        help_text=_("(OPTIONAL) Every creative work is copyrighted by default,"
+                    " so find out whether you have permission to share your "
+                    "file. This needs to be verified before the file is "
+                    "uplinked to Outernet.")
+    )
+    url = form.StringField(
+        # Translators, used as label for url field
+        _("Source URL"),
+        placeholder=_('Source URL'),
+        messages={
+            'url_invalid': _("Invalid URL entered."),
+        },
+        help_text=_("(OPTIONAL) If your file originated on the Web, please"
+                    " specify the source address of the file.")
+    )
+    email = form.StringField(
+        # Translators, used as label for email field
+        _("Your Email"),
+        placeholder=_('Email'),
+        messages={
+            'email_invalid': _("Invalid e-mail address entered."),
+        },
+        help_text=_("(OPTIONAL) If you do not intend to use Rocket Share.")
+    )
+
+    def postprocess_email(self, value):
+        if value and not re.match(r'[^@]+@[^@]+\.[^@]+', value):
+            raise form.ValidationError('email_invalid', {})
+
+        return value
 
     def postprocess_content_file(self, file_upload):
         # validate file size
@@ -232,93 +289,23 @@ class UploadForm(BaseUploadForm):
         return file_upload
 
     def validate(self):
-        super(UploadForm, self).validate()
+        super(ContentForm, self).validate()
         id = self.processed_data['id']
         if get_item(self.type, id=id):
             raise form.ValidationError('expired', {})
-
-
-class ContentForm(UploadForm):
-    type = ContentItem.type
-    content_file = form.FileField(
-        # Translators, used as label for content file upload field
-        _("Content file"),
-        placeholder=_('content'),
-        validators=[form.Required()],
-        messages={
-            # Translators, upload form error, do not translate '{formats}'
-            'file_format': _('Only {formats} files are allowed.'),
-            # Translators, upload form error, do not translate '{size}'
-            'file_size': _('Files larger than {size} are not allowed.'),
-            # Translators, upload form error, do not translate '{filename}'
-            'index': _('No HTML file found in {filename}'),
-        })
-
-
-class TVForm(UploadForm):
-    type = TVItem.type
-    content_file = form.FileField(
-        # Translators, used as label for content file upload field
-        _("Audio / Video file"),
-        placeholder=_('audio / video'),
-        validators=[form.Required()],
-        messages={
-            # Translators, upload form error, do not translate '{formats}'
-            'file_format': _('Only {formats} files are allowed.'),
-            # Translators, upload form error, do not translate '{size}'
-            'file_size': _('Files larger than {size} are not allowed.'),
-            # Translators, upload form error, do not translate '{filename}'
-            'index': _('No HTML file found in {filename}'),
-        })
-
-
-class DetailsForm(BaseUploadForm):
-    mode = form.HiddenField()
-    license = form.SelectField(
-        # Translators, used as label for content license field
-        _("Copyright"),
-        choices=LICENSE_CHOICES,
-        validators=[form.Required()])
-    email = form.StringField(
-        # Translators, used as label for email field
-        _("Email"),
-        placeholder=_('Email'),
-        messages={
-            'email_invalid': _("Invalid e-mail address entered."),
-        }
-    )
-
-    def postprocess_email(self, value):
-        if value and not re.match(r'[^@]+@[^@]+\.[^@]+', value):
-            raise form.ValidationError('email_invalid', {})
-
-        return value
-
-    def validate(self):
-        super(DetailsForm, self).validate()
-        if self.processed_data['mode'] not in ('free', 'priority'):
-            raise form.ValidationError('tampered', {})
-
-
-class ContentDetailsForm(DetailsForm):
-    type = ContentItem.type
-
-
-class TVDetailsForm(DetailsForm):
-    type = TVItem.type
 
 
 class TwitterForm(form.Form):
     type = TwitterItem.type
 
     PAYMENT_PLANS = (
-        ('bc_twitter_monthly', _("Monthly - USD 3 per month")),
-        ('bc_twitter_annual', _("Annual - USD 30 per year")),
+        ('bc_twitter_monthly', _("Monthly - $3 per month")),
+        ('bc_twitter_annual', _("Annual - $30 per year")),
     )
     handle = form.StringField(
         # Translators, used as label for twitter handle(username)
         _("Twitter handle"),
-        placeholder=_('@handle'),
+        placeholder=_('handle'),
         validators=[form.Required()])
     plan = form.SelectField(
         # Translators, used as label for payment plan

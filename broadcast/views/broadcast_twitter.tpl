@@ -1,39 +1,21 @@
 <%inherit file='base.tpl'/>
-<%namespace name='broadcast_switch' file='_broadcast_switch.tpl'/>
+<%namespace name="forms" file="/ui/forms.tpl"/>
 
 <%block name="title">
-    ${_("Share Twitter feed")}
+    ${_("Share your tweets")}
 </%block>
 
 <%block name="main">
-<div class="h-bar">
-    ${broadcast_switch.body()}
-</div>
-<div class="full-page-form">
-    <div class="twitter">
+    <div class="form">
+        <h2>${_('Share your tweets')}</h2>
         ${h.form('post', action=url('broadcast_twitter'), enctype="multipart/form-data")}
-            % if form.error:
-            ${form.error}
-            % endif
+            ${forms.form_errors([form.error]) if form.error else ''}
             ${csrf_tag()}
-            <p class="field form-input-required">
-                ${form.handle.label}
-                ${form.handle}
-                % if form.handle.error:
-                ${form.handle.error}
-                % endif
-            </p>
-            <p class="field form-input-required form-select">
-                ${form.plan.label}
-                ${form.plan}
-                % if form.plan.error:
-                ${form.plan.error}
-                % endif
-            </p>
+            ${forms.field(form.handle, help=_("Your Twitter handle/username. You cannot use another person's handle/username unless you have their permission to do so."), required=True)}
+            ${forms.field(form.plan, help=_("All payments are recurring (auto-renewed). If you want to cancel your plan later, please email us."), required=True)}
             <p class="buttons">
-                <button type="submit" class="primary"><span class="icon"></span> ${_('Continue')}</button>
+                <button type="submit" class="primary"><span class="icon"></span> ${_('Share')}</button>
             </p>
         </form>
     </div>
-</div>
 </%block>

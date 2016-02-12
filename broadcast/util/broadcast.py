@@ -24,7 +24,9 @@ from bottle import request, redirect, abort
 from bottle_utils.form import ValidationError
 from bottle_utils.i18n import dummy_gettext as _
 
-from .email import send_mail
+from .gdrive import DriveClient
+from .gsheet import SheetClient
+from .sendmail import send_mail
 
 
 def get_unique_id():
@@ -53,7 +55,7 @@ def get_item(table, db=None, raw=False, **kwargs):
     row = row_to_dict(db.result)
 
     if not raw and row is not None:
-        (wrapper_cls,) = [cls for cls in (ContentItem, TVItem, TwitterItem)
+        (wrapper_cls,) = [cls for cls in (ContentItem, TwitterItem)
                           if cls.type == table]
         return wrapper_cls(db=db, **row)
 
@@ -72,7 +74,7 @@ def filter_items(table, db=None, raw=False, **kwargs):
     rows = map(row_to_dict, db.results)
 
     if not raw and rows:
-        (wrapper_cls,) = [cls for cls in (ContentItem, TVItem, TwitterItem)
+        (wrapper_cls,) = [cls for cls in (ContentItem, TwitterItem)
                           if cls.type == table]
         return [wrapper_cls(db=db, **row) for row in rows]
 
@@ -104,7 +106,6 @@ def send_payment_confirmation(item, stripe_obj, email, config):
     item_types = {
         'twitter': _("twitter feed"),
         'content': _("content"),
-        'tv': _("tv")
     }
     is_subscription = stripe_obj.object == 'customer'
     if is_subscription:
@@ -134,6 +135,18 @@ def send_payment_confirmation(item, stripe_obj, email, config):
               config=config)
 
 
+def upload_to_drive(item, config):
+    dc = DriveClient(config['google.service_credentials_path'])
+    upload_root = config['{}.upload_root'.format(item.type)]
+    upload_path = os.path.join(upload_root, item.file_path)
+    file_data = dc.upload(upload_path,
+                          parent_id=config.get('google.parent_folder_id'))
+    sc = SheetClient(config['google.service_credentials_path'])
+    sc.insert(config['google.spreadsheet_id'],
+              config['google.worksheet_index'],
+              item.values() + [file_data['alternateLink'], file_data['id']])
+
+
 class ChargeError(ValidationError):
     pass
 
@@ -161,6 +174,9 @@ class BaseItem(object):
     def keys(self):
         return self.data.keys()
 
+    def values(self):
+        return self.data.values()
+
     def items(self):
         return self.data.items()
 
@@ -185,6 +201,7 @@ class BaseItem(object):
                                charge_id=':charge_id',
                                where='id = :id')
         self.db.query(query, id=self.id, charge_id=obj.id)
+        self.update(charge_id=obj.id)
 
     def save_charge_object(self, charge_obj):
         # create charge object
@@ -263,14 +280,14 @@ class BaseUploadItem(BaseItem):
         return filename
 
     @property
-    def url(self):
+    def internal_url(self):
         url_template = request.app.config[self.ckey('url_template')]
         base_url = url_template.format(self.data['name'])
         return urlparse.urljoin(base_url, self.data['url'])
 
     @property
     def unit_price(self):
-        return humanize_amount(request.app.config[self.ckey('price_per_mb')],
+        return humanize_amount(request.app.config[self.ckey('review_price')],
                                request.app.config)
 
     def save(self):
@@ -288,13 +305,11 @@ class BaseUploadItem(BaseItem):
 
         super(BaseUploadItem, self).save()
 
+    def calculate_price(self):
+        return request.app.config[self.ckey('review_price')]
+
     def calculate_chargeable_size(self):
         return int(math.ceil(float(self.file_size) / 1024 / 1024))
-
-    def calculate_price(self):
-        chargeable_size = self.calculate_chargeable_size()
-        price_per_mb_cents = request.app.config[self.ckey('price_per_mb')]
-        return chargeable_size * price_per_mb_cents
 
     def charge(self, token):
         human_size = '{0} MB'.format(self.calculate_chargeable_size())
@@ -305,10 +320,6 @@ class BaseUploadItem(BaseItem):
 
 class ContentItem(BaseUploadItem):
     type = 'content'
-
-
-class TVItem(BaseUploadItem):
-    type = 'tv'
 
 
 class TwitterItem(BaseItem):

@@ -4,6 +4,7 @@ import os
 
 import bottle
 
+import bottle_utils.common
 import bottle_utils.csrf
 import bottle_utils.html
 
@@ -31,6 +32,9 @@ def pre_init(config):
         'DEBUG': bottle.DEBUG,
         'request': bottle.request,
         'h': bottle_utils.html,
+        'esc': bottle_utils.common.html_escape,
+        'aesc': bottle_utils.common.attr_escape,
+        'u': bottle_utils.common.to_unicode,
         'url': app.get_url,
         'csrf_tag': bottle_utils.csrf.csrf_tag,
         '_': lambda x: x,

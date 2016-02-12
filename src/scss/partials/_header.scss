@@ -1,0 +1,135 @@
+@import "compass/css3";
+@import "compass/typography/text/replacement";
+@import "sprites";
+@import "mixins/media_query";
+
+$hamburger-cutoff: 700px;
+$logo-cutoff: 350px;
+$menu-width: 260px;
+
+// Menu-related stuff
+
+.section, footer {
+  position: relative;
+  left: 0;
+  right: 0;
+  @include transition(left 0.5s, right 0.5s);
+}
+
+.menu-open .section,
+.menu-open footer {
+  left: -$menu-width;
+  right: $menu-width;
+}
+
+header {
+  overflow: hidden;
+  
+  // layout
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 1;
+
+  // decoration
+  background-image: image-url('header_bg.jpg');
+  background-position: center top;
+
+  @include transition(all 0.5s);
+
+  .menu-open & {
+    left: -$menu-width;
+    right: $menu-width;
+  }
+
+  .header-logo {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+
+    a {
+      @include sprite-image('logo');
+      @include hide-text;
+
+      @include narrower-than($logo-cutoff) {
+        @include sprite-image('logo_short');
+      }
+    }
+  }
+
+  .header-links {
+    position: absolute;
+    right: 1rem;
+    top: 1.2rem;
+
+    a {
+      display: inline-block;
+      font-size: 114%;
+      text-transform: uppercase;
+      color: $base-text;
+      margin-left: 1rem;
+      overflow: hidden;
+
+      &:hover {
+        color: $link;
+        text-decoration: none;
+      }
+    }
+
+    .nav {
+      @include narrower-than($hamburger-cutoff) {
+        // layout
+        position: fixed;
+        right: -$menu-width;
+        width: $menu-width;
+        top: 0;
+        bottom: 0;
+        padding: 1rem 1rem 1rem 2rem;
+        z-index: 2;
+        @include box-sizing(border-box);
+
+        // styling
+        background: $menu-background;
+        @include transition(all 0.5s);
+        @include background-image(linear-gradient(to right, #3b434d, $menu-background 1rem, $menu-background));
+        
+        a {
+          display: block;
+          margin: 1rem 0 2rem;
+        }
+
+        .menu-open & {
+          right: 0;
+        }
+      }
+    }
+
+    .nav > span {
+      display: inline-block;
+      font-size: 114%;
+      text-transform: uppercase;
+      margin-left: 1rem;
+      overflow: hidden;
+      color: $link;
+      text-decoration: none;
+    }
+
+    .hamburger {
+      display: none;
+
+      @include narrower-than($hamburger-cutoff) {
+        display: block;
+      }
+
+      a {
+        @include sprite-image('menu');
+        @include hide-text;
+        margin: 0;
+        position: relative;
+        top: -0.2rem;
+      }
+    }
+  }
+}
