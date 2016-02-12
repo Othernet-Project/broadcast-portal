@@ -87,7 +87,7 @@
 ##
 
 <%def name="label(label, inline=False, id=None)">
-    <% label = label + ':' if not label.endswith(':') else label %>
+    <% label = label + ':' if not label.endswith(':') and not inline else label %>
     <label${' for="{}"'.format(id) if id else '' | h} class="field-label${' field-label-inline' if inline else ''}">${label}</label>
 </%def>
 
@@ -143,7 +143,7 @@
             % elif fld.type == 'hidden':
                 ${self.hidden(fld.name, value=fld.value, id=id, **fld.options)}
             % elif fld.type in ['checkbox', 'radio']:
-                ${self.checkbox(fld.name, value=fld.expected_value, is_checked=fld.value, id=id)}
+                ${self.checkbox(fld.name, value=fld.expected_value, is_checked=fld.value, label=fld.label, id=id)}
             % elif fld.type == 'textarea':
                 ${self.textarea(fld.name, placeholder=fld.options.get('placeholder'), value=fld.value, id=id)}
             % elif fld.type == 'select':

@@ -55,6 +55,11 @@ select {
   font-size: 14px;
 }
 
+input[type=checkbox] {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 label {
   display: block;
   text-transform: uppercase;
@@ -63,6 +68,11 @@ label {
 
   &::after {
     display: inline;
+  }
+
+  input[type=checkbox] + & {
+    display: inline-block;
+    vertical-align: center;
   }
 }
 
@@ -241,7 +251,8 @@ label {
   }
 }
 
-.priority-help {
+.priority-help,
+.account-help {
   background-color: lighten($background, 20);
   padding: 2rem 20%;
   text-align: center;
@@ -260,4 +271,13 @@ label {
   @include animation-delay(10s);
   @include animation-duration(1s);
   @include animation-fill-mode(forwards);
+}
+
+.form-help {
+  text-align: center;
+  padding-bottom: 1rem;
+
+  p {
+    margin-bottom: 1rem;
+  }
 }

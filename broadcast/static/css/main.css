@@ -131,6 +131,11 @@ h2 {
   line-height: 130%;
 }
 
+/* line 47, ../../../src/scss/partials/_base.scss */
+h3 {
+  margin-bottom: 1rem;
+}
+
 /* line 4, ../../../src/scss/partials/_buttons.scss */
 button,
 a.button {
@@ -218,7 +223,7 @@ header {
   right: 0;
   height: 60px;
   z-index: 1;
-  background-image: url('../img/header_bg.jpg?1454696182');
+  background-image: url('../img/header_bg.jpg?1455275928');
   background-position: center top;
   -moz-transition: all 0.5s;
   -o-transition: all 0.5s;
@@ -403,7 +408,7 @@ footer {
 /* line 7, ../../../src/scss/partials/_body.scss */
 .hero {
   min-height: 480px;
-  background-image: url('../img/content_bg.jpg?1454696182');
+  background-image: url('../img/content_bg.jpg?1455275928');
   background-position: center top;
 }
 @media only screen and (max-width: 700px) {
@@ -566,42 +571,53 @@ select {
 }
 
 /* line 58, ../../../src/scss/partials/_form.scss */
+input[type=checkbox] {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* line 63, ../../../src/scss/partials/_form.scss */
 label {
   display: block;
   text-transform: uppercase;
   font-size: 92%;
   margin-bottom: 0.3rem;
 }
-/* line 64, ../../../src/scss/partials/_form.scss */
+/* line 69, ../../../src/scss/partials/_form.scss */
 label::after {
   display: inline;
 }
+/* line 73, ../../../src/scss/partials/_form.scss */
+input[type=checkbox] + label {
+  display: inline-block;
+  vertical-align: center;
+}
 
-/* line 69, ../../../src/scss/partials/_form.scss */
+/* line 79, ../../../src/scss/partials/_form.scss */
 .field {
   margin-bottom: 1rem;
 }
-/* line 73, ../../../src/scss/partials/_form.scss */
+/* line 83, ../../../src/scss/partials/_form.scss */
 .field.required label::after {
   content: ' ✸';
   color: #ffcc00;
 }
 
-/* line 80, ../../../src/scss/partials/_form.scss */
+/* line 90, ../../../src/scss/partials/_form.scss */
 .file {
   margin-bottom: 2rem;
   text-align: center;
 }
-/* line 84, ../../../src/scss/partials/_form.scss */
+/* line 94, ../../../src/scss/partials/_form.scss */
 .file label, .file input {
   display: none;
 }
-/* line 88, ../../../src/scss/partials/_form.scss */
+/* line 98, ../../../src/scss/partials/_form.scss */
 .file .file-wrapper {
   display: block;
   text-align: center;
 }
-/* line 92, ../../../src/scss/partials/_form.scss */
+/* line 102, ../../../src/scss/partials/_form.scss */
 .file .file-wrapper .button {
   text-align: center;
   width: auto;
@@ -610,13 +626,13 @@ label::after {
   font-size: 100%;
   line-height: 30px;
 }
-/* line 101, ../../../src/scss/partials/_form.scss */
+/* line 111, ../../../src/scss/partials/_form.scss */
 .file .file-wrapper .filename {
   display: block;
   text-align: center;
 }
 
-/* line 108, ../../../src/scss/partials/_form.scss */
+/* line 118, ../../../src/scss/partials/_form.scss */
 .field-help-message,
 .field-error-message {
   display: inline-block;
@@ -624,74 +640,74 @@ label::after {
   font-size: 92%;
 }
 
-/* line 115, ../../../src/scss/partials/_form.scss */
+/* line 125, ../../../src/scss/partials/_form.scss */
 .field-help-message {
   color: #b7bec8;
 }
 
-/* line 119, ../../../src/scss/partials/_form.scss */
+/* line 129, ../../../src/scss/partials/_form.scss */
 .field-error-message {
   color: #ffcc00;
 }
 
-/* line 123, ../../../src/scss/partials/_form.scss */
+/* line 133, ../../../src/scss/partials/_form.scss */
 .buttons {
   text-align: center;
   margin: 3rem 0;
 }
-/* line 127, ../../../src/scss/partials/_form.scss */
+/* line 137, ../../../src/scss/partials/_form.scss */
 .buttons span {
   display: block;
   margin: 0 auto;
   max-width: 340px;
 }
-/* line 133, ../../../src/scss/partials/_form.scss */
+/* line 143, ../../../src/scss/partials/_form.scss */
 .buttons .separator {
   color: #b7bec8;
   margin: 0.5rem auto;
 }
-/* line 138, ../../../src/scss/partials/_form.scss */
+/* line 148, ../../../src/scss/partials/_form.scss */
 .buttons .field-help-message {
   margin: 0.5rem auto 0;
 }
 
-/* line 144, ../../../src/scss/partials/_form.scss */
+/* line 154, ../../../src/scss/partials/_form.scss */
 .field-error label {
   color: #ffcc00;
 }
-/* line 148, ../../../src/scss/partials/_form.scss */
+/* line 158, ../../../src/scss/partials/_form.scss */
 .field-error input, .field-error select {
   border-color: #ffcc00;
   background-color: #ffe066;
 }
-/* line 153, ../../../src/scss/partials/_form.scss */
+/* line 163, ../../../src/scss/partials/_form.scss */
 .field-error .button {
   border-color: #ffcc00;
   color: #ffcc00;
 }
 
-/* line 159, ../../../src/scss/partials/_form.scss */
+/* line 169, ../../../src/scss/partials/_form.scss */
 .form-errors {
   border: 1px solid #ffcc00;
   padding: 0.5rem;
   color: #ffcc00;
 }
-/* line 164, ../../../src/scss/partials/_form.scss */
+/* line 174, ../../../src/scss/partials/_form.scss */
 .form-errors li {
   list-style: disc;
   margin-left: 1rem;
 }
 
-/* line 170, ../../../src/scss/partials/_form.scss */
+/* line 180, ../../../src/scss/partials/_form.scss */
 #field-handle .field-input {
   display: block;
   position: relative;
 }
-/* line 174, ../../../src/scss/partials/_form.scss */
+/* line 184, ../../../src/scss/partials/_form.scss */
 #field-handle .field-input input {
   padding-left: 48px;
 }
-/* line 178, ../../../src/scss/partials/_form.scss */
+/* line 188, ../../../src/scss/partials/_form.scss */
 #field-handle .field-input::before {
   display: inline-block;
   position: absolute;
@@ -708,16 +724,16 @@ label::after {
   box-sizing: border-box;
 }
 
-/* line 193, ../../../src/scss/partials/_form.scss */
+/* line 203, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input {
   display: block;
   position: relative;
 }
-/* line 197, ../../../src/scss/partials/_form.scss */
+/* line 207, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input input {
   padding-right: 48px;
 }
-/* line 201, ../../../src/scss/partials/_form.scss */
+/* line 211, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input::after {
   position: absolute;
   top: 0.5rem;
@@ -733,7 +749,7 @@ label::after {
   height: 23px;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 201, ../../../src/scss/partials/_form.scss */
+  /* line 211, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input::after {
     background-image: url('../img/sprites/2x-s8ad64209a1.png');
     background-position: 0 -212px;
@@ -743,7 +759,7 @@ label::after {
     background-size: 266px 517px;
   }
 }
-/* line 211, ../../../src/scss/partials/_form.scss */
+/* line 221, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input.visa::after {
   display: inline-block;
   vertical-align: middle;
@@ -754,7 +770,7 @@ label::after {
   height: 23px;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 211, ../../../src/scss/partials/_form.scss */
+  /* line 221, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input.visa::after {
     background-image: url('../img/sprites/2x-s8ad64209a1.png');
     background-position: 0 -318px;
@@ -764,7 +780,7 @@ label::after {
     background-size: 266px 517px;
   }
 }
-/* line 211, ../../../src/scss/partials/_form.scss */
+/* line 221, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input.amex::after {
   display: inline-block;
   vertical-align: middle;
@@ -775,7 +791,7 @@ label::after {
   height: 23px;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 211, ../../../src/scss/partials/_form.scss */
+  /* line 221, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input.amex::after {
     background-image: url('../img/sprites/2x-s8ad64209a1.png');
     background-position: 0 0;
@@ -785,7 +801,7 @@ label::after {
     background-size: 266px 517px;
   }
 }
-/* line 211, ../../../src/scss/partials/_form.scss */
+/* line 221, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input.discover::after {
   display: inline-block;
   vertical-align: middle;
@@ -796,7 +812,7 @@ label::after {
   height: 23px;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 211, ../../../src/scss/partials/_form.scss */
+  /* line 221, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input.discover::after {
     background-image: url('../img/sprites/2x-s8ad64209a1.png');
     background-position: 0 -159px;
@@ -806,7 +822,7 @@ label::after {
     background-size: 266px 517px;
   }
 }
-/* line 211, ../../../src/scss/partials/_form.scss */
+/* line 221, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input.diners::after {
   display: inline-block;
   vertical-align: middle;
@@ -817,7 +833,7 @@ label::after {
   height: 23px;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 211, ../../../src/scss/partials/_form.scss */
+  /* line 221, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input.diners::after {
     background-image: url('../img/sprites/2x-s8ad64209a1.png');
     background-position: 0 -106px;
@@ -827,7 +843,7 @@ label::after {
     background-size: 266px 517px;
   }
 }
-/* line 211, ../../../src/scss/partials/_form.scss */
+/* line 221, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input.bad::after {
   display: inline-block;
   vertical-align: middle;
@@ -838,7 +854,7 @@ label::after {
   height: 23px;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 211, ../../../src/scss/partials/_form.scss */
+  /* line 221, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input.bad::after {
     background-image: url('../img/sprites/2x-s8ad64209a1.png');
     background-position: 0 -53px;
@@ -849,7 +865,7 @@ label::after {
   }
 }
 
-/* line 217, ../../../src/scss/partials/_form.scss */
+/* line 227, ../../../src/scss/partials/_form.scss */
 .inline-fields::after {
   display: block;
   content: '';
@@ -857,30 +873,31 @@ label::after {
   clear: both;
 }
 
-/* line 224, ../../../src/scss/partials/_form.scss */
+/* line 234, ../../../src/scss/partials/_form.scss */
 #field-cvc {
   float: left;
   width: 80px;
 }
-/* line 228, ../../../src/scss/partials/_form.scss */
+/* line 238, ../../../src/scss/partials/_form.scss */
 #field-cvc input {
   width: 80px;
   min-width: 0;
 }
 
-/* line 234, ../../../src/scss/partials/_form.scss */
+/* line 244, ../../../src/scss/partials/_form.scss */
 #field-expiration {
   float: right;
   width: 164px;
 }
-/* line 238, ../../../src/scss/partials/_form.scss */
+/* line 248, ../../../src/scss/partials/_form.scss */
 #field-expiration input {
   width: 80px;
   min-width: 0;
 }
 
-/* line 244, ../../../src/scss/partials/_form.scss */
-.priority-help {
+/* line 254, ../../../src/scss/partials/_form.scss */
+.priority-help,
+.account-help {
   background-color: #4a6781;
   padding: 2rem 20%;
   text-align: center;
@@ -902,12 +919,23 @@ label::after {
   animation-fill-mode: forwards;
 }
 @media only screen and (max-width: 540px) {
-  /* line 244, ../../../src/scss/partials/_form.scss */
-  .priority-help {
+  /* line 254, ../../../src/scss/partials/_form.scss */
+  .priority-help,
+  .account-help {
     font-size: 100%;
     line-height: 140%;
     padding: 1rem;
   }
+}
+
+/* line 276, ../../../src/scss/partials/_form.scss */
+.form-help {
+  text-align: center;
+  padding-bottom: 1rem;
+}
+/* line 280, ../../../src/scss/partials/_form.scss */
+.form-help p {
+  margin-bottom: 1rem;
 }
 
 /* line 3, ../../../src/scss/partials/_feedback.scss */

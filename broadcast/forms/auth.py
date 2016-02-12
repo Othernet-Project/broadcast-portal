@@ -23,12 +23,12 @@ class LoginForm(form.Form):
     }
 
     # Translators, used as label for a login field
-    username = form.StringField(_("Username or E-mail"),
-                                placeholder=_('username or e-mail'),
+    username = form.StringField(_("Username or email"),
+                                placeholder=_('Username or email'),
                                 validators=[form.Required()])
     # Translators, used as label for a password field
     password = form.PasswordField(_("Password"),
-                                  placeholder=_('password'),
+                                  placeholder=_('Password'),
                                   validators=[form.Required()])
 
     def validate(self):
@@ -59,7 +59,7 @@ class RegistrationForm(form.Form):
         # Translators, used as label in create user form
         _("Username"),
         validators=[form.Required()],
-        placeholder=_('username'),
+        placeholder=_('Username'),
         messages={
             'username_taken': _("Username already taken."),
         })
@@ -76,7 +76,7 @@ class RegistrationForm(form.Form):
         # Translators, used as label in create user form
         _("Password"),
         validators=[form.Required()],
-        placeholder=_('password'),
+        placeholder=_('Password'),
         messages={
             'password_length': _('Must be longer than {length} characters.'),
         })
@@ -84,7 +84,7 @@ class RegistrationForm(form.Form):
         # Translators, used as label in create user form
         _("Confirm Password"),
         validators=[form.Required()],
-        placeholder=_('confirm password'))
+        placeholder=_('Retype the password'))
     tos_agree = form.BooleanField(
         # Translators, used as label for terms of service agreement checkbox
         _('I agree to the <a href="%(url)s">Terms of Service</a>'),
@@ -132,9 +132,9 @@ class RegistrationForm(form.Form):
 class ConfirmationForm(form.Form):
     # Translators, used as label in create user form
     email = form.StringField(
-        _("E-mail"),
+        _("Email"),
         validators=[form.Required()],
-        placeholder=_('e-mail'),
+        placeholder=_('Email'),
         messages={
             # Translators, used as error messages for invalid email addresses
             # in send email confirmation form
@@ -159,9 +159,9 @@ class PasswordResetRequestForm(form.Form):
     }
     # Translators, used as label in create user form
     email = form.StringField(
-        _("E-mail"),
+        _("Email"),
         validators=[form.Required()],
-        placeholder=_('e-mail'),
+        placeholder=_('Email'),
         messages={
             # Translators, used as error messages for invalid email addresses
             # in password reset form
@@ -187,18 +187,18 @@ class PasswordResetForm(form.Form):
     key = form.HiddenField()
     new_password1 = form.PasswordField(
         # Translators, used as label in password reset form
-        _("New Password"),
+        _("New password"),
         validators=[form.Required()],
-        placeholder=_('password'),
+        placeholder=_('Password'),
         messages={
             'password_length': _('Must be longer than {length} characters.'),
         }
     )
     new_password2 = form.PasswordField(
         # Translators, used as label in password reset form
-        _("Confirm New Password"),
+        _("Confirm bew password"),
         validators=[form.Required()],
-        placeholder=_('password'),
+        placeholder=_('Password'),
         messages={
             'password_length': _('Must be longer than {length} characters.'),
         }

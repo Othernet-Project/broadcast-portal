@@ -6,18 +6,18 @@
     ${_("Register")}
 </%block>
 
-<div class="h-bar">
-    <h2>${_('Get started')}</h2>
-</div>
-<div class="full-page-form" data-url="${url('check_available')}" id="register-form">
-    <p class="note">
-    ${_('''In order for us to manage your submissions and track payment status,
-    you need to create an account and confirm your email address. Confirmation
-    email will be sent to your inbox after registration.''')}
-    </p>
+<%block name="main">
+    <div class="form">
+        <h2>${_('Get started')}</h2>
+        <p class="account-help">
+        ${_('''In order for us to manage your submissions and track payment status,
+        you need to create an account and confirm your email address. Confirmation
+        email will be sent to your inbox after registration.''')}
+        </p>
 
-    ${register_form.body()}
-</div>
+        ${register_form.body()}
+    </div>
+</%block>
 
 <%block name="extra_scripts">
 ${messages.messages(registration_form)}
