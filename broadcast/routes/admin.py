@@ -8,7 +8,7 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-from bottle import redirect, request, static_file
+from bottle import redirect, request, static_file, abort
 
 from ..util.auth import login_required
 from ..util.broadcast import get_item, filter_items
@@ -40,6 +40,8 @@ def scheduled_type_list(item_type):
 @view('scheduled_detail')
 def scheduled_detail(item_type, item_id):
     item = get_item(item_type, id=item_id)
+    if item is None:
+        abort(404, "Invalid item id specified.")
     return dict(item=item)
 
 
