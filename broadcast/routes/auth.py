@@ -21,6 +21,7 @@ from ..util.auth import (create_user,
                          get_user,
                          get_redirect_path,
                          create_temporary_key,
+                         send_confirmation_email,
                          confirm_user,
                          reset_password,
                          login_user_no_auth,
@@ -76,16 +77,10 @@ def send_confirmation(email=None, next_path=None):
         redirect_url = get_redirect_path(login_path, next_path)
         redirect_target = _('log-in')
 
-    expiration = request.app.config['authentication.confirmation_expires']
-    confirmation_key = create_temporary_key(email, expiration)
-    task_runner = request.app.config['task.runner']
-    task_runner.schedule(send_mail,
-                         email,
-                         _("Confirm registration"),
-                         text='email/confirm',
-                         data={'confirmation_key': confirmation_key,
-                               'next_path': next_path},
-                         config=request.app.config)
+    send_confirmation_email(email,
+                            next_path,
+                            config=request.app.config,
+                            db=request.db.sessions)
     return template('feedback',
                     page_title=_('Account registration complete'),
                     status='email',
