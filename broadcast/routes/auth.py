@@ -136,7 +136,9 @@ def password_reset_request():
     next_path = request.params.get('next', '/')
     form = PasswordResetRequestForm(request.params)
     if not form.is_valid():
-        return template('password_reset_request', form=form)
+        return template('password_reset_request',
+                        form=form,
+                        next_path=next_path)
 
     email = form.processed_data['email']
     if get_user(email):
