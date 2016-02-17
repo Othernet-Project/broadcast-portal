@@ -32,6 +32,8 @@
                     <a href="http://www.outernet.is/" class="homepage"><span class="label">${_("Home")}</span></a>
                     <a href="mailto:hello+uplink@outernet.is" class="homepage"><span class="label">${_("Contact Us")}</span></a>
                     ${h.link_other(_("Rocket Service"), url('rocket_service'), request.path)}
+                    <a href="${url('login_form')}" class="homepage"><span class="label">${_("Login")}</span></a>
+                    <a href="${url('register_form')}" class="homepage"><span class="label">${_("Sign Up")}</span></a>
                 </nav>
                 <div class="hamburger">
                     <a href="#nav">Site menu</a>
