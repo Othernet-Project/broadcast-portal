@@ -193,6 +193,19 @@ def create_user(email, username=None, password=None, is_superuser=False,
         raise UserAlreadyExists()
 
 
+def update_user(email, db=None, **kwargs):
+    if not email:
+        raise InvalidUserCredentials()
+
+    db = db or request.db.sessions
+    user_data = dict(email=email, **kwargs)
+    query = db.Update('users', cols=user_data.keys())
+    try:
+        db.execute(query, user_data)
+    except sqlite3.IntegrityError:
+        raise UserAlreadyExists()
+
+
 def create_temporary_key(email, expiration, db=None):
     key = uuid.uuid4().hex
     expires = datetime.datetime.utcnow() + datetime.timedelta(days=expiration)

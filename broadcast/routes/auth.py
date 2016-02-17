@@ -18,6 +18,7 @@ from ..forms.auth import (LoginForm,
                           PasswordResetRequestForm,
                           PasswordResetForm)
 from ..util.auth import (create_user,
+                         update_user,
                          get_user,
                          get_redirect_path,
                          create_temporary_key,
@@ -111,6 +112,15 @@ def confirm(key):
                 'redirect_target': _('log-in')}
     else:
         login_user_no_auth(email)
+        if request.user.is_anonymous:
+            redir_url = get_redirect_path(request.app.get_url('register_form'))
+            return {'message': _("E-mail address successfully confirmed. "
+                                 "Please complete your registration now."),
+                    'page_title': _("Confirmation"),
+                    'status': 'success',
+                    'redirect_url': redir_url,
+                    'redirect_target': _('the registration page')}
+
         return {'message': _("E-mail address successfully confirmed. You have "
                              "been automatically logged in."),
                 'page_title': _("Confirmation"),
@@ -202,10 +212,16 @@ def register():
         username = registration_form.processed_data['username']
         email = registration_form.processed_data['email']
         password = registration_form.processed_data['password1']
-        create_user(username=username,
-                    password=password,
-                    email=email,
-                    db=request.db.sessions)
+        if request.user.is_anonymous:
+            update_user(email=request.user.email,
+                        db=request.db.sessions,
+                        username=username,
+                        password=password)
+        else:
+            create_user(username=username,
+                        password=password,
+                        email=email,
+                        db=request.db.sessions)
         login_user_no_auth(email)
         return send_confirmation(email, next_path)
 
