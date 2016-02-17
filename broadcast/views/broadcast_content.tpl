@@ -21,7 +21,11 @@
             ${forms.field(form.is_authorized)}
             ${forms.field(form.license)}
             ${forms.field(form.url)}
+            % if request.user.is_authenticated:
+            ${h.hidden(name='email', value=request.user.email)}
+            % else:
             ${forms.field(form.email)}
+            % endif
             <p class="buttons">
                 <button type="submit" name="mode" value="free" class="primary"><span class="icon"></span> ${_('Share')}</button>
                 <span class="separator">${_("or")}</span>
