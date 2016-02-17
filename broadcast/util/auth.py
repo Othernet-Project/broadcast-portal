@@ -18,8 +18,10 @@ import uuid
 
 import pbkdf2
 from bottle import request, abort, redirect
+from bottle_utils.i18n import dummy_gettext as _
 
 from .options import Options
+from ..util.sendmail import send_mail
 
 
 class UserAlreadyExists(Exception):
@@ -79,7 +81,11 @@ class User(object):
 
     @property
     def is_authenticated(self):
-        return self.username is not None
+        return self.email is not None
+
+    @property
+    def is_anonymous(self):
+        return self.email and self.username is None
 
     def save_options(self):
         if self.is_authenticated:
@@ -161,15 +167,13 @@ def is_valid_password(password, encrypted_password):
     return encrypted_password == pbkdf2.crypt(password, encrypted_password)
 
 
-def create_user(username, password, email, is_superuser=False,
+def create_user(email, username=None, password=None, is_superuser=False,
                 confirmed=None, db=None, overwrite=False):
-    if not username or not email or not password:
+    if not email:
         raise InvalidUserCredentials()
 
-    encrypted = encrypt_password(password)
-
     user_data = {'username': username,
-                 'password': encrypted,
+                 'password': encrypt_password(password) if password else None,
                  'email': email,
                  'created': datetime.datetime.utcnow(),
                  'is_superuser': is_superuser,
@@ -204,6 +208,20 @@ def create_temporary_key(email, expiration, db=None):
 def delete_temporary_key(key, db=None):
     db = db or request.db.sessions
     db.query(db.Delete('confirmations', where='key = :key'), key=key)
+
+
+def send_confirmation_email(email, next_path, config=None, db=None):
+    config = config or request.app.config
+    expiration = config['authentication.confirmation_expires']
+    confirmation_key = create_temporary_key(email, expiration, db=db)
+    task_runner = config['task.runner']
+    task_runner.schedule(send_mail,
+                         email,
+                         _("Confirm registration"),
+                         text='email/confirm',
+                         data={'confirmation_key': confirmation_key,
+                               'next_path': next_path},
+                         config=config)
 
 
 def confirm_user(key, db=None):
