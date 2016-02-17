@@ -5,7 +5,7 @@
 </%block>
 
 <%block name="main">
-<div class="full-page-form">
+<div class="form">
     <div class="confirmed">
         % if error:
             <p class="error">${error}</p>

@@ -10,7 +10,7 @@
     ${_('Check your inbox')}
     </h2>
 </div>
-<div class="full-page-form">
+<div class="form">
     <p class="single confirm">
     ${_("A confirmation link has been sent to %(email)s.") % {'email': email}}
     </p>
