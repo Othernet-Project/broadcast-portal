@@ -3,7 +3,7 @@ mako
 webassets
 cssmin==0.2.0
 sqlize
-bottle-utils
+bottle-utils==0.9
 mandrill
 stripe
 gevent
