@@ -16,6 +16,7 @@ from bottle_utils.html import hsize
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.broadcast import ContentForm, TwitterForm
+from ..util.auth import create_user, send_confirmation_email
 from ..util.broadcast import (ContentItem,
                               TwitterItem,
                               get_unique_id,
@@ -43,6 +44,15 @@ def broadcast_content(item_type):
     form_data.update(request.files)
     form = ContentForm(form_data)
     if form.is_valid():
+        email = form.processed_data['email']
+        if request.user.is_authenticated:
+            email = request.user.email
+        else:
+            create_user(email=email, db=request.db.sessions)
+            send_confirmation_email(email,
+                                    next_path='/',
+                                    config=request.app.config,
+                                    db=request.db.sessions)
         item = ContentItem(
             created=datetime.datetime.utcnow(),
             title=form.processed_data['title'],
@@ -52,7 +62,7 @@ def broadcast_content(item_type):
             file_size=form.processed_data['file_size'],
             status=ContentItem.PROCESSING,
             license=form.processed_data['license'],
-            email=form.processed_data['email'],
+            email=email,
             url=form.processed_data['url']
         )
         item.save()
