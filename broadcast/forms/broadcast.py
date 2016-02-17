@@ -262,10 +262,11 @@ class ContentForm(BaseUploadForm):
         # Translators, used as label for email field
         _("Your Email"),
         placeholder=_('Email'),
+        validators=[form.Required()],
         messages={
             'email_invalid': _("Invalid e-mail address entered."),
         },
-        help_text=_("(OPTIONAL) If you do not intend to use Rocket Share.")
+        help_text=_("A confirmation email will be sent to this address.")
     )
 
     def postprocess_email(self, value):
