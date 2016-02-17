@@ -11,7 +11,7 @@
         <h2>${_('Log in')}</h2>
         ${h.form('post', action=url('login'))}
             % if login_form.error:
-            ${login_form.error}
+            ${forms.form_errors([login_form.error])}
             % endif
 
             ${csrf_tag()}
