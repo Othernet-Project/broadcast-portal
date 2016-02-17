@@ -9,7 +9,7 @@
     <div class="form">
         ${h.form('post', action=url('send_confirmation'))}
             % if form.error:
-            ${form.error}
+            ${forms.form_errors([form.error])}
             % endif
 
             ${csrf_tag()}
