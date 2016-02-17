@@ -238,6 +238,13 @@ class ContentForm(BaseUploadForm):
         help_text=_("(OPTIONAL) If your file is a text document (PDF, HTML,"
                     " plain text, etc), specify the content language.")
     )
+    is_authorized = form.BooleanField(
+        # Translators, used as label for is_authorized field
+        _("I am authorized"),
+        value="authorized",
+        validators=[form.Required()],
+        help_text=_("Are you authorized to distribute this file?")
+    )
     license = form.SelectField(
         # Translators, used as label for content license field
         _("License"),

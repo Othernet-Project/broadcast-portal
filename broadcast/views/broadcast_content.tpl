@@ -18,6 +18,7 @@
             </div>
             ${forms.field(form.title)}
             ${forms.field(form.language)}
+            ${forms.field(form.is_authorized)}
             ${forms.field(form.license)}
             ${forms.field(form.url)}
             ${forms.field(form.email)}
