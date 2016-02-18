@@ -10,11 +10,14 @@
     <div class="form">
         <h2>${_('Get started')}</h2>
         <p class="account-help">
-        ${_('''In order for us to manage your submissions and track payment status,
-        you need to create an account and confirm your email address. Confirmation
-        email will be sent to your inbox after registration.''')}
+        % if request.user.is_confirmed:
+            ${_('E-mail address successfully confirmed. Please complete your registration now.')}
+        % else:
+            ${_('''In order for us to manage your submissions and track payment status,
+            you need to create an account and confirm your email address. Confirmation
+            email will be sent to your inbox after registration.''')}
+        % endif
         </p>
-
         ${register_form.body()}
     </div>
 </%block>
