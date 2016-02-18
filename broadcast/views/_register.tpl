@@ -9,7 +9,7 @@ ${h.form('post', action=url('register'))}
     <input type="hidden" name="next" value="${next_path}">
     ${forms.field(registration_form.username, required=True)}
     % if request.user.is_anonymous:
-    ${h.hidden(name='email', value=request.user.email)}
+    ${h.HIDDEN('email', request.user.email)}
     % else:
     ${forms.field(registration_form.email, required=True)}
     % endif
