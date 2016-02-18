@@ -105,7 +105,7 @@ def confirm(key):
     next_path = request.params.get('next', '/')
     redir_onfail = get_redirect_path(request.app.get_url('login'), next_path)
     try:
-        email = confirm_user(key)
+        user = confirm_user(key)
     except KeyExpired:
         return {'message': _("The confirmation key has already expired."),
                 'page_title': _("Confirmation"),
@@ -119,8 +119,7 @@ def confirm(key):
                 'redirect_url': redir_onfail,
                 'redirect_target': _('log-in')}
     else:
-        User.login(email, verify=False)
-        if request.user.is_anonymous:
+        if user.is_anonymous:
             redir_url = request.app.get_url('register_form')
             return {'message': _("E-mail address successfully confirmed. "
                                  "Please complete your registration now."),
