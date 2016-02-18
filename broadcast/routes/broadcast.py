@@ -18,7 +18,8 @@ from bottle_utils.i18n import dummy_gettext as _
 from ..forms.broadcast import ContentForm, TwitterForm
 from ..util.auth import (create_user,
                          send_confirmation_email,
-                         login_user_no_auth)
+                         login_user_no_auth,
+                         UserAlreadyExists)
 from ..util.broadcast import (ContentItem,
                               TwitterItem,
                               get_unique_id,
@@ -50,8 +51,13 @@ def broadcast_content(item_type):
         if request.user.is_authenticated:
             email = request.user.email
         else:
-            create_user(email=email, db=request.db.sessions)
-            login_user_no_auth(email)
+            try:
+                create_user(email=email, db=request.db.sessions)
+            except UserAlreadyExists:
+                pass  # ignore, just resend confirmation mail
+            else:
+                login_user_no_auth(email)
+
             send_confirmation_email(email,
                                     next_path='/',
                                     config=request.app.config,
