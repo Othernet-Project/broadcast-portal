@@ -288,12 +288,11 @@ def confirm_user(key, db=None):
         delete_temporary_key(key, db=db)
         raise KeyExpired()
 
-    query = db.Update('users',
-                      confirmed=':confirmed',
-                      where='email = :email')
-    db.query(query, confirmed=now, email=confirmation.email)
+    user = User.get(confirmation.email)
+    user.update(confirmed=now)
+    user.make_logged_in()
     delete_temporary_key(key, db=db)
-    return confirmation.email
+    return user
 
 
 def verify_temporary_key(key, db=None):
