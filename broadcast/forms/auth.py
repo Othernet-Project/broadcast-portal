@@ -217,10 +217,10 @@ class PasswordResetForm(form.Form):
     def validate(self):
         key = self.processed_data['key']
         try:
-            auth.verify_temporary_key(key)
-        except auth.KeyExpired:
+            auth.Confirmation.get(key)
+        except auth.Confirmation.KeyExpired:
             raise form.ValidationError('key_expired', {})
-        except auth.KeyNotFound:
+        except auth.Confirmation.KeyNotFound:
             raise form.ValidationError('key_invalid', {})
 
         new_password1 = self.processed_data['new_password1']

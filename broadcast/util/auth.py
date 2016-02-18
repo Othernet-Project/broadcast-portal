@@ -23,14 +23,6 @@ from bottle_utils.i18n import dummy_gettext as _
 from ..util.sendmail import send_mail
 
 
-class KeyNotFound(Exception):
-    pass
-
-
-class KeyExpired(Exception):
-    pass
-
-
 class DateTimeEncoder(json.JSONEncoder):
 
     def default(self, obj):
@@ -59,7 +51,33 @@ class DateTimeDecoder(json.JSONDecoder):
             return obj
 
 
-class User(object):
+class DBDataWrapper(object):
+
+    def __init__(self, data=None, db=None):
+        self._db = db or request.db.sessions
+        # if user logs out, an empty user object is needed
+        if not data:
+            data = dict((k, None) for k in self._columns)
+        # data must be json-serializable, make sure it is
+        if not isinstance(data, dict):
+            data = dict((k, data[k]) for k in data.keys())
+
+        self._data = data
+
+    def __getattr__(self, name):
+        if name in self._columns:
+            return self._data.get(name, None)
+        raise AttributeError(name)
+
+    def to_json(self):
+        return json.dumps(self._data, cls=DateTimeEncoder)
+
+    @classmethod
+    def from_json(cls, data, db=None):
+        return cls(json.loads(data, cls=DateTimeDecoder), db=db)
+
+
+class User(DBDataWrapper):
 
     class Error(Exception):
         pass
@@ -84,22 +102,6 @@ class User(object):
         'options',
     )
 
-    def __init__(self, data=None, db=None):
-        self._db = db or request.db.sessions
-        # if user logs out, an empty user object is needed
-        if not data:
-            data = dict((k, None) for k in self._columns)
-        # data must be json-serializable, make sure it is
-        if not isinstance(data, dict):
-            data = dict((k, data[k]) for k in data.keys())
-
-        self._data = data
-
-    def __getattr__(self, name):
-        if name in self._columns:
-            return self._data.get(name, None)
-        raise AttributeError(name)
-
     @property
     def is_authenticated(self):
         return self.email is not None
@@ -122,9 +124,6 @@ class User(object):
         request.session.rotate()
         return self
 
-    def to_json(self):
-        return json.dumps(self._data, cls=DateTimeEncoder)
-
     def update(self, **kwargs):
         if any([key not in self._columns for key in kwargs]):
             raise ValueError("Unknown columns detected.")
@@ -137,10 +136,6 @@ class User(object):
         self._db.query(query, email=self.email, **kwargs)
         self._data.update(kwargs)
         return self
-
-    @classmethod
-    def from_json(cls, data, db=None):
-        return cls(json.loads(data, cls=DateTimeDecoder), db=db)
 
     @classmethod
     def get(cls, username_or_email, db=None):
@@ -244,78 +239,92 @@ def login_required(redirect_to='/login/', superuser_only=False, next_to=None):
     return decorator
 
 
-def create_temporary_key(email, expiration, db=None):
-    key = uuid.uuid4().hex
-    expires = datetime.datetime.utcnow() + datetime.timedelta(days=expiration)
-    data = {'key': key,
-            'email': email,
-            'expires': expires}
-    db = db or request.db.sessions
-    query = db.Insert('confirmations', cols=('key', 'email', 'expires'))
-    db.execute(query, data)
-    return key
+class Confirmation(DBDataWrapper):
 
+    class Error(Exception):
+        pass
 
-def delete_temporary_key(key, db=None):
-    db = db or request.db.sessions
-    db.query(db.Delete('confirmations', where='key = :key'), key=key)
+    class KeyNotFound(Error):
+        pass
+
+    class KeyExpired(Error):
+        pass
+
+    _table = 'confirmations'
+    _columns = (
+        'key',
+        'email',
+        'expires',
+    )
+
+    @property
+    def has_expired(self):
+        return self.expires < datetime.datetime.now()
+
+    def delete(self):
+        query = self._db.Delete(self._table, where='key = :key')
+        self._db.query(query, key=self.key)
+
+    def accept(self):
+        user = User.get(self.email)
+        user.update(confirmed=datetime.datetime.now())
+        user.make_logged_in()
+        self.delete()
+        return user
+
+    @staticmethod
+    def generate_key():
+        return uuid.uuid4().hex
+
+    @classmethod
+    def create(cls, email, expiration, db=None):
+        db = db or request.db.sessions
+        key = cls.generate_key()
+        expires = (datetime.datetime.utcnow() +
+                   datetime.timedelta(days=expiration))
+        data = {'key': key,
+                'email': email,
+                'expires': expires}
+        query = db.Insert(cls._table, cols=cls._columns)
+        db.execute(query, data)
+        return cls(data, db=db)
+
+    @classmethod
+    def get(cls, key, db=None):
+        db = db or request.db.sessions
+        query = db.Select(sets=cls._table, where='key = :key')
+        db.execute(query, dict(key=key))
+        data = db.result
+        if not data:
+            raise cls.KeyNotFound()
+
+        confirmation = cls(data, db=db)
+        if confirmation.has_expired:
+            confirmation.delete()
+            raise cls.KeyExpired()
+
+        return confirmation
 
 
 def send_confirmation_email(email, next_path, config=None, db=None):
     config = config or request.app.config
     expiration = config['authentication.confirmation_expires']
-    confirmation_key = create_temporary_key(email, expiration, db=db)
+    confirmation = Confirmation.create(email, expiration, db=db)
     task_runner = config['task.runner']
     task_runner.schedule(send_mail,
                          email,
                          _("Confirm registration"),
                          text='email/confirm',
-                         data={'confirmation_key': confirmation_key,
+                         data={'confirmation_key': confirmation.key,
                                'next_path': next_path},
                          config=config)
 
 
-def confirm_user(key, db=None):
-    db = db or request.db.sessions
-    query = db.Select(sets='confirmations', where='key = :key')
-    db.execute(query, dict(key=key))
-    confirmation = db.result
-    if not confirmation:
-        raise KeyNotFound()
-
-    now = datetime.datetime.utcnow()
-    if confirmation.expires < now:
-        delete_temporary_key(key, db=db)
-        raise KeyExpired()
-
-    user = User.get(confirmation.email)
-    user.update(confirmed=now)
-    user.make_logged_in()
-    delete_temporary_key(key, db=db)
-    return user
-
-
-def verify_temporary_key(key, db=None):
-    db = db or request.db.sessions
-    query = db.Select(sets='confirmations', where='key = :key')
-    db.execute(query, dict(key=key))
-    temp_key = db.result
-    if not temp_key:
-        raise KeyNotFound()
-
-    now = datetime.datetime.utcnow()
-    if temp_key.expires < now:
-        delete_temporary_key(key, db=db)
-        raise KeyExpired()
-
-
 def reset_password(key, new_password, db=None):
     db = db or request.db.sessions
-    query = db.Select(sets='confirmations', where='key = :key')
-    db.execute(query, dict(key=key))
-    temp_key = db.result
-    change_password(temp_key.email, new_password, db=db)
-    delete_temporary_key(key, db=db)
+    confirmation = Confirmation.get(key, db=db)
+    change_password(confirmation.email, new_password, db=db)
+    confirmation.delete()
 
 
 def change_password(email, new_password, db=None):

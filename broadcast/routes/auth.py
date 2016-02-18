@@ -20,13 +20,10 @@ from ..forms.auth import (LoginForm,
                           PasswordResetRequestForm,
                           PasswordResetForm)
 from ..util.auth import (User,
+                         Confirmation,
                          get_redirect_path,
-                         create_temporary_key,
                          send_confirmation_email,
-                         confirm_user,
-                         reset_password,
-                         KeyExpired,
-                         KeyNotFound)
+                         reset_password)
 from ..util.sendmail import send_mail
 from ..util.http import http_redirect
 from ..util.template import view, template
@@ -105,20 +102,21 @@ def confirm(key):
     next_path = request.params.get('next', '/')
     redir_onfail = get_redirect_path(request.app.get_url('login'), next_path)
     try:
-        user = confirm_user(key)
-    except KeyExpired:
+        confirmation = Confirmation.get(key)
+    except Confirmation.KeyExpired:
         return {'message': _("The confirmation key has already expired."),
                 'page_title': _("Confirmation"),
                 'status': 'error',
                 'redirect_url': redir_onfail,
                 'redirect_target': _('log-in')}
-    except KeyNotFound:
+    except Confirmation.KeyNotFound:
         return {'message': _("The confirmation key is not valid."),
                 'page_title': _("Confirmation"),
                 'status': 'error',
                 'redirect_url': redir_onfail,
                 'redirect_target': _('log-in')}
     else:
+        user = confirmation.accept()
         if user.is_anonymous:
             redir_url = request.app.get_url('register_form')
             return {'message': _("E-mail address successfully confirmed. "
@@ -160,13 +158,13 @@ def password_reset_request():
         pass  # do not reveal to users whether an email exists or not
     else:
         expires = request.app.config['authentication.password_reset_expires']
-        reset_key = create_temporary_key(email, expires)
+        confirmation = Confirmation.create(email, expires)
         task_runner = request.app.config['task.runner']
         task_runner.schedule(send_mail,
                              email,
                              _("Reset Password"),
                              text='email/password_reset',
-                             data={'reset_key': reset_key,
+                             data={'reset_key': confirmation.key,
                                    'next_path': next_path},
                              config=request.app.config)
 
