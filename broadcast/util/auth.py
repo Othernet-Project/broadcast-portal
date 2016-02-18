@@ -219,9 +219,12 @@ def update_user(email, db=None, **kwargs):
 
     db = db or request.db.sessions
     user_data = dict(email=email, **kwargs)
-    query = db.Update('users', cols=user_data.keys())
+    placeholders = dict((name, ':{}'.format(name)) for name in kwargs.keys())
+    query = db.Update('users',
+                      where='email = :email',
+                      **placeholders)
     try:
-        db.execute(query, user_data)
+        db.query(query, **user_data)
     except sqlite3.IntegrityError:
         raise UserAlreadyExists()
 
