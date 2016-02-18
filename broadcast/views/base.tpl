@@ -6,7 +6,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title><%block name="title">Share your content</%block> - Outernet</title>
         % if redirect_url is not UNDEFINED:
-        <meta http-equiv="refresh" content="5; url=${redirect_url}">
+            % if redirect_delay is UNDEFINED:
+            <% actual_redirect_delay = 5 %>
+            % else:
+            <% actual_redirect_delay = redirect_delay %>
+            % endif
+            <meta http-equiv="refresh" content="${actual_redirect_delay}; url=${redirect_url}">
         % endif
         <link rel="stylesheet" href="${assets['css/main']}">
         % if not DEBUG:
