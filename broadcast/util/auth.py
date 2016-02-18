@@ -71,7 +71,8 @@ class DateTimeDecoder(json.JSONDecoder):
 class User(object):
 
     def __init__(self, username=None, email=None, is_superuser=None,
-                 confirmed=None, created=None, options=None):
+                 confirmed=None, created=None, options=None, db=None):
+        self._db = db or request.db.sessions
         self.username = username
         self.email = email
         self.is_superuser = is_superuser
@@ -89,12 +90,11 @@ class User(object):
 
     def save_options(self):
         if self.is_authenticated:
-            db = request.db.sessions
             options = self.options.to_json()
-            query = db.Update('users',
-                              options=':options',
-                              where='username = :username')
-            db.query(query, username=self.username, options=options)
+            query = self._db.Update('users',
+                                    options=':options',
+                                    where='username = :username')
+            self._db.query(query, username=self.username, options=options)
 
     def logout(self):
         if self.is_authenticated:
@@ -113,6 +113,26 @@ class User(object):
     @classmethod
     def from_json(cls, data):
         return cls(**json.loads(data, cls=DateTimeDecoder))
+
+    @classmethod
+    def get(cls, username_or_email, db=None):
+        db = db or request.db.sessions
+        query = db.Select(sets='users',
+                          where='username = :username OR email = :email')
+        db.query(query,
+                 username=username_or_email,
+                 email=username_or_email)
+        raw_data = db.result
+        if not raw_data:
+            return None
+
+        return cls(username=raw_data.username,
+                   email=raw_data.email,
+                   is_superuser=raw_data.is_superuser,
+                   confirmed=raw_data.confirmed,
+                   created=raw_data.created,
+                   options=raw_data.options,
+                   db=db)
 
 
 def get_redirect_path(base_path, next_path, next_param_name='next'):
