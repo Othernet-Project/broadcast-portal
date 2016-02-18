@@ -8,7 +8,9 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-from bottle import request, redirect
+import functools
+
+from bottle import request, redirect, abort
 from bottle_utils.csrf import csrf_protect, csrf_token
 from bottle_utils.i18n import dummy_gettext as _
 
@@ -31,6 +33,15 @@ from ..util.auth import (create_user,
 from ..util.sendmail import send_mail
 from ..util.http import http_redirect
 from ..util.template import view, template
+
+
+def anon_or_unknown(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        if request.user.is_authenticated and not request.user.is_anonymous:
+            abort(403, _("Only anonymous or not registered users are allowed."))
+        return func(*args, **kwargs)
+    return wrapper
 
 
 @view('login')
@@ -196,12 +207,14 @@ def password_reset(key):
 
 @view('register')
 @csrf_token
+@anon_or_unknown
 def show_register_form():
     return dict(registration_form=RegistrationForm(),
                 next_path=request.params.get('next', '/'))
 
 
 @csrf_protect
+@anon_or_unknown
 def register():
     referer = request.headers.get('Referer', 'register')
     template_name = 'login' if 'login' in referer else 'register'
