@@ -86,6 +86,9 @@ class User(object):
 
     def __init__(self, data, db=None):
         self._db = db or request.db.sessions
+        if not isinstance(data, dict):
+            # data must be json-serializable, make sure it is
+            data = dict((k, v) for (k, v) in data.items())
         self._data = data
 
     def __getattr__(self, name):
