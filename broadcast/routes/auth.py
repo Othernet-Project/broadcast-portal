@@ -19,15 +19,12 @@ from ..forms.auth import (LoginForm,
                           ConfirmationForm,
                           PasswordResetRequestForm,
                           PasswordResetForm)
-from ..util.auth import (create_user,
-                         update_user,
-                         get_user,
+from ..util.auth import (User,
                          get_redirect_path,
                          create_temporary_key,
                          send_confirmation_email,
                          confirm_user,
                          reset_password,
-                         login_user_no_auth,
                          KeyExpired,
                          KeyNotFound)
 from ..util.sendmail import send_mail
@@ -122,7 +119,7 @@ def confirm(key):
                 'redirect_url': redir_onfail,
                 'redirect_target': _('log-in')}
     else:
-        login_user_no_auth(email)
+        User.login(email, verify=False)
         if request.user.is_anonymous:
             redir_url = request.app.get_url('register_form')
             return {'message': _("E-mail address successfully confirmed. "
@@ -157,7 +154,11 @@ def password_reset_request():
                         next_path=next_path)
 
     email = form.processed_data['email']
-    if get_user(email):
+    try:
+        User.get(email)
+    except User.DoesNotExist:
+        pass  # do not reveal to users whether an email exists or not
+    else:
         expires = request.app.config['authentication.password_reset_expires']
         reset_key = create_temporary_key(email, expires)
         task_runner = request.app.config['task.runner']
@@ -168,6 +169,7 @@ def password_reset_request():
                              data={'reset_key': reset_key,
                                    'next_path': next_path},
                              config=request.app.config)
+
     redirect_url = get_redirect_path(request.app.get_url('login'), next_path)
     return template('feedback',
                     page_title=_('Password reset email sent'),
@@ -226,16 +228,21 @@ def register():
         email = registration_form.processed_data['email']
         password = registration_form.processed_data['password1']
         if request.user.is_anonymous:
-            update_user(email=request.user.email,
-                        db=request.db.sessions,
-                        username=username,
-                        password=password)
-        else:
-            create_user(username=username,
-                        password=password,
-                        email=email,
-                        db=request.db.sessions)
-        login_user_no_auth(email)
+            request.user.update(username=username,
+                                password=password)
+            return template('feedback',
+                            page_title=_('Registration completed'),
+                            status='success',
+                            redirect_url=next_path,
+                            message=_('You have successfully completed the '
+                                      'registration process.'),
+                            redirect_target=_('log-in'))
+
+        user = User.create(username=username,
+                           password=password,
+                           email=email,
+                           db=request.db.sessions)
+        user.make_logged_in()
         return send_confirmation(email, next_path)
 
     return template(template_name,
@@ -246,9 +253,16 @@ def register():
 
 def check_available():
     username_or_email = request.params.get('account', '').strip()
-    if not username_or_email:
-        return {'result': False}
-    return {'result': get_user(username_or_email) is not None}
+    result = False
+    if username_or_email:
+        try:
+            User.get(username_or_email)
+        except User.DoesNotExist:
+            pass
+        else:
+            result = True
+
+    return {'result': result}
 
 
 def logout():

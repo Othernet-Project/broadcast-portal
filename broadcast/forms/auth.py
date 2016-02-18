@@ -34,8 +34,9 @@ class LoginForm(form.Form):
     def validate(self):
         username = self.processed_data['username']
         password = self.processed_data['password']
-
-        if not auth.login_user(username, password):
+        try:
+            auth.User.login(username, password)
+        except auth.User.InvalidCredentials:
             raise form.ValidationError('invalid', {})
 
 
@@ -111,17 +112,23 @@ class RegistrationForm(form.Form):
         if not re.match(r'[^@]+@[^@]+\.[^@]+', value):
             raise form.ValidationError('email_invalid', {})
 
-        user = auth.User.get(value)
-        if user and not user.is_anonymous:
-            raise form.ValidationError('email_taken', {})
+        try:
+            user = auth.User.get(value)
+        except auth.User.DoesNotExist:
+            pass  # good, email is free
+        else:
+            if not user.is_anonymous:
+                raise form.ValidationError('email_taken', {})
 
         return value
 
     def postprocess_username(self, value):
-        if auth.get_user(value):
+        try:
+            auth.User.get(value)
+        except auth.User.DoesNotExist:
+            return value  # good, username is free
+        else:
             raise form.ValidationError('username_taken', {})
-
-        return value
 
     def validate(self):
         password1 = self.processed_data['password1']
@@ -148,10 +155,12 @@ class ConfirmationForm(form.Form):
         if not re.match(r'[^@]+@[^@]+\.[^@]+', value):
             raise form.ValidationError('invalid_email', {})
 
-        if not auth.get_user(value):
+        try:
+            auth.User.get(value)
+        except auth.User.DoesNotExist:
             raise form.ValidationError('not_registered', {})
-
-        return value
+        else:
+            return value
 
 
 class PasswordResetRequestForm(form.Form):
