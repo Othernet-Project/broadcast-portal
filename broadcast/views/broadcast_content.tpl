@@ -14,17 +14,17 @@
             ${forms.field(form.id)}
             ${forms.field(form.signature)}
             <div class="file">
-                ${forms.field(form.content_file)}
+                ${forms.field(form.content_file, required=True)}
             </div>
             ${forms.field(form.title)}
             ${forms.field(form.language)}
-            ${forms.field(form.is_authorized)}
+            ${forms.field(form.is_authorized, required=True)}
             ${forms.field(form.license)}
             ${forms.field(form.url)}
             % if request.user.is_authenticated:
             ${h.HIDDEN('email', request.user.email)}
             % else:
-            ${forms.field(form.email)}
+            ${forms.field(form.email, required=True)}
             % endif
             <p class="buttons">
                 <button type="submit" name="mode" value="free" class="primary"><span class="icon"></span> ${_('Share')}</button>
