@@ -90,7 +90,7 @@ class User(object):
 
     def __getattr__(self, name):
         if name in self._columns:
-            return self._data['name']
+            return self._data.get(name, None)
         raise AttributeError(name)
 
     @property
