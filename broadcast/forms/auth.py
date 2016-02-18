@@ -111,7 +111,7 @@ class RegistrationForm(form.Form):
         if not re.match(r'[^@]+@[^@]+\.[^@]+', value):
             raise form.ValidationError('email_invalid', {})
 
-        user = auth.get_user(value)
+        user = auth.User.get(value)
         if user and not user.is_anonymous:
             raise form.ValidationError('email_taken', {})
 
