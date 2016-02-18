@@ -35,6 +35,8 @@
                     % if not request.user.is_authenticated or request.user.is_anonymous:
                     <a href="${url('login_form')}" class="homepage"><span class="label">${_("Login")}</span></a>
                     <a href="${url('register_form')}" class="homepage"><span class="label">${_("Sign Up")}</span></a>
+                    % else:
+                    <a href="${url('logout')}" class="homepage"><span class="label">${_("Log Out")}</span></a>
                     % endif
                 </nav>
                 <div class="hamburger">
