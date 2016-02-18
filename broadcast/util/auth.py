@@ -20,16 +20,7 @@ import pbkdf2
 from bottle import request, abort, redirect
 from bottle_utils.i18n import dummy_gettext as _
 
-from .options import Options
 from ..util.sendmail import send_mail
-
-
-class UserAlreadyExists(Exception):
-    pass
-
-
-class InvalidUserCredentials(Exception):
-    pass
 
 
 class KeyNotFound(Exception):
@@ -70,15 +61,37 @@ class DateTimeDecoder(json.JSONDecoder):
 
 class User(object):
 
-    def __init__(self, username=None, email=None, is_superuser=None,
-                 confirmed=None, created=None, options=None, db=None):
+    class Error(Exception):
+        pass
+
+    class DoesNotExist(Error):
+        pass
+
+    class AlreadyExists(Error):
+        pass
+
+    class InvalidCredentials(Error):
+        pass
+
+    _table = 'users'
+    _columns = (
+        'email',
+        'username',
+        'password',
+        'is_superuser',
+        'created',
+        'confirmed',
+        'options',
+    )
+
+    def __init__(self, data, db=None):
         self._db = db or request.db.sessions
-        self.username = username
-        self.email = email
-        self.is_superuser = is_superuser
-        self.confirmed = confirmed
-        self.created = created
-        self.options = Options(options, onchange=self.save_options)
+        self._data = data
+
+    def __getattr__(self, name):
+        if name in self._columns:
+            return self._data['name']
+        raise AttributeError(name)
 
     @property
     def is_authenticated(self):
@@ -88,51 +101,92 @@ class User(object):
     def is_anonymous(self):
         return self.email and self.username is None
 
-    def save_options(self):
-        if self.is_authenticated:
-            options = self.options.to_json()
-            query = self._db.Update('users',
-                                    options=':options',
-                                    where='username = :username')
-            self._db.query(query, username=self.username, options=options)
-
     def logout(self):
         if self.is_authenticated:
             request.session.delete().reset()
             request.user = User()
 
+    def make_logged_in(self):
+        request.user = self
+        request.session.rotate()
+        return self
+
     def to_json(self):
-        data = dict(username=self.username,
-                    email=self.email,
-                    is_superuser=self.is_superuser,
-                    confirmed=self.confirmed,
-                    created=self.created,
-                    options=self.options.to_native())
-        return json.dumps(data, cls=DateTimeEncoder)
+        return json.dumps(self._data, cls=DateTimeEncoder)
+
+    def update(self, **kwargs):
+        if any([key not in self._columns for key in kwargs]):
+            raise ValueError("Unknown columns detected.")
+
+        placeholders = dict((name, ':{}'.format(name))
+                            for name in kwargs.keys())
+        query = self._db.Update(self._table,
+                                where='email = :email',
+                                **placeholders)
+        self._db.query(query, email=self.email, **kwargs)
+        self._data.update(kwargs)
+        return self
 
     @classmethod
-    def from_json(cls, data):
-        return cls(**json.loads(data, cls=DateTimeDecoder))
+    def from_json(cls, data, db=None):
+        return cls(json.loads(data, cls=DateTimeDecoder), db=db)
 
     @classmethod
     def get(cls, username_or_email, db=None):
         db = db or request.db.sessions
-        query = db.Select(sets='users',
+        query = db.Select(sets=cls._table,
                           where='username = :username OR email = :email')
         db.query(query,
                  username=username_or_email,
                  email=username_or_email)
         raw_data = db.result
         if not raw_data:
-            return None
+            raise cls.DoesNotExist()
 
-        return cls(username=raw_data.username,
-                   email=raw_data.email,
-                   is_superuser=raw_data.is_superuser,
-                   confirmed=raw_data.confirmed,
-                   created=raw_data.created,
-                   options=raw_data.options,
-                   db=db)
+        return cls(raw_data, db=db)
+
+    @classmethod
+    def create(cls, email, username=None, password=None, is_superuser=False,
+               confirmed=None, overwrite=False, db=None):
+        db = db or request.db.sessions
+        password = cls.encrypt_password(password) if password else None
+        data = {'username': username,
+                'password': password,
+                'email': email,
+                'created': datetime.datetime.utcnow(),
+                'is_superuser': is_superuser,
+                'confirmed': confirmed}
+        statement_cls = db.Replace if overwrite else db.Insert
+        query = statement_cls(cls._table, cols=('username',
+                                                'password',
+                                                'email',
+                                                'created',
+                                                'is_superuser',
+                                                'confirmed'))
+        try:
+            db.execute(query, data)
+        except sqlite3.IntegrityError:
+            raise cls.AlreadyExists()
+        else:
+            return cls(data, db=db)
+
+    @classmethod
+    def login(cls, username_or_email, password=None, verify=True, db=None):
+        """Makes the user of the passed in username or email logged in, with
+        optional security verification."""
+        user = cls.get(username_or_email, db=db)
+        if verify and not cls.is_valid_password(password, user.password):
+            raise cls.InvalidCredentials()
+
+        return user.make_logged_in()
+
+    @staticmethod
+    def encrypt_password(password):
+        return pbkdf2.crypt(password)
+
+    @staticmethod
+    def is_valid_password(password, encrypted_password):
+        return encrypted_password == pbkdf2.crypt(password, encrypted_password)
 
 
 def get_redirect_path(base_path, next_path, next_param_name='next'):
@@ -177,56 +231,6 @@ def login_required(redirect_to='/login/', superuser_only=False, next_to=None):
             return redirect(redirect_path)
         return wrapper
     return decorator
-
-
-def encrypt_password(password):
-    return pbkdf2.crypt(password)
-
-
-def is_valid_password(password, encrypted_password):
-    return encrypted_password == pbkdf2.crypt(password, encrypted_password)
-
-
-def create_user(email, username=None, password=None, is_superuser=False,
-                confirmed=None, db=None, overwrite=False):
-    if not email:
-        raise InvalidUserCredentials()
-
-    user_data = {'username': username,
-                 'password': encrypt_password(password) if password else None,
-                 'email': email,
-                 'created': datetime.datetime.utcnow(),
-                 'is_superuser': is_superuser,
-                 'confirmed': confirmed}
-
-    db = db or request.db.sessions
-    sql_cmd = db.Replace if overwrite else db.Insert
-    query = sql_cmd('users', cols=('username',
-                                   'password',
-                                   'email',
-                                   'created',
-                                   'is_superuser',
-                                   'confirmed'))
-    try:
-        db.execute(query, user_data)
-    except sqlite3.IntegrityError:
-        raise UserAlreadyExists()
-
-
-def update_user(email, db=None, **kwargs):
-    if not email:
-        raise InvalidUserCredentials()
-
-    db = db or request.db.sessions
-    user_data = dict(email=email, **kwargs)
-    placeholders = dict((name, ':{}'.format(name)) for name in kwargs.keys())
-    query = db.Update('users',
-                      where='email = :email',
-                      **placeholders)
-    try:
-        db.query(query, **user_data)
-    except sqlite3.IntegrityError:
-        raise UserAlreadyExists()
 
 
 def create_temporary_key(email, expiration, db=None):
@@ -309,45 +313,8 @@ def change_password(email, new_password, db=None):
     query = db.Update('users',
                       password=':password',
                       where='email = :email')
-    encrypted_password = encrypt_password(new_password)
+    encrypted_password = User.encrypt_password(new_password)
     db.query(query, password=encrypted_password, email=email)
-
-
-def get_user(username_or_email):
-    db = request.db.sessions
-    query = db.Select(sets='users',
-                      where='username = :username OR email = :email')
-    db.query(query, username=username_or_email, email=username_or_email)
-    return db.result
-
-
-def login_user_no_auth(username_or_email):
-    """Makes the user of the passed in username or email logged in, with no
-    security verification whatsoever."""
-    user = get_user(username_or_email)
-    if user:
-        request.user = User(username=user.username,
-                            email=user.email,
-                            is_superuser=user.is_superuser,
-                            confirmed=user.confirmed,
-                            created=user.created,
-                            options=user.options)
-        request.session.rotate()
-
-
-def login_user(username_or_email, password):
-    user = get_user(username_or_email)
-    if user and is_valid_password(password, user.password):
-        request.user = User(username=user.username,
-                            email=user.email,
-                            is_superuser=user.is_superuser,
-                            confirmed=user.confirmed,
-                            created=user.created,
-                            options=user.options)
-        request.session.rotate()
-        return True
-
-    return False
 
 
 def user_plugin(conf):
@@ -358,7 +325,6 @@ def user_plugin(conf):
     @bottle.hook('after_request')
     def process_options():
         if hasattr(request, 'session') and hasattr(request, 'user'):
-            request.user.options.apply()
             request.session['user'] = request.user.to_json()
 
     def plugin(callback):
@@ -366,7 +332,7 @@ def user_plugin(conf):
         def wrapper(*args, **kwargs):
             request.no_auth = no_auth
             user_data = request.session.get('user', '{}')
-            request.user = User.from_json(user_data)
+            request.user = User.from_json(user_data, db=request.db.sessions)
             return callback(*args, **kwargs)
 
         return wrapper
