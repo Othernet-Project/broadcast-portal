@@ -21,7 +21,7 @@
             ${forms.field(form.is_authorized)}
             ${forms.field(form.license)}
             ${forms.field(form.url)}
-            % if request.user.is_anonymous:
+            % if request.user.is_authenticated:
             ${h.HIDDEN('email', request.user.email)}
             % else:
             ${forms.field(form.email)}
