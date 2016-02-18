@@ -224,8 +224,8 @@ def register():
     registration_form = RegistrationForm(request.params)
 
     if registration_form.is_valid():
-        username = registration_form.processed_data['username']
         email = registration_form.processed_data['email']
+        username = registration_form.processed_data['username']
         password = registration_form.processed_data['password1']
         if request.user.is_anonymous:
             request.user.update(username=username,
