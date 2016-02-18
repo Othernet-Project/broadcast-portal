@@ -16,10 +16,7 @@ from bottle_utils.html import hsize
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.broadcast import ContentForm, TwitterForm
-from ..util.auth import (create_user,
-                         send_confirmation_email,
-                         login_user_no_auth,
-                         UserAlreadyExists)
+from ..util.auth import User, send_confirmation_email
 from ..util.broadcast import (ContentItem,
                               TwitterItem,
                               get_unique_id,
@@ -52,11 +49,11 @@ def broadcast_content(item_type):
             email = request.user.email
         else:
             try:
-                create_user(email=email, db=request.db.sessions)
-            except UserAlreadyExists:
+                user = User.create(email=email, db=request.db.sessions)
+            except User.AlreadyExists:
                 pass  # ignore, just resend confirmation mail
             else:
-                login_user_no_auth(email)
+                user.make_logged_in()
 
             send_confirmation_email(email,
                                     next_path='/',

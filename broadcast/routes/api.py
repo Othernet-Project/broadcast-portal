@@ -18,7 +18,7 @@ from bottle import (request,
                     HTTPError,
                     HTTP_CODES)
 
-from ..util.auth import login_user
+from ..util.auth import User
 from ..util.broadcast import get_item, filter_items
 
 
@@ -31,9 +31,12 @@ HTTP_405_METHOD_NOT_ALLOWED = 405
 
 
 def check_auth(username, password):
-    if login_user(username, password):
-        return request.user.is_superuser
-    return False
+    try:
+        user = User.login(username, password)
+    except (User.DoesNotExist, User.InvalidCredentials):
+        return False
+    else:
+        return user.is_superuser
 
 
 def json_required(func):

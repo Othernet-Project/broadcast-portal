@@ -36,7 +36,7 @@ class LoginForm(form.Form):
         password = self.processed_data['password']
         try:
             auth.User.login(username, password)
-        except auth.User.InvalidCredentials:
+        except (auth.User.DoesNotExist, auth.User.InvalidCredentials):
             raise form.ValidationError('invalid', {})
 
 
