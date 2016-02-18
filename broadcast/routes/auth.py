@@ -39,7 +39,7 @@ def anon_or_unknown(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         if request.user.is_authenticated and not request.user.is_anonymous:
-            abort(403, _("Only anonymous or not registered users are allowed."))
+            abort(403, _("Only anonymous or unregistered users are allowed."))
         return func(*args, **kwargs)
     return wrapper
 
@@ -124,7 +124,7 @@ def confirm(key):
     else:
         login_user_no_auth(email)
         if request.user.is_anonymous:
-            redir_url = get_redirect_path(request.app.get_url('register_form'))
+            redir_url = request.app.get_url('register_form')
             return {'message': _("E-mail address successfully confirmed. "
                                  "Please complete your registration now."),
                     'page_title': _("Confirmation"),
