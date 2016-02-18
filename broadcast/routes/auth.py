@@ -127,6 +127,7 @@ def confirm(key):
                     'page_title': _("Confirmation"),
                     'status': 'success',
                     'redirect_url': redir_url,
+                    'redirect_delay': 1,
                     'redirect_target': _('the registration page')}
 
         return {'message': _("E-mail address successfully confirmed. You have "
