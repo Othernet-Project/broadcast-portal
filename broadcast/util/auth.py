@@ -104,6 +104,10 @@ class User(object):
     def is_anonymous(self):
         return self.email and self.username is None
 
+    @property
+    def is_confirmed(self):
+        return self.confirmed is not None
+
     def logout(self):
         if self.is_authenticated:
             request.session.delete().reset()
