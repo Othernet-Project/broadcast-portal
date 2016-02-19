@@ -158,27 +158,27 @@ class BaseItem(object):
 
     def __init__(self, db=None, **kwargs):
         self.db = db or request.db.main
-        self.data = kwargs
+        self._data = kwargs
 
     def __getattr__(self, name):
         try:
-            return self.data[name]
+            return self._data[name]
         except KeyError:
             cls_name = self.__class__.__name__
             msg = "'{0}' object has no attribute '{1}'".format(cls_name, name)
             raise AttributeError(msg)
 
     def __getitem__(self, name):
-        return self.data[name]
+        return self._data[name]
 
     def keys(self):
-        return self.data.keys()
+        return self._data.keys()
 
     def values(self):
-        return self.data.values()
+        return self._data.values()
 
     def items(self):
-        return self.data.items()
+        return self._data.items()
 
     def validate(self, data):
         valid_statuses = (self.PROCESSING, self.ACCEPTED, self.REJECTED)
@@ -189,12 +189,12 @@ class BaseItem(object):
 
     def update(self, **kwargs):
         self.validate(kwargs)
-        self.data.update(kwargs)
+        self._data.update(kwargs)
         self.save()
 
     def save(self):
-        query = self.db.Replace(self.type, cols=self.data.keys())
-        self.db.execute(query, self.data)
+        query = self.db.Replace(self.type, cols=self._data.keys())
+        self.db.execute(query, self._data)
 
     def save_charge_id(self, obj):
         query = self.db.Update(self.type,
@@ -282,8 +282,8 @@ class BaseUploadItem(BaseItem):
     @property
     def internal_url(self):
         url_template = request.app.config[self.ckey('url_template')]
-        base_url = url_template.format(self.data['name'])
-        return urlparse.urljoin(base_url, self.data['url'])
+        base_url = url_template.format(self._data['name'])
+        return urlparse.urljoin(base_url, self._data['url'])
 
     @property
     def unit_price(self):
