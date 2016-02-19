@@ -13,7 +13,7 @@ import re
 from bottle_utils import form
 from bottle_utils.i18n import lazy_gettext as _
 
-from ..util import auth
+from ..util.auth import User, PasswordReset
 
 
 class LoginForm(form.Form):
@@ -35,8 +35,8 @@ class LoginForm(form.Form):
         username = self.processed_data['username']
         password = self.processed_data['password']
         try:
-            auth.User.login(username, password)
-        except (auth.User.DoesNotExist, auth.User.InvalidCredentials):
+            User.login(username, password)
+        except (User.DoesNotExist, User.InvalidCredentials):
             raise form.ValidationError('invalid', {})
 
 
@@ -113,8 +113,8 @@ class RegistrationForm(form.Form):
             raise form.ValidationError('email_invalid', {})
 
         try:
-            user = auth.User.get(value)
-        except auth.User.DoesNotExist:
+            user = User.get(value)
+        except User.DoesNotExist:
             pass  # good, email is free
         else:
             if not user.is_anonymous:
@@ -124,8 +124,8 @@ class RegistrationForm(form.Form):
 
     def postprocess_username(self, value):
         try:
-            auth.User.get(value)
-        except auth.User.DoesNotExist:
+            User.get(value)
+        except User.DoesNotExist:
             return value  # good, username is free
         else:
             raise form.ValidationError('username_taken', {})
@@ -137,7 +137,7 @@ class RegistrationForm(form.Form):
             raise form.ValidationError('pwmatch', {})
 
 
-class ConfirmationForm(form.Form):
+class EmailVerificationForm(form.Form):
     # Translators, used as label in create user form
     email = form.StringField(
         _("Email"),
@@ -156,8 +156,8 @@ class ConfirmationForm(form.Form):
             raise form.ValidationError('invalid_email', {})
 
         try:
-            auth.User.get(value)
-        except auth.User.DoesNotExist:
+            User.get(value)
+        except User.DoesNotExist:
             raise form.ValidationError('not_registered', {})
         else:
             return value
@@ -217,10 +217,10 @@ class PasswordResetForm(form.Form):
     def validate(self):
         key = self.processed_data['key']
         try:
-            auth.Confirmation.get(key)
-        except auth.Confirmation.KeyExpired:
+            PasswordReset.get(key)
+        except PasswordReset.KeyExpired:
             raise form.ValidationError('key_expired', {})
-        except auth.Confirmation.KeyNotFound:
+        except PasswordReset.KeyNotFound:
             raise form.ValidationError('key_invalid', {})
 
         new_password1 = self.processed_data['new_password1']

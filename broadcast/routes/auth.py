@@ -16,14 +16,14 @@ from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.auth import (LoginForm,
                           RegistrationForm,
-                          ConfirmationForm,
+                          EmailVerificationForm,
                           PasswordResetRequestForm,
                           PasswordResetForm)
 from ..util.auth import (User,
-                         Confirmation,
+                         EmailVerification,
+                         PasswordReset,
                          get_redirect_path,
-                         send_confirmation_email,
-                         reset_password)
+                         send_confirmation_email)
 from ..util.sendmail import send_mail
 from ..util.http import http_redirect
 from ..util.template import view, template
@@ -62,13 +62,13 @@ def login():
 @view('confirmation')
 @csrf_token
 def send_confirmation_form():
-    return dict(form=ConfirmationForm())
+    return dict(form=EmailVerificationForm())
 
 
 @csrf_protect
 def send_confirmation(email=None, next_path=None):
     if email is None:
-        form = ConfirmationForm(request.params)
+        form = EmailVerificationForm(request.params)
         if not form.is_valid():
             return template('confirmation', form=form)
 
@@ -102,21 +102,21 @@ def confirm(key):
     next_path = request.params.get('next', '/')
     redir_onfail = get_redirect_path(request.app.get_url('login'), next_path)
     try:
-        confirmation = Confirmation.get(key)
-    except Confirmation.KeyExpired:
+        verification = EmailVerification.get(key)
+    except EmailVerification.KeyExpired:
         return {'message': _("The confirmation key has already expired."),
                 'page_title': _("Confirmation"),
                 'status': 'error',
                 'redirect_url': redir_onfail,
                 'redirect_target': _('log-in')}
-    except Confirmation.KeyNotFound:
+    except EmailVerification.KeyNotFound:
         return {'message': _("The confirmation key is not valid."),
                 'page_title': _("Confirmation"),
                 'status': 'error',
                 'redirect_url': redir_onfail,
                 'redirect_target': _('log-in')}
     else:
-        user = confirmation.accept()
+        user = verification.accept()
         if user.is_anonymous:
             redir_url = request.app.get_url('register_form')
             return {'message': _("E-mail address successfully confirmed. "
@@ -158,13 +158,13 @@ def password_reset_request():
         pass  # do not reveal to users whether an email exists or not
     else:
         expires = request.app.config['authentication.password_reset_expires']
-        confirmation = Confirmation.create(email, expires)
+        pw_reset = PasswordReset.create(email, expires)
         task_runner = request.app.config['task.runner']
         task_runner.schedule(send_mail,
                              email,
                              _("Reset Password"),
                              text='email/password_reset',
-                             data={'reset_key': confirmation.key,
+                             data={'reset_key': pw_reset.key,
                                    'next_path': next_path},
                              config=request.app.config)
 
@@ -193,16 +193,31 @@ def password_reset(key):
     if not form.is_valid():
         return template('password_reset', form=form, next_path=next_path)
 
+    redirect_url = get_redirect_path(request.app.get_url('login'), next_path)
     key = form.processed_data['key']
     new_password = form.processed_data['new_password1']
-    reset_password(key, new_password)
-    redirect_url = get_redirect_path(request.app.get_url('login'), next_path)
-    return template('feedback',
-                    page_title=_('Password reset successful'),
-                    status='success',
-                    redirect_url=redirect_url,
-                    message=_('You have successfully reset your password.'),
-                    redirect_target=_('log-in'))
+    try:
+        pw_reset = PasswordReset.get(key)
+    except PasswordReset.KeyExpired:
+        context = {'message': _("The password reset key has already expired."),
+                   'page_title': _("Password Reset"),
+                   'status': 'error',
+                   'redirect_url': redirect_url,
+                   'redirect_target': _('log-in')}
+    except PasswordReset.KeyNotFound:
+        context = {'message': _("The confirmation key is not valid."),
+                   'page_title': _("Confirmation"),
+                   'status': 'error',
+                   'redirect_url': redirect_url,
+                   'redirect_target': _('log-in')}
+    else:
+        pw_reset.accept(new_password)
+        context = {'message': _('You have successfully reset your password.'),
+                   'page_title': _('Password reset successful'),
+                   'status': 'success',
+                   'redirect_url': redirect_url,
+                   'redirect_target': _('log-in')}
+    return template('feedback', **context)
 
 
 @view('register')
@@ -235,7 +250,6 @@ def register():
                             message=_('You have successfully completed the '
                                       'registration process.'),
                             redirect_target=_('log-in'))
-
         user = User.create(username=username,
                            password=password,
                            email=email,

@@ -137,6 +137,14 @@ class User(DBDataWrapper):
         self._data.update(kwargs)
         return self
 
+    def set_password(self, new_password):
+        self.update(password=self.encrypt_password(new_password))
+        return self
+
+    def confirm(self):
+        self.update(confirmed=datetime.datetime.now())
+        return self
+
     @classmethod
     def get(cls, username_or_email, db=None):
         db = db or request.db.sessions
@@ -195,6 +203,101 @@ class User(DBDataWrapper):
         return encrypted_password == pbkdf2.crypt(password, encrypted_password)
 
 
+class BaseToken(DBDataWrapper):
+
+    class Error(Exception):
+        pass
+
+    class KeyNotFound(Error):
+        pass
+
+    class KeyExpired(Error):
+        pass
+
+    _table = 'confirmations'
+    _columns = (
+        'key',
+        'email',
+        'expires',
+    )
+
+    @property
+    def has_expired(self):
+        return self.expires < datetime.datetime.now()
+
+    def delete(self):
+        query = self._db.Delete(self._table, where='key = :key')
+        self._db.query(query, key=self.key)
+
+    def accept(self):
+        raise NotImplementedError()
+
+    @staticmethod
+    def generate_key():
+        return uuid.uuid4().hex
+
+    @classmethod
+    def create(cls, email, expiration, db=None):
+        db = db or request.db.sessions
+        key = cls.generate_key()
+        expires = (datetime.datetime.utcnow() +
+                   datetime.timedelta(days=expiration))
+        data = {'key': key,
+                'email': email,
+                'expires': expires}
+        query = db.Insert(cls._table, cols=cls._columns)
+        db.execute(query, data)
+        return cls(data, db=db)
+
+    @classmethod
+    def get(cls, key, db=None):
+        db = db or request.db.sessions
+        query = db.Select(sets=cls._table, where='key = :key')
+        db.execute(query, dict(key=key))
+        data = db.result
+        if not data:
+            raise cls.KeyNotFound()
+
+        confirmation = cls(data, db=db)
+        if confirmation.has_expired:
+            confirmation.delete()
+            raise cls.KeyExpired()
+
+        return confirmation
+
+
+class EmailVerification(BaseToken):
+
+    def accept(self):
+        user = User.get(self.email)
+        user.confirm().make_logged_in()
+        self.delete()
+        return user
+
+
+class PasswordReset(BaseToken):
+
+    def accept(self, new_password):
+        user = User.get(self.email)
+        user.set_password(new_password)
+        self.delete()
+        return user
+
+
+def send_confirmation_email(email, next_path, config=None, db=None):
+    config = config or request.app.config
+    expiration = config['authentication.confirmation_expires']
+    verification = EmailVerification.create(email, expiration, db=db)
+    task_runner = config['task.runner']
+    task_runner.schedule(send_mail,
+                         email,
+                         _("Confirm registration"),
+                         text='email/confirm',
+                         data={'confirmation_key': verification.key,
+                               'next_path': next_path},
+                         config=config)
+
+
 def get_redirect_path(base_path, next_path, next_param_name='next'):
     QUERY_PARAM_IDX = 4
 
@@ -237,103 +340,6 @@ def login_required(redirect_to='/login/', superuser_only=False, next_to=None):
             return redirect(redirect_path)
         return wrapper
     return decorator
-
-
-class Confirmation(DBDataWrapper):
-
-    class Error(Exception):
-        pass
-
-    class KeyNotFound(Error):
-        pass
-
-    class KeyExpired(Error):
-        pass
-
-    _table = 'confirmations'
-    _columns = (
-        'key',
-        'email',
-        'expires',
-    )
-
-    @property
-    def has_expired(self):
-        return self.expires < datetime.datetime.now()
-
-    def delete(self):
-        query = self._db.Delete(self._table, where='key = :key')
-        self._db.query(query, key=self.key)
-
-    def accept(self):
-        user = User.get(self.email)
-        user.update(confirmed=datetime.datetime.now())
-        user.make_logged_in()
-        self.delete()
-        return user
-
-    @staticmethod
-    def generate_key():
-        return uuid.uuid4().hex
-
-    @classmethod
-    def create(cls, email, expiration, db=None):
-        db = db or request.db.sessions
-        key = cls.generate_key()
-        expires = (datetime.datetime.utcnow() +
-                   datetime.timedelta(days=expiration))
-        data = {'key': key,
-                'email': email,
-                'expires': expires}
-        query = db.Insert(cls._table, cols=cls._columns)
-        db.execute(query, data)
-        return cls(data, db=db)
-
-    @classmethod
-    def get(cls, key, db=None):
-        db = db or request.db.sessions
-        query = db.Select(sets=cls._table, where='key = :key')
-        db.execute(query, dict(key=key))
-        data = db.result
-        if not data:
-            raise cls.KeyNotFound()
-
-        confirmation = cls(data, db=db)
-        if confirmation.has_expired:
-            confirmation.delete()
-            raise cls.KeyExpired()
-
-        return confirmation
-
-
-def send_confirmation_email(email, next_path, config=None, db=None):
-    config = config or request.app.config
-    expiration = config['authentication.confirmation_expires']
-    confirmation = Confirmation.create(email, expiration, db=db)
-    task_runner = config['task.runner']
-    task_runner.schedule(send_mail,
-                         email,
-                         _("Confirm registration"),
-                         text='email/confirm',
-                         data={'confirmation_key': confirmation.key,
-                               'next_path': next_path},
-                         config=config)
-
-
-def reset_password(key, new_password, db=None):
-    db = db or request.db.sessions
-    confirmation = Confirmation.get(key, db=db)
-    change_password(confirmation.email, new_password, db=db)
-    confirmation.delete()
-
-
-def change_password(email, new_password, db=None):
-    db = db or request.db.sessions
-    query = db.Update('users',
-                      password=':password',
-                      where='email = :email')
-    encrypted_password = User.encrypt_password(new_password)
-    db.query(query, password=encrypted_password, email=email)
 
 
 def user_plugin(conf):
