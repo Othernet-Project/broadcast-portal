@@ -18,7 +18,6 @@
             </div>
             ${forms.field(form.title)}
             ${forms.field(form.language)}
-            ${forms.field(form.is_authorized, required=True)}
             ${forms.field(form.license)}
             ${forms.field(form.url)}
             % if request.user.is_authenticated:
@@ -26,6 +25,7 @@
             % else:
             ${forms.field(form.email, required=True)}
             % endif
+            ${forms.field(form.is_authorized, required=True)}
             <p class="buttons">
                 <button type="submit" name="mode" value="free" class="primary"><span class="icon"></span> ${_('Share')}</button>
                 <span class="separator">${_("or")}</span>
