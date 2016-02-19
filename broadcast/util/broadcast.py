@@ -180,7 +180,7 @@ class BaseItem(object):
     def items(self):
         return self._data.items()
 
-    def validate(self, data):
+    def _validate(self, data):
         valid_statuses = (self.PROCESSING, self.ACCEPTED, self.REJECTED)
         if 'status' in data and data['status'] not in valid_statuses:
             msg = ("Value of `status` can only be one of the following: "
@@ -188,13 +188,20 @@ class BaseItem(object):
             raise ValueError(msg)
 
     def update(self, **kwargs):
-        self.validate(kwargs)
+        self._validate(kwargs)
         self._data.update(kwargs)
-        self.save()
+        return self.save()
 
     def save(self):
         query = self.db.Replace(self.type, cols=self._data.keys())
         self.db.execute(query, self._data)
+        return self
+
+    def accept(self):
+        return self.update(status=self.ACCEPTED)
+
+    def reject(self):
+        return self.update(status=self.REJECTED)
 
     def save_charge_id(self, obj):
         query = self.db.Update(self.type,
