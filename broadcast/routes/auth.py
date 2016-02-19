@@ -205,8 +205,8 @@ def password_reset(key):
                    'redirect_url': redirect_url,
                    'redirect_target': _('log-in')}
     except PasswordReset.KeyNotFound:
-        context = {'message': _("The confirmation key is not valid."),
-                   'page_title': _("Confirmation"),
+        context = {'message': _("The password reset key is not valid."),
+                   'page_title': _("Password Reset"),
                    'status': 'error',
                    'redirect_url': redirect_url,
                    'redirect_target': _('log-in')}
