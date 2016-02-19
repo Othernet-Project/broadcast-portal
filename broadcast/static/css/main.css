@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* line 5, ../../../../../../../home/hajime/.gem/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 5, ../../../../../../../../usr/lib/ruby/gems/2.3.0/gems/compass-1.0.3/vendor/bundle/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -21,67 +21,67 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../../../home/hajime/.gem/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../../../../usr/lib/ruby/gems/2.3.0/gems/compass-1.0.3/vendor/bundle/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../../../home/hajime/.gem/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../../../../usr/lib/ruby/gems/2.3.0/gems/compass-1.0.3/vendor/bundle/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../../../home/hajime/.gem/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../../../../usr/lib/ruby/gems/2.3.0/gems/compass-1.0.3/vendor/bundle/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../../../home/hajime/.gem/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../../../../usr/lib/ruby/gems/2.3.0/gems/compass-1.0.3/vendor/bundle/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../../../home/hajime/.gem/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../../../../usr/lib/ruby/gems/2.3.0/gems/compass-1.0.3/vendor/bundle/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../../../home/hajime/.gem/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../../../../usr/lib/ruby/gems/2.3.0/gems/compass-1.0.3/vendor/bundle/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../../../../../home/hajime/.gem/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../../../../usr/lib/ruby/gems/2.3.0/gems/compass-1.0.3/vendor/bundle/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../../../home/hajime/.gem/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../../../../usr/lib/ruby/gems/2.3.0/gems/compass-1.0.3/vendor/bundle/ruby/2.3.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
 
 @font-face {
   font-family: "Brandon Grotesque";
-  src: url('../fonts/brandongrotesque-light-webfont.eot?315442800');
-  src: url('../fonts/brandongrotesque-light-webfont.eot?&315442800#iefix') format('embedded-opentype'), url('../fonts/brandongrotesque-light-webfont.eot?315442800') format('embedded-opentype'), url('../fonts/brandongrotesque-light-webfont.woff2?315442800') format('woff2'), url('../fonts/brandongrotesque-light-webfont.woff?315442800') format('woff'), url('../fonts/brandongrotesque-light-webfont.ttf?315442800') format('truetype');
+  src: url('../fonts/brandongrotesque-light-webfont.eot');
+  src: url('../fonts/brandongrotesque-light-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/brandongrotesque-light-webfont.eot') format('embedded-opentype'), url('../fonts/brandongrotesque-light-webfont.woff2') format('woff2'), url('../fonts/brandongrotesque-light-webfont.woff') format('woff'), url('../fonts/brandongrotesque-light-webfont.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: "Brandon Text";
-  src: url('../fonts/brandontext-regular-webfont.eot?315442800');
-  src: url('../fonts/brandontext-regular-webfont.eot?&315442800#iefix') format('embedded-opentype'), url('../fonts/brandontext-regular-webfont.eot?315442800') format('embedded-opentype'), url('../fonts/brandontext-regular-webfont.woff2?315442800') format('woff2'), url('../fonts/brandontext-regular-webfont.woff?315442800') format('woff'), url('../fonts/brandontext-regular-webfont.ttf?315442800') format('truetype');
+  src: url('../fonts/brandontext-regular-webfont.eot');
+  src: url('../fonts/brandontext-regular-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/brandontext-regular-webfont.eot') format('embedded-opentype'), url('../fonts/brandontext-regular-webfont.woff2') format('woff2'), url('../fonts/brandontext-regular-webfont.woff') format('woff'), url('../fonts/brandontext-regular-webfont.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: "Brandon Text";
-  src: url('../fonts/brandontext-regular-webfont.eot?315442800');
-  src: url('../fonts/brandontext-regular-webfont.eot?&315442800#iefix') format('embedded-opentype'), url('../fonts/brandontext-italic-webfont.eot?315442800') format('embedded-opentype'), url('../fonts/brandontext-italic-webfont.woff2?315442800') format('woff2'), url('../fonts/brandontext-italic-webfont.woff?315442800') format('woff'), url('../fonts/brandontext-italic-webfont.ttf?315442800') format('truetype');
+  src: url('../fonts/brandontext-regular-webfont.eot');
+  src: url('../fonts/brandontext-regular-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/brandontext-italic-webfont.eot') format('embedded-opentype'), url('../fonts/brandontext-italic-webfont.woff2') format('woff2'), url('../fonts/brandontext-italic-webfont.woff') format('woff'), url('../fonts/brandontext-italic-webfont.ttf') format('truetype');
   font-weight: normal;
   font-style: italic;
 }
@@ -223,7 +223,7 @@ header {
   right: 0;
   height: 60px;
   z-index: 1;
-  background-image: url('../img/header_bg.jpg?1455275928');
+  background-image: url('../img/header_bg.jpg?1455638601');
   background-position: center top;
   -moz-transition: all 0.5s;
   -o-transition: all 0.5s;
@@ -409,7 +409,7 @@ footer {
 /* line 7, ../../../src/scss/partials/_body.scss */
 .hero {
   min-height: 480px;
-  background-image: url('../img/content_bg.jpg?1455275928');
+  background-image: url('../img/content_bg.jpg?1455638601');
   background-position: center top;
 }
 @media only screen and (max-width: 700px) {
@@ -1076,4 +1076,9 @@ input[type=checkbox] + label {
     -webkit-background-size: 266px 733px;
     background-size: 266px 733px;
   }
+}
+
+/* line 2, ../../../src/scss/partials/_queue.scss */
+.queue.hidden {
+  display: none;
 }
