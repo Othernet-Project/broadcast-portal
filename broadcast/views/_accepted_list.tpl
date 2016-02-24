@@ -21,7 +21,7 @@
             </td>
             <td class="trunc">${item.url}</td>
             <td class="trunc">${item.license}</td>
-            <td class="trunc">${item.file_size}</td>
+            <td class="trunc">${h.hsize(item.file_size)}</td>
             % if request.user.is_superuser:
             <td>
                 ${h.form('post', action=url('save_queue_item', item_id=item.id))}
