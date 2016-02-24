@@ -22,6 +22,8 @@ class Bin(object):
         'id',
         'created',
         'closes',
+        'capacity',
+        'size',
         'status',
     )
     _pk_field = 'id'
@@ -46,7 +48,7 @@ class Bin(object):
 
         placeholders = dict((name, ':{}'.format(name))
                             for name in kwargs.keys())
-        where = '{pk_field} = :{pk_field}'.format(self._pk_field)
+        where = '{pk_field} = :{pk_field}'.format(pk_field=self._pk_field)
         query = self._db.Update(self._table,
                                 where=where,
                                 **placeholders)
@@ -85,8 +87,9 @@ class Bin(object):
         return self
 
     @classmethod
-    def find_open(cls, db=None, config=None):
+    def current(cls, db=None, config=None):
         db = db or request.db.main
+        config = config or request.app.config
         query = db.Select(sets=cls._table,
                           where='status = :status',
                           order='-created',
