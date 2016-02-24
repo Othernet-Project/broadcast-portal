@@ -40,7 +40,7 @@ def create_superuser(config):
         sys.exit(1)
 
     try:
-        auth.create_user(username=username,
+        auth.User.create(username=username,
                          password=password,
                          email=email,
                          is_superuser=True,
@@ -48,10 +48,10 @@ def create_superuser(config):
                          db=databases.sessions,
                          overwrite=True)
         print("User created.")
-    except auth.UserAlreadyExists:
+    except auth.User.AlreadyExists:
         print("User already exists, please try a different username.")
         create_superuser(config)
-    except auth.InvalidUserCredentials:
+    except auth.User.InvalidCredentials:
         print("Invalid user credentials, please try again.")
         create_superuser(config)
 
