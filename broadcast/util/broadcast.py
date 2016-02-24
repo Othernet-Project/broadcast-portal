@@ -287,6 +287,10 @@ class BaseUploadItem(BaseItem):
         return filename
 
     @property
+    def size(self):
+        return self.file_size
+
+    @property
     def internal_url(self):
         url_template = request.app.config[self.ckey('url_template')]
         base_url = url_template.format(self._data['name'])
