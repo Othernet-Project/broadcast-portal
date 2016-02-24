@@ -70,12 +70,12 @@ class Bin(object):
         except sqlite3.IntegrityError:
             raise self.NotEnoughSpace()
         else:
-            item.update(bin=self.id)
+            item.update(bin=self.id, status=item.ACCEPTED)
             return self
 
     def remove(self, item):
         self.update(size=self.size - item.size)
-        item.update(bin=None)
+        item.update(bin=None, status=item.REJECTED)
         return self
 
     def close(self):
