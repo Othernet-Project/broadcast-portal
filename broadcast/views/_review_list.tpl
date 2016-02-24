@@ -1,4 +1,4 @@
-% if processing:
+% if pending:
 <table>
     <thead>
         <tr>
@@ -7,6 +7,7 @@
             <th>${_("Source")}</th>
             <th>${_("License")}</th>
             <th>${_("Size")}</th>
+            <th>${_("Flagged?")}</th>
             % if request.user.is_superuser:
             <th>${_("Accept")}</th>
             % endif
@@ -22,6 +23,7 @@
             <td class="trunc">${item.url}</td>
             <td class="trunc">${item.license}</td>
             <td class="trunc">${item.file_size}</td>
+            <td class="trunc">${'!' if item.is_rejected else ''}</td>
             % if request.user.is_superuser:
             <td>
                 ${h.form('post', action=url('save_queue_item', item_id=item.id))}

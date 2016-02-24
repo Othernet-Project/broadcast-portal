@@ -203,6 +203,14 @@ class BaseItem(object):
     def reject(self):
         return self.update(status=self.REJECTED)
 
+    @property
+    def is_accepted(self):
+        return self.status == self.ACCEPTED
+
+    @property
+    def is_rejected(self):
+        return self.status == self.REJECTED
+
     def save_charge_id(self, obj):
         query = self.db.Update(self.type,
                                charge_id=':charge_id',

@@ -25,8 +25,8 @@ def queue_accepted():
 def queue_review():
     processing = filter_items(ContentItem.type, status=ContentItem.PROCESSING)
     rejected = filter_items(ContentItem.type, status=ContentItem.REJECTED)
-    pending = sorted(processing + rejected, key=lambda x: x.created)
-    return dict(pending=pending)
+    pending = processing + rejected
+    return dict(pending=sorted(pending, key=lambda x: x.created))
 
 
 @view('queue_item')
