@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody>
-    % for item in processing:
+    % for item in pending:
         <tr>
             <td class="datestamp">${item.created.strftime('%b %d, %H:%M UTC')}</td>
             <td class="trunc">

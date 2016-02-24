@@ -1,9 +1,11 @@
-from bottle import request, redirect
+from bottle import request, redirect, abort
 from bottle_utils.ajax import roca_view
 from bottle_utils.csrf import csrf_token, csrf_protect
+from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.queue import QueueItemForm
 from ..util.auth import login_required
+from ..util.bins import Bin
 from ..util.broadcast import ContentItem, filter_items, get_item
 from ..util.template import template, view
 
@@ -11,15 +13,20 @@ from ..util.template import template, view
 @csrf_token
 @roca_view('queue_list', '_accepted_list', template_func=template)
 def queue_accepted():
-    accepted = filter_items(ContentItem.type, status=ContentItem.ACCEPTED)
+    current_bin = Bin.current()
+    accepted = filter_items(ContentItem.type,
+                            status=ContentItem.ACCEPTED,
+                            bin=current_bin.id)
     return dict(accepted=accepted)
 
 
 @csrf_token
-@roca_view('queue_list', '_processing_list', template_func=template)
-def queue_processing():
+@roca_view('queue_list', '_review_list', template_func=template)
+def queue_review():
     processing = filter_items(ContentItem.type, status=ContentItem.PROCESSING)
-    return dict(processing=processing)
+    rejected = filter_items(ContentItem.type, status=ContentItem.REJECTED)
+    pending = sorted(processing + rejected, key=lambda x: x.created)
+    return dict(pending=pending)
 
 
 @view('queue_item')
@@ -28,20 +35,35 @@ def queue_item(item_id):
 
 
 @csrf_protect
-@view('queue_item')
 @login_required(superuser_only=True)
 def save_queue_item(item_id):
     form = QueueItemForm(request.forms)
     if form.is_valid():
+        item = get_item(ContentItem.type, id=item_id, bin=None)
+        if not item:
+            abort(404, _("The specified item is no longer modifiable."))
+
+        current_bin = Bin.current()
         status = form.processed_data['status']
-        item = get_item(ContentItem.type, id=item_id)
-        item.update(status=status)
         if status == ContentItem.ACCEPTED:
-            url = request.app.get_url('queue_accepted')
+            try:
+                current_bin.add(item)
+            except Bin.NotEnoughSpace:
+                message = _("The chosen item exceeds the bin's "
+                            "capacity and thus cannot be added to it.")
+                redirect_url = request.app.get_url('queue_review')
+                return template('feedback',
+                                status='error',
+                                page_title=_('Item unacceptable'),
+                                message=message,
+                                redirect_url=redirect_url,
+                                redirect_target=_('review page'))
+            else:
+                redirect(request.app.get_url('queue_review'))
         else:
-            url = request.app.get_url('queue_processing')
-        redirect(url)
-    return dict(form=form)
+            current_bin.remove(item)
+            redirect(request.app.get_url('queue_accepted'))
+    return template('queue_item', form=form)
 
 
 def route(conf):
@@ -53,10 +75,10 @@ def route(conf):
             'queue_accepted',
             {}
         ), (
-            '/queue/processing/',
+            '/queue/review/',
             'GET',
-            queue_processing,
-            'queue_processing',
+            queue_review,
+            'queue_review',
             {}
         ), (
             '/queue/<item_id:re:[0-9a-f]{32}>/',

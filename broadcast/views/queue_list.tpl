@@ -1,11 +1,11 @@
 <%inherit file='base.tpl'/>
 <%namespace name="accepted_list" file="_accepted_list.tpl"/>
-<%namespace name="processing_list" file="_processing_list.tpl"/>
+<%namespace name="review_list" file="_review_list.tpl"/>
 
 <%block name="main">
     <div class="handles">
         <a class="handle" href="${url('queue_accepted')}" data-target="accepted">${_("Accepted")}</a>
-        <a class="handle" href="${url('queue_processing')}" data-target="processing">${_("Review")}</a>
+        <a class="handle" href="${url('queue_review')}" data-target="review">${_("Review")}</a>
     </div>
 
     % if accepted is not UNDEFINED:
@@ -16,11 +16,11 @@
     % endif
     </div>
 
-    % if processing is not UNDEFINED:
-    <div class="queue processing">
-        ${processing_list.body()}
+    % if pending is not UNDEFINED:
+    <div class="queue review">
+        ${review_list.body()}
     % else:
-    <div class="queue processing hidden">
+    <div class="queue review hidden">
     % endif
     </div>
 </%block>
