@@ -19,11 +19,10 @@ from ..forms.auth import (LoginForm,
                           EmailVerificationForm,
                           PasswordResetRequestForm,
                           PasswordResetForm)
-from ..util.auth import (User,
-                         EmailVerification,
-                         PasswordReset,
-                         get_redirect_path,
-                         send_confirmation_email)
+from ..util.auth.helpers import send_confirmation_email
+from ..util.auth.tokens import EmailVerification, PasswordReset
+from ..util.auth.users import User
+from ..util.auth.utils import get_redirect_path
 from ..util.sendmail import send_mail
 from ..util.http import http_redirect
 from ..util.template import view, template

@@ -4,7 +4,7 @@ from bottle_utils.csrf import csrf_token, csrf_protect
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.queue import QueueItemForm
-from ..util.auth import login_required
+from ..util.auth.decorators import login_required
 from ..util.bins import Bin
 from ..util.broadcast import ContentItem, filter_items, get_item
 from ..util.template import template, view

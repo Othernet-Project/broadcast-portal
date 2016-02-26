@@ -10,7 +10,7 @@ file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 
 from bottle import redirect, request, static_file, abort
 
-from ..util.auth import login_required
+from ..util.auth.decorators import login_required
 from ..util.broadcast import get_item, filter_items
 from ..util.template import view
 

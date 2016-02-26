@@ -18,7 +18,7 @@ from bottle import (request,
                     HTTPError,
                     HTTP_CODES)
 
-from ..util.auth import User
+from ..util.auth.users import User
 from ..util.broadcast import get_item, filter_items
 
 

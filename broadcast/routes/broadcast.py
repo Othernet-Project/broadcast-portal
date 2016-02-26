@@ -16,7 +16,8 @@ from bottle_utils.html import hsize
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.broadcast import ContentForm, TwitterForm
-from ..util.auth import User, send_confirmation_email
+from ..util.auth.users import User
+from ..util.auth.helpers import send_confirmation_email
 from ..util.broadcast import (ContentItem,
                               TwitterItem,
                               filter_items,

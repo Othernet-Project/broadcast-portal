@@ -13,7 +13,8 @@ import re
 from bottle_utils import form
 from bottle_utils.i18n import lazy_gettext as _
 
-from ..util.auth import User, PasswordReset
+from ..util.auth.users import User
+from ..util.auth.tokens import PasswordReset
 
 
 class LoginForm(form.Form):
