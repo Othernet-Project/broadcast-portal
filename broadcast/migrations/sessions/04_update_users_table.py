@@ -7,11 +7,11 @@ create table users
     created timestamp not null,                     -- user creation timestamp
     email varchar primary_key unique not null,      -- email address
     confirmed timestamp,                            -- email confirmed timestamp
-    options varchar default '{}',                   -- arbitary user data
+    data varchar default '{}',                      -- arbitary user data
     groups text                                     -- comma separated list of groups
 );
 replace into users
-(username, password, created, email, confirmed, options)
+(username, password, created, email, confirmed, data)
 select
 username, password, created, email, confirmed, options
 from tmp;

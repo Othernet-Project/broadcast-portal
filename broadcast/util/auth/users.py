@@ -41,7 +41,7 @@ class User(DBDataWrapper):
         'password',
         'created',
         'confirmed',
-        'options',
+        'data',
         'groups',
     )
 
