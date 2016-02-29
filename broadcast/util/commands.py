@@ -12,7 +12,7 @@ import datetime
 import getpass
 import sys
 
-from . import auth
+from .auth.users import User
 from .squery import DatabaseContainer
 from .static import rebuild_assets
 
@@ -40,18 +40,18 @@ def create_superuser(config):
         sys.exit(1)
 
     try:
-        auth.User.create(username=username,
-                         password=password,
-                         email=email,
-                         is_superuser=True,
-                         confirmed=datetime.datetime.utcnow(),
-                         db=databases.sessions,
-                         overwrite=True)
+        User.create(username=username,
+                    password=password,
+                    email=email,
+                    is_superuser=True,
+                    confirmed=datetime.datetime.utcnow(),
+                    db=databases.sessions,
+                    overwrite=True)
         print("User created.")
-    except auth.User.AlreadyExists:
+    except User.AlreadyExists:
         print("User already exists, please try a different username.")
         create_superuser(config)
-    except auth.User.InvalidCredentials:
+    except User.InvalidCredentials:
         print("Invalid user credentials, please try again.")
         create_superuser(config)
 
