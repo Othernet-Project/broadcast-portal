@@ -42,6 +42,13 @@ class Bin(object):
             return self._data.get(name, None)
         raise AttributeError(name)
 
+    @property
+    def usage(self):
+        try:
+            return self.size * 100 / self.capacity
+        except ZeroDivisionError:
+            return 0
+
     def update(self, **kwargs):
         if any([key not in self._columns for key in kwargs]):
             raise ValueError("Unknown columns detected.")
