@@ -1,4 +1,4 @@
-% if pending:
+% if items:
 <table>
     <thead>
         <tr>
@@ -7,14 +7,16 @@
             <th>${_("Source")}</th>
             <th>${_("License")}</th>
             <th>${_("Size")}</th>
+            % if queue_type == REVIEW_QUEUE:
             <th>${_("Flagged?")}</th>
+            % endif
             % if request.user.is_in_group('superuser'):
-            <th>${_("Accept")}</th>
+            <th>${_("Action")}</th>
             % endif
         </tr>
     </thead>
     <tbody>
-    % for item in pending:
+    % for item in items:
         <tr>
             <td class="datestamp">${item.created.strftime('%b %d, %H:%M UTC')}</td>
             <td class="trunc">
@@ -23,12 +25,14 @@
             <td class="trunc">${item.url}</td>
             <td class="trunc">${item.license}</td>
             <td class="trunc">${h.hsize(item.file_size)}</td>
+            % if queue_type == REVIEW_QUEUE:
             <td class="trunc">${'!' if item.is_rejected else ''}</td>
+            % endif
             % if request.user.is_in_group('superuser'):
             <td>
                 ${h.form('post', action=url('save_queue_item', item_id=item.id))}
                     ${csrf_tag()}
-                    <button type="submit" name="status" value="${item.ACCEPTED}"></button>
+                    <button type="submit" name="queue_type" value="${hidden_queue_type}"></button>
                 </form>
             </td>
             % endif
@@ -37,5 +41,5 @@
     </tbody>
 </table>
 % else:
-<p>${_("No items waiting for review.")}</p>
+<p>${_("No items on the list.")}</p>
 % endif

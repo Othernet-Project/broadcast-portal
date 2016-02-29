@@ -1,21 +1,20 @@
 from bottle_utils import form
 from bottle_utils.i18n import lazy_gettext as _
 
-from ..util.broadcast import ContentItem
 
-
-STATUSES = (
-    (ContentItem.ACCEPTED, _("Accepted")),
-    (ContentItem.PROCESSING, _("Processing")),
-    (ContentItem.REJECTED, _("Rejected")),
+ACCEPTED_QUEUE = 'accepted'
+REVIEW_QUEUE = 'review'
+QUEUE_TYPES = (
+    (ACCEPTED_QUEUE, _("Accepted")),
+    (REVIEW_QUEUE, _("Review")),
 )
 
 
 class QueueItemForm(form.Form):
-    status = form.SelectField(
-        # Translators, used as label for item status field
-        _("Status"),
-        choices=STATUSES,
+    queue_type = form.SelectField(
+        # Translators, used as label for item queue type field
+        _("Queue type"),
+        choices=QUEUE_TYPES,
         validators=[form.Required()]
     )
 

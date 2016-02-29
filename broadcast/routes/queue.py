@@ -3,7 +3,7 @@ from bottle_utils.ajax import roca_view
 from bottle_utils.csrf import csrf_token, csrf_protect
 from bottle_utils.i18n import dummy_gettext as _
 
-from ..forms.queue import QueueItemForm
+from ..forms.queue import QueueItemForm, ACCEPTED_QUEUE, REVIEW_QUEUE
 from ..util.auth.decorators import login_required
 from ..util.bins import Bin
 from ..util.broadcast import ContentItem, filter_items, get_item
@@ -11,27 +11,32 @@ from ..util.template import template, view
 
 
 @csrf_token
-@roca_view('queue_list', '_accepted_list', template_func=template)
-def queue_accepted():
+@roca_view('queue_list', '_queue_list', template_func=template)
+def queue_list():
+    query = request.params.get('query', '')
+    queue_type = request.params.get('type', ACCEPTED_QUEUE)
     current_bin = Bin.current()
-    accepted = filter_items(ContentItem.type,
-                            status=ContentItem.ACCEPTED,
-                            bin=current_bin.id)
-    return dict(bin=current_bin, accepted=accepted)
+    if queue_type == ACCEPTED_QUEUE:
+        items = filter_items(ContentItem.type,
+                             status=ContentItem.ACCEPTED,
+                             bin=current_bin.id)
+    else:
+        processing = filter_items(ContentItem.type,
+                                  status=ContentItem.PROCESSING,
+                                  bin=None)
+        rejected = filter_items(ContentItem.type,
+                                status=ContentItem.REJECTED,
+                                bin=None)
+        items = sorted(processing + rejected, key=lambda x: x.created)
 
-
-@csrf_token
-@roca_view('queue_list', '_review_list', template_func=template)
-def queue_review():
-    processing = filter_items(ContentItem.type,
-                              status=ContentItem.PROCESSING,
-                              bin=None)
-    rejected = filter_items(ContentItem.type,
-                            status=ContentItem.REJECTED,
-                            bin=None)
-    pending = processing + rejected
-    return dict(bin=Bin.current(),
-                pending=sorted(pending, key=lambda x: x.created))
+    hidden_queue_type = (ACCEPTED_QUEUE,
+                         REVIEW_QUEUE)[queue_type == ACCEPTED_QUEUE]
+    return dict(bin=current_bin,
+                items=items,
+                queue_type=queue_type,
+                hidden_queue_type=hidden_queue_type,
+                ACCEPTED_QUEUE=ACCEPTED_QUEUE,
+                REVIEW_QUEUE=REVIEW_QUEUE)
 
 
 @view('queue_item')
@@ -44,19 +49,21 @@ def queue_item(item_id):
 def save_queue_item(item_id):
     form = QueueItemForm(request.forms)
     if form.is_valid():
-        item = get_item(ContentItem.type, id=item_id, bin=None)
+        current_bin = Bin.current()
+        queue_type = form.processed_data['queue_type']
+        target_bin = None if queue_type == ACCEPTED_QUEUE else current_bin.id
+        item = get_item(ContentItem.type, id=item_id, bin=target_bin)
         if not item:
             abort(404, _("The specified item is no longer modifiable."))
 
-        current_bin = Bin.current()
-        status = form.processed_data['status']
-        if status == ContentItem.ACCEPTED:
+        if queue_type == ACCEPTED_QUEUE:
             try:
                 current_bin.add(item)
             except Bin.NotEnoughSpace:
                 message = _("The chosen item exceeds the bin's "
                             "capacity and thus cannot be added to it.")
-                redirect_url = request.app.get_url('queue_review')
+                redirect_url = request.app.get_url('queue_list',
+                                                   type=REVIEW_QUEUE)
                 return template('feedback',
                                 status='error',
                                 page_title=_('Item unacceptable'),
@@ -64,25 +71,19 @@ def save_queue_item(item_id):
                                 redirect_url=redirect_url,
                                 redirect_target=_('review page'))
             else:
-                redirect(request.app.get_url('queue_review'))
+                redirect(request.app.get_url('queue_list', type=REVIEW_QUEUE))
         current_bin.remove(item)
-        redirect(request.app.get_url('queue_accepted'))
+        redirect(request.app.get_url('queue_list', type=ACCEPTED_QUEUE))
     return template('queue_item', form=form)
 
 
 def route(conf):
     return (
         (
-            '/queue/accepted/',
+            '/queue/',
             'GET',
-            queue_accepted,
-            'queue_accepted',
-            {}
-        ), (
-            '/queue/review/',
-            'GET',
-            queue_review,
-            'queue_review',
+            queue_list,
+            'queue_list',
             {}
         ), (
             '/queue/<item_id:re:[0-9a-f]{32}>/',
