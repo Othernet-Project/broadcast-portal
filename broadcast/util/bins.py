@@ -28,8 +28,7 @@ class Bin(object):
     )
     _pk_field = 'id'
 
-    def __init__(self, data, capacity, db=None):
-        self._capacity = capacity
+    def __init__(self, data, db=None):
         self._db = db or request.db.main
         # in case a dict-like object is passed in
         if not isinstance(data, dict):
@@ -118,7 +117,7 @@ class Bin(object):
                      new_status=cls.CLOSED,
                      exclude_id=new_bin.id)
             return new_bin
-        return cls(raw_data, capacity=config['bin.capacity'], db=db)
+        return cls(raw_data, db=db)
 
     @classmethod
     def create(cls, db=None, config=None):
@@ -134,7 +133,7 @@ class Bin(object):
                 'status': cls.OPEN}
         query = db.Insert(cls._table, cols=cls._columns)
         db.execute(query, data)
-        return cls(data, capacity=config['bin.capacity'], db=db)
+        return cls(data, db=db)
 
     @staticmethod
     def get_unique_id():
