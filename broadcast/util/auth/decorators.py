@@ -41,7 +41,7 @@ def permission_required(user_getter=lambda: request.user,
     return decorator
 
 
-def login_required(redirect_to='/login/', superuser_only=False, next_to=None):
+def login_required(redirect_to='/login/', groups=None, next_to=None):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -57,8 +57,7 @@ def login_required(redirect_to='/login/', superuser_only=False, next_to=None):
                 next_path = next_to
 
             if request.user.is_authenticated:
-                is_superuser = request.user.is_superuser
-                if not superuser_only or (superuser_only and is_superuser):
+                if not groups or request.user.is_in_group(groups):
                     return func(*args, **kwargs)
                 return abort(403)
 

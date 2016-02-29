@@ -17,7 +17,7 @@ from bottle import request
 from .base import DBDataWrapper
 from .groups import Group
 from .permissions import BasePermission
-from .utils import is_string, from_csv
+from .utils import is_string, from_csv, to_list
 
 
 class User(DBDataWrapper):
@@ -67,6 +67,11 @@ class User(DBDataWrapper):
                 return permission.is_granted(*args, **kwargs)
 
         return False
+
+    @to_list
+    def is_in_group(self, groups):
+        member_of = [group.name for group in self._groups]
+        return all([name in member_of for name in groups])
 
     @property
     def is_authenticated(self):

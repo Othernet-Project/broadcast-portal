@@ -1,3 +1,4 @@
+import functools
 import random
 import string
 import urllib
@@ -9,6 +10,15 @@ def is_string(obj):
         return isinstance(obj, basestring)
     except NameError:
         return isinstance(obj, str)
+
+
+def to_list(func):
+    @functools.wraps(func)
+    def wrapper(self, arg):
+        if is_string(arg):
+            arg = [arg]
+        return func(self, arg)
+    return wrapper
 
 
 def from_csv(raw_value):
