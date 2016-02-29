@@ -10,6 +10,8 @@ create table groups
 SQL_CREATE_GROUP = """
 INSERT INTO groups (name, permissions, has_superpowers)
 VALUES ('superuser', '', 1);
+INSERT INTO groups (name, permissions, has_superpowers)
+VALUES ('moderator', '', 0);
 """
 
 
