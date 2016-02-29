@@ -57,10 +57,10 @@ class BaseDynamicPermission(BasePermission):
     def _load(self):
         q = self.db.Select(
             sets='permissions',
-            where='name = %(name)s AND identifier = %(identifier)s'
+            where='name = :name AND identifier = :identifier'
         )
-        result = self.db.fetchone(q, dict(name=self.name,
-                                          identifier=self.identifier))
+        self.db.query(q, name=self.name, identifier=self.identifier)
+        result = self.db.result
         if result:
             return json.loads(result['data'], cls=DateTimeDecoder)
         return {}
@@ -70,9 +70,10 @@ class BaseDynamicPermission(BasePermission):
                             constraints=('name', 'identifier'),
                             cols=('name', 'identifier', 'data'))
         data = json.dumps(self.data, cls=DateTimeEncoder)
-        self.db.execute(q, dict(name=self.name,
-                                identifier=self.identifier,
-                                data=data))
+        self.db.query(q,
+                      name=self.name,
+                      identifier=self.identifier,
+                      data=data)
 
 
 class ACLPermission(BaseDynamicPermission):

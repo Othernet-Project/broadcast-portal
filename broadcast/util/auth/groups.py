@@ -48,8 +48,9 @@ class Group(BaseGroup):
     @classmethod
     def from_name(cls, group_name, db):
         db = db or request.db.sessions
-        query = db.Select(sets='groups', where='name = %(name)s')
-        group = db.fetchone(query, dict(name=group_name))
+        query = db.Select(sets='groups', where='name = :name')
+        db.query(query, name=group_name)
+        group = db.result
         group = row_to_dict(group) if group else {}
 
         if group:
@@ -64,6 +65,7 @@ class Group(BaseGroup):
             constraints=['name'],
             cols=('name', 'permissions', 'has_superpowers'),
         )
-        self.db.execute(query, dict(name=self.name,
-                                    permissions=self.permissions,
-                                    has_superpowers=self.has_superpowers))
+        self.db.query(query,
+                      name=self.name,
+                      permissions=self.permissions,
+                      has_superpowers=self.has_superpowers)
