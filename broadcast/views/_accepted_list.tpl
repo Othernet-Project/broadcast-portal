@@ -7,7 +7,7 @@
             <th>${_("Source")}</th>
             <th>${_("License")}</th>
             <th>${_("Size")}</th>
-            % if request.user.is_superuser:
+            % if request.user.is_in_group('superuser'):
             <th>${_("Reject")}</th>
             % endif
         </tr>
@@ -22,7 +22,7 @@
             <td class="trunc">${item.url}</td>
             <td class="trunc">${item.license}</td>
             <td class="trunc">${h.hsize(item.file_size)}</td>
-            % if request.user.is_superuser:
+            % if request.user.is_in_group('superuser'):
             <td>
                 ${h.form('post', action=url('save_queue_item', item_id=item.id))}
                     ${csrf_tag()}
