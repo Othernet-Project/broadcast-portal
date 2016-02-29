@@ -17,16 +17,21 @@ def queue_accepted():
     accepted = filter_items(ContentItem.type,
                             status=ContentItem.ACCEPTED,
                             bin=current_bin.id)
-    return dict(accepted=accepted)
+    return dict(bin=current_bin, accepted=accepted)
 
 
 @csrf_token
 @roca_view('queue_list', '_review_list', template_func=template)
 def queue_review():
-    processing = filter_items(ContentItem.type, status=ContentItem.PROCESSING)
-    rejected = filter_items(ContentItem.type, status=ContentItem.REJECTED)
+    processing = filter_items(ContentItem.type,
+                              status=ContentItem.PROCESSING,
+                              bin=None)
+    rejected = filter_items(ContentItem.type,
+                            status=ContentItem.REJECTED,
+                            bin=None)
     pending = processing + rejected
-    return dict(pending=sorted(pending, key=lambda x: x.created))
+    return dict(bin=Bin.current(),
+                pending=sorted(pending, key=lambda x: x.created))
 
 
 @view('queue_item')
@@ -60,9 +65,8 @@ def save_queue_item(item_id):
                                 redirect_target=_('review page'))
             else:
                 redirect(request.app.get_url('queue_review'))
-        else:
-            current_bin.remove(item)
-            redirect(request.app.get_url('queue_accepted'))
+        current_bin.remove(item)
+        redirect(request.app.get_url('queue_accepted'))
     return template('queue_item', form=form)
 
 
