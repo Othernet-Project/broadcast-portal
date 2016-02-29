@@ -1,11 +1,14 @@
 from bottle import request
 
+from ..util.bins import Bin
 from ..util.template import view
 
 
 @view('main')
 def show_main():
-    return dict(item_type=request.query.get('item_type', None))
+    current_bin = Bin.current()
+    return dict(bin=current_bin,
+                item_type=request.query.get('item_type', None))
 
 
 @view('rocket_service')
