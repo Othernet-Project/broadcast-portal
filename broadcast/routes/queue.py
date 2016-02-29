@@ -35,7 +35,7 @@ def queue_item(item_id):
 
 
 @csrf_protect
-@login_required(superuser_only=True)
+@login_required(groups='superuser')
 def save_queue_item(item_id):
     form = QueueItemForm(request.forms)
     if form.is_valid():

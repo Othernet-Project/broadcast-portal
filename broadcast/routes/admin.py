@@ -19,7 +19,7 @@ def scheduled_redirect():
     return redirect(request.app.get_url('scheduled_list'))
 
 
-@login_required(superuser_only=True)
+@login_required(groups='superuser')
 @view('scheduled_list')
 def scheduled_list():
     items = []
@@ -29,14 +29,14 @@ def scheduled_list():
     return dict(items=sorted(items, key=lambda x: x.created, reverse=True))
 
 
-@login_required(superuser_only=True)
+@login_required(groups='superuser')
 @view('scheduled_list')
 def scheduled_type_list(item_type):
     items = filter_items(item_type)
     return dict(items=sorted(items, key=lambda x: x.created, reverse=True))
 
 
-@login_required(superuser_only=True)
+@login_required(groups='superuser')
 @view('scheduled_detail')
 def scheduled_detail(item_type, item_id):
     item = get_item(item_type, id=item_id)
@@ -45,7 +45,7 @@ def scheduled_detail(item_type, item_id):
     return dict(item=item)
 
 
-@login_required(superuser_only=True)
+@login_required(groups='superuser')
 def expose_content(item_type, item_id, name):
     if item_type != "twitter":
         return scheduled_file(item_id, name)
@@ -53,7 +53,7 @@ def expose_content(item_type, item_id, name):
     redirect(url)
 
 
-@login_required(superuser_only=True)
+@login_required(groups='superuser')
 def scheduled_file(item_id, filename):
     upload_root = request.app.config['content.upload_root']
     root = upload_root + '/' + item_id
