@@ -6,14 +6,30 @@
   searchForm = $ '.search form'
   searchUrl = searchForm.attr 'action'
   searchQTElem = $ '.search input#type'
+  actionFormSelector = '.action form'
 
-  loadData = (url, container) ->
-    res = $.get url
+  getFormData = (form) ->
+    data = {}
+    arr = form.serializeArray()
+    $(arr).each (index, obj) ->
+      data[obj.name] = obj.value;
+    return data;
+
+  modifyQueue = (e) ->
+    e.preventDefault()
+    form = $ @
+    btn = form.find 'button'
+    formData = getFormData form
+    formData[btn.attr 'name'] = btn.val()
+    actionUrl = form.attr 'action'
+    res = $.ajax actionUrl,
+      method: 'POST'
+      data: formData
     res.done (data) ->
-      container.html(data)
+      row = form.parents 'tr'
+      row.remove()
     res.fail () ->
-      container.html(templates.queueLoadError)
-    return res
+      alert(templates.queueModifyError)
 
   handles.on 'click', (e) ->
     e.preventDefault()
@@ -26,14 +42,14 @@
       elem.addClass 'active'
       queues.addClass 'hidden'
       container.removeClass 'hidden'
-      loadData(url, container)
-
-  getFormData = (form) ->
-    data = {}
-    arr = form.serializeArray()
-    $(arr).each (index, obj) ->
-      data[obj.name] = obj.value;
-    return data;
+      res = $.get url
+      res.done (data) ->
+        container.html(data)
+        actionForms = $ actionFormSelector
+        actionForms.off 'submit', modifyQueue
+        actionForms.on 'submit', modifyQueue
+      res.fail () ->
+        container.html(templates.queueLoadError)
 
   searchForm.on 'submit', (e) ->
     e.preventDefault()

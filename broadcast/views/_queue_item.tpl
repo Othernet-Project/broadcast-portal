@@ -1,3 +1,6 @@
+<%namespace name="forms" file="/ui/forms.tpl"/>
+
+% if item:
 <dl class="queue-item">
     <dt>${_("ID")}</dt>
     <dd>${item.id}</dd>
@@ -23,3 +26,6 @@
     <dt>${_("Status")}</dt>
     <dd>${item.status}</dd>
 </dl>
+% else:
+<p>${forms.form_errors([form.error]) if form.error else ''}</p>
+% endif

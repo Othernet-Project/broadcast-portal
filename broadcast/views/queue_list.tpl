@@ -46,6 +46,9 @@
     <script type="text/template" id="queueLoadError">
         <p>${_('Queue loading failed. Please try again in a few seconds.')}</p>
     </script>
+    <script type="text/template" id="queueModifyError">
+        <p>${_('We were unable to modify the queue. Please try again in a few seconds.')}</p>
+    </script>
 </%block>
 
 <%block name="extra_scripts">

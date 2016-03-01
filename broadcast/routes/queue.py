@@ -82,7 +82,7 @@ def save_queue_item(item_id):
                 redirect(request.app.get_url('queue_list', type=REVIEW_QUEUE))
         current_bin.remove(item)
         redirect(request.app.get_url('queue_list', type=ACCEPTED_QUEUE))
-    return template('queue_item', form=form)
+    return template('queue_item', form=form, item=None)
 
 
 def route(conf):
