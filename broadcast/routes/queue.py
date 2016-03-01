@@ -14,19 +14,23 @@ from ..util.template import template, view
 @roca_view('queue_list', '_queue_list', template_func=template)
 def queue_list():
     query = request.params.get('query', '')
+    query_args = {'title__like': query} if query else {}
     queue_type = request.params.get('type', ACCEPTED_QUEUE)
     current_bin = Bin.current()
     if queue_type == ACCEPTED_QUEUE:
         items = filter_items(ContentItem.type,
                              status=ContentItem.ACCEPTED,
-                             bin=current_bin.id)
+                             bin=current_bin.id,
+                             **query_args)
     else:
         processing = filter_items(ContentItem.type,
                                   status=ContentItem.PROCESSING,
-                                  bin=None)
+                                  bin=None,
+                                  **query_args)
         rejected = filter_items(ContentItem.type,
                                 status=ContentItem.REJECTED,
-                                bin=None)
+                                bin=None,
+                                **query_args)
         items = sorted(processing + rejected, key=lambda x: x.created)
 
     hidden_queue_type = (ACCEPTED_QUEUE,
@@ -35,6 +39,7 @@ def queue_list():
                 items=items,
                 queue_type=queue_type,
                 hidden_queue_type=hidden_queue_type,
+                query=query,
                 ACCEPTED_QUEUE=ACCEPTED_QUEUE,
                 REVIEW_QUEUE=REVIEW_QUEUE)
 
