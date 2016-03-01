@@ -31,7 +31,6 @@
             % if request.user.is_in_group('superuser'):
             <td class="action">
                 ${h.form('post', action=url('save_queue_item', item_id=item.id))}
-                    ${csrf_tag()}
                     <button type="submit" name="queue_type" value="${hidden_queue_type}"></button>
                 </form>
             </td>

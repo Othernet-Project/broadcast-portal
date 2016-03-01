@@ -1,6 +1,5 @@
 from bottle import request, redirect, abort
 from bottle_utils.ajax import roca_view
-from bottle_utils.csrf import csrf_token, csrf_protect
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.queue import QueueItemForm, ACCEPTED_QUEUE, REVIEW_QUEUE
@@ -10,7 +9,6 @@ from ..util.broadcast import ContentItem, filter_items, get_item
 from ..util.template import template
 
 
-@csrf_token
 @roca_view('queue_list', '_queue_list', template_func=template)
 def queue_list():
     query = request.params.get('query', '')
@@ -52,7 +50,6 @@ def queue_item(item_id):
     return dict(item=item)
 
 
-@csrf_protect
 @login_required(groups='superuser')
 def save_queue_item(item_id):
     form = QueueItemForm(request.forms)
