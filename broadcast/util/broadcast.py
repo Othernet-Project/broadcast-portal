@@ -148,6 +148,8 @@ def send_payment_confirmation(item, stripe_obj, email, config):
 
 
 def upload_to_drive(item, config):
+    if not config['google.enabled']:
+        return
     dc = DriveClient(config['google.service_credentials_path'])
     upload_root = config['{}.upload_root'.format(item.type)]
     upload_path = os.path.join(upload_root, item.file_path)
