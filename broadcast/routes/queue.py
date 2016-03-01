@@ -7,7 +7,7 @@ from ..forms.queue import QueueItemForm, ACCEPTED_QUEUE, REVIEW_QUEUE
 from ..util.auth.decorators import login_required
 from ..util.bins import Bin
 from ..util.broadcast import ContentItem, filter_items, get_item
-from ..util.template import template, view
+from ..util.template import template
 
 
 @csrf_token
@@ -44,9 +44,12 @@ def queue_list():
                 REVIEW_QUEUE=REVIEW_QUEUE)
 
 
-@view('queue_item')
+@roca_view('queue_item', '_queue_item', template_func=template)
 def queue_item(item_id):
-    return {}
+    item = get_item(ContentItem.type, id=item_id)
+    if not item:
+        abort(404, _("The requested item was not found."))
+    return dict(item=item)
 
 
 @csrf_protect
