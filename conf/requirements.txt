@@ -12,5 +12,6 @@ pbkdf2==1.3
 i18n
 urllib3
 pyOpenSSL==0.15.1
+oauth2client==1.5.2
 google-api-python-client==1.4.2
 gspread==0.3.0
