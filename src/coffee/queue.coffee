@@ -64,5 +64,9 @@
     res.fail () ->
       container.html(templates.queueLoadError)
 
+  # apply action handlers to initially visible forms
+  actionForms = $ actionFormSelector
+  actionForms.on 'submit', modifyQueue
+
 ) this, this.jQuery, this.templates
 
