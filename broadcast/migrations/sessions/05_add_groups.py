@@ -17,5 +17,5 @@ VALUES ('moderator', '', 0);
 
 def up(db, conf):
     db.executescript(SQL)
-    # create superusers group
-    db.execute(SQL_CREATE_GROUP)
+    # create needed groups
+    db.executescript(SQL_CREATE_GROUP)
