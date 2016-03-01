@@ -2,6 +2,8 @@
 @import "base/media_query";
 @import "base/params";
 
+$o-dark-blue: #152E44;
+
 .bin-status {
   padding: 0.5rem;
 
@@ -40,6 +42,17 @@
 
 .bin-contents {
   padding: 0.5rem;
+
+  .handle {
+    background-color: $o-accent;
+    padding: 0.5rem 1rem;
+    color: $o-material;
+    text-decoration: none;
+    text-transform: uppercase;
+    &.active {
+      background-color: $o-dark-blue;
+    }
+  }
 
   .queue {
     &.hidden {

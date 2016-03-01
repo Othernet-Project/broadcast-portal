@@ -22,8 +22,8 @@
 
     <div class="bin-contents">
         <div class="handles">
-            <a class="handle" href="${url('queue_list', type=ACCEPTED_QUEUE)}" data-target="${ACCEPTED_QUEUE}">${_("Accepted")}</a>
-            <a class="handle" href="${url('queue_list', type=REVIEW_QUEUE)}" data-target="${REVIEW_QUEUE}">${_("Review")}</a>
+            <a class="handle ${'active' if queue_type == ACCEPTED_QUEUE else ''}" href="${url('queue_list', type=ACCEPTED_QUEUE)}" data-target="${ACCEPTED_QUEUE}">${_("Accepted")}</a>
+            <a class="handle ${'active' if queue_type == REVIEW_QUEUE else ''}" href="${url('queue_list', type=REVIEW_QUEUE)}" data-target="${REVIEW_QUEUE}">${_("Review")}</a>
         </div>
 
         <div class="search">

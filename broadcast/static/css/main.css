@@ -1095,26 +1095,26 @@ input[type=checkbox] + label {
  * Recommended way to customize the variables is to load a separate module 
  * containing customized values _before_ this module.
  */
-/* line 5, ../../../src/scss/partials/_queue.scss */
+/* line 7, ../../../src/scss/partials/_queue.scss */
 .bin-status {
   padding: 0.5rem;
 }
-/* line 8, ../../../src/scss/partials/_queue.scss */
+/* line 10, ../../../src/scss/partials/_queue.scss */
 .bin-status .title {
   font-size: 3rem;
   line-height: 3rem;
   float: left;
 }
-/* line 14, ../../../src/scss/partials/_queue.scss */
+/* line 16, ../../../src/scss/partials/_queue.scss */
 .bin-status .bin-info-display {
   height: 3rem;
   padding: 0.3rem;
 }
-/* line 17, ../../../src/scss/partials/_queue.scss */
+/* line 19, ../../../src/scss/partials/_queue.scss */
 .bin-status .bin-info-display .line {
   padding-left: 1rem;
 }
-/* line 22, ../../../src/scss/partials/_queue.scss */
+/* line 24, ../../../src/scss/partials/_queue.scss */
 .bin-status .bin-usage-bar {
   display: block;
   position: relative;
@@ -1123,7 +1123,7 @@ input[type=checkbox] + label {
   background: white;
   margin-bottom: 0.5rem;
 }
-/* line 31, ../../../src/scss/partials/_queue.scss */
+/* line 33, ../../../src/scss/partials/_queue.scss */
 .bin-status .bin-usage-bar-indicator {
   display: block;
   position: absolute;
@@ -1133,11 +1133,23 @@ input[type=checkbox] + label {
   background: #255a89;
 }
 
-/* line 41, ../../../src/scss/partials/_queue.scss */
+/* line 43, ../../../src/scss/partials/_queue.scss */
 .bin-contents {
   padding: 0.5rem;
 }
-/* line 45, ../../../src/scss/partials/_queue.scss */
+/* line 46, ../../../src/scss/partials/_queue.scss */
+.bin-contents .handle {
+  background-color: #255a89;
+  padding: 0.5rem 1rem;
+  color: #eee;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+/* line 52, ../../../src/scss/partials/_queue.scss */
+.bin-contents .handle.active {
+  background-color: #152E44;
+}
+/* line 58, ../../../src/scss/partials/_queue.scss */
 .bin-contents .queue.hidden {
   display: none;
 }
