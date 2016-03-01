@@ -6,7 +6,7 @@ $single-column-cutoff: 700px;
 
 .hero {
   // layout
-  min-height: 480px;
+  min-height: 580px;
 
   // decoration
   background-image: image-url('content_bg.jpg');
@@ -55,9 +55,17 @@ $single-column-cutoff: 700px;
         @include narrower-than($single-column-cutoff) {
           margin: 0;
         }
-      } 
+      }
+    }
+  }
 
+  .daily-bin {
+    margin-top: 2rem;
 
+    .bin-usage-bar {
+      background: transparentize($footer, 0.3);
+      max-width: 400px;
+      margin: 0 auto 2rem;
     }
   }
 }
