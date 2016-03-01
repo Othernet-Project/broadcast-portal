@@ -29,7 +29,7 @@
         <div class="search">
             ${h.form('get', action=url('queue_list'))}
                 ${h.HIDDEN('type', queue_type)}
-                ${h.vinput('query', locals())}
+                ${h.vinput('query', locals(), _placeholder=_("Search"))}
                 <button type="submit"></button>
             </form>
         </div>

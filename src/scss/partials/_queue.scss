@@ -43,18 +43,40 @@ $o-dark-blue: #152E44;
 .bin-contents {
   padding: 0.5rem;
 
-  .handle {
-    background-color: $o-accent;
-    padding: 0.5rem 1rem;
-    color: $o-material;
-    text-decoration: none;
-    text-transform: uppercase;
-    &.active {
+  .handles {
+    display: inline-block;
+    margin-bottom: 0.65rem;
+    margin-top: 0.5rem;
+
+    .handle {
       background-color: $o-dark-blue;
+      padding: 0.75rem 1rem;
+      color: $o-material;
+      text-decoration: none;
+      text-transform: uppercase;
+      &.active {
+        background-color: $o-accent;
+      }
+    }
+  }
+
+  .search {
+    float: right;
+
+    #query {
+      height: 1.15rem;
+      vertical-align: top;
+    }
+    button {
+      width: 1.5rem;
+      height: 1.5rem;
     }
   }
 
   .queue {
+    background-color: $o-accent;
+    padding: 0.5rem;
+
     &.hidden {
       display: none;
     }

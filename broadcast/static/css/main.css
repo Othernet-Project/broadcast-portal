@@ -1138,18 +1138,43 @@ input[type=checkbox] + label {
   padding: 0.5rem;
 }
 /* line 46, ../../../src/scss/partials/_queue.scss */
-.bin-contents .handle {
-  background-color: #255a89;
-  padding: 0.5rem 1rem;
+.bin-contents .handles {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  margin-top: 0.5rem;
+}
+/* line 51, ../../../src/scss/partials/_queue.scss */
+.bin-contents .handles .handle {
+  background-color: #152E44;
+  padding: 0.75rem 1rem;
   color: #eee;
   text-decoration: none;
   text-transform: uppercase;
 }
-/* line 52, ../../../src/scss/partials/_queue.scss */
-.bin-contents .handle.active {
-  background-color: #152E44;
+/* line 57, ../../../src/scss/partials/_queue.scss */
+.bin-contents .handles .handle.active {
+  background-color: #255a89;
 }
-/* line 58, ../../../src/scss/partials/_queue.scss */
+/* line 63, ../../../src/scss/partials/_queue.scss */
+.bin-contents .search {
+  float: right;
+}
+/* line 66, ../../../src/scss/partials/_queue.scss */
+.bin-contents .search #query {
+  height: 1.15rem;
+  vertical-align: top;
+}
+/* line 70, ../../../src/scss/partials/_queue.scss */
+.bin-contents .search button {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+/* line 76, ../../../src/scss/partials/_queue.scss */
+.bin-contents .queue {
+  background-color: #255a89;
+  padding: 0.5rem;
+}
+/* line 80, ../../../src/scss/partials/_queue.scss */
 .bin-contents .queue.hidden {
   display: none;
 }
