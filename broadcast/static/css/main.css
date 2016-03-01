@@ -1133,7 +1133,11 @@ input[type=checkbox] + label {
   background: #255a89;
 }
 
-/* line 42, ../../../src/scss/partials/_queue.scss */
-.queue.hidden {
+/* line 41, ../../../src/scss/partials/_queue.scss */
+.bin-contents {
+  padding: 0.5rem;
+}
+/* line 45, ../../../src/scss/partials/_queue.scss */
+.bin-contents .queue.hidden {
   display: none;
 }

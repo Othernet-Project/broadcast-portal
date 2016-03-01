@@ -20,24 +20,26 @@
         </span>
     </div>
 
-    <div class="handles">
-        <a class="handle" href="${url('queue_list', type=ACCEPTED_QUEUE)}" data-target="${ACCEPTED_QUEUE}">${_("Accepted")}</a>
-        <a class="handle" href="${url('queue_list', type=REVIEW_QUEUE)}" data-target="${REVIEW_QUEUE}">${_("Review")}</a>
-    </div>
+    <div class="bin-contents">
+        <div class="handles">
+            <a class="handle" href="${url('queue_list', type=ACCEPTED_QUEUE)}" data-target="${ACCEPTED_QUEUE}">${_("Accepted")}</a>
+            <a class="handle" href="${url('queue_list', type=REVIEW_QUEUE)}" data-target="${REVIEW_QUEUE}">${_("Review")}</a>
+        </div>
 
-    <div class="search">
-        ${h.form('get', action=url('queue_list'))}
-            ${h.HIDDEN('type', queue_type)}
-            ${h.vinput('query', locals())}
-            <button type="submit"></button>
-        </form>
-    </div>
+        <div class="search">
+            ${h.form('get', action=url('queue_list'))}
+                ${h.HIDDEN('type', queue_type)}
+                ${h.vinput('query', locals())}
+                <button type="submit"></button>
+            </form>
+        </div>
 
-    <div class="queue ${queue_type}" data-source="${queue_type}">
-        ${queue_list.body()}
-    </div>
+        <div class="queue ${queue_type}" data-source="${queue_type}">
+            ${queue_list.body()}
+        </div>
 
-    <div class="queue ${hidden_queue_type} hidden" data-source="${hidden_queue_type}"></div>
+        <div class="queue ${hidden_queue_type} hidden" data-source="${hidden_queue_type}"></div>
+    </div>
 </%block>
 
 <%block name="extra_body">

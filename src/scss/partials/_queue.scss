@@ -38,8 +38,12 @@
   }
 }
 
-.queue {
-  &.hidden {
-    display: none;
+.bin-contents {
+  padding: 0.5rem;
+
+  .queue {
+    &.hidden {
+      display: none;
+    }
   }
 }
