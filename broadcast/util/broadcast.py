@@ -63,16 +63,28 @@ def get_item(table, db=None, raw=False, **kwargs):
     return row
 
 
+def unpack_cmd(cmd, value, delimiter='__'):
+    splitted = cmd.split(delimiter)
+    if len(splitted) > 1:
+        return splitted
+    (field,) = splitted
+    return (field, 'IS' if value is None else '=')
+
+
 def filter_items(table, db=None, raw=False, **kwargs):
     db = db or request.db.main
     query = db.Select(sets=table, order=['date(created)'])
-    for name, value in kwargs.items():
-        op = 'IS' if value is None else '='
-        query.where += '{0} {1} :{0}'.format(name, op)
+    values = dict()
+    for cmd, value in kwargs.items():
+        (field, op) = unpack_cmd(cmd, value)
+        if op.lower() == 'like':
+            value = '%{value}%'.format(value=value)
 
-    db.query(query, **kwargs)
+        values[field] = value
+        query.where += '{0} {1} :{0}'.format(field, op)
+
+    db.query(query, **values)
     rows = map(row_to_dict, db.results)
-
     if not raw and rows:
         (wrapper_cls,) = [cls for cls in (ContentItem, TwitterItem)
                           if cls.type == table]
