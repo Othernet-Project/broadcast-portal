@@ -1228,66 +1228,65 @@ input[type=checkbox] + label {
     background-size: 266px 781px;
   }
 }
-/* line 124, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue {
-  background-color: #3a5065;
-  padding: 0.5rem 0;
-}
-/* line 128, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue.hidden {
-  display: none;
-}
-/* line 132, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue table {
+
+/* line 125, ../../../src/scss/partials/_queue.scss */
+table {
   width: 100%;
   margin-bottom: 1rem;
 }
-/* line 137, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue thead tr {
-  background: #4a6781;
+
+/* line 130, ../../../src/scss/partials/_queue.scss */
+.queue {
+  background-color: #3a5065;
+  padding: 0.5rem 0;
 }
-/* line 140, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue thead tr th {
+/* line 134, ../../../src/scss/partials/_queue.scss */
+.queue.hidden {
+  display: none;
+}
+/* line 138, ../../../src/scss/partials/_queue.scss */
+.queue th {
+  background: #4a6781;
   font-size: 90%;
   text-transform: uppercase;
 }
-/* line 146, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue td, .bin-contents .queue th {
+/* line 144, ../../../src/scss/partials/_queue.scss */
+.queue td, .queue th {
   padding: 0.5rem;
 }
-/* line 151, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue td:nth-child(1) {
+/* line 149, ../../../src/scss/partials/_queue.scss */
+.queue td:nth-child(1) {
   width: 8rem;
 }
-/* line 156, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue td:nth-child(3) {
+/* line 154, ../../../src/scss/partials/_queue.scss */
+.queue td:nth-child(3) {
   width: 4rem;
 }
-/* line 161, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue td:nth-child(4) {
+/* line 159, ../../../src/scss/partials/_queue.scss */
+.queue td:nth-child(4) {
   width: 4rem;
 }
-/* line 166, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue td:nth-child(5) {
+/* line 164, ../../../src/scss/partials/_queue.scss */
+.queue td:nth-child(5) {
   width: 6rem;
 }
-/* line 171, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue th:nth-child(6),
-.bin-contents .queue td:nth-child(6) {
+/* line 169, ../../../src/scss/partials/_queue.scss */
+.queue th:nth-child(6),
+.queue td:nth-child(6) {
   width: 4rem;
   text-align: center;
 }
-/* line 178, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue td:last-child {
+/* line 176, ../../../src/scss/partials/_queue.scss */
+.queue td:last-child {
   padding: 0;
   width: 2rem;
 }
-/* line 183, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue tr {
+/* line 181, ../../../src/scss/partials/_queue.scss */
+.queue tr {
   border-bottom: 1px solid #253340;
 }
-/* line 187, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue button {
+/* line 185, ../../../src/scss/partials/_queue.scss */
+.queue button {
   border: 0;
   background: #6183a4;
   width: 4rem;
@@ -1296,12 +1295,12 @@ input[type=checkbox] + label {
   line-height: 2rem;
   font-size: 200%;
 }
-/* line 196, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue button:hover {
+/* line 194, ../../../src/scss/partials/_queue.scss */
+.queue button:hover {
   background: white;
 }
-/* line 201, ../../../src/scss/partials/_queue.scss */
-.bin-contents .queue .flagged {
+/* line 199, ../../../src/scss/partials/_queue.scss */
+.queue .flagged {
   display: inline-block;
   vertical-align: center;
   background: #ffcc00;
@@ -1315,8 +1314,19 @@ input[type=checkbox] + label {
   text-align: center;
   font-weight: bold;
 }
-/* line 215, ../../../src/scss/partials/_queue.scss */
-.bin-contents .noitems {
+
+/* line 214, ../../../src/scss/partials/_queue.scss */
+.queue-item th, .queue-item td, .queue-item td:last-child {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+/* line 219, ../../../src/scss/partials/_queue.scss */
+.queue-item th {
+  width: 4rem;
+}
+
+/* line 224, ../../../src/scss/partials/_queue.scss */
+.noitems {
   text-align: center;
   font-size: 200%;
   padding: 2rem 0.5rem;

@@ -120,106 +120,114 @@
       }
     }
   }
+}
 
-  .queue {
-    background-color: $table-background;
-    padding: 0.5rem 0;
+table {
+  width: 100%;
+  margin-bottom: 1rem;
+}
 
-    &.hidden {
-      display: none;
-    }
+.queue {
+  background-color: $table-background;
+  padding: 0.5rem 0;
 
-    table {
-      width: 100%;
-      margin-bottom: 1rem;
-    }
-
-    thead tr {
-      background: $table-header-background;
-
-      th {
-        font-size: 90%;
-        text-transform: uppercase;
-      }
-    }
-
-    td, th {
-      padding: 0.5rem;
-    }
-
-    // date
-    td:nth-child(1) {
-      width: 8rem;
-    }
-
-    // souce url
-    td:nth-child(3) {
-      width: 4rem;
-    }
-
-    // license
-    td:nth-child(4) {
-      width: 4rem;
-    }
-
-    // size
-    td:nth-child(5) {
-      width: 6rem;
-    }
-
-    // flag
-    th:nth-child(6),
-    td:nth-child(6) {
-      width: 4rem;
-      text-align: center;
-    }
-
-    // action
-    td:last-child {
-      padding: 0;
-      width: 2rem;
-    }
-
-    tr {
-      border-bottom: 1px solid $background;
-    }
-
-    button {
-      border: 0;
-      background: lighten($table-background, 20);
-      width: 4rem;
-      height: 100%;
-      padding: 0;
-      line-height: 2rem;
-      font-size: 200%;
-
-      &:hover {
-        background: white;
-      }
-    }
-
-    .flagged {
-      display: inline-block;
-      vertical-align: center;
-      background: $form-error;
-      color: $footer;
-      width: 1.2rem;
-      height: 1.2rem;
-      line-height: 1.2rem;
-      @include border-radius(20px);
-      text-align: center;
-      font-weight: bold;
-    }
+  &.hidden {
+    display: none;
   }
 
-  .noitems {
-    // Positioning
-    text-align: center;
-
-    // Styling
-    font-size: 200%;
-    padding: 2rem 0.5rem;
+  th {
+    background: $table-header-background;
+    font-size: 90%;
     text-transform: uppercase;
-    color: lighten($table-background, 20)
   }
+
+  td, th {
+    padding: 0.5rem;
+  }
+
+  // date
+  td:nth-child(1) {
+    width: 8rem;
+  }
+
+  // souce url
+  td:nth-child(3) {
+    width: 4rem;
+  }
+
+  // license
+  td:nth-child(4) {
+    width: 4rem;
+  }
+
+  // size
+  td:nth-child(5) {
+    width: 6rem;
+  }
+
+  // flag
+  th:nth-child(6),
+  td:nth-child(6) {
+    width: 4rem;
+    text-align: center;
+  }
+
+  // action
+  td:last-child {
+    padding: 0;
+    width: 2rem;
+  }
+
+  tr {
+    border-bottom: 1px solid $background;
+  }
+
+  button {
+    border: 0;
+    background: lighten($table-background, 20);
+    width: 4rem;
+    height: 100%;
+    padding: 0;
+    line-height: 2rem;
+    font-size: 200%;
+
+    &:hover {
+      background: white;
+    }
+  }
+
+  .flagged {
+    display: inline-block;
+    vertical-align: center;
+    background: $form-error;
+    color: $footer;
+    width: 1.2rem;
+    height: 1.2rem;
+    line-height: 1.2rem;
+    @include border-radius(20px);
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.queue-item {
+  th, td, td:last-child {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  th {
+    width: 4rem;
+  }
+}
+
+.noitems {
+  // Positioning
+  text-align: center;
+
+  // Styling
+  font-size: 200%;
+  padding: 2rem 0.5rem;
+  text-transform: uppercase;
+  color: lighten($table-background, 20)
 }
