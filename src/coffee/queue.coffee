@@ -22,6 +22,8 @@
     container = queues.filter('.' + target)
     if container.hasClass 'hidden'
       url = elem.attr 'href'
+      handles.removeClass 'active'
+      elem.addClass 'active'
       queues.addClass 'hidden'
       container.removeClass 'hidden'
       loadData(url, container)
