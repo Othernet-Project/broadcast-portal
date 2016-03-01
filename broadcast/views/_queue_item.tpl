@@ -1,31 +1,47 @@
 <%namespace name="forms" file="/ui/forms.tpl"/>
 
 % if item:
-<dl class="queue-item">
-    <dt>${_("ID")}</dt>
-    <dd>${item.id}</dd>
+    <table class="queue queue-item">
+        <tr>
+            <th>${_("ID")}</th>
+            <td>${item.id}</td>
+        </tr>
 
-    <dt>${_("Created")}</dt>
-    <dd>${item.created.strftime('%b %d, %H:%M UTC')}</dd>
+        <tr>
+            <th>${_("Created")}</th>
+            <td>${item.created.strftime('%b %d, %H:%M UTC')}</td>
+        </tr>
 
-    <dt>${_("Size")}</dt>
-    <dd>${h.hsize(item.size)}</dd>
+        <tr>
+            <th>${_("Size")}</th>
+            <td>${h.hsize(item.size)}</td>
+        </tr>
 
-    <dt>${_("Title")}</dt>
-    <dd>${item.title}</dd>
+        <tr>
+            <th>${_("Title")}</th>
+            <td>${item.title}</td>
+        </tr>
 
-    <dt>${_("Source")}</dt>
-    <dd>${item.url}</dd>
+        <tr>
+            <th>${_("Source")}</th>
+            <td>${item.url}</td>
+        </tr>
 
-    <dt>${_("License")}</dt>
-    <dd>${item.license}</dd>
+        <tr>
+            <th>${_("License")}</th>
+            <td>${item.license}</td>
+        </tr>
 
-    <dt>${_("Language")}</dt>
-    <dd>${item.language}</dd>
+        <tr>
+            <th>${_("Language")}</th>
+            <td>${item.language}</td>
+        </tr>
 
-    <dt>${_("Status")}</dt>
-    <dd>${item.status}</dd>
-</dl>
+        <tr>
+            <th>${_("Status")}</th>
+            <td>${item.status}</td>
+        </tr>
+    </table>
 % else:
-<p>${forms.form_errors([form.error]) if form.error else ''}</p>
+    <p>${forms.form_errors([form.error]) if form.error else ''}</p>
 % endif
