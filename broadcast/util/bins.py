@@ -44,7 +44,7 @@ class Bin(object):
     @property
     def usage(self):
         try:
-            return self.size * 100 / self.capacity
+            return self.size * 100.0 / self.capacity
         except ZeroDivisionError:
             return 0
 
