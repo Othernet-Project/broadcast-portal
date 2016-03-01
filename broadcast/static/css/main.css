@@ -1096,26 +1096,7 @@ input[type=checkbox] + label {
  * containing customized values _before_ this module.
  */
 /* line 7, ../../../src/scss/partials/_queue.scss */
-.bin-status {
-  padding: 0.5rem;
-}
-/* line 10, ../../../src/scss/partials/_queue.scss */
-.bin-status .title {
-  font-size: 3rem;
-  line-height: 3rem;
-  float: left;
-}
-/* line 16, ../../../src/scss/partials/_queue.scss */
-.bin-status .bin-info-display {
-  height: 3rem;
-  padding: 0.3rem;
-}
-/* line 19, ../../../src/scss/partials/_queue.scss */
-.bin-status .bin-info-display .line {
-  padding-left: 1rem;
-}
-/* line 24, ../../../src/scss/partials/_queue.scss */
-.bin-status .bin-usage-bar {
+.bin-usage-bar {
   display: block;
   position: relative;
   width: 100%;
@@ -1123,14 +1104,35 @@ input[type=checkbox] + label {
   background: white;
   margin-bottom: 0.5rem;
 }
-/* line 33, ../../../src/scss/partials/_queue.scss */
-.bin-status .bin-usage-bar-indicator {
+
+/* line 16, ../../../src/scss/partials/_queue.scss */
+.bin-usage-bar-indicator {
   display: block;
   position: absolute;
   left: 0;
   top: 0;
   height: 100%;
   background: #255a89;
+}
+
+/* line 25, ../../../src/scss/partials/_queue.scss */
+.bin-status {
+  padding: 0.5rem;
+}
+/* line 28, ../../../src/scss/partials/_queue.scss */
+.bin-status .title {
+  font-size: 3rem;
+  line-height: 3rem;
+  float: left;
+}
+/* line 34, ../../../src/scss/partials/_queue.scss */
+.bin-status .bin-info-display {
+  height: 3rem;
+  padding: 0.3rem;
+}
+/* line 37, ../../../src/scss/partials/_queue.scss */
+.bin-status .bin-info-display .line {
+  padding-left: 1rem;
 }
 
 /* line 43, ../../../src/scss/partials/_queue.scss */

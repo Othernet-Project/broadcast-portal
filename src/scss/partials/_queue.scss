@@ -4,6 +4,24 @@
 
 $o-dark-blue: #152E44;
 
+.bin-usage-bar {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 0.5rem;
+  background: white;
+  margin-bottom: 0.5rem;
+}
+
+.bin-usage-bar-indicator {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: $o-accent;
+}
+
 .bin-status {
   padding: 0.5rem;
 
@@ -19,24 +37,6 @@ $o-dark-blue: #152E44;
     .line {
       padding-left: 1rem;
     }
-  }
-
-  .bin-usage-bar {
-    display: block;
-    position: relative;
-    width: 100%;
-    height: 0.5rem;
-    background: white;
-    margin-bottom: 0.5rem;
-  }
-
-  .bin-usage-bar-indicator {
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    background: $o-accent;
   }
 }
 

@@ -8,9 +8,12 @@
             <a class="button" href="${url('broadcast_twitter_form')}">${_("Share your tweets")}</a>
         </p>
         <p>${_("Share your favorite files with the world. Broadcast your blog posts, documents, music, and videos from six geostationary satellites.")}</p>
+        <h3 class="bin-usage-data">${_("Daily bin: {size} / {usage}".format(size=h.hsize(bin.size), usage=bin.usage))}</h3>
         <span class="bin-usage-bar">
             <span class="bin-usage-bar-indicator" style="width: ${bin.usage}%"></span>
         </span>
-        <span class="bin-usage-data">${_("{size} of {capacity} used.".format(size=h.hsize(bin.size), capacity=h.hsize(bin.capacity)))}</span>
+        <p>
+            <a class="button" href="${url('queue_list')}">${_("See the bin")}</a>
+        </p>
     </div>
 </div>
