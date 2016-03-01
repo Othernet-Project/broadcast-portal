@@ -12,6 +12,7 @@
                broadcast_in = '{:02}:{:02}:{:02}'.format(int(hours), int(minutes), int(seconds))
             %>
             <span class="line">${_("Current bin size: {size} / {usage}%".format(size=h.hsize(bin.size), usage=bin.usage))}</span>
+            <br />
             <span class="line">${_("Broadcasting in: {time}".format(time=broadcast_in))}</span>
         </div>
         <span class="bin-usage-bar">
