@@ -3,11 +3,17 @@
 
 <%block name="main">
     <div class="bin-status">
-        <h1>${_("Daily Bin")}</h1>
-        <p>
-            <span class="bin-usage-data">${_("Current bin size: {size} / {usage}%".format(size=h.hsize(bin.size), usage=bin.usage))}</span>
-            <span>${_("Broadcasting in: ")}</span>
-        </p>
+        <h1 class="title">${_("Daily Bin")}</h1>
+        <div class="bin-info-display">
+            <%
+               tsecs = bin.time_left.total_seconds()
+               hours, remainder = divmod(tsecs, 3600)
+               minutes, seconds = divmod(remainder, 60)
+               broadcast_in = '{:02}:{:02}:{:02}'.format(int(hours), int(minutes), int(seconds))
+            %>
+            <span class="line">${_("Current bin size: {size} / {usage}%".format(size=h.hsize(bin.size), usage=bin.usage))}</span>
+            <span class="line">${_("Broadcasting in: {time}".format(time=broadcast_in))}</span>
+        </div>
         <span class="bin-usage-bar">
             <span class="bin-usage-bar-indicator" style="width: ${bin.usage}%"></span>
         </span>

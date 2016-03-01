@@ -48,6 +48,10 @@ class Bin(object):
         except ZeroDivisionError:
             return 0
 
+    @property
+    def time_left(self):
+        return self.closes - datetime.datetime.utcnow()
+
     def update(self, **kwargs):
         if any([key not in self._columns for key in kwargs]):
             raise ValueError("Unknown columns detected.")
