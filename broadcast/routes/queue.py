@@ -13,14 +13,14 @@ from ..util.template import template
 def queue_list():
     query = request.params.get('query', '')
     query_args = {'title__like': query} if query else {}
-    queue_type = request.params.get('type', ACCEPTED_QUEUE)
+    queue_type = request.params.get('type')
     current_bin = Bin.current()
     if queue_type == ACCEPTED_QUEUE:
         items = filter_items(ContentItem.type,
                              status=ContentItem.ACCEPTED,
                              bin=current_bin.id,
                              **query_args)
-    else:
+    elif queue_type == REVIEW_QUEUE:
         processing = filter_items(ContentItem.type,
                                   status=ContentItem.PROCESSING,
                                   bin=None,
@@ -30,6 +30,8 @@ def queue_list():
                                 bin=None,
                                 **query_args)
         items = sorted(processing + rejected, key=lambda x: x.created)
+    else:
+        redirect(request.app.get_url('queue_list', type=ACCEPTED_QUEUE))
 
     hidden_queue_type = (ACCEPTED_QUEUE,
                          REVIEW_QUEUE)[queue_type == ACCEPTED_QUEUE]
