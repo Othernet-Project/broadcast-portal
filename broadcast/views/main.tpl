@@ -14,7 +14,7 @@
                 <span class="bin-usage-bar-indicator" style="width: ${bin.usage}%"></span>
             </span>
             <p>
-                <a class="button" href="${url('queue_list')}">${_("See the bin")}</a>
+                <a class="button" href="${url('queue_list', type='accepted')}">${_("See the bin")}</a>
             </p>
         </div>
     </div>
