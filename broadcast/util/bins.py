@@ -131,7 +131,7 @@ class Bin(object):
 
     @classmethod
     def create(cls, db=None, config=None):
-        db = db or request.db.sessions
+        db = db or request.db.main
         config = config or request.app.config
         created = datetime.datetime.utcnow()
         closes = created + datetime.timedelta(seconds=config['bin.lifetime'])
