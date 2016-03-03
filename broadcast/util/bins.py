@@ -145,6 +145,12 @@ class Bin(object):
         db.execute(query, data)
         return cls(data, db=db)
 
+    @classmethod
+    def list(cls, db=None):
+        db = db or request.db.main
+        db.query(db.Select(sets=cls._table))
+        return [cls(raw_data, db=db) for raw_data in db.results]
+
     @staticmethod
     def get_unique_id():
         return uuid.uuid4().hex
