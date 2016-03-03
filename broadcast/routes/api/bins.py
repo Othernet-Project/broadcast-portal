@@ -21,7 +21,7 @@ class BinItemsListAPI(BaseAPI):
 
 def route(conf):
     return [
-        ('/api/bin/', ['GET'], BinListAPI(), 'bin_list', {}),
-        ('/api/bin/<id>/items/', ['GET'], BinItemsListAPI(), 'bin_items_list', {}),
+        ('/api/bins/', ['GET'], BinListAPI(), 'bin_list', {}),
+        ('/api/bins/<id>/items/', ['GET'], BinItemsListAPI(), 'bin_items_list', {}),
     ]
 
