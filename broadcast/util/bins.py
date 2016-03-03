@@ -13,6 +13,9 @@ class Bin(object):
     class NotEnoughSpace(Error):
         pass
 
+    class DoesNotExist(Error):
+        pass
+
     OPEN = 'OPEN'
     CLOSED = 'CLOSED'
     ARCHIVED = 'ARCHIVED'
@@ -141,6 +144,17 @@ class Bin(object):
         query = db.Insert(cls._table, cols=cls._columns)
         db.execute(query, data)
         return cls(data, db=db)
+
+    @classmethod
+    def get(cls, bin_id, db=None):
+        db = db or request.db.main
+        query = db.Select(sets=cls._table, where='id = :bin_id')
+        db.query(query, bin_id=bin_id)
+        raw_data = db.result
+        if not raw_data:
+            raise cls.DoesNotExist()
+
+        return cls(raw_data, db=db)
 
     @classmethod
     def list(cls, db=None):
