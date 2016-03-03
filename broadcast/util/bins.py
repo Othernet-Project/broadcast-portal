@@ -1,11 +1,8 @@
 import datetime
-import json
 import sqlite3
 import uuid
 
 from bottle import request
-
-from .serializers import DateTimeEncoder
 
 
 class Bin(object):
@@ -44,8 +41,8 @@ class Bin(object):
             return self._data.get(name, None)
         raise AttributeError(name)
 
-    def to_json(self):
-        return json.dumps(self._data, cls=DateTimeEncoder)
+    def to_native(self):
+        return dict(self._data)
 
     @property
     def usage(self):

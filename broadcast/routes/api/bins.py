@@ -6,7 +6,7 @@ class BinListAPI(BaseAPI):
     __name__ = 'BinListAPI'
 
     def get(self):
-        results = [b.to_json() for b in Bin.list()]
+        results = [b.to_native() for b in Bin.list()]
         return {'results': results, 'count': len(results)}
 
 
