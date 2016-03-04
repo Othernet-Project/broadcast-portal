@@ -3,9 +3,9 @@ from bottle_utils.ajax import roca_view
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.queue import QueueItemForm, ACCEPTED_QUEUE, REVIEW_QUEUE
+from ..models.bins import Bin
+from ..models.items import ContentItem
 from ..util.auth.decorators import login_required
-from ..util.bins import Bin
-from ..util.broadcast import ContentItem, filter_items, get_item
 from ..util.template import template
 
 
@@ -16,19 +16,16 @@ def queue_list():
     queue_type = request.params.get('type')
     current_bin = Bin.current()
     if queue_type == ACCEPTED_QUEUE:
-        items = filter_items(ContentItem.type,
-                             status=ContentItem.ACCEPTED,
-                             bin=current_bin.id,
-                             **query_args)
+        items = ContentItem.filter(status=ContentItem.ACCEPTED,
+                                   bin=current_bin.id,
+                                   **query_args)
     elif queue_type == REVIEW_QUEUE:
-        processing = filter_items(ContentItem.type,
-                                  status=ContentItem.PROCESSING,
-                                  bin=None,
-                                  **query_args)
-        rejected = filter_items(ContentItem.type,
-                                status=ContentItem.REJECTED,
-                                bin=None,
-                                **query_args)
+        processing = ContentItem.filter(status=ContentItem.PROCESSING,
+                                        bin=None,
+                                        **query_args)
+        rejected = ContentItem.filter(status=ContentItem.REJECTED,
+                                      bin=None,
+                                      **query_args)
         items = sorted(processing + rejected, key=lambda x: x.created)
     else:
         redirect(request.app.get_url('queue_list', type=ACCEPTED_QUEUE))
@@ -46,10 +43,12 @@ def queue_list():
 
 @roca_view('queue_item', '_queue_item', template_func=template)
 def queue_item(item_id):
-    item = get_item(ContentItem.type, id=item_id)
-    if not item:
+    try:
+        item = ContentItem.get(id=item_id)
+    except ContentItem.DoesNotExist:
         abort(404, _("The requested item was not found."))
-    return dict(item=item)
+    else:
+        return dict(item=item)
 
 
 @login_required(groups='superuser')
@@ -59,8 +58,9 @@ def save_queue_item(item_id):
         current_bin = Bin.current()
         queue_type = form.processed_data['queue_type']
         target_bin = None if queue_type == ACCEPTED_QUEUE else current_bin.id
-        item = get_item(ContentItem.type, id=item_id, bin=target_bin)
-        if not item:
+        try:
+            item = ContentItem.get(id=item_id, bin=target_bin)
+        except ContentItem.DoesNotExist:
             abort(404, _("The specified item is no longer modifiable."))
 
         if queue_type == ACCEPTED_QUEUE:

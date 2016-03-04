@@ -16,21 +16,19 @@ from bottle_utils.html import hsize
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.broadcast import ContentForm, TwitterForm
+from ..helpers import upload_to_drive
+from ..models.charges import Charge
+from ..models.items import ContentItem, TwitterItem
 from ..util.auth.users import User
 from ..util.auth.helpers import send_confirmation_email
-from ..util.broadcast import (ContentItem,
-                              TwitterItem,
-                              filter_items,
-                              get_unique_id,
-                              sign,
-                              upload_to_drive)
+from ..util.security import sign
 from ..util.template import template, view
 
 
 @view('broadcast_content')
 @csrf_token
 def show_broadcast_content_form(item_type):
-    id = get_unique_id()
+    id = ContentItem.generate_unique_id()
     signature = sign(id, secret_key=request.app.config['app.secret_key'])
     initial_data = {'id': id, 'signature': signature}
     form = ContentForm(initial_data)
@@ -62,19 +60,22 @@ def broadcast_content(item_type):
                                     config=request.app.config,
                                     db=request.db.sessions)
 
-        item = ContentItem(
-            created=datetime.datetime.utcnow(),
-            title=form.processed_data['title'],
-            language=form.processed_data['language'],
-            id=form.processed_data['id'],
-            content_file=form.processed_data['content_file'],
-            file_size=form.processed_data['file_size'],
-            status=ContentItem.PROCESSING,
-            license=form.processed_data['license'],
-            email=email,
-            url=form.processed_data['url']
-        )
-        item.save()
+        item = ContentItem.create(created=datetime.datetime.utcnow(),
+                                  title=form.processed_data['title'],
+                                  language=form.processed_data['language'],
+                                  id=form.processed_data['id'],
+                                  size=form.processed_data['file_size'],
+                                  status=ContentItem.PROCESSING,
+                                  license=form.processed_data['license'],
+                                  email=email,
+                                  url=form.processed_data['url'])
+        upload_root = request.app.config['content.upload_root']
+        path = item.save_file(form.processed_data['content_file'],
+                              upload_root=upload_root)
+        item.update(path=path)
+        Charge.create(item_id=item.id,
+                      item_type=item.type,
+                      plan=form.payment_plan)
         if form.processed_data['mode'] == 'priority':
             next_url = request.app.get_url('broadcast_priority_form',
                                            item_type=item.type,
@@ -110,15 +111,16 @@ def show_broadcast_twitter_form():
 def broadcast_twitter():
     form = TwitterForm(request.forms)
     if form.is_valid():
-        twitter_item = TwitterItem(status=TwitterItem.PROCESSING,
-                                   created=datetime.datetime.utcnow(),
-                                   handle=form.processed_data['handle'],
-                                   plan=form.processed_data['plan'],
-                                   id=get_unique_id())
-        twitter_item.save()
+        item = TwitterItem.create(status=TwitterItem.PROCESSING,
+                                  created=datetime.datetime.utcnow(),
+                                  handle=form.processed_data['handle'],
+                                  id=TwitterItem.generate_unique_id())
+        Charge.create(item_id=item.id,
+                      item_type=item.type,
+                      plan=form.processed_data['plan'])
         next_url = request.app.get_url('broadcast_priority_form',
-                                       item_type=twitter_item.type,
-                                       item_id=twitter_item.id)
+                                       item_type=item.type,
+                                       item_id=item.id)
         redirect(next_url)
 
     return dict(form=form)

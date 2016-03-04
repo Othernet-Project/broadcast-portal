@@ -1,4 +1,3 @@
-import datetime
 import json
 import os
 
@@ -8,18 +7,12 @@ import bottle_utils.common
 import bottle_utils.csrf
 import bottle_utils.html
 
-
-class DateTimeCapableEncoder(json.JSONEncoder):
-
-    def default(self, obj):
-        if isinstance(obj, datetime.datetime):
-            return obj.isoformat()
-
-        return super(DateTimeCapableEncoder, self).default(obj)
+from .serializers import DateTimeEncoder
+from .template_helper import template_helper
 
 
 def json_dumps(s):
-    return json.dumps(s, cls=DateTimeCapableEncoder)
+    return json.dumps(s, cls=DateTimeEncoder)
 
 
 def pre_init(config):
@@ -32,6 +25,7 @@ def pre_init(config):
         'DEBUG': bottle.DEBUG,
         'request': bottle.request,
         'h': bottle_utils.html,
+        'th': template_helper,
         'esc': bottle_utils.common.html_escape,
         'aesc': bottle_utils.common.attr_escape,
         'u': bottle_utils.common.to_unicode,

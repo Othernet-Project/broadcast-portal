@@ -14,28 +14,23 @@ import sqlite3
 import pbkdf2
 from bottle import request
 
-from .base import DBDataWrapper
+from ..basemodel import Model
 from .groups import Group
 from .permissions import BasePermission
 from .utils import is_string, from_csv, to_list
 
 
-class User(DBDataWrapper):
+class User(Model):
 
-    class Error(Exception):
+    class AlreadyExists(Model.Error):
         pass
 
-    class DoesNotExist(Error):
+    class InvalidCredentials(Model.Error):
         pass
 
-    class AlreadyExists(Error):
-        pass
-
-    class InvalidCredentials(Error):
-        pass
-
-    _table = 'users'
-    _columns = (
+    database = 'sessions'
+    table = 'users'
+    columns = (
         'email',
         'username',
         'password',
@@ -44,6 +39,7 @@ class User(DBDataWrapper):
         'data',
         'groups',
     )
+    pk_field = 'email'
 
     def __init__(self, *args, **kwargs):
         super(User, self).__init__(*args, **kwargs)
@@ -99,19 +95,6 @@ class User(DBDataWrapper):
         request.session.rotate()
         return self
 
-    def update(self, **kwargs):
-        if any([key not in self._columns for key in kwargs]):
-            raise ValueError("Unknown columns detected.")
-
-        placeholders = dict((name, ':{}'.format(name))
-                            for name in kwargs.keys())
-        query = self._db.Update(self._table,
-                                where='email = :email',
-                                **placeholders)
-        self._db.query(query, email=self.email, **kwargs)
-        self._data.update(kwargs)
-        return self
-
     def set_password(self, new_password):
         self.update(password=self.encrypt_password(new_password))
         return self
@@ -121,37 +104,19 @@ class User(DBDataWrapper):
         return self
 
     @classmethod
-    def get(cls, username_or_email, db=None):
-        db = db or request.db.sessions
-        query = db.Select(sets=cls._table,
-                          where='username = :username OR email = :email')
-        db.query(query,
-                 username=username_or_email,
-                 email=username_or_email)
-        raw_data = db.result
-        if not raw_data:
-            raise cls.DoesNotExist()
-
-        return cls(raw_data, db=db)
-
-    @classmethod
     def create(cls, email, username=None, password=None, is_superuser=False,
                confirmed=None, overwrite=False, db=None):
-        db = db or request.db.sessions
+        db = db or cls.database()
         password = cls.encrypt_password(password) if password else None
         data = {'username': username,
                 'password': password,
                 'email': email,
                 'created': datetime.datetime.utcnow(),
                 'groups': 'superuser' if is_superuser else '',
+                'data': None,
                 'confirmed': confirmed}
         statement_cls = db.Replace if overwrite else db.Insert
-        query = statement_cls(cls._table, cols=('username',
-                                                'password',
-                                                'email',
-                                                'created',
-                                                'groups',
-                                                'confirmed'))
+        query = statement_cls(cls._table, cols=cls.columns)
         try:
             db.execute(query, data)
         except sqlite3.IntegrityError:
@@ -163,7 +128,12 @@ class User(DBDataWrapper):
     def login(cls, username_or_email, password=None, verify=True, db=None):
         """Makes the user of the passed in username or email logged in, with
         optional security verification."""
-        user = cls.get(username_or_email, db=db)
+        try:
+            user = cls.get(email=username_or_email, db=db)
+        except cls.DoesNotExist:
+            # if it's not found by username either, raise freely
+            user = cls.get(username=username_or_email, db=db)
+
         if verify and not cls.is_valid_password(password, user.password):
             raise cls.InvalidCredentials()
 

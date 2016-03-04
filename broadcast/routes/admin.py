@@ -10,8 +10,8 @@ file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 
 from bottle import redirect, request, static_file, abort
 
+from ..models.items import BaseItem
 from ..util.auth.decorators import login_required
-from ..util.broadcast import get_item, filter_items
 from ..util.template import view
 
 
@@ -24,7 +24,8 @@ def scheduled_redirect():
 def scheduled_list():
     items = []
     for item_type in request.app.config['app.broadcast_types']:
-        items.extend(filter_items(item_type))
+        item_cls = BaseItem.cast(item_type)
+        items.extend(item_cls.filter())
 
     return dict(items=sorted(items, key=lambda x: x.created, reverse=True))
 
@@ -32,17 +33,21 @@ def scheduled_list():
 @login_required(groups='superuser')
 @view('scheduled_list')
 def scheduled_type_list(item_type):
-    items = filter_items(item_type)
+    item_cls = BaseItem.cast(item_type)
+    items = item_cls.filter()
     return dict(items=sorted(items, key=lambda x: x.created, reverse=True))
 
 
 @login_required(groups='superuser')
 @view('scheduled_detail')
 def scheduled_detail(item_type, item_id):
-    item = get_item(item_type, id=item_id)
-    if item is None:
+    item_cls = BaseItem.cast(item_type)
+    try:
+        item = item_cls.get(id=item_id)
+    except item_cls.DoesNotExist:
         abort(404, "Invalid item id specified.")
-    return dict(item=item)
+    else:
+        return dict(item=item)
 
 
 @login_required(groups='superuser')

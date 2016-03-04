@@ -55,10 +55,6 @@ class BaseAPI(object):
     def error(self, status_code):
         raise HTTPError(status_code, HTTP_CODES[status_code])
 
-    def to_json(self, obj):
-        # using getattr so that values generated in a property will be included
-        return dict((key, getattr(obj, key)) for key in obj.keys())
-
     @auth_basic(check_auth)
     def __call__(self, *args, **kwargs):
         instance = self.create()

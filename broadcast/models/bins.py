@@ -1,27 +1,23 @@
 import datetime
 import sqlite3
-import uuid
 
 from bottle import request
 
+from ..util.basemodel import Model
 
-class Bin(object):
 
-    class Error(Exception):
-        pass
+class Bin(Model):
 
-    class NotEnoughSpace(Error):
-        pass
-
-    class DoesNotExist(Error):
+    class NotEnoughSpace(Model.Error):
         pass
 
     OPEN = 'OPEN'
     CLOSED = 'CLOSED'
     ARCHIVED = 'ARCHIVED'
 
-    _table = 'bins'
-    _columns = (
+    database = 'main'
+    table = 'bins'
+    columns = (
         'id',
         'created',
         'closes',
@@ -29,23 +25,7 @@ class Bin(object):
         'size',
         'status',
     )
-    _pk_field = 'id'
-
-    def __init__(self, data, db=None):
-        self._db = db or request.db.main
-        # in case a dict-like object is passed in
-        if not isinstance(data, dict):
-            data = dict((k, data[k]) for k in data.keys())
-
-        self._data = data
-
-    def __getattr__(self, name):
-        if name in self._columns:
-            return self._data.get(name, None)
-        raise AttributeError(name)
-
-    def to_native(self):
-        return dict(self._data)
+    pk_field = 'id'
 
     @property
     def usage(self):
@@ -57,22 +37,6 @@ class Bin(object):
     @property
     def time_left(self):
         return self.closes - datetime.datetime.utcnow()
-
-    def update(self, **kwargs):
-        if any([key not in self._columns for key in kwargs]):
-            raise ValueError("Unknown columns detected.")
-
-        placeholders = dict((name, ':{}'.format(name))
-                            for name in kwargs.keys())
-        where = '{pk_field} = :{pk_field}'.format(pk_field=self._pk_field)
-        query = self._db.Update(self._table,
-                                where=where,
-                                **placeholders)
-        query_args = dict(kwargs)
-        query_args[self._pk_field] = getattr(self, self._pk_field)
-        self._db.query(query, **query_args)
-        self._data.update(kwargs)
-        return self
 
     def can_accept(self, item):
         return self.size + item.size <= self.capacity
@@ -104,7 +68,7 @@ class Bin(object):
 
     @classmethod
     def current(cls, db=None, config=None):
-        db = db or request.db.main
+        db = db or cls.database()
         config = config or request.app.config
         query = db.Select(sets=cls._table,
                           where='status = :status',
@@ -113,11 +77,11 @@ class Bin(object):
         db.query(query, status=cls.OPEN)
         raw_data = db.result
         if not raw_data:
-            return cls.create(db=db, config=config)
+            return cls.new(db=db, config=config)
         # check if bin lifetime already exceeded the limit
         if datetime.datetime.utcnow() >= raw_data['closes']:
             # if so, close older bin(s), and return a newly created one
-            new_bin = cls.create(db=db, config=config)
+            new_bin = cls.new(db=db, config=config)
             where = 'status = :old_status AND id != :exclude_id'
             query = db.Update(cls._table,
                               where=where,
@@ -130,8 +94,8 @@ class Bin(object):
         return cls(raw_data, db=db)
 
     @classmethod
-    def create(cls, db=None, config=None):
-        db = db or request.db.main
+    def new(cls, db=None, config=None):
+        db = db or cls.database()
         config = config or request.app.config
         created = datetime.datetime.utcnow()
         closes = created + datetime.timedelta(seconds=config['bin.lifetime'])
@@ -141,28 +105,5 @@ class Bin(object):
                 'capacity': config['bin.capacity'],
                 'size': 0,
                 'status': cls.OPEN}
-        query = db.Insert(cls._table, cols=cls._columns)
-        db.execute(query, data)
-        return cls(data, db=db)
-
-    @classmethod
-    def get(cls, bin_id, db=None):
-        db = db or request.db.main
-        query = db.Select(sets=cls._table, where='id = :bin_id')
-        db.query(query, bin_id=bin_id)
-        raw_data = db.result
-        if not raw_data:
-            raise cls.DoesNotExist()
-
-        return cls(raw_data, db=db)
-
-    @classmethod
-    def list(cls, db=None):
-        db = db or request.db.main
-        db.query(db.Select(sets=cls._table))
-        return [cls(raw_data, db=db) for raw_data in db.results]
-
-    @staticmethod
-    def get_unique_id():
-        return uuid.uuid4().hex
+        return cls.create(db=db, **data)
 

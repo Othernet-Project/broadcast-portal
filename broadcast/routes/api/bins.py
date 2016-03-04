@@ -1,6 +1,6 @@
 from .base import BaseAPI
-from ...util.bins import Bin
-from ...util.broadcast import filter_items, ContentItem
+from ...models.bins import Bin
+from ...models.items import ContentItem
 
 
 class BinListAPI(BaseAPI):
@@ -15,7 +15,7 @@ class BinItemsListAPI(BaseAPI):
     __name__ = 'BinItemsListAPI'
 
     def get(self, id):
-        results = filter_items(ContentItem.type, bin=id, raw=True)
+        results = [item.to_native() for item in ContentItem.filter(bin=id)]
         return {'results': results, 'count': len(results)}
 
 

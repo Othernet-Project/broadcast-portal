@@ -13,11 +13,11 @@ from bottle_utils.csrf import csrf_protect, csrf_token
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.priority import PaymentForm
-from ..util.broadcast import (fetch_item,
-                              guard_already_charged,
-                              send_payment_confirmation,
-                              upload_to_drive,
-                              ChargeError)
+from ..helpers import (fetch_item,
+                       guard_already_charged,
+                       send_payment_confirmation,
+                       upload_to_drive)
+from ..models.charges import Charge
 from ..util.template import view
 
 
@@ -42,9 +42,10 @@ def broadcast_priority(item):
     if form.is_valid():
         token = form.processed_data['stripe_token']
         item.update(email=form.processed_data['email'])
+        charge = Charge.get(item_id=item.id)
         try:
-            stripe_obj = item.charge(token)
-        except ChargeError as exc:
+            stripe_object = charge.execute(token, item=item)
+        except Charge.Error as exc:
             error = exc
         else:
             task_runner = request.app.config['task.runner']
@@ -53,7 +54,7 @@ def broadcast_priority(item):
             if item.email:
                 task_runner.schedule(send_payment_confirmation,
                                      item,
-                                     stripe_obj,
+                                     stripe_object,
                                      item.email,
                                      request.app.config)
 

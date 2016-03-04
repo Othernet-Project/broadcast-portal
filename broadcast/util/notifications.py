@@ -12,7 +12,8 @@ import datetime
 
 from bottle_utils.i18n import dummy_gettext as _
 
-from .broadcast import filter_items, cleanup
+from ..helpers import cleanup
+from ..models.items import BaseItem
 from .sendmail import send_multiple
 from .squery import Database
 
@@ -48,7 +49,8 @@ def is_already_sent(db, broadcast_types):
 
 
 def get_new_broadcast_entries(db, broadcast_types):
-    return dict((item_type, filter_items(item_type, notified=None, db=db))
+    return dict((item_type, BaseItem.cast(item_type).filter(notified=None,
+                                                            db=db))
                 for item_type in broadcast_types)
 
 

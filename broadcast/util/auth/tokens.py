@@ -3,27 +3,29 @@ import uuid
 
 from bottle import request
 
-from .base import DBDataWrapper
+from ..basemodel import Model
 from .users import User
 
 
-class BaseToken(DBDataWrapper):
+class BaseToken(Model):
 
-    class Error(Exception):
+    class KeyExpired(Model.Error):
         pass
 
-    class KeyNotFound(Error):
-        pass
-
-    class KeyExpired(Error):
-        pass
-
-    _table = 'confirmations'
-    _columns = (
+    database = 'sessions'
+    table = 'confirmations'
+    columns = (
         'key',
         'email',
         'expires',
     )
+    pk_field = 'key'
+
+    def __init__(self, *args, **kwargs):
+        super(BaseToken, self).__init__(*args, **kwargs)
+        if self.has_expired:
+            self.delete()
+            raise self.KeyExpired()
 
     @property
     def has_expired(self):
@@ -53,27 +55,11 @@ class BaseToken(DBDataWrapper):
         db.execute(query, data)
         return cls(data, db=db)
 
-    @classmethod
-    def get(cls, key, db=None):
-        db = db or request.db.sessions
-        query = db.Select(sets=cls._table, where='key = :key')
-        db.execute(query, dict(key=key))
-        data = db.result
-        if not data:
-            raise cls.KeyNotFound()
-
-        confirmation = cls(data, db=db)
-        if confirmation.has_expired:
-            confirmation.delete()
-            raise cls.KeyExpired()
-
-        return confirmation
-
 
 class EmailVerification(BaseToken):
 
     def accept(self):
-        user = User.get(self.email)
+        user = User.get(email=self.email)
         user.confirm().make_logged_in()
         self.delete()
         return user
@@ -82,7 +68,7 @@ class EmailVerification(BaseToken):
 class PasswordReset(BaseToken):
 
     def accept(self, new_password):
-        user = User.get(self.email)
+        user = User.get(email=self.email)
         user.set_password(new_password)
         self.delete()
         return user

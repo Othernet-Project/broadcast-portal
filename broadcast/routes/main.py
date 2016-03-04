@@ -1,6 +1,6 @@
 from bottle import request
 
-from ..util.bins import Bin
+from ..models.bins import Bin
 from ..util.template import view
 
 

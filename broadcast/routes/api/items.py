@@ -8,35 +8,38 @@ from .base import (BaseAPI,
                    check_auth,
                    HTTP_400_BAD_REQUEST,
                    HTTP_404_NOT_FOUND)
-from ...util.broadcast import get_item, filter_items
+from ...models.items import BaseItem
 
 
 class ItemListAPI(BaseAPI):
 
     def get(self):
-        results = filter_items(self.table, raw=True, **request.query)
+        item_cls = BaseItem.cast(self.table)
+        results = [item.to_native()
+                   for item in item_cls.filter(**request.query)]
         return {'results': results, 'count': len(results)}
 
 
 class ItemDetailAPI(BaseAPI):
 
     def get_object(self, id):
-        obj = get_item(self.table, id=id)
-        if obj is None:
+        item_cls = BaseItem.cast(self.table)
+        try:
+            return item_cls.get(id=id)
+        except item_cls.DoesNotExist:
             self.error(HTTP_404_NOT_FOUND)
-        return obj
 
     def get(self, id):
         obj = self.get_object(id)
-        return self.to_json(obj)
+        return obj.to_native()
 
     @json_required
     def patch(self, id):
-        obj = get_item(self.table, id=id)
+        obj = self.get_object(id)
         # None is a possible incoming value, so we cannot rely on using
         # `request.json.get`
         patch_data = dict()
-        for key in obj.modifieable_fields:
+        for key in self.modifieable_fields:
             try:
                 patch_data[key] = request.json[key]
             except KeyError:
@@ -53,30 +56,35 @@ class ItemDetailAPI(BaseAPI):
 
 @auth_basic(check_auth)
 def download_content_file(id):
-    obj = get_item('content', id=id)
-    if obj is None:
+    ContentItem = BaseItem.cast('content')
+    try:
+        obj = ContentItem.get(id=id)
+    except ContentItem.DoesNotExist:
         raise HTTPError(HTTP_404_NOT_FOUND, HTTP_CODES[HTTP_404_NOT_FOUND])
-
-    return static_file(obj.file_path,
-                       root=request.app.config['content.upload_root'],
-                       download=os.path.basename(obj.file_path))
+    else:
+        return static_file(obj.path,
+                           root=request.app.config['content.upload_root'],
+                           download=os.path.basename(obj.path))
 
 
 def route(conf):
     generated_routes = []
+    modifiable_fields = ['status']
     for item_type in conf['app.broadcast_types']:
         # generate list api endpoint
         list_api_cls_name = '{0}ListAPI'.format(item_type.capitalize())
         list_api_cls = type(list_api_cls_name,
                             (ItemListAPI,),
                             {'__name__': list_api_cls_name,
-                             'table': item_type})
+                             'table': item_type,
+                             'modifiable_fields': modifiable_fields})
         # generate detail api endpoint
         detail_api_cls_name = '{0}DetailAPI'.format(item_type.capitalize())
         detail_api_cls = type(detail_api_cls_name,
                               (ItemDetailAPI,),
                               {'__name__': list_api_cls_name,
-                               'table': item_type})
+                               'table': item_type,
+                               'modifiable_fields': modifiable_fields})
         # add routes to api endpoints
         generated_routes.extend([(
             '/api/{0}/'.format(item_type),

@@ -19,7 +19,9 @@ from bottle_utils.i18n import lazy_gettext as _
 
 from outernet_metadata.values import LICENSES, LICENSE_NAMES
 
-from ..util.broadcast import sign, get_item, ContentItem, TwitterItem
+from ..models.items import ContentItem, TwitterItem
+from ..util.security import sign
+
 
 LICENSE_CHOICES = (('', _('Select the content license')),)
 LICENSE_CHOICES += tuple(zip(LICENSES, LICENSE_NAMES))
@@ -186,7 +188,9 @@ def list_zipfile(zip_filepath):
         return zf.namelist()
 
 
-class BaseUploadForm(form.Form):
+class ContentForm(form.Form):
+    payment_plan = 'review'
+    type = ContentItem.type
     messages = {
         # Translators, upload form error when data is tampered with
         'tampered': _('Form data missing or has been tampered with.'),
@@ -196,17 +200,6 @@ class BaseUploadForm(form.Form):
 
     id = form.HiddenField()
     signature = form.HiddenField()
-
-    def validate(self):
-        id = self.processed_data['id']
-        signature = self.processed_data['signature']
-        secret_key = request.app.config.get('app.secret_key')
-        if signature != sign(id, secret_key):
-            raise form.ValidationError('tampered', {})
-
-
-class ContentForm(BaseUploadForm):
-    type = ContentItem.type
     mode = form.HiddenField()
     content_file = form.FileField(
         # Translators, used as label for content file upload field
@@ -297,9 +290,18 @@ class ContentForm(BaseUploadForm):
         return file_upload
 
     def validate(self):
-        super(ContentForm, self).validate()
         id = self.processed_data['id']
-        if get_item(self.type, id=id):
+        signature = self.processed_data['signature']
+        secret_key = request.app.config.get('app.secret_key')
+        if signature != sign(id, secret_key):
+            raise form.ValidationError('tampered', {})
+
+        try:
+            ContentItem.get(id=id)
+        except ContentItem.DoesNotExist:
+            # all right, it should not exist
+            pass
+        else:
             raise form.ValidationError('expired', {})
 
 
