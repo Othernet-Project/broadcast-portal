@@ -46,6 +46,7 @@ class ContentItem(BaseItem):
         'url',
         'bin',
     )
+    pk_field = 'id'
 
     @property
     def filename(self):
@@ -77,4 +78,5 @@ class TwitterItem(BaseItem):
         'notified',
         'status',
     )
+    pk_field = 'id'
 
