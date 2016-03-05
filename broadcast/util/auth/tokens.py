@@ -32,7 +32,7 @@ class BaseToken(Model):
         return self.expires < datetime.datetime.now()
 
     def delete(self):
-        query = self._db.Delete(self._table, where='key = :key')
+        query = self._db.Delete(self.table, where='key = :key')
         self._db.query(query, key=self.key)
 
     def accept(self):
@@ -51,7 +51,7 @@ class BaseToken(Model):
         data = {'key': key,
                 'email': email,
                 'expires': expires}
-        query = db.Insert(cls._table, cols=cls._columns)
+        query = db.Insert(cls.table, cols=cls.columns)
         db.execute(query, data)
         return cls(data, db=db)
 
