@@ -79,7 +79,6 @@ class Model(object):
 
     @classmethod
     def _construct_query(cls, db, **kwargs):
-        db = db or cls.get_database()
         query = db.Select(sets=cls.table)
         if cls.order:
             query.order += cls.order
@@ -94,6 +93,7 @@ class Model(object):
 
     @classmethod
     def get(cls, db=None, **kwargs):
+        db = db or cls.get_database()
         (query, params) = cls._construct_query(db=db, **kwargs)
         db.query(query, **params)
         raw_data = db.result
@@ -104,6 +104,7 @@ class Model(object):
 
     @classmethod
     def filter(cls, db=None, **kwargs):
+        db = db or cls.get_database()
         (query, params) = cls._construct_query(db=db, **kwargs)
         db.query(query, **params)
         return [cls(raw_data, db=db) for raw_data in db.results]
