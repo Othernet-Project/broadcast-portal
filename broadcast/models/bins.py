@@ -70,7 +70,7 @@ class Bin(Model):
     def current(cls, db=None, config=None):
         db = db or cls.get_database()
         config = config or request.app.config
-        query = db.Select(sets=cls._table,
+        query = db.Select(sets=cls.table,
                           where='status = :status',
                           order='-created',
                           limit=1)
@@ -83,7 +83,7 @@ class Bin(Model):
             # if so, close older bin(s), and return a newly created one
             new_bin = cls.new(db=db, config=config)
             where = 'status = :old_status AND id != :exclude_id'
-            query = db.Update(cls._table,
+            query = db.Update(cls.table,
                               where=where,
                               status=':new_status')
             db.query(query,
