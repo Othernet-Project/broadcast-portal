@@ -99,7 +99,7 @@ class Bin(Model):
         config = config or request.app.config
         created = datetime.datetime.utcnow()
         closes = created + datetime.timedelta(seconds=config['bin.lifetime'])
-        data = {'id': cls.get_unique_id(),
+        data = {'id': cls.generate_unique_id(),
                 'created': created,
                 'closes': closes,
                 'capacity': config['bin.capacity'],
