@@ -24,7 +24,7 @@
             </td>
             <td class="trunc">${item.url or 'n/a'}</td>
             <td class="trunc">${item.license or 'n/a'}</td>
-            <td class="trunc">${h.hsize(item.file_size)}</td>
+            <td class="trunc">${h.hsize(item.size)}</td>
             % if queue_type == REVIEW_QUEUE:
                 <td class="trunc">
                     % if item.is_rejected:
