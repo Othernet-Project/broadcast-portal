@@ -79,10 +79,7 @@ class Model(object):
 
     @classmethod
     def _construct_query(cls, db, **kwargs):
-        query = db.Select(sets=cls.table)
-        if cls.order:
-            query.order += cls.order
-
+        query = db.Select(sets=cls.table, order=cls.order)
         params = dict()
         for (command, value) in kwargs.items():
             (field, operator, value) = cls._unpack_command(command, value)
