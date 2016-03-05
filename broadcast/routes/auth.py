@@ -249,10 +249,10 @@ def register():
                             message=_('You have successfully completed the '
                                       'registration process.'),
                             redirect_target=_('log-in'))
-        user = User.create(username=username,
-                           password=password,
-                           email=email,
-                           db=request.db.sessions)
+        user = User.new(username=username,
+                        password=password,
+                        email=email,
+                        db=request.db.sessions)
         user.make_logged_in()
         return send_confirmation(email, next_path)
 

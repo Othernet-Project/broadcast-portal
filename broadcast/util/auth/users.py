@@ -104,8 +104,8 @@ class User(Model):
         return self
 
     @classmethod
-    def create(cls, email, username=None, password=None, is_superuser=False,
-               confirmed=None, overwrite=False, db=None):
+    def new(cls, email, username=None, password=None, is_superuser=False,
+            confirmed=None, overwrite=False, db=None):
         db = db or cls.database()
         password = cls.encrypt_password(password) if password else None
         data = {'username': username,
@@ -116,7 +116,7 @@ class User(Model):
                 'data': None,
                 'confirmed': confirmed}
         statement_cls = db.Replace if overwrite else db.Insert
-        query = statement_cls(cls._table, cols=cls.columns)
+        query = statement_cls(cls.table, cols=cls.columns)
         try:
             db.execute(query, data)
         except sqlite3.IntegrityError:

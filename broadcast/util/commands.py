@@ -40,13 +40,13 @@ def create_superuser(config):
         sys.exit(1)
 
     try:
-        User.create(username=username,
-                    password=password,
-                    email=email,
-                    is_superuser=True,
-                    confirmed=datetime.datetime.utcnow(),
-                    db=databases.sessions,
-                    overwrite=True)
+        User.new(username=username,
+                 password=password,
+                 email=email,
+                 is_superuser=True,
+                 confirmed=datetime.datetime.utcnow(),
+                 db=databases.sessions,
+                 overwrite=True)
         print("User created.")
     except User.AlreadyExists:
         print("User already exists, please try a different username.")

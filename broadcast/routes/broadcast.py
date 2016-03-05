@@ -49,7 +49,7 @@ def broadcast_content(item_type):
             email = request.user.email
         else:
             try:
-                user = User.create(email=email, db=request.db.sessions)
+                user = User.new(email=email, db=request.db.sessions)
             except User.AlreadyExists:
                 pass  # ignore, just resend confirmation mail
             else:
