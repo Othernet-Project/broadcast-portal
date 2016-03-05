@@ -70,9 +70,8 @@ def broadcast_content(item_type):
                                   email=email,
                                   url=form.processed_data['url'])
         upload_root = request.app.config['content.upload_root']
-        path = item.save_file(form.processed_data['content_file'],
-                              upload_root=upload_root)
-        item.update(path=path)
+        item.save_file(form.processed_data['content_file'],
+                       upload_root=upload_root)
         Charge.create(item_id=item.id,
                       item_type=item.type,
                       plan=form.payment_plan)

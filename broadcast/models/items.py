@@ -63,8 +63,7 @@ class ContentItem(BaseItem):
             os.remove(upload_path)
 
         file_object.save(upload_path)
-        # return saved path relative to upload_root
-        return os.path.relpath(upload_path, upload_root)
+        return self.update(path=os.path.relpath(upload_path, upload_root))
 
 
 class TwitterItem(BaseItem):
