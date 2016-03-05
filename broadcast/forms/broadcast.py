@@ -190,7 +190,7 @@ def list_zipfile(zip_filepath):
 
 class ContentForm(form.Form):
     payment_plan = 'review'
-    type = ContentItem.type
+    type = ContentItem.table
     messages = {
         # Translators, upload form error when data is tampered with
         'tampered': _('Form data missing or has been tampered with.'),
@@ -306,7 +306,7 @@ class ContentForm(form.Form):
 
 
 class TwitterForm(form.Form):
-    type = TwitterItem.type
+    type = TwitterItem.table
 
     PAYMENT_PLANS = (
         ('bc_twitter_monthly', _("Monthly - $3 per month")),
