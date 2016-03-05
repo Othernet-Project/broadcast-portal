@@ -21,7 +21,7 @@ class Model(object):
         pass
 
     def __init__(self, data=None, db=None):
-        self._db = db or self.database()
+        self._db = db or self.get_database()
         data = data or dict()
         # data must be json-serializable, make sure it is
         if not isinstance(data, dict):
@@ -61,8 +61,8 @@ class Model(object):
         return cls(json.loads(data, cls=DateTimeDecoder), db=db)
 
     @classmethod
-    def database(cls):
-        return request.db[cls._database]
+    def get_database(cls):
+        return request.db[cls.database]
 
     @classmethod
     def _unpack_command(cls, command, value):
@@ -79,7 +79,7 @@ class Model(object):
 
     @classmethod
     def _construct_query(cls, db, **kwargs):
-        db = db or cls.database()
+        db = db or cls.get_database()
         query = db.Select(sets=cls.table)
         if cls.order:
             query.order += cls.order
@@ -110,7 +110,7 @@ class Model(object):
 
     @classmethod
     def create(cls, db=None, **kwargs):
-        db = db or cls.database()
+        db = db or cls.get_database()
         writable_columns = [col for col in kwargs if col in cls.columns]
         query = db.Insert(cls.table, cols=writable_columns)
         db.execute(query, kwargs)

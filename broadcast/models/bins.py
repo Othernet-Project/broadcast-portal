@@ -68,7 +68,7 @@ class Bin(Model):
 
     @classmethod
     def current(cls, db=None, config=None):
-        db = db or cls.database()
+        db = db or cls.get_database()
         config = config or request.app.config
         query = db.Select(sets=cls._table,
                           where='status = :status',
@@ -95,7 +95,7 @@ class Bin(Model):
 
     @classmethod
     def new(cls, db=None, config=None):
-        db = db or cls.database()
+        db = db or cls.get_database()
         config = config or request.app.config
         created = datetime.datetime.utcnow()
         closes = created + datetime.timedelta(seconds=config['bin.lifetime'])
