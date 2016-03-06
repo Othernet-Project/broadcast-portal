@@ -6,6 +6,7 @@ import os
 from bottle import request, redirect, abort
 from bottle_utils.i18n import dummy_gettext as _
 
+from .models.charges import Charge
 from .models.items import BaseItem
 from .util.gdrive import DriveClient
 from .util.gsheet import SheetClient
@@ -38,13 +39,17 @@ def fetch_item(func):
 def guard_already_charged(func):
     @functools.wraps(func)
     def wrapper(item, **kwargs):
-        if item.charge_id:
-            scheduled_url = request.app.get_url('broadcast_priority_scheduled',
-                                                item_type=item.type,
-                                                item_id=item.id)
-            redirect(scheduled_url)
-
-        return func(item=item, **kwargs)
+        try:
+            charge = Charge.get(item_id=item.id)
+        except Charge.DoesNotExist:
+            abort(400, _("Cannot determine the requested plan."))
+        else:
+            if charge.is_executed:
+                url = request.app.get_url('broadcast_priority_scheduled',
+                                          item_type=item.type,
+                                          item_id=item.id)
+                redirect(url)
+            return func(item=item, charge=charge, **kwargs)
     return wrapper
 
 
