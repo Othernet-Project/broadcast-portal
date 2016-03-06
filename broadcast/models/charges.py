@@ -26,6 +26,10 @@ class Charge(Model):
     )
     pk_field = 'id'
 
+    @property
+    def is_executed(self):
+        return self.id is not None and self.charged_at is not None
+
     def _fetch_item(self):
         item_cls = BaseItem.cast(self.item_type)
         return item_cls.get(id=self.item_id)
