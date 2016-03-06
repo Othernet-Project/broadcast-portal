@@ -36,7 +36,7 @@ def fetch_item(func):
     return wrapper
 
 
-def guard_already_charged(func):
+def fetch_charge(func):
     @functools.wraps(func)
     def wrapper(item, **kwargs):
         try:

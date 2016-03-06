@@ -14,7 +14,7 @@ from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.priority import PaymentForm
 from ..helpers import (fetch_item,
-                       guard_already_charged,
+                       fetch_charge,
                        send_payment_confirmation,
                        upload_to_drive)
 from ..models.charges import Charge
@@ -24,19 +24,19 @@ from ..util.template import view
 @view('priority')
 @csrf_token
 @fetch_item
-@guard_already_charged
-def show_broadcast_priority_form(item):
+@fetch_charge
+def show_broadcast_priority_form(item, charge):
     stripe_public_key = request.app.config['stripe.public_key']
     form = PaymentForm({'stripe_public_key': stripe_public_key,
                         'email': item.email})
-    return dict(mode='priority', item=item, form=form)
+    return dict(mode='priority', item=item, charge=charge, form=form)
 
 
 @view('priority')
 @csrf_protect
 @fetch_item
-@guard_already_charged
-def broadcast_priority(item):
+@fetch_charge
+def broadcast_priority(item, charge):
     form = PaymentForm(request.forms)
     error = None
     if form.is_valid():
@@ -63,7 +63,11 @@ def broadcast_priority(item):
                                                 item_id=item.id)
             redirect(scheduled_url)
 
-    return dict(mode='priority', item=item, form=form, charge_error=error)
+    return dict(mode='priority',
+                item=item,
+                charge=charge,
+                charge_error=error,
+                form=form)
 
 
 @view('feedback')
@@ -107,3 +111,4 @@ def route(conf):
             {}
         ),
     )
+
