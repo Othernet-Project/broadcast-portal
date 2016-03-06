@@ -22,7 +22,11 @@
             % endif
             ${csrf_tag()}
             ${forms.field(form.stripe_public_key)}
+            % if item.email:
+            ${h.HIDDEN('email', request.user.email)}
+            % else:
             ${forms.field(form.email, required=True)}
+            % endif
             ${forms.field(form.card_number, required=True)}
             <div class="inline-fields">
                 <p class="field required" id="field-cvc">
