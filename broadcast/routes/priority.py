@@ -41,8 +41,8 @@ def broadcast_priority(item, charge):
     error = None
     if form.is_valid():
         token = form.processed_data['stripe_token']
-        item.update(email=form.processed_data['email'])
-        charge = Charge.get(item_id=item.id)
+        if not item.email:
+            item.update(email=form.processed_data['email'])
         try:
             stripe_object = charge.execute(token, item=item)
         except Charge.Error as exc:
@@ -55,7 +55,6 @@ def broadcast_priority(item, charge):
                 task_runner.schedule(send_payment_confirmation,
                                      item,
                                      stripe_object,
-                                     item.email,
                                      request.app.config)
 
             scheduled_url = request.app.get_url('broadcast_priority_scheduled',
