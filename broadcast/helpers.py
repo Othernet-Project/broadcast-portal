@@ -129,3 +129,10 @@ def plan_period(charge):
     }
     return periods[charge.plan]
 
+
+@template_helper
+def plan_price(item, charge):
+    config = request.app.config
+    price_map = config['{}.prices'.format(item.type)]
+    return charge._match_price(price_map)
+
