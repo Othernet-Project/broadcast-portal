@@ -9,9 +9,24 @@
     <div class="form">
         <h2>${_('Payment')}</h2>
         % if item.type == 'twitter':
-            <p class="priority-help">${_("{amount} will be charged {period} until you unsubscribe from this service. Your card will not be charged until the subscription is approved by Outernet staff.".format(amount=th.plan_price(item, charge), period=th.plan_period(charge)))}</p>
+            <p class="priority-help">
+                ${_("{amount} will be charged {period} until you unsubscribe "
+                    "from this service. Your card will not be charged until "
+                    "the subscription is approved by Outernet staff.".format(
+                        amount=th.hamount(th.plan_price(item, charge)),
+                        period=th.plan_period(charge)
+                    )
+                )}
+            </p>
         % else:
-            <p class="priority-help">${_("A one time {amount} accelerated review fee will be charged immediately. Your submission will be reviewed within 24 hours after we receive your payment.".format(amount=th.plan_price(item, charge)))}</p>
+            <p class="priority-help">
+                ${_("A one time {amount} accelerated review fee will be charged "
+                    "immediately. Your submission will be reviewed within 24 "
+                    "hours after we receive your payment.".format(
+                        amount=th.hamount(th.plan_price(item, charge))
+                    )
+                )}
+            </p>
         % endif
 
         ${h.form('post', _id='payment-form', action=url('broadcast_priority', item_type=item.type, item_id=item.id))}

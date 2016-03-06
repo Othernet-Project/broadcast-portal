@@ -85,34 +85,25 @@ def hamount(cent_amount, config=None):
     return "{} {:,.2f}".format(currency, basic_unit)
 
 
-def send_payment_confirmation(item, stripe_obj, config):
-    interval_types = {
-        'month': _("monthly"),
-        'year': _("annual")
-    }
-    item_types = {
-        'twitter': _("twitter feed"),
-        'content': _("content"),
-    }
-    is_subscription = stripe_obj.object == 'customer'
+def send_payment_confirmation(item, stripe_object, config):
+    is_subscription = stripe_object.object == 'customer'
     if is_subscription:
-        card = stripe_obj.sources.data[-1]
+        card = stripe_object.sources.data[-1]
         last4digits = card.last4
-        subscription = stripe_obj.subscriptions.data[-1]
-        interval = interval_types[subscription.plan.interval]
+        subscription = stripe_object.subscriptions.data[-1]
+        interval = subscription.plan.interval
         timestamp = subscription.start
         amount = subscription.plan.amount
     else:
-        last4digits = stripe_obj.source.last4
+        last4digits = stripe_object.source.last4
         interval = None
-        timestamp = stripe_obj.created
-        amount = stripe_obj.amount
+        timestamp = stripe_object.created
+        amount = stripe_object.amount
 
-    context_data = {'email': item.email,
-                    'item_type': item_types[item.type],
+    context_data = {'item': item,
                     'last4digits': last4digits,
                     'timestamp': datetime.datetime.fromtimestamp(timestamp),
-                    'total_amount': humanize_amount(amount, config=config),
+                    'amount': amount,
                     'interval': interval,
                     'is_subscription': is_subscription}
     send_mail(item.email,
