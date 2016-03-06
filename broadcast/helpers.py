@@ -76,7 +76,8 @@ def upload_to_drive(item, config):
               item.values() + [file_data['alternateLink'], file_data['id']])
 
 
-def humanize_amount(cent_amount, config=None):
+@template_helper
+def hamount(cent_amount, config=None):
     config = config or request.app.config
     currency = config['charge.currency']
     multiplier = config['charge.basic_monetary_unit_multiplier']
