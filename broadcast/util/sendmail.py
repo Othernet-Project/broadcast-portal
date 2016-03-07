@@ -27,7 +27,7 @@ from bottle import request, mako_template as template
 
 def send_multiple(to_list, subject, text=None, html=None, data={},
                   mandrill_args={'preserve_recipients': False},
-                  use_template=None, config=None):
+                  use_template=None, is_async=False, config=None):
     """ Sends out text/HTML email with specified templates """
     conf = config or request.app.config
 
@@ -59,13 +59,14 @@ def send_multiple(to_list, subject, text=None, html=None, data={},
     if use_template:
         try:
             return mandrill_client.messages.send_template(
-                template=use_template, message=message, async=False)
+                template=use_template, message=message, async=is_async)
         except Exception as e:
             logging.exception('Error sending email: %s' % e)
             return None
     else:
         try:
-            return mandrill_client.messages.send(message=message, async=False)
+            return mandrill_client.messages.send(message=message,
+                                                 async=is_async)
         except Exception as e:
             logging.exception('Error sending email: %s' % e)
             return None
@@ -73,7 +74,7 @@ def send_multiple(to_list, subject, text=None, html=None, data={},
 
 def send_mail(to, subject, text=None, html=None, to_name='',
               data={}, mandrill_args={'preserve_recipients': False},
-              use_template=None, config=None):
+              use_template=None, is_async=False, config=None):
     """ Send out text/HTML email with specified templates """
     return send_multiple([(to, to_name)], subject, text, html, data,
-                         mandrill_args, use_template, config)
+                         mandrill_args, use_template, is_async, config)
