@@ -108,7 +108,7 @@ def confirm(key):
                 'status': 'error',
                 'redirect_url': redir_onfail,
                 'redirect_target': _('log-in')}
-    except EmailVerification.KeyNotFound:
+    except EmailVerification.DoesNotExist:
         return {'message': _("The confirmation key is not valid."),
                 'page_title': _("Confirmation"),
                 'status': 'error',
@@ -203,7 +203,7 @@ def password_reset(key):
                    'status': 'error',
                    'redirect_url': redirect_url,
                    'redirect_target': _('log-in')}
-    except PasswordReset.KeyNotFound:
+    except PasswordReset.DoesNotExist:
         context = {'message': _("The password reset key is not valid."),
                    'page_title': _("Password Reset"),
                    'status': 'error',
