@@ -47,8 +47,9 @@ def broadcast_priority(item, charge):
             error = exc
         else:
             if item.type == 'content':
-                task_runner = request.app.config['task.runner']
-                task_runner.schedule(upload_to_drive, item, request.app.config)
+                tasks = request.app.config['tasks']
+                tasks.schedule(upload_to_drive,
+                               args=(item, request.app.config))
             send_mail(item.email,
                       _("Payment Confirmation"),
                       text='email/payment_confirmation',

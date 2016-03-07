@@ -158,14 +158,13 @@ def password_reset_request():
     else:
         expires = request.app.config['authentication.password_reset_expires']
         pw_reset = PasswordReset.create(email, expires)
-        task_runner = request.app.config['task.runner']
-        task_runner.schedule(send_mail,
-                             email,
-                             _("Reset Password"),
-                             text='email/password_reset',
-                             data={'reset_key': pw_reset.key,
-                                   'next_path': next_path},
-                             config=request.app.config)
+        tasks = request.app.config['tasks']
+        tasks.schedule(send_mail,
+                       args=(email, _("Reset Password")),
+                       kwargs=dict(text='email/password_reset',
+                                   data={'reset_key': pw_reset.key,
+                                         'next_path': next_path},
+                                   config=request.app.config))
 
     redirect_url = get_redirect_path(request.app.get_url('login'), next_path)
     return template('feedback',

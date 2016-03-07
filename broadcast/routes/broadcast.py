@@ -81,8 +81,8 @@ def broadcast_content(item_type):
                                            item_id=item.id)
             redirect(next_url)
         else:
-            task_runner = request.app.config['task.runner']
-            task_runner.schedule(upload_to_drive, item, request.app.config)
+            tasks = request.app.config['tasks']
+            tasks.schedule(upload_to_drive, args=(item, request.app.config))
             message = _('Free uplink has been successfully scheduled.')
             return template('feedback',
                             item=item,
