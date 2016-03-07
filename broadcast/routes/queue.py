@@ -71,6 +71,9 @@ def save_queue_item(item_id):
                             "capacity and thus cannot be added to it.")
                 redirect_url = request.app.get_url('queue_list',
                                                    type=REVIEW_QUEUE)
+                if request.is_xhr:
+                    abort(400, _("Item not be accepted, bin is already full."))
+
                 return template('feedback',
                                 status='error',
                                 page_title=_('Item unacceptable'),
