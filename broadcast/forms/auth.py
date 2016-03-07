@@ -114,7 +114,7 @@ class RegistrationForm(form.Form):
             raise form.ValidationError('email_invalid', {})
 
         try:
-            user = User.get(value)
+            user = User.get(email=value)
         except User.DoesNotExist:
             pass  # good, email is free
         else:
@@ -125,7 +125,7 @@ class RegistrationForm(form.Form):
 
     def postprocess_username(self, value):
         try:
-            User.get(value)
+            User.get(username=value)
         except User.DoesNotExist:
             return value  # good, username is free
         else:
@@ -157,7 +157,7 @@ class EmailVerificationForm(form.Form):
             raise form.ValidationError('invalid_email', {})
 
         try:
-            User.get(value)
+            User.get(email=value)
         except User.DoesNotExist:
             raise form.ValidationError('not_registered', {})
         else:
@@ -218,10 +218,10 @@ class PasswordResetForm(form.Form):
     def validate(self):
         key = self.processed_data['key']
         try:
-            PasswordReset.get(key)
+            PasswordReset.get(key=key)
         except PasswordReset.KeyExpired:
             raise form.ValidationError('key_expired', {})
-        except PasswordReset.KeyNotFound:
+        except PasswordReset.DoesNotExist:
             raise form.ValidationError('key_invalid', {})
 
         new_password1 = self.processed_data['new_password1']
