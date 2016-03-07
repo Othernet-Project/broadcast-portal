@@ -23,6 +23,7 @@ class Bin(Model):
         'closes',
         'capacity',
         'size',
+        'count',
         'status',
     )
     pk_field = 'id'
@@ -46,7 +47,8 @@ class Bin(Model):
             raise self.NotEnoughSpace()
 
         try:
-            self.update(size=self.size + item.size)
+            self.update(size=self.size + item.size,
+                        count=self.count + 1)
         except sqlite3.IntegrityError:
             raise self.NotEnoughSpace()
         else:
@@ -54,7 +56,8 @@ class Bin(Model):
             return self
 
     def remove(self, item):
-        self.update(size=self.size - item.size)
+        self.update(size=self.size - item.size,
+                    count=self.count - 1)
         item.update(bin=None, status=item.REJECTED)
         return self
 
