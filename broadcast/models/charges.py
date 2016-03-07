@@ -24,7 +24,7 @@ class Charge(Model):
         'item_id',
         'item_type',
     )
-    pk_field = 'id'
+    pk_field = 'item_id'
 
     @property
     def is_executed(self):
