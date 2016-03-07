@@ -110,10 +110,15 @@ def show_broadcast_twitter_form():
 def broadcast_twitter():
     form = TwitterForm(request.forms)
     if form.is_valid():
+        extra_kwargs = dict()
+        if request.user.is_authenticated:
+            extra_kwargs['email'] = request.user.email
+
         item = TwitterItem.create(status=TwitterItem.PROCESSING,
                                   created=datetime.datetime.utcnow(),
                                   handle=form.processed_data['handle'],
-                                  id=TwitterItem.generate_unique_id())
+                                  id=TwitterItem.generate_unique_id(),
+                                  **extra_kwargs)
         Charge.create(item_id=item.id,
                       item_type=item.type,
                       plan=form.processed_data['plan'])
