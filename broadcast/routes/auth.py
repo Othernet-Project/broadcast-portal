@@ -152,7 +152,7 @@ def password_reset_request():
 
     email = form.processed_data['email']
     try:
-        User.get(email)
+        User.get(email=email)
     except User.DoesNotExist:
         pass  # do not reveal to users whether an email exists or not
     else:
@@ -267,9 +267,14 @@ def check_available():
     result = False
     if username_or_email:
         try:
-            User.get(username_or_email)
+            User.get(email=username_or_email)
         except User.DoesNotExist:
-            pass
+            try:
+                User.get(username=username_or_email)
+            except User.DoesNotExist:
+                pass
+            else:
+                result = True
         else:
             result = True
 
