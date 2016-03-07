@@ -311,7 +311,7 @@ header .header-links a:hover {
   color: #2ad4ff;
   text-decoration: none;
 }
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 850px) {
   /* line 82, ../../../src/scss/partials/_header.scss */
   header .header-links .nav {
     position: fixed;
@@ -360,7 +360,7 @@ header .header-links .nav > span {
 header .header-links .hamburger {
   display: none;
 }
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 850px) {
   /* line 120, ../../../src/scss/partials/_header.scss */
   header .header-links .hamburger {
     display: block;
@@ -1229,53 +1229,55 @@ table {
 .queue {
   background-color: #3a5065;
   padding: 0.5rem 0;
+  position: relative;
+  z-index: 1;
 }
-/* line 133, ../../../src/scss/partials/_queue.scss */
+/* line 135, ../../../src/scss/partials/_queue.scss */
 .queue.hidden {
   display: none;
 }
-/* line 137, ../../../src/scss/partials/_queue.scss */
+/* line 139, ../../../src/scss/partials/_queue.scss */
 .queue th {
   background: #4a6781;
   font-size: 90%;
   text-transform: uppercase;
 }
-/* line 143, ../../../src/scss/partials/_queue.scss */
+/* line 145, ../../../src/scss/partials/_queue.scss */
 .queue td, .queue th {
   padding: 0.5rem;
 }
-/* line 148, ../../../src/scss/partials/_queue.scss */
+/* line 150, ../../../src/scss/partials/_queue.scss */
 .queue td:nth-child(1) {
   width: 8rem;
 }
-/* line 153, ../../../src/scss/partials/_queue.scss */
+/* line 155, ../../../src/scss/partials/_queue.scss */
 .queue td:nth-child(3) {
   width: 4rem;
 }
-/* line 158, ../../../src/scss/partials/_queue.scss */
+/* line 160, ../../../src/scss/partials/_queue.scss */
 .queue td:nth-child(4) {
   width: 4rem;
 }
-/* line 163, ../../../src/scss/partials/_queue.scss */
+/* line 165, ../../../src/scss/partials/_queue.scss */
 .queue td:nth-child(5) {
   width: 6rem;
 }
-/* line 168, ../../../src/scss/partials/_queue.scss */
+/* line 170, ../../../src/scss/partials/_queue.scss */
 .queue th:nth-child(6),
 .queue td:nth-child(6) {
   width: 4rem;
   text-align: center;
 }
-/* line 175, ../../../src/scss/partials/_queue.scss */
+/* line 177, ../../../src/scss/partials/_queue.scss */
 .queue td:last-child {
   padding: 0;
   width: 2rem;
 }
-/* line 180, ../../../src/scss/partials/_queue.scss */
+/* line 182, ../../../src/scss/partials/_queue.scss */
 .queue tr {
   border-bottom: 1px solid #253340;
 }
-/* line 184, ../../../src/scss/partials/_queue.scss */
+/* line 186, ../../../src/scss/partials/_queue.scss */
 .queue button {
   border: 0;
   background: #6183a4;
@@ -1285,11 +1287,11 @@ table {
   line-height: 2rem;
   font-size: 200%;
 }
-/* line 193, ../../../src/scss/partials/_queue.scss */
+/* line 195, ../../../src/scss/partials/_queue.scss */
 .queue button:hover {
   background: white;
 }
-/* line 198, ../../../src/scss/partials/_queue.scss */
+/* line 200, ../../../src/scss/partials/_queue.scss */
 .queue .flagged {
   display: inline-block;
   vertical-align: center;
@@ -1305,17 +1307,17 @@ table {
   font-weight: bold;
 }
 
-/* line 213, ../../../src/scss/partials/_queue.scss */
+/* line 215, ../../../src/scss/partials/_queue.scss */
 .queue-item th, .queue-item td, .queue-item td:last-child {
   padding-left: 1rem;
   padding-right: 1rem;
 }
-/* line 218, ../../../src/scss/partials/_queue.scss */
+/* line 220, ../../../src/scss/partials/_queue.scss */
 .queue-item th {
   width: 4rem;
 }
 
-/* line 223, ../../../src/scss/partials/_queue.scss */
+/* line 225, ../../../src/scss/partials/_queue.scss */
 .noitems {
   text-align: center;
   font-size: 200%;
