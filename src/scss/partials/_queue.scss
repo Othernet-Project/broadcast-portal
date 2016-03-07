@@ -129,6 +129,8 @@ table {
 .queue {
   background-color: $table-background;
   padding: 0.5rem 0;
+  position: relative;
+  z-index: 1;
 
   &.hidden {
     display: none;
