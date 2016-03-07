@@ -6,7 +6,7 @@ create table charges
     charged_at timestamp,                    -- timestamp of funds reservation
     captured_at timestamp,                   -- timestamp when funds actually arrived
     plan varchar,                            -- payment plan, also determines whether charge_id is a subscription or fixed payment
-    item_id varchar,                         -- id of item to which the charge object belongs
+    item_id varchar unique,                  -- id of item to which the charge object belongs
     item_type varchar                        -- type of item to which the charge object belons
 );
 replace into charges
