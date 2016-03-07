@@ -38,7 +38,7 @@
             ${csrf_tag()}
             ${forms.field(form.stripe_public_key)}
             % if item.email:
-            ${h.HIDDEN('email', request.user.email)}
+            ${h.HIDDEN('email', item.email)}
             % else:
             ${forms.field(form.email, required=True)}
             % endif
