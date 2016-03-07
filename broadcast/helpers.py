@@ -10,7 +10,6 @@ from .models.charges import Charge
 from .models.items import BaseItem
 from .util.gdrive import DriveClient
 from .util.gsheet import SheetClient
-from .util.sendmail import send_mail
 from .util.template_helper import template_helper
 
 
@@ -87,34 +86,6 @@ def hamount(cent_amount, config=None):
     return "{} {:,.2f}".format(currency, basic_unit)
 
 
-def send_payment_confirmation(item, stripe_object, config):
-    is_subscription = stripe_object.object == 'customer'
-    if is_subscription:
-        card = stripe_object.sources.data[-1]
-        last4digits = card.last4
-        subscription = stripe_object.subscriptions.data[-1]
-        interval = subscription.plan.interval
-        timestamp = subscription.start
-        amount = subscription.plan.amount
-    else:
-        last4digits = stripe_object.source.last4
-        interval = None
-        timestamp = stripe_object.created
-        amount = stripe_object.amount
-
-    context_data = {'item': item,
-                    'last4digits': last4digits,
-                    'timestamp': datetime.datetime.fromtimestamp(timestamp),
-                    'amount': amount,
-                    'interval': interval,
-                    'is_subscription': is_subscription}
-    send_mail(item.email,
-              _("Payment Confirmation"),
-              text='email/payment_confirmation',
-              data=context_data,
-              config=config)
-
-
 @template_helper
 def plan_period(charge):
     periods = {
@@ -129,4 +100,9 @@ def plan_price(item, charge):
     config = request.app.config
     price_map = config['{}.prices'.format(item.type)]
     return charge._match_price(price_map)
+
+
+@template_helper
+def from_ts(timestamp):
+    return datetime.datetime.fromtimestamp(timestamp)
 

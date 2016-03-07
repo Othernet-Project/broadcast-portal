@@ -13,11 +13,9 @@ from bottle_utils.csrf import csrf_protect, csrf_token
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..forms.priority import PaymentForm
-from ..helpers import (fetch_item,
-                       fetch_charge,
-                       send_payment_confirmation,
-                       upload_to_drive)
+from ..helpers import fetch_item, fetch_charge, upload_to_drive
 from ..models.charges import Charge
+from ..util.sendmail import send_mail
 from ..util.template import view
 
 
@@ -48,15 +46,15 @@ def broadcast_priority(item, charge):
         except Charge.Error as exc:
             error = exc
         else:
-            task_runner = request.app.config['task.runner']
             if item.type == 'content':
+                task_runner = request.app.config['task.runner']
                 task_runner.schedule(upload_to_drive, item, request.app.config)
-            if item.email:
-                task_runner.schedule(send_payment_confirmation,
-                                     item,
-                                     stripe_object,
-                                     request.app.config)
-
+            send_mail(item.email,
+                      _("Payment Confirmation"),
+                      text='email/payment_confirmation',
+                      data=dict(item=item, stripe_object=stripe_object),
+                      is_async=True,
+                      config=request.app.config)
             scheduled_url = request.app.get_url('broadcast_priority_scheduled',
                                                 item_type=item.type,
                                                 item_id=item.id)
