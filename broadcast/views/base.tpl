@@ -62,6 +62,7 @@
             <p class="copyright">2014-2015 <span lang="en">Outernet Inc</span></p>
         </footer>
         </%block>
+        <%block name="extra_body"/>
         <script src="${assets['js/ui']}"></script>
         <%block name="extra_scripts"/>
     </body>
