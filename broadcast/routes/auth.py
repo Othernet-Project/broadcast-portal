@@ -101,7 +101,7 @@ def confirm(key):
     next_path = request.params.get('next', '/')
     redir_onfail = get_redirect_path(request.app.get_url('login'), next_path)
     try:
-        verification = EmailVerification.get(key)
+        verification = EmailVerification.get(key=key)
     except EmailVerification.KeyExpired:
         return {'message': _("The confirmation key has already expired."),
                 'page_title': _("Confirmation"),
@@ -196,7 +196,7 @@ def password_reset(key):
     key = form.processed_data['key']
     new_password = form.processed_data['new_password1']
     try:
-        pw_reset = PasswordReset.get(key)
+        pw_reset = PasswordReset.get(key=key)
     except PasswordReset.KeyExpired:
         context = {'message': _("The password reset key has already expired."),
                    'page_title': _("Password Reset"),
