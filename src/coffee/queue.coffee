@@ -1,7 +1,7 @@
 ((window, $, templates) ->
   'use strict'
 
-  queues = $ '.queue'
+  queues = $ '.items'
   handles = $ '.handles a.handle'
   searchForm = $ 'form.search'
   searchUrl = searchForm.attr 'action'

@@ -68,6 +68,13 @@ $single-column-cutoff: 700px;
       margin: 0 auto 2rem;
     }
   }
+
+  .previous-bins {
+    margin-top: 2rem;
+    a {
+      color: $base-text;
+    }
+  }
 }
 
 .static {

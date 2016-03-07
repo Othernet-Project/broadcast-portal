@@ -16,6 +16,9 @@
             <p>
                 <a class="button" href="${url('queue_list', type='accepted')}">${_("See the bin")}</a>
             </p>
+            <p class="previous-bins">
+                <a href="${url('bin_list')}">${_("See previous bins")}</a>
+            </p>
         </div>
     </div>
 </div>

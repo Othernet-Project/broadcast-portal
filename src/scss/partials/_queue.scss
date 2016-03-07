@@ -31,8 +31,9 @@
   @include background-image(linear-gradient($bar-highlight, $bar-shadow));
 }
 
-.bin-status {
+.bin-heading {
   padding: 0.5rem;
+  min-height: 2.4rem;
 
   .title {
     font-size: 3rem;
@@ -49,7 +50,7 @@
   }
 }
 
-.bin-contents {
+.bin {
   position: relative;
   margin-top: 0.5rem;
 
@@ -126,7 +127,7 @@ table {
   margin-bottom: 1rem;
 }
 
-.queue {
+.items {
   background-color: $table-background;
   padding: 0.5rem 0;
   position: relative;

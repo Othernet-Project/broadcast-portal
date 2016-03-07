@@ -2,7 +2,7 @@
 (function(window, $, templates) {
   'use strict';
   var actionFormSelector, actionForms, decode, getFormData, getQueryParams, handles, loadQueue, modifyQueue, plusSign, queryRegEx, queues, searchForm, searchQTElem, searchUrl;
-  queues = $('.queue');
+  queues = $('.items');
   handles = $('.handles a.handle');
   searchForm = $('form.search');
   searchUrl = searchForm.attr('action');

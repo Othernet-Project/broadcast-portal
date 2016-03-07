@@ -2,7 +2,7 @@
 <%namespace name="queue_list" file="_queue_list.tpl"/>
 
 <%block name="main">
-    <div class="bin-status">
+    <div class="bin-heading">
         <h1 class="title">${_("Daily Bin")}</h1>
         <div class="bin-info-display">
             <%
@@ -20,7 +20,7 @@
         </span>
     </div>
 
-    <div class="bin-contents">
+    <div class="bin">
         <p class="handles">
             <a class="handle ${ACCEPTED_QUEUE} ${'active' if queue_type == ACCEPTED_QUEUE else ''}" href="${url('queue_list', type=ACCEPTED_QUEUE)}" data-target="${ACCEPTED_QUEUE}">${_("Accepted")}</a>
             <a class="handle ${REVIEW_QUEUE} ${'active' if queue_type == REVIEW_QUEUE else ''}" href="${url('queue_list', type=REVIEW_QUEUE)}" data-target="${REVIEW_QUEUE}">${_("Review")}</a>
@@ -32,11 +32,11 @@
             <button type="submit"><span class="icon">${_('Search')}</span></button>
         </form>
 
-        <div class="queue ${queue_type}" data-source="${queue_type}">
+        <div class="items ${queue_type}" data-source="${queue_type}">
             ${queue_list.body()}
         </div>
 
-        <div class="queue ${hidden_queue_type} hidden" data-source="${hidden_queue_type}"></div>
+        <div class="items ${hidden_queue_type} hidden" data-source="${hidden_queue_type}"></div>
     </div>
 </%block>
 
