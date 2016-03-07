@@ -72,7 +72,7 @@ def broadcast_priority(item, charge):
 @fetch_item
 @fetch_charge(guard_already_charged=False)
 def show_broadcast_priority_scheduled(item, charge):
-    if charge.is_executed:
+    if not charge.is_executed:
         # attempted access to success-page, while not charged
         priority_url = request.app.get_url('broadcast_priority_form',
                                            item_type=item.type,
