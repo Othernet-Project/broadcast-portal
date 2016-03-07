@@ -5,6 +5,7 @@ import importlib
 
 from bottle import Bottle
 from gevent import pywsgi
+from greentasks.scheduler import TaskScheduler
 
 from .confloader import ConfDict
 from .signal_handlers import on_interrupt
@@ -25,6 +26,7 @@ class Application:
         self.config['root'] = root
         self.config['bottle'] = self.app
         self.config['args'] = args
+        self.config['tasks'] = TaskScheduler()
 
         # Register application hooks
         self.pre_init(self.config['stack.pre_init'])

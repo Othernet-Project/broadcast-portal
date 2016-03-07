@@ -6,10 +6,13 @@ import os
 from bottle import request, redirect, abort
 from bottle_utils.i18n import dummy_gettext as _
 
+from .models.bins import Bin
 from .models.charges import Charge
 from .models.items import BaseItem
 from .util.gdrive import DriveClient
 from .util.gsheet import SheetClient
+from .util.sendmail import send_multiple
+from .util.squery import Database
 from .util.template_helper import template_helper
 
 
@@ -61,6 +64,44 @@ def cleanup(table, db=None, config=None):
     where = "email IS NULL AND created < date('now', '-{0} days')".format(days)
     query = db.Delete(table, where=where)
     db.query(query)
+
+
+def send_notifications(config):
+    debug = config['server.debug']
+    db_conn = config['database.connections']['main']
+    db = Database(db_conn, debug=debug)
+    broadcast_types = config['app.broadcast_types']
+    # remove orphans before sending notifications
+    for item_type in broadcast_types:
+        cleanup(item_type, db=db, config=config)
+    # assemble list of items to be included in notification
+    entries = dict((itype, BaseItem.cast(itype).filter(notified=None, db=db))
+                   for itype in broadcast_types)
+    # send out notifications
+    recipients = config['notifications.recipients']
+    send_multiple([(email, email) for email in recipients],
+                  _("Notification"),
+                  text='email/notification',
+                  data=dict(**entries),
+                  config=config)
+    # mark sent entries so no duplicate notifications can happen
+    notified = datetime.datetime.now()
+    for (entry_type, entry_list) in entries.items():
+        entry_ids = [entry.id for entry in entry_list]
+        query = db.Update(entry_type,
+                          notified='?',
+                          where=db.sqlin.__func__('id', entry_ids))
+        args = [notified] + entry_ids
+        db.query(query, *args)
+
+
+def check_bin_expiry(config):
+    debug = config['server.debug']
+    db_conn = config['database.connections']['main']
+    db = Database(db_conn, debug=debug)
+    # fetching the current bin will automatically perform the expiration
+    # check and close the bin if needed while also creating a new one
+    Bin.current(db=db, config=config)
 
 
 def upload_to_drive(item, config):
