@@ -14,6 +14,7 @@ import re
 import os
 import sqlite3
 import logging
+import datetime
 from functools import wraps
 from contextlib import contextmanager
 
@@ -27,7 +28,14 @@ from sqlize import (From, Where, Group, Order, Limit, Select, Update, Delete,
 SLASH = re.compile(r'\\')
 
 
-sqlite3.register_converter('timestamp', dateutil.parser.parse)
+def dt_parser(timestamp):
+    try:
+        return dateutil.parser.parse(timestamp)
+    except ValueError:
+        return datetime.datetime.utcfromtimestamp(float(timestamp))
+
+
+sqlite3.register_converter('timestamp', dt_parser)
 
 
 class Row(sqlite3.Row):
