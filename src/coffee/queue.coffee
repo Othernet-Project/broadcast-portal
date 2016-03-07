@@ -3,7 +3,7 @@
 
   queues = $ '.queue'
   handles = $ '.handles a.handle'
-  searchForm = $ '.search form'
+  searchForm = $ 'form.search'
   searchUrl = searchForm.attr 'action'
   searchQTElem = $ '.search input#type'
   actionFormSelector = '.action form'
