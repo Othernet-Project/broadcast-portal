@@ -43,17 +43,12 @@ class BaseToken(Model):
         return uuid.uuid4().hex
 
     @classmethod
-    def create(cls, email, expiration, db=None):
-        db = db or request.db.sessions
+    def new(cls, email, expiration, db=None):
+        db = db or cls.get_database()
         key = cls.generate_key()
         expires = (datetime.datetime.utcnow() +
                    datetime.timedelta(days=expiration))
-        data = {'key': key,
-                'email': email,
-                'expires': expires}
-        query = db.Insert(cls.table, cols=cls.columns)
-        db.execute(query, data)
-        return cls(data, db=db)
+        return cls.create(key=key, email=email, expires=expires, db=db)
 
 
 class EmailVerification(BaseToken):

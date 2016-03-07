@@ -157,7 +157,7 @@ def password_reset_request():
         pass  # do not reveal to users whether an email exists or not
     else:
         expires = request.app.config['authentication.password_reset_expires']
-        pw_reset = PasswordReset.create(email, expires)
+        pw_reset = PasswordReset.new(email, expires)
         tasks = request.app.config['tasks']
         tasks.schedule(send_mail,
                        args=(email, _("Reset Password")),

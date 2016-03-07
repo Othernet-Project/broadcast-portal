@@ -8,7 +8,7 @@ from .tokens import EmailVerification
 def send_confirmation_email(email, next_path, config=None, db=None):
     config = config or request.app.config
     expiration = config['authentication.confirmation_expires']
-    verification = EmailVerification.create(email, expiration, db=db)
+    verification = EmailVerification.new(email, expiration, db=db)
     send_mail(email,
               _("Confirm registration"),
               text='email/confirm',
