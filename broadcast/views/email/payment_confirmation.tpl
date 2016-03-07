@@ -6,19 +6,18 @@ verbose_types = {'twitter': _("twitter feed"),
 intervals = {'month': _("a monthly"),
              'year': _("an annual")}
 
-is_subscription = stripe_object.object == 'customer'
-if is_subscription:
+if stripe_object.object == 'customer':
     card = stripe_object.sources.data[-1]
     last4digits = card.last4
     subscription = stripe_object.subscriptions.data[-1]
-    interval = subscription.plan.interval
+    interval = intervals[subscription.plan.interval]
     timestamp = th.from_ts(subscription.start)
-    amount = subscription.plan.amount
+    amount = th.hamount(subscription.plan.amount)
 else:
     last4digits = stripe_object.source.last4
     interval = None
     timestamp = th.from_ts(stripe_object.created)
-    amount = stripe_object.amount
+    amount = th.hamount(stripe_object.amount)
 %>
 ${_("""Dear user,
 
@@ -36,13 +35,11 @@ Service: {service}
            item_type=verbose_types[item.type],
            last4digits=last4digits,
            timestamp=timestamp,
-           total_amount=th.hamount(amount)))} 
+           total_amount=amount))}
 
-% if is_subscription:
+% if interval:
 ${_("This is {interval} subscription service. If you wish to unsubscribe at "
-    "any moment, please contact us at hello@outernet.is.".format(
-        interval=intervals[interval]
-))}
+    "any moment, please contact us at hello@outernet.is.".format(interval=interval))}
 % endif
 
 --
