@@ -43,12 +43,12 @@ class Charge(Model):
 
     def _get_human_context(self, item):
         context_generators = {
-            'content': lambda item: {
+            'content': lambda: {
                 'hsize': '{} MB'.format(rounded_megabytes(item.size)),
             },
-            'twitter': lambda item: {},
+            'twitter': lambda: {},
         }
-        return context_generators.get(item.type, lambda item: {})(item)
+        return context_generators.get(item.type, lambda: {})()
 
     def _charge(self, token, price, currency, description):
         try:
@@ -81,7 +81,7 @@ class Charge(Model):
             price_map = config['{}.prices'.format(item.type)]
             price = self._match_price(price_map)
             desc_template = config['{}.description_template'.format(item.type)]
-            context = self._get_human_context()
+            context = self._get_human_context(item)
             context.update(self.to_native())
             context.update(item.to_native())
             description = desc_template.format(**context)
