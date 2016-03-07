@@ -42,10 +42,10 @@
 
 <%block name="extra_body">
     <script type="text/template" id="queueLoadError">
-        <p>${_('Queue loading failed. Please try again in a few seconds.')}</p>
+        ${_('Queue loading failed. Please try again in a few seconds.')}
     </script>
     <script type="text/template" id="queueModifyError">
-        <p>${_('We were unable to modify the queue. Please try again in a few seconds.')}</p>
+        ${_('We were unable to modify the queue. Please try again in a few seconds.')}
     </script>
 </%block>
 
