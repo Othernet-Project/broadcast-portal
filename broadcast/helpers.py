@@ -36,21 +36,23 @@ def fetch_item(func):
     return wrapper
 
 
-def fetch_charge(func):
-    @functools.wraps(func)
-    def wrapper(item, **kwargs):
-        try:
-            charge = Charge.get(item_id=item.id)
-        except Charge.DoesNotExist:
-            abort(400, _("Cannot determine the requested plan."))
-        else:
-            if charge.is_executed:
-                url = request.app.get_url('broadcast_priority_scheduled',
-                                          item_type=item.type,
-                                          item_id=item.id)
-                redirect(url)
-            return func(item=item, charge=charge, **kwargs)
-    return wrapper
+def fetch_charge(guard_already_charged=True):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(item, **kwargs):
+            try:
+                charge = Charge.get(item_id=item.id)
+            except Charge.DoesNotExist:
+                abort(400, _("Cannot determine the requested plan."))
+            else:
+                if guard_already_charged and charge.is_executed:
+                    url = request.app.get_url('broadcast_priority_scheduled',
+                                              item_type=item.type,
+                                              item_id=item.id)
+                    redirect(url)
+                return func(item=item, charge=charge, **kwargs)
+        return wrapper
+    return decorator
 
 
 def cleanup(table, db=None, config=None):

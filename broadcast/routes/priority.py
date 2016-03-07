@@ -24,7 +24,7 @@ from ..util.template import view
 @view('priority')
 @csrf_token
 @fetch_item
-@fetch_charge
+@fetch_charge()
 def show_broadcast_priority_form(item, charge):
     stripe_public_key = request.app.config['stripe.public_key']
     form = PaymentForm({'stripe_public_key': stripe_public_key,
@@ -35,7 +35,7 @@ def show_broadcast_priority_form(item, charge):
 @view('priority')
 @csrf_protect
 @fetch_item
-@fetch_charge
+@fetch_charge()
 def broadcast_priority(item, charge):
     form = PaymentForm(request.forms)
     error = None
@@ -71,8 +71,9 @@ def broadcast_priority(item, charge):
 
 @view('feedback')
 @fetch_item
-def show_broadcast_priority_scheduled(item):
-    if item.charge_id is None:
+@fetch_charge(guard_already_charged=False)
+def show_broadcast_priority_scheduled(item, charge):
+    if charge.is_executed:
         # attempted access to success-page, while not charged
         priority_url = request.app.get_url('broadcast_priority_form',
                                            item_type=item.type,
