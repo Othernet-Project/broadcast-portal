@@ -9,7 +9,7 @@ from ..util.template import template
 
 @roca_view('bin_list', '_bin_list', template_func=template)
 def bin_list():
-    return dict(bins=Bin.filter())
+    return dict(bins=Bin.filter(Bin.CLOSED))
 
 
 @roca_view('bin_details', '_bin_details', template_func=template)
