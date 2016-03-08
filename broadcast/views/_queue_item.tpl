@@ -9,7 +9,7 @@
 
         <tr>
             <th>${_("Created")}</th>
-            <td>${item.created.strftime('%b %d, %H:%M UTC')}</td>
+            <td>${th.hdatetime(item.created)}</td>
         </tr>
 
         <tr>

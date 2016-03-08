@@ -7,7 +7,7 @@
         <div class="bin-info-display">
             <span class="line">${_("Current bin size: {size} / {usage}%".format(size=h.hsize(bin.size), usage=round(bin.usage, 2)))}</span>
             <br />
-            <span class="line">${_("Broadcast date: {time}".format(time=bin.closes.strftime('%b %d, %H:%M UTC')))}</span>
+            <span class="line">${_("Broadcast date: {time}".format(time=th.hdatetime(bin.closes)))}</span>
         </div>
         <span class="bin-usage-bar light">
             <span class="bin-usage-bar-indicator" style="width: ${bin.usage}%"></span>

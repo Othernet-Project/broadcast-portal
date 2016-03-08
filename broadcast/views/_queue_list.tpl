@@ -18,7 +18,7 @@
     <tbody>
     % for item in items:
         <tr>
-            <td class="datestamp">${item.created.strftime('%b %d, %H:%M UTC')}</td>
+            <td class="datestamp">${th.hdatetime(item.created)}</td>
             <td class="trunc">
                 <a href="${url('queue_item', item_id=item.id)}">${item.title or 'n/a'}</a>
             </td>
