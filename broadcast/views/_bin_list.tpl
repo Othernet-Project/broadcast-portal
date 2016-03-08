@@ -3,9 +3,8 @@
     <thead>
         <tr>
             <th>${_("Created")}</th>
-            <th>${_("Capacity")}</th>
             <th>${_("Size")}</th>
-            <th>${_("Item Count")}</th>
+            <th>${_("Items")}</th>
             <th>${_("Status")}</th>
         </tr>
     </thead>
@@ -13,9 +12,8 @@
     % for bin in bins:
         <tr>
             <td class="datestamp">
-                <a href="${url('bin_details', bin_id=bin.id)}">${bin.created.strftime('%b %d, %H:%M UTC')}</a>
+                <a href="${url('bin_details', bin_id=bin.id)}">${th.hdatetime(bin.created)}</a>
             </td>
-            <td>${h.hsize(bin.capacity)}</td>
             <td>${h.hsize(bin.size)}</td>
             <td>${bin.count}</td>
             <td class="trunc">${bin.status}</td>
