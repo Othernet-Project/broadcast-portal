@@ -128,6 +128,26 @@ def hamount(cent_amount, config=None):
 
 
 @template_helper
+def hdatetime(dt):
+    diff = datetime.datetime.utcnow() - dt
+    periods = (
+        (diff.days / 365, _("year"), _("years")),
+        (diff.days / 30, _("month"), _("months")),
+        (diff.days / 7, _("week"), _("weeks")),
+        (diff.days, _("day"), _("days")),
+        (diff.seconds / 3600, _("hour"), _("hours")),
+        (diff.seconds / 60, _("minute"), _("minutes")),
+        (diff.seconds, _("second"), _("seconds")),
+    )
+    for (period, singular, plural) in periods:
+        if period:
+            unit = singular if period == 1 else plural
+            return _("{period} {unit} ago").format(period=period, unit=unit)
+
+    return _("just now")
+
+
+@template_helper
 def plan_period(charge):
     periods = {
         'bc_twitter_monthly': _('every month'),
