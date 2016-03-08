@@ -1096,12 +1096,12 @@ input[type=checkbox] + label {
   }
 }
 
-/* line 6, ../../../src/scss/partials/_queue.scss */
+/* line 6, ../../../src/scss/partials/_items.scss */
 .body {
   background: #253340;
 }
 
-/* line 10, ../../../src/scss/partials/_queue.scss */
+/* line 10, ../../../src/scss/partials/_items.scss */
 .bin-usage-bar {
   display: block;
   position: relative;
@@ -1115,7 +1115,7 @@ input[type=checkbox] + label {
   border-radius: 100px;
 }
 
-/* line 24, ../../../src/scss/partials/_queue.scss */
+/* line 24, ../../../src/scss/partials/_items.scss */
 .bin-usage-bar-indicator {
   display: block;
   position: absolute;
@@ -1131,39 +1131,39 @@ input[type=checkbox] + label {
   background-image: linear-gradient(#e5e7eb, #b7bec8);
 }
 
-/* line 34, ../../../src/scss/partials/_queue.scss */
+/* line 34, ../../../src/scss/partials/_items.scss */
 .bin-heading {
   padding: 0.5rem;
   min-height: 2.4rem;
 }
-/* line 38, ../../../src/scss/partials/_queue.scss */
+/* line 38, ../../../src/scss/partials/_items.scss */
 .bin-heading .title {
   font-size: 3rem;
   line-height: 3rem;
   float: left;
 }
-/* line 44, ../../../src/scss/partials/_queue.scss */
+/* line 44, ../../../src/scss/partials/_items.scss */
 .bin-heading .bin-info-display {
   height: 3rem;
   padding: 0.3rem;
 }
-/* line 47, ../../../src/scss/partials/_queue.scss */
+/* line 47, ../../../src/scss/partials/_items.scss */
 .bin-heading .bin-info-display .line {
   padding-left: 1rem;
 }
 
-/* line 53, ../../../src/scss/partials/_queue.scss */
+/* line 53, ../../../src/scss/partials/_items.scss */
 .bin {
   position: relative;
   margin-top: 0.5rem;
 }
-/* line 57, ../../../src/scss/partials/_queue.scss */
+/* line 57, ../../../src/scss/partials/_items.scss */
 .bin .handles {
   display: inline-block;
   margin: 0 0.5rem;
   line-height: 2.5rem;
 }
-/* line 62, ../../../src/scss/partials/_queue.scss */
+/* line 62, ../../../src/scss/partials/_items.scss */
 .bin .handles .handle {
   background-color: #314355;
   padding: 0.75rem 1rem;
@@ -1171,19 +1171,19 @@ input[type=checkbox] + label {
   text-decoration: none;
   text-transform: uppercase;
 }
-/* line 69, ../../../src/scss/partials/_queue.scss */
+/* line 69, ../../../src/scss/partials/_items.scss */
 .bin .handles .handle.active {
   color: white;
   background-color: #3a5065;
 }
-/* line 76, ../../../src/scss/partials/_queue.scss */
+/* line 76, ../../../src/scss/partials/_items.scss */
 .bin .search {
   position: absolute;
   top: 0;
   right: 0.5rem;
   background: #e6e6e6;
 }
-/* line 85, ../../../src/scss/partials/_queue.scss */
+/* line 85, ../../../src/scss/partials/_items.scss */
 .bin .search .search-query {
   vertical-align: top;
   height: 1.8rem;
@@ -1191,7 +1191,7 @@ input[type=checkbox] + label {
   width: 120px;
   text-transform: lowercase;
 }
-/* line 101, ../../../src/scss/partials/_queue.scss */
+/* line 101, ../../../src/scss/partials/_items.scss */
 .bin .search button {
   height: 1.8rem;
   width: 1.8rem;
@@ -1200,7 +1200,7 @@ input[type=checkbox] + label {
   border: none;
   background: white;
 }
-/* line 112, ../../../src/scss/partials/_queue.scss */
+/* line 112, ../../../src/scss/partials/_items.scss */
 .bin .search button .icon {
   position: relative;
   top: -3px;
@@ -1217,7 +1217,7 @@ input[type=checkbox] + label {
   text-transform: capitalize;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 112, ../../../src/scss/partials/_queue.scss */
+  /* line 112, ../../../src/scss/partials/_items.scss */
   .bin .search button .icon {
     background-image: url('../img/sprites/2x-s9a73f3fabc.png');
     background-position: 0 -751px;
@@ -1228,65 +1228,65 @@ input[type=checkbox] + label {
   }
 }
 
-/* line 125, ../../../src/scss/partials/_queue.scss */
+/* line 125, ../../../src/scss/partials/_items.scss */
 table {
   width: 100%;
   margin-bottom: 1rem;
 }
 
-/* line 130, ../../../src/scss/partials/_queue.scss */
+/* line 130, ../../../src/scss/partials/_items.scss */
 .items {
   background-color: #3a5065;
   padding: 0.5rem 0;
   position: relative;
   z-index: 1;
 }
-/* line 136, ../../../src/scss/partials/_queue.scss */
+/* line 136, ../../../src/scss/partials/_items.scss */
 .items.hidden {
   display: none;
 }
-/* line 140, ../../../src/scss/partials/_queue.scss */
+/* line 140, ../../../src/scss/partials/_items.scss */
 .items th {
   background: #4a6781;
   font-size: 90%;
   text-transform: uppercase;
 }
-/* line 146, ../../../src/scss/partials/_queue.scss */
+/* line 146, ../../../src/scss/partials/_items.scss */
 .items td, .items th {
   padding: 0.5rem;
 }
-/* line 151, ../../../src/scss/partials/_queue.scss */
+/* line 151, ../../../src/scss/partials/_items.scss */
 .items td:nth-child(1) {
   width: 8rem;
 }
-/* line 156, ../../../src/scss/partials/_queue.scss */
+/* line 156, ../../../src/scss/partials/_items.scss */
 .items td:nth-child(3) {
   width: 4rem;
 }
-/* line 161, ../../../src/scss/partials/_queue.scss */
+/* line 161, ../../../src/scss/partials/_items.scss */
 .items td:nth-child(4) {
   width: 4rem;
 }
-/* line 166, ../../../src/scss/partials/_queue.scss */
+/* line 166, ../../../src/scss/partials/_items.scss */
 .items td:nth-child(5) {
   width: 6rem;
 }
-/* line 171, ../../../src/scss/partials/_queue.scss */
+/* line 171, ../../../src/scss/partials/_items.scss */
 .items th:nth-child(6),
 .items td:nth-child(6) {
   width: 4rem;
   text-align: center;
 }
-/* line 178, ../../../src/scss/partials/_queue.scss */
+/* line 178, ../../../src/scss/partials/_items.scss */
 .items td:last-child {
   padding: 0;
   width: 2rem;
 }
-/* line 183, ../../../src/scss/partials/_queue.scss */
+/* line 183, ../../../src/scss/partials/_items.scss */
 .items tr {
   border-bottom: 1px solid #253340;
 }
-/* line 187, ../../../src/scss/partials/_queue.scss */
+/* line 187, ../../../src/scss/partials/_items.scss */
 .items button {
   border: 0;
   background: #6183a4;
@@ -1296,11 +1296,11 @@ table {
   line-height: 2rem;
   font-size: 200%;
 }
-/* line 196, ../../../src/scss/partials/_queue.scss */
+/* line 196, ../../../src/scss/partials/_items.scss */
 .items button:hover {
   background: white;
 }
-/* line 201, ../../../src/scss/partials/_queue.scss */
+/* line 201, ../../../src/scss/partials/_items.scss */
 .items .flagged {
   display: inline-block;
   vertical-align: center;
@@ -1315,7 +1315,7 @@ table {
   text-align: center;
   font-weight: bold;
 }
-/* line 214, ../../../src/scss/partials/_queue.scss */
+/* line 214, ../../../src/scss/partials/_items.scss */
 .items .download a {
   display: inline-block;
   vertical-align: middle;
@@ -1326,7 +1326,7 @@ table {
   height: 18px;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
-  /* line 214, ../../../src/scss/partials/_queue.scss */
+  /* line 214, ../../../src/scss/partials/_items.scss */
   .items .download a {
     background-image: url('../img/sprites/2x-s9a73f3fabc.png');
     background-position: 0 -371px;
@@ -1337,17 +1337,17 @@ table {
   }
 }
 
-/* line 220, ../../../src/scss/partials/_queue.scss */
+/* line 220, ../../../src/scss/partials/_items.scss */
 .queue-item th, .queue-item td, .queue-item td:last-child {
   padding-left: 1rem;
   padding-right: 1rem;
 }
-/* line 225, ../../../src/scss/partials/_queue.scss */
+/* line 225, ../../../src/scss/partials/_items.scss */
 .queue-item th {
   width: 4rem;
 }
 
-/* line 230, ../../../src/scss/partials/_queue.scss */
+/* line 230, ../../../src/scss/partials/_items.scss */
 .noitems {
   text-align: center;
   font-size: 200%;
