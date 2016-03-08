@@ -245,8 +245,8 @@ header .header-logo {
 header .header-logo a {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
-  background-position: 0 -425px;
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
+  background-position: 0 -521px;
   background-repeat: no-repeat;
   width: 266px;
   height: 28px;
@@ -258,12 +258,12 @@ header .header-logo a {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 52, ../../../src/scss/partials/_header.scss */
   header .header-logo a {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
-    background-position: 0 -425px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
+    background-position: 0 -521px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 @media only screen and (max-width: 350px) {
@@ -271,8 +271,8 @@ header .header-logo a {
   header .header-logo a {
     display: inline-block;
     vertical-align: middle;
-    background-image: url('../img/sprites/1x-s6cf863c2e9.png');
-    background-position: 0 -483px;
+    background-image: url('../img/sprites/1x-sf41d63acd3.png');
+    background-position: 0 -579px;
     background-repeat: no-repeat;
     width: 98px;
     height: 28px;
@@ -281,12 +281,12 @@ header .header-logo a {
 @media only screen and (max-width: 350px) and (-webkit-min-device-pixel-ratio: 1.3), only screen and (max-width: 350px) and (min-resolution: 120dpi), only screen and (max-width: 350px) and (min-resolution: 1.3dppx) {
   /* line 52, ../../../src/scss/partials/_header.scss */
   header .header-logo a {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
-    background-position: 0 -483px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
+    background-position: 0 -579px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 
@@ -370,8 +370,8 @@ header .header-links .hamburger {
 header .header-links .hamburger a {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
-  background-position: 0 -541px;
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
+  background-position: 0 -637px;
   background-repeat: no-repeat;
   width: 36px;
   height: 30px;
@@ -386,12 +386,12 @@ header .header-links .hamburger a {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 127, ../../../src/scss/partials/_header.scss */
   header .header-links .hamburger a {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
-    background-position: 0 -541px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
+    background-position: 0 -637px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 
@@ -761,7 +761,7 @@ input[type=checkbox] + label {
   content: '';
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
   background-position: 0 -212px;
   background-repeat: no-repeat;
   width: 36px;
@@ -770,19 +770,19 @@ input[type=checkbox] + label {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 211, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input::after {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
     background-position: 0 -212px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 /* line 221, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input.visa::after {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
   background-position: 0 -318px;
   background-repeat: no-repeat;
   width: 36px;
@@ -791,19 +791,19 @@ input[type=checkbox] + label {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 221, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input.visa::after {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
     background-position: 0 -318px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 /* line 221, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input.amex::after {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
   background-position: 0 0;
   background-repeat: no-repeat;
   width: 36px;
@@ -812,19 +812,19 @@ input[type=checkbox] + label {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 221, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input.amex::after {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
     background-position: 0 0;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 /* line 221, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input.discover::after {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
   background-position: 0 -159px;
   background-repeat: no-repeat;
   width: 36px;
@@ -833,19 +833,19 @@ input[type=checkbox] + label {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 221, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input.discover::after {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
     background-position: 0 -159px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 /* line 221, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input.diners::after {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
   background-position: 0 -106px;
   background-repeat: no-repeat;
   width: 36px;
@@ -854,19 +854,19 @@ input[type=checkbox] + label {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 221, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input.diners::after {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
     background-position: 0 -106px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 /* line 221, ../../../src/scss/partials/_form.scss */
 #field-card_number .field-input.bad::after {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
   background-position: 0 -53px;
   background-repeat: no-repeat;
   width: 36px;
@@ -875,12 +875,12 @@ input[type=checkbox] + label {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 221, ../../../src/scss/partials/_form.scss */
   #field-card_number .field-input.bad::after {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
     background-position: 0 -53px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 
@@ -1015,8 +1015,8 @@ input[type=checkbox] + label {
 .submissions .content-icon {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
-  background-position: 0 -371px;
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
+  background-position: 0 -467px;
   background-repeat: no-repeat;
   width: 24px;
   height: 24px;
@@ -1024,20 +1024,20 @@ input[type=checkbox] + label {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 42, ../../../src/scss/partials/_admin.scss */
   .submissions .content-icon {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
-    background-position: 0 -371px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
+    background-position: 0 -467px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 /* line 46, ../../../src/scss/partials/_admin.scss */
 .submissions .twitter-icon {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
-  background-position: 0 -703px;
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
+  background-position: 0 -799px;
   background-repeat: no-repeat;
   width: 24px;
   height: 24px;
@@ -1045,20 +1045,20 @@ input[type=checkbox] + label {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 46, ../../../src/scss/partials/_admin.scss */
   .submissions .twitter-icon {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
-    background-position: 0 -703px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
+    background-position: 0 -799px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 /* line 50, ../../../src/scss/partials/_admin.scss */
 .submissions .paid {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
-  background-position: 0 -601px;
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
+  background-position: 0 -697px;
   background-repeat: no-repeat;
   width: 24px;
   height: 24px;
@@ -1066,20 +1066,20 @@ input[type=checkbox] + label {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 50, ../../../src/scss/partials/_admin.scss */
   .submissions .paid {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
-    background-position: 0 -601px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
+    background-position: 0 -697px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 /* line 54, ../../../src/scss/partials/_admin.scss */
 .submissions .unpaid {
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
-  background-position: 0 -757px;
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
+  background-position: 0 -853px;
   background-repeat: no-repeat;
   width: 24px;
   height: 24px;
@@ -1087,12 +1087,12 @@ input[type=checkbox] + label {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 54, ../../../src/scss/partials/_admin.scss */
   .submissions .unpaid {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
-    background-position: 0 -757px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
+    background-position: 0 -853px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 
@@ -1206,8 +1206,8 @@ input[type=checkbox] + label {
   top: -3px;
   display: inline-block;
   vertical-align: middle;
-  background-image: url('../img/sprites/1x-s6cf863c2e9.png');
-  background-position: 0 -655px;
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
+  background-position: 0 -751px;
   background-repeat: no-repeat;
   width: 20px;
   height: 18px;
@@ -1219,12 +1219,12 @@ input[type=checkbox] + label {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
   /* line 112, ../../../src/scss/partials/_queue.scss */
   .bin .search button .icon {
-    background-image: url('../img/sprites/2x-s37681c75be.png');
-    background-position: 0 -655px;
-    -moz-background-size: 266px 781px;
-    -o-background-size: 266px 781px;
-    -webkit-background-size: 266px 781px;
-    background-size: 266px 781px;
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
+    background-position: 0 -751px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
   }
 }
 
@@ -1315,18 +1315,39 @@ table {
   text-align: center;
   font-weight: bold;
 }
+/* line 214, ../../../src/scss/partials/_queue.scss */
+.items .download a {
+  display: inline-block;
+  vertical-align: middle;
+  background-image: url('../img/sprites/1x-sf41d63acd3.png');
+  background-position: 0 -371px;
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 18px;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min-resolution: 120dpi), only screen and (min-resolution: 1.3dppx) {
+  /* line 214, ../../../src/scss/partials/_queue.scss */
+  .items .download a {
+    background-image: url('../img/sprites/2x-s9a73f3fabc.png');
+    background-position: 0 -371px;
+    -moz-background-size: 266px 877px;
+    -o-background-size: 266px 877px;
+    -webkit-background-size: 266px 877px;
+    background-size: 266px 877px;
+  }
+}
 
-/* line 216, ../../../src/scss/partials/_queue.scss */
+/* line 220, ../../../src/scss/partials/_queue.scss */
 .queue-item th, .queue-item td, .queue-item td:last-child {
   padding-left: 1rem;
   padding-right: 1rem;
 }
-/* line 221, ../../../src/scss/partials/_queue.scss */
+/* line 225, ../../../src/scss/partials/_queue.scss */
 .queue-item th {
   width: 4rem;
 }
 
-/* line 226, ../../../src/scss/partials/_queue.scss */
+/* line 230, ../../../src/scss/partials/_queue.scss */
 .noitems {
   text-align: center;
   font-size: 200%;

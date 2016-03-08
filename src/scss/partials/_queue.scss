@@ -210,6 +210,10 @@ table {
     text-align: center;
     font-weight: bold;
   }
+
+  .download a {
+    @include sprite-image('download');
+  }
 }
 
 .queue-item {
