@@ -1,5 +1,5 @@
 <%inherit file='base.tpl'/>
-<%namespace name="bin_details" file="_bin_details.tpl"/>
+<%namespace name="item_list" file="_item_list.tpl"/>
 
 <%block name="main">
     <div class="bin-heading">
@@ -16,7 +16,7 @@
 
     <div class="bin">
         <div class="items">
-            ${bin_details.body()}
+            ${item_list.body()}
         </div>
     </div>
 </%block>

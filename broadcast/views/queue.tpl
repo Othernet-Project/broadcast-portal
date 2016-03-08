@@ -1,5 +1,5 @@
 <%inherit file='base.tpl'/>
-<%namespace name="queue_list" file="_queue_list.tpl"/>
+<%namespace name="item_list" file="_item_list.tpl"/>
 
 <%block name="main">
     <div class="bin-heading">
@@ -33,7 +33,7 @@
         </form>
 
         <div class="items ${queue_type}" data-source="${queue_type}">
-            ${queue_list.body()}
+            ${item_list.body()}
         </div>
 
         <div class="items ${hidden_queue_type} hidden" data-source="${hidden_queue_type}"></div>

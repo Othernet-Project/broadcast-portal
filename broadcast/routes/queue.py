@@ -11,7 +11,7 @@ from ..util.auth.decorators import login_required
 from ..util.template import template
 
 
-@roca_view('queue_list', '_queue_list', template_func=template)
+@roca_view('queue', '_item_list', template_func=template)
 def queue_list():
     query = request.params.get('query', '')
     query_args = {'title__like': query} if query else {}
