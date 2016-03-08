@@ -1,4 +1,6 @@
-from bottle import request, redirect, abort
+import os
+
+from bottle import request, redirect, abort, static_file
 from bottle_utils.ajax import roca_view
 from bottle_utils.i18n import dummy_gettext as _
 
@@ -41,18 +43,9 @@ def queue_list():
                 REVIEW_QUEUE=REVIEW_QUEUE)
 
 
-@roca_view('queue_item', '_queue_item', template_func=template)
-def queue_item(item_id):
-    try:
-        item = ContentItem.get(id=item_id)
-    except ContentItem.DoesNotExist:
-        abort(404, _("The requested item was not found."))
-    else:
-        return dict(item=item)
-
-
 @login_required(groups='superuser')
 def save_queue_item(item_id):
+    review_url = request.app.get_url('queue_list', type=REVIEW_QUEUE)
     form = QueueItemForm(request.forms)
     if form.is_valid():
         current_bin = Bin.current()
@@ -69,22 +62,32 @@ def save_queue_item(item_id):
             except Bin.NotEnoughSpace:
                 message = _("The chosen item exceeds the bin's "
                             "capacity and thus cannot be added to it.")
-                redirect_url = request.app.get_url('queue_list',
-                                                   type=REVIEW_QUEUE)
                 if request.is_xhr:
-                    abort(400, _("Item not be accepted, bin is already full."))
+                    abort(400, _("Item not accepted, bin is already full."))
 
                 return template('feedback',
                                 status='error',
                                 page_title=_('Item unacceptable'),
                                 message=message,
-                                redirect_url=redirect_url,
+                                redirect_url=review_url,
                                 redirect_target=_('review page'))
             else:
-                redirect(request.app.get_url('queue_list', type=REVIEW_QUEUE))
+                redirect(review_url)
         current_bin.remove(item)
         redirect(request.app.get_url('queue_list', type=ACCEPTED_QUEUE))
-    return template('queue_item', form=form, item=None)
+
+    return template('feedback',
+                    status='error',
+                    page_title=_('Item unacceptable'),
+                    message=form.error,
+                    redirect_url=review_url,
+                    redirect_target=_('review page'))
+
+
+def download_queue_item(item_id, filename):
+    upload_root = request.app.config['content.upload_root']
+    root = os.path.join(upload_root, item_id)
+    return static_file(filename, root=root, download=filename)
 
 
 def route(conf):
@@ -97,15 +100,15 @@ def route(conf):
             {}
         ), (
             '/queue/<item_id:re:[0-9a-f]{32}>/',
-            'GET',
-            queue_item,
-            'queue_item',
-            {}
-        ), (
-            '/queue/<item_id:re:[0-9a-f]{32}>/',
             'POST',
             save_queue_item,
             'save_queue_item',
+            {}
+        ), (
+            '/queue/<item_id:re:[0-9a-f]{32}>/<filename>',
+            'GET',
+            download_queue_item,
+            'download_queue_item',
             {}
         )
     )

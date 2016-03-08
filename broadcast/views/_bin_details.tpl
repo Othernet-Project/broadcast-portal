@@ -14,7 +14,8 @@
         <tr>
             <td class="datestamp">${th.hdatetime(item.created)}</td>
             <td class="trunc">
-                <a href="${url('queue_item', item_id=item.id)}">${item.title or 'n/a'}</a>
+                <% download_url = url('download_queue_item', item_id=item.id, filename=item.filename) %>
+                <a href="${download_url}">${item.title or 'n/a'}</a>
             </td>
             <td class="trunc">${item.url or 'n/a'}</td>
             <td class="trunc">${item.license or 'n/a'}</td>
