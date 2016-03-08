@@ -69,6 +69,18 @@ class Bin(Model):
         self.update(status=self.ARCHIVED)
         return self
 
+    @property
+    def is_open(self):
+        return self.status == self.OPEN
+
+    @property
+    def is_closed(self):
+        return self.status == self.CLOSED
+
+    @property
+    def is_archived(self):
+        return self.status == self.ARCHIVED
+
     @classmethod
     def current(cls, db=None, config=None):
         db = db or cls.get_database()
