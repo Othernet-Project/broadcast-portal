@@ -57,7 +57,6 @@ def send_multiple(to_list, subject, text=None, data={},
     message = template(text, **data)
     plain = MIMEText(message, 'plain', 'utf-8')
     msg.attach(plain)
-    logging.debug("Prepared message")
 
     # Open SMTP connection
     smtp = smtplib.SMTP('%s:%s' % (conf['smtp.server'], conf['smtp.port']))
@@ -67,6 +66,7 @@ def send_multiple(to_list, subject, text=None, data={},
     try:  # Try to send the message
         smtp.sendmail(msg['from'], msg['to'], msg.as_string())
         smtp.quit()
+        logging.debug("Sent message to %s" % msg['to'])
         return
     except Exception as e:
         smtp.quit()  # smtp connection will stay open until closed
