@@ -34,7 +34,7 @@ def send_multiple(to_list, subject, text=None, data={},
     """
     # As described in the docstring, you must provide a template
     if text is None:
-        with Exception('no template specified') as ex:
+        with ValueError('no template specified') as ex:
             logging.exception('Error sending email: %s' % ex)
         return None
 
