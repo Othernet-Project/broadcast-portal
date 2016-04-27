@@ -26,46 +26,63 @@ def send_multiple(to_list, subject, text=None, data={},
     `to_list` is a list of tuples containing an email and a name. This
     is historical from BD (Before Docstrings). `subject` is a single line
     string used as the subject of the message. `text` is a string that
-    specifies what template to use in combination with the data. It is a
-    keyword argument for historical reasons. `data` is a dict that is passed to
-    the template to create the message. `config` is an initialized config
-    object (see main module) if not provided, the call must be part of a
+    specifies what template to use in combination with the data. It is named
+    `text` and a keyword argument for historical reasons. `data` is a dict that
+    is passed to the template to create the message. `config` is an initialized
+    config object (see main module) if not provided, the call must be part of a
     request context.
     """
+    # As described in the docstring, you must provide a template
     if text is None:
         with Exception('no template specified') as ex:
             logging.exception('Error sending email: %s' % ex)
         return None
+
+    # Because this is a bottle app we can get the config through request
+    # context
     conf = config or request.app.config
 
     # Construct message object
-    msg = MIMEMultipart()
+    msg = MIMEMultipart()  # Special object for building emails
     msg['subject'] = subject
-    msg['from'] = conf['smtp.user']
+    msg['from'] = conf['smtp.user']  # Get sender's email from the config
+    # As described in the docstring, we only use the first item in whatever
+    # objects make up the to_list. This is historical, BD (Before Docstrings).
     msg['to'] = ', '.join([e[0] for e in to_list])
+
+    # Add the subject of the email and a newline character
     msg.preamble = subject + '\n'
 
-    message = ''.join(template(text, **data))
+    # Process the data with the chosen template
+    message = template(text, **data)
     plain = MIMEText(message, 'plain', 'utf-8')
     msg.attach(plain)
     logging.debug("Prepared message")
 
     # Open SMTP connection
     smtp = smtplib.SMTP('%s:%s' % (conf['smtp.server'], conf['smtp.port']))
-    smtp.starttls()
+    smtp.starttls()  # Calls `ehlo` if it hasn't been already
+    # Calls `ehlo` if it needs to be, which it does because starttls was called
     smtp.login(conf['smtp.user'], conf['smtp.pass'])
     try:  # Try to send the message
         smtp.sendmail(msg['from'], msg['to'], msg.as_string())
         smtp.quit()
         return
     except Exception as e:
-        smtp.quit()
+        smtp.quit()  # smtp connection will stay open until closed
         logging.exception('Error sending email: %s' % e)
         return None
 
 
-def send_mail(to, subject, text=None, to_name='',
-              data={}, is_async=False, config=None):
-    """ Send out text/HTML email with specified templates """
+def send_mail(to, subject, text=None, data={}, is_async=False, config=None):
+    """
+    Create a single message with send_multiple. For detailed usage, see that.
+
+    `to` is a string, an email address to send to. `subject` is a string, and
+    will be the subject of the email. `text` is a string that specifies a
+    template to use for the email. `is_async` is kept for historical reasons,
+    but does not do anything. `config` is either a Config object or None. If
+    None, the Config object is retrieved from the request context.
+    """
     return send_multiple(
-        [(to, to_name)], subject, text, data, is_async, config)
+        [(to, '')], subject, text, data, is_async, config)
