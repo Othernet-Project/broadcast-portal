@@ -10,66 +10,58 @@ without express written permission.
 
 from __future__ import unicode_literals, print_function
 
+import smtplib
 import logging
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
-try:
-    from urllib.parse import urlparse
-except ImportError:
-    from urlparse import urlparse
-
-import mandrill
-# mako_template must be used because simplates do not support multiline strings
-# and our custom template function has the request object in it's context,
-# which for deferred tasks such as email sending causes the:
-# 'This request is not connected to an application' error.
-from bottle import request, mako_template as template
+from bottle import request, template
 
 
-def send_multiple(to_list, subject, text=None, html=None, data={},
-                  mandrill_args={'preserve_recipients': False},
-                  use_template=None, is_async=False, config=None):
-    """ Sends out text/HTML email with specified templates """
+def send_multiple(to_list, subject, text=None, data={},
+                  is_async=False, config=None):
+    """
+    Sends out text/HTML email with specified templates
+
+    `to_list` is a list of tuples containing an email and a name. This
+    is historical from BD (Before Docstrings). `subject` is a single line
+    string used as the subject of the message. `text` is a string that
+    specifies what template to use in combination with the data. It is a
+    keyword argument for historical reasons. `data` is a dict that is passed to
+    the template to create the message. `config` is an initialized config
+    object (see main module) if not provided, the call must be part of a
+    request context.
+    """
+    if text is None:
+        with Exception('no template specified') as ex:
+            logging.exception('Error sending email: %s' % ex)
+        return None
     conf = config or request.app.config
 
-    # Set up mandrill API access
-    mandrill_client = mandrill.Mandrill(conf['mandrill.key'])
-
-    # Prepare data for the email
-    url = request.url if config is None else conf.get('app.url', '')
-    parsed = urlparse(url)
-    data['protocol'] = parsed.scheme
-    data['host'] = parsed.netloc
-    data['host_url'] = parsed.scheme + '://' + parsed.netloc
-
     # Construct message object
-    message = mandrill_args
-    message.update({
-        'subject': subject,
-        'from_name': conf['mandrill.sender_name'],
-        'from_email': conf['mandrill.sender_email'],
-        'to': [dict(email=e[0], name=e[1], type='to') for e in to_list]
-    })
+    msg = MIMEMultipart()
+    msg['subject'] = subject
+    msg['from'] = conf['smtp.user']
+    msg['to'] = ', '.join([e[0] for e in to_list])
+    msg.preamble = subject + '\n'
 
-    logging.debug("Prepared message: %s" % message)
-    if text:
-        message['text'] = ''.join(template(text, **data))
-    if html:
-        message['html'] = ''.join(template(html, **data))
+    message = ''.join(template(text, **data))
+    plain = MIMEText(message, 'plain', 'utf-8')
+    msg.attach(plain)
+    logging.debug("Prepared message")
 
-    if use_template:
-        try:
-            return mandrill_client.messages.send_template(
-                template=use_template, message=message, async=is_async)
-        except Exception as e:
-            logging.exception('Error sending email: %s' % e)
-            return None
-    else:
-        try:
-            return mandrill_client.messages.send(message=message,
-                                                 async=is_async)
-        except Exception as e:
-            logging.exception('Error sending email: %s' % e)
-            return None
+    # Open SMTP connection
+    smtp = smtplib.SMTP('%s:%s' % (conf['smtp.server'], conf['smtp.port']))
+    smtp.starttls()
+    smtp.login(conf['smtp.user'], conf['smtp.pass'])
+    try:  # Try to send the message
+        smtp.sendmail(msg['from'], msg['to'], msg.as_string())
+        smtp.quit()
+        return
+    except Exception as e:
+        smtp.quit()
+        logging.exception('Error sending email: %s' % e)
+        return None
 
 
 def send_mail(to, subject, text=None, html=None, to_name='',
