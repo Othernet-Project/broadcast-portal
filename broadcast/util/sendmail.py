@@ -63,7 +63,7 @@ def send_multiple(to_list, subject, text=None, data={},
     smtp.starttls()  # Calls `ehlo` if it hasn't been already
     # Calls `ehlo` if it needs to be, which it does because starttls was called
     smtp.login(conf['smtp.user'], conf['smtp.pass'])
-    try:  # Try to send the message
+    try:
         smtp.sendmail(msg['from'], msg['to'], msg.as_string())
         smtp.quit()
         logging.debug("Sent message to %s" % msg['to'])
