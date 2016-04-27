@@ -64,9 +64,8 @@ def send_multiple(to_list, subject, text=None, data={},
         return None
 
 
-def send_mail(to, subject, text=None, html=None, to_name='',
-              data={}, mandrill_args={'preserve_recipients': False},
-              use_template=None, is_async=False, config=None):
+def send_mail(to, subject, text=None, to_name='',
+              data={}, is_async=False, config=None):
     """ Send out text/HTML email with specified templates """
-    return send_multiple([(to, to_name)], subject, text, html, data,
-                         mandrill_args, use_template, is_async, config)
+    return send_multiple(
+        [(to, to_name)], subject, text, data, is_async, config)
