@@ -52,7 +52,8 @@ def send_multiple(to_list, subject, text=None, data={},
     # objects make up the to_list. This is historical, BD (Before Docstrings).
     msg['to'] = ', '.join([e[0] for e in to_list])
 
-    # Add the subject of the email and a newline character
+    # For more information on how preamble is used, see
+    # https://docs.python.org/2/library/email.message.html#email.message.Message.preamble
     msg.preamble = subject + '\n'
 
     # Open SMTP connection
