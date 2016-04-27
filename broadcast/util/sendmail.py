@@ -13,7 +13,6 @@ from __future__ import unicode_literals, print_function
 import smtplib
 import logging
 from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 
 from bottle import request, template
 
@@ -42,8 +41,11 @@ def send_multiple(to_list, subject, text=None, data={},
     # context
     conf = config or request.app.config
 
+    # Process the data with the chosen template
+    message = template(text, **data)
+
     # Construct message object
-    msg = MIMEMultipart()  # Special object for building emails
+    msg = MIMEText(message, 'plain', 'utf-8')
     msg['subject'] = subject
     msg['from'] = conf['smtp.user']  # Get sender's email from the config
     # As described in the docstring, we only use the first item in whatever
@@ -52,11 +54,6 @@ def send_multiple(to_list, subject, text=None, data={},
 
     # Add the subject of the email and a newline character
     msg.preamble = subject + '\n'
-
-    # Process the data with the chosen template
-    message = template(text, **data)
-    plain = MIMEText(message, 'plain', 'utf-8')
-    msg.attach(plain)
 
     # Open SMTP connection
     smtp = smtplib.SMTP('%s:%s' % (conf['smtp.server'], conf['smtp.port']))
