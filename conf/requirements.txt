@@ -4,7 +4,6 @@ webassets
 cssmin==0.2.0
 sqlize
 bottle-utils
-mandrill
 stripe
 gevent
 outernet-metadata==0.5.post3
@@ -14,3 +13,4 @@ urllib3
 pyOpenSSL==0.15.1
 google-api-python-client==1.4.2
 gspread==0.3.0
+auth2client==1.5.2
