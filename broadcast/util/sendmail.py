@@ -14,7 +14,11 @@ import smtplib
 import logging
 from email.mime.text import MIMEText
 
-from bottle import request, template
+#: mako_template must be used because simplates do not support multiline
+# strings and our custom template function has the request object in it's
+# context, which for deferred tasks such as email sending causes the: 'This
+# request is not connected to an application' error.
+from bottle import request, mako_template as template
 
 
 def send_multiple(to_list, subject, text=None, data={},
