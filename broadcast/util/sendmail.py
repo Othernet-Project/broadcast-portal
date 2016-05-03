@@ -14,7 +14,7 @@ import smtplib
 import logging
 from email.mime.text import MIMEText
 
-from bottle import request, template
+from bottle import request, mako_template as template
 
 
 def send_multiple(to_list, subject, text=None, data={},
