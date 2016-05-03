@@ -14,7 +14,12 @@ import smtplib
 import logging
 from email.mime.text import MIMEText
 
-from bottle import request, template
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
+
+from bottle import request, mako_template as template
 
 
 def send_multiple(to_list, subject, text=None, data={},
@@ -40,6 +45,13 @@ def send_multiple(to_list, subject, text=None, data={},
     # Because this is a bottle app we can get the config through request
     # context
     conf = config or request.app.config
+
+    # Prepare host_url for emails that offer links
+    url = request.url if config is None else conf.get('app.url', '')
+    parsed = urlparse(url)
+    data['protocol'] = parsed.scheme
+    data['host'] = parsed.netloc
+    data['host_url'] = parsed.scheme + '://' + parsed.netloc
 
     # Process the data with the chosen template
     message = template(text, **data)
