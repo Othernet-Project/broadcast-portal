@@ -34,6 +34,7 @@ def queue_list():
 
     hidden_queue_type = (ACCEPTED_QUEUE,
                          REVIEW_QUEUE)[queue_type == ACCEPTED_QUEUE]
+    items.reverse()
     return dict(bin=current_bin,
                 items=items,
                 queue_type=queue_type,
