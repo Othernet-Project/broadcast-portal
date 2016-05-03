@@ -144,17 +144,5 @@ def route(conf):
             broadcast_content,
             'broadcast_content',
             {}
-        ), (
-            '/broadcast/twitter/',
-            'GET',
-            show_broadcast_twitter_form,
-            'broadcast_twitter_form',
-            {}
-        ), (
-            '/broadcast/twitter/',
-            'POST',
-            broadcast_twitter,
-            'broadcast_twitter',
-            {}
         ),
     )
