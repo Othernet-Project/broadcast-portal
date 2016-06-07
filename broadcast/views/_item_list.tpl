@@ -36,7 +36,7 @@
             % endif
             % if bin.is_open and request.user.is_in_group('superuser'):
             <td class="action">
-                ${h.form('post', action=url('save_queue_item', item_id=item.id))}
+                ${h.form('post', action=h.full_url(path=url('save_queue_item', item_id=item.id)))}
                     <button type="submit" name="queue_type" value="${hidden_queue_type}">
                         % if hidden_queue_type == 'accepted':
                             +
