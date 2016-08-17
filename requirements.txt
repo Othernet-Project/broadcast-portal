@@ -4,6 +4,7 @@ webassets
 cssmin==0.2.0
 sqlize
 bottle-utils==0.9
+bottle-streamline==1.0
 mandrill
 stripe
 gevent

@@ -35,7 +35,7 @@ setup(
     url='https://github.com/Outernet-Project/broadcast-portal',
     packages=find_packages(),
     long_description=read('README.rst'),
-    install_requires=read('conf/requirements.txt').strip().split('\n'),
+    install_requires=read('requirements.txt').strip().split('\n'),
     entry_points={
         'console_scripts': [
             'runbroadcast = broadcast.app:main',
