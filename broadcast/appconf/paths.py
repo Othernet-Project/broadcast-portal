@@ -1,6 +1,8 @@
 import os
 import logging
 
+from ..app.exts import container as exts
+
 
 def ensure_dir(path):
     if os.path.exists(path):
@@ -8,7 +10,8 @@ def ensure_dir(path):
     os.makedirs(path)
 
 
-def pre_init(conf):
+def pre_init():
+    conf = exts.config
     logging.info('Preparing application directories')
     paths = (
         conf['database.path'],

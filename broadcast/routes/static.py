@@ -1,26 +1,26 @@
 import datetime
-from bottle import request, static_file
+
+from bottle import static_file
+
+from ..util.routes import StaticRoute
+from ..app.exts import container as exts
 
 
-EXP_TIMESTAMP = '%a, %d %b %Y %H:%M:%S GMT'
+class Static(StaticRoute):
+    def get_base_dir(self):
+        return exts.assets.directory
+
+    @classmethod
+    def get_path_prefix(cls):
+        return exts.config['assets.url']
 
 
-def serve_static(path):
-    response = static_file(path, root=request.assets.directory)
-    exp = datetime.datetime.utcnow() + datetime.timedelta(365)
-    response.headers['Expires'] = exp.strftime(EXP_TIMESTAMP)
-    return response
+class Favicon(Static):
+    path = '/favicon.ico'
+
+    def get(self):
+        return super(Favicon, self).get('favicon.ico')
 
 
-def serve_favicon():
-    return serve_static('img/favicon.ico')
-
-
-def route(config):
-    url = config['assets.url']
-    return (
-        ('{}<path:path>'.format(url), 'GET', serve_static, 'static',
-         {'skip': ['sessions']}),
-        ('/favicon.ico', 'GET', serve_favicon, 'favicon',
-         {'skip': ['sessions']}),
-    )
+def route():
+    return (Static, Favicon)

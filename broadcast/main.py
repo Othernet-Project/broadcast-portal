@@ -1,9 +1,14 @@
 import gevent.monkey
 gevent.monkey.patch_all(aggressive=True)
 
+# For more details on the below see: http://bit.ly/18fP1uo
+import gevent.hub
+gevent.hub.Hub.NOT_ERROR = (Exception,)
+
 import os
 
-from util.application import Application
+from broadcast.app.application import Application
+
 
 PKGDIR = os.path.dirname(__file__)
 CONF = os.path.join(PKGDIR, 'broadcast.ini')

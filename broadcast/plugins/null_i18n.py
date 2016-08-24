@@ -14,7 +14,7 @@ import gettext
 from bottle import request
 
 
-def null_i18n_plugin(config):
+def null_i18n_plugin():
     def plugin(callback):
         @functools.wraps(callback)
         def wrapper(*args, **kwargs):

@@ -6,7 +6,10 @@ import functools
 import webassets
 from webassets.script import CommandLineEnvironment
 
-from bottle import request, BaseTemplate
+from bottle import request
+
+from ..app.exts import container as exts
+
 
 MODDIR = os.path.dirname(__file__)
 PKGDIR = os.path.dirname(MODDIR)
@@ -138,8 +141,8 @@ def make_assets(config):
     return assets
 
 
-def rebuild_assets(config):
-    config = config.copy()
+def rebuild_assets():
+    config = exts.config.copy()
     config['assets.debug'] = True
     assets = make_assets(config)
     assets_dir = assets.env.directory
@@ -152,19 +155,15 @@ def rebuild_assets(config):
     cmdenv.invoke('build', {})
 
 
-def pre_init(config):
-    assets = make_assets(config)
-    config['assets.manager'] = assets
+def pre_init():
+    exts.assets = make_assets(exts.config)
 
 
-def assets_plugin(config):
-    assets = config['assets.manager']
-    BaseTemplate.defaults['assets'] = assets
-
+def assets_plugin():
     def plugin(fn):
         @functools.wraps(fn)
         def wrapper(*args, **kwargs):
-            request.assets = assets
+            request.assets = exts.assets
             return fn(*args, **kwargs)
         return wrapper
     plugin.name = 'assets'

@@ -4,7 +4,7 @@ from bottle_utils.i18n import dummy_gettext as _
 
 from ..models.bins import Bin
 from ..models.items import ContentItem
-from ..util.template import template
+from ..util.template import render as template
 
 
 @roca_view('bin_list', '_bin_list', template_func=template)
@@ -24,7 +24,8 @@ def bin_details(bin_id):
         return dict(bin=bin, items=ContentItem.filter(bin=bin_id))
 
 
-def route(conf):
+def route():
+    return tuple()
     return (
         (
             '/bins/',
@@ -40,4 +41,3 @@ def route(conf):
             {}
         )
     )
-

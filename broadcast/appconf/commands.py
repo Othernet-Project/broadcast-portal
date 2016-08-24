@@ -12,9 +12,14 @@ import datetime
 import getpass
 import sys
 
-from .auth.users import User
-from .squery import DatabaseContainer
-from .static import rebuild_assets
+from ..util.auth.users import User
+from ..plugins.static import rebuild_assets
+from ..app.exts import container as exts
+
+try:
+    raw_input
+except NameError:
+    raw_input = input
 
 
 COMMANDS = dict()
@@ -28,9 +33,9 @@ def command(name):
 
 
 @command('su')
-def create_superuser(config):
+def create_superuser():
     print("Press ctrl-c to abort")
-    databases = DatabaseContainer(config['database.connections'])
+    databases = exts.databases
     try:
         username = raw_input('Username: ')
         email = raw_input('Email: ')
@@ -50,23 +55,22 @@ def create_superuser(config):
         print("User created.")
     except User.AlreadyExists:
         print("User already exists, please try a different username.")
-        create_superuser(config)
+        create_superuser()
     except User.InvalidCredentials:
         print("Invalid user credentials, please try again.")
-        create_superuser(config)
-
+        create_superuser()
     sys.exit(0)
 
 
 @command('assets')
-def assets(config):
+def assets():
     print("Rebuilding assets")
-    rebuild_assets(config)
+    rebuild_assets()
     sys.exit(0)
 
 
-def pre_init(config):
-    arg_dict = vars(config['args'])
+def pre_init():
+    arg_dict = vars(exts.args)
     for name, value in arg_dict.items():
         try:
             cmd_handler = COMMANDS[name]
@@ -74,4 +78,4 @@ def pre_init(config):
             pass
         else:
             if value:
-                cmd_handler(config)
+                cmd_handler()

@@ -8,297 +8,189 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-import functools
+import logging
 
-from bottle import request, redirect, abort
-from bottle_utils.csrf import csrf_protect, csrf_token
 from bottle_utils.i18n import dummy_gettext as _
 
-from ..forms.auth import (LoginForm,
-                          RegistrationForm,
-                          EmailVerificationForm,
-                          PasswordResetRequestForm,
-                          PasswordResetForm)
-from ..util.auth.helpers import send_confirmation_email
-from ..util.auth.tokens import EmailVerification, PasswordReset
-from ..util.auth.users import User
-from ..util.auth.utils import get_redirect_path
-from ..util.sendmail import send_mail
-from ..util.http import http_redirect
-from ..util.template import view, template
+from ..models.auth import User, EmailVerificationToken
+from ..forms.auth import (
+    LoginForm,
+    RegisterForm,
+    EmailVerificationForm,
+    PasswordResetRequestForm,
+    ResetPasswordForm,
+)
+from ..util.routes import (
+    ActionXHRPartialFormRoute,
+    ActionTemplateRoute,
+    CSRFMixin,
+    XHRJsonRoute,
+)
 
 
-def anon_or_unknown(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        if request.user.is_authenticated and not request.user.is_anonymous:
-            abort(403, _("Only anonymous or unregistered users are allowed."))
-        return func(*args, **kwargs)
-    return wrapper
+class NextPathMixin(object):
+    """
+    This mixin select the appropriate URL and label depending on whether the
+    redirect path is present in the request parameters.
+    """
+    success_url = ('main:home', {})
+    success_url_label = _('main page')
+    error_url = success_url
+    error_url_label = _('main page')
+
+    def get_success_url(self):
+        return self.request.params.get(
+            'next', super(NextPathMixin, self).get_success_url())
+
+    def get_error_url(self):
+        return self.request.params.get(
+            'next', super(NextPathMixin, self).get_error_url())
+
+    def get_success_url_label(self):
+        if self.params.get('next'):
+            return _('your previous location')
+        return super(NextPathMixin, self).get_success_url_label()
+
+    def get_error_url_label(self):
+        if self.params.get('next'):
+            return _('your previous location')
+        return super(NextPathMixin, self).get_error_url_label()
 
 
-@view('login')
-@csrf_token
-def show_login_form():
-    return dict(login_form=LoginForm(),
-                registration_form=RegistrationForm(),
-                next_path=request.params.get('next', '/'))
+class LoginOnSuccessMixin(object):
+    """
+    Used in conjunction with Action* routes where user is to be redirected to
+    the log-in page on successful action.
+    """
+    success_url = ('auth:login', {})
+    success_url_label = _('log-in page')
 
 
-@view('login')
-@csrf_protect
-def login():
-    next_path = request.params.get('next', '/')
-    login_form = LoginForm(request.params)
-    if login_form.is_valid():
-        return http_redirect(next_path)
-
-    return dict(next_path=next_path,
-                login_form=login_form,
-                registration_form=RegistrationForm())
-
-
-@view('confirmation')
-@csrf_token
-def send_confirmation_form():
-    return dict(form=EmailVerificationForm())
+class NoLoginNeededMixin(object):
+    """
+    Used with routes requiring login for anonymous users, causing non-anonymous
+    users to go straigth to success URL.
+    """
+    def get(self):
+        if not self.request.user.is_anonymous():
+            # Don't bother authenticated users
+            self.redirect(self.get_success_url())
+        return super(NoLoginNeededMixin, self).get()
 
 
-@csrf_protect
-def send_confirmation(email=None, next_path=None):
-    if email is None:
-        form = EmailVerificationForm(request.params)
-        if not form.is_valid():
-            return template('confirmation', form=form)
-
-        email = form.processed_data['email']
-
-    next_path = next_path or request.params.get('next', '/')
-    if request.user.is_authenticated:
-        redirect_url = next_path
-        redirect_target = _("your previous location")
-    else:
-        login_path = request.app.get_url('login')
-        redirect_url = get_redirect_path(login_path, next_path)
-        redirect_target = _('log-in')
-
-    send_confirmation_email(email,
-                            next_path,
-                            config=request.app.config,
-                            db=request.db.sessions)
-    return template('feedback',
-                    page_title=_('Account registration complete'),
-                    status='email',
-                    redirect_url=redirect_url,
-                    message=_('Confirmation email has been sent to '
-                              '{address}. Check your inbox.').format(
-                                  address=email),
-                    redirect_target=redirect_target)
+class Register(NoLoginNeededMixin, CSRFMixin, ActionXHRPartialFormRoute):
+    path = '/accounts/'
+    template_name = 'auth/register.mako'
+    partial_template_name = 'auth/_register.mako'
+    form_factory = RegisterForm
+    success_message = _('Check your inbox for an email confirmation link')
+    success_url = ('main:home', {})
 
 
-@view('feedback')
-def confirm(key):
-    next_path = request.params.get('next', '/')
-    redir_onfail = get_redirect_path(request.app.get_url('login'), next_path)
-    try:
-        verification = EmailVerification.get(key=key)
-    except EmailVerification.KeyExpired:
-        return {'message': _("The confirmation key has already expired."),
-                'page_title': _("Confirmation"),
-                'status': 'error',
-                'redirect_url': redir_onfail,
-                'redirect_target': _('log-in')}
-    except EmailVerification.DoesNotExist:
-        return {'message': _("The confirmation key is not valid."),
-                'page_title': _("Confirmation"),
-                'status': 'error',
-                'redirect_url': redir_onfail,
-                'redirect_target': _('log-in')}
-    else:
-        user = verification.accept()
-        if user.is_anonymous:
-            redir_url = request.app.get_url('register_form')
-            return {'message': _("E-mail address successfully confirmed. "
-                                 "Please complete your registration now."),
-                    'page_title': _("Confirmation"),
-                    'status': 'success',
-                    'redirect_url': redir_url,
-                    'redirect_delay': 1,
-                    'redirect_target': _('the registration page')}
-
-        return {'message': _("E-mail address successfully confirmed. You have "
-                             "been automatically logged in."),
-                'page_title': _("Confirmation"),
-                'status': 'success',
-                'redirect_url': next_path,
-                'redirect_target': _('the main page')}
+class Login(NoLoginNeededMixin, CSRFMixin, NextPathMixin,
+            ActionXHRPartialFormRoute):
+    path = '/accounts/login'
+    template_name = 'auth/login.mako'
+    partial_template_name = 'auth/_login.mako'
+    form_factory = LoginForm
+    success_message = _('You have been logged in')
 
 
-@view('password_reset_request')
-@csrf_token
-def password_reset_request_form():
-    return dict(form=PasswordResetRequestForm(),
-                next_path=request.params.get('next', '/'))
+class ResendConfirmation(CSRFMixin, ActionXHRPartialFormRoute):
+    path = '/accounts/resend-confirmation'
+    template_name = 'auth/confirmation.mako'
+    partial_template_name = 'auth/_confirmation.mako'
+    form_factory = EmailVerificationForm
+    success_message = _('Check your inbox for an email confirmation link')
+
+    def get_success_url(self):
+        return self.app.get_url('main:home')
 
 
-@csrf_protect
-def password_reset_request():
-    next_path = request.params.get('next', '/')
-    form = PasswordResetRequestForm(request.params)
-    if not form.is_valid():
-        return template('password_reset_request',
-                        form=form,
-                        next_path=next_path)
+class ConfirmEmail(LoginOnSuccessMixin, NextPathMixin, ActionTemplateRoute):
+    path = '/accounts/verify/<key:re:[0-9a-f]{32}'
+    success_message = _('Your email address has been confirmed')
+    error_message = _('The confirmation link has expired or has already been '
+                      'used.')
+    error_message = _('main page')
 
-    email = form.processed_data['email']
-    try:
-        User.get(email=email)
-    except User.DoesNotExist:
-        pass  # do not reveal to users whether an email exists or not
-    else:
-        expires = request.app.config['authentication.password_reset_expires']
-        pw_reset = PasswordReset.new(email, expires)
-        tasks = request.app.config['tasks']
-        tasks.schedule(send_mail,
-                       args=(email, _("Reset Password")),
-                       kwargs=dict(text='email/password_reset',
-                                   data={'reset_key': pw_reset.key,
-                                         'next_path': next_path},
-                                   config=request.app.config))
+    def get_error_url(self):
+        return self.app.get_url('main:home')
 
-    redirect_url = get_redirect_path(request.app.get_url('login'), next_path)
-    return template('feedback',
-                    page_title=_('Password reset email sent'),
-                    status='email',
-                    redirect_url=redirect_url,
-                    message=_('An email with a password reset link has been '
-                              'sent to {address}. Check your inbox.').format(
-                                  address=email),
-                    redirect_target=_('log-in'))
-
-
-@view('password_reset')
-@csrf_token
-def password_reset_form(key):
-    return dict(form=PasswordResetForm({'key': key}),
-                next_path=request.params.get('next', '/'))
-
-
-@csrf_protect
-def password_reset(key):
-    next_path = request.params.get('next', '/')
-    form = PasswordResetForm(request.forms)
-    if not form.is_valid():
-        return template('password_reset', form=form, next_path=next_path)
-
-    redirect_url = get_redirect_path(request.app.get_url('login'), next_path)
-    key = form.processed_data['key']
-    new_password = form.processed_data['new_password1']
-    try:
-        pw_reset = PasswordReset.get(key=key)
-    except PasswordReset.KeyExpired:
-        context = {'message': _("The password reset key has already expired."),
-                   'page_title': _("Password Reset"),
-                   'status': 'error',
-                   'redirect_url': redirect_url,
-                   'redirect_target': _('log-in')}
-    except PasswordReset.DoesNotExist:
-        context = {'message': _("The password reset key is not valid."),
-                   'page_title': _("Password Reset"),
-                   'status': 'error',
-                   'redirect_url': redirect_url,
-                   'redirect_target': _('log-in')}
-    else:
-        pw_reset.accept(new_password)
-        context = {'message': _('You have successfully reset your password.'),
-                   'page_title': _('Password reset successful'),
-                   'status': 'success',
-                   'redirect_url': redirect_url,
-                   'redirect_target': _('log-in')}
-    return template('feedback', **context)
-
-
-@view('register')
-@csrf_token
-@anon_or_unknown
-def show_register_form():
-    return dict(registration_form=RegistrationForm(),
-                next_path=request.params.get('next', '/'))
-
-
-@csrf_protect
-@anon_or_unknown
-def register():
-    referer = request.headers.get('Referer', 'register')
-    template_name = 'login' if 'login' in referer else 'register'
-    next_path = request.params.get('next', '/')
-    registration_form = RegistrationForm(request.params)
-
-    if registration_form.is_valid():
-        email = registration_form.processed_data['email']
-        username = registration_form.processed_data['username']
-        password = registration_form.processed_data['password1']
-        if request.user.is_anonymous:
-            request.user.update(username=username,
-                                password=password)
-            return template('feedback',
-                            page_title=_('Registration completed'),
-                            status='success',
-                            redirect_url=next_path,
-                            message=_('You have successfully completed the '
-                                      'registration process.'),
-                            redirect_target=_('log-in'))
-        user = User.new(username=username,
-                        password=password,
-                        email=email,
-                        db=request.db.sessions)
-        user.make_logged_in()
-        return send_confirmation(email, next_path)
-
-    return template(template_name,
-                    next_path=next_path,
-                    login_form=LoginForm(),
-                    registration_form=registration_form)
-
-
-def check_available():
-    username_or_email = request.params.get('account', '').strip()
-    result = False
-    if username_or_email:
+    def get(self, key):
+        EmailVerificationToken.clear_expired()
         try:
-            User.get(email=username_or_email)
-        except User.DoesNotExist:
-            try:
-                User.get(username=username_or_email)
-            except User.DoesNotExist:
-                pass
-            else:
-                result = True
+            token = EmailVerificationToken.get(key)
+        except EmailVerificationToken.NotFound:
+            self.status = False
+            return
         else:
-            result = True
-
-    return {'result': result}
-
-
-def logout():
-    next_path = request.params.get('next', '/')
-    request.user.logout()
-    redirect(next_path)
+            token.accept()
+            self.status = True
 
 
-def route(conf):
+class PasswordResetRequest(CSRFMixin, LoginOnSuccessMixin,
+                           ActionXHRPartialFormRoute):
+    path = '/accounts/password-reset'
+    template_name = 'auth/password_reset_request.mako'
+    partial_template_name = 'auth/_password_reset_request.mako'
+    form_factory = PasswordResetRequestForm
+    success_message = _('Check your inbox for a password reset link')
+
+
+class ResetPassword(CSRFMixin, LoginOnSuccessMixin,
+                    ActionXHRPartialFormRoute):
+    path = '/accounts/reset-password/<key:re:[0-9a-f]{32}'
+    template_name = 'auth/reset_password.mako'
+    partial_template_name = 'auth/_reset_password.mako'
+    form_factory = ResetPasswordForm
+    success_message = _('Your password has been updated')
+
+
+class NameCheck(XHRJsonRoute):
+    path = '/accounts/check-name'
+
+    @staticmethod
+    def has_username(username):
+        try:
+            User.get(username=username)
+        except User.NotFound:
+            return False
+        else:
+            return True
+
+    def get(self):
+        username = self.request.params.get('username', None)
+        return {'result': self.has_username(username)}
+
+
+class LogOut(ActionTemplateRoute):
+    path = '/accounts/bye'
+    success_message = _('You have been logged out')
+    success_url = ('main:home', {})
+    success_url_label = _('main page')
+    error_message = _('The system could not log you out due to an error')
+    error_url = ('main:home', {})
+    error_url_label = _('main page')
+
+    def get(self):
+        try:
+            self.request.user.logout()
+        except Exception as e:
+            logging.exception('Error while logging out user: %s (%s)',
+                              e, self.request.user.username)
+            self.status = False
+        else:
+            self.status = True
+
+
+def route():
     return (
-        ('/login/', 'GET', show_login_form, 'login_form', {}),
-        ('/login/', 'POST', login, 'login', {}),
-        ('/register/', 'GET', show_register_form, 'register_form', {}),
-        ('/register/', 'POST', register, 'register', {}),
-        ('/check/', 'GET', check_available, 'check_available', {}),
-        ('/confirm/', 'GET', send_confirmation_form, 'send_confirmation_form', {}),
-        ('/confirm/', 'POST', send_confirmation, 'send_confirmation', {}),
-        ('/confirm/<key:re:[0-9a-f]{32}>', 'GET', confirm, 'confirm', {}),
-        ('/password-reset/', 'GET', password_reset_request_form, 'password_reset_request_form', {}),
-        ('/password-reset/', 'POST', password_reset_request, 'password_reset_request', {}),
-        ('/password-reset/<key:re:[0-9a-f]{32}>', 'GET', password_reset_form, 'password_reset_form', {}),
-        ('/password-reset/<key:re:[0-9a-f]{32}>', 'POST', password_reset, 'password_reset', {}),
-        ('/logout/', 'GET', logout, 'logout', {}),
+        Register,
+        Login,
+        ResendConfirmation,
+        ConfirmEmail,
+        PasswordResetRequest,
+        ResetPassword,
+        NameCheck,
     )

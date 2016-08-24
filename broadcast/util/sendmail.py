@@ -53,13 +53,19 @@ def send_multiple(to_list, subject, text=None, data={},
     data['host'] = parsed.netloc
     data['host_url'] = parsed.scheme + '://' + parsed.netloc
 
+    # Obtain the SMTP info
+    server = conf['smtp.server']
+    port = conf['smtp.port']
+    user = conf['smtp.user']
+    pwd = conf['smtp.pass']
+
     # Process the data with the chosen template
     message = template(text, **data)
 
     # Construct message object
     msg = MIMEText(message, 'plain', 'utf-8')
     msg['subject'] = subject
-    msg['from'] = conf['smtp.user']  # Get sender's email from the config
+    msg['from'] = user
     # As described in the docstring, we only use the first item in whatever
     # objects make up the to_list. This is historical, BD (Before Docstrings).
     msg['to'] = ', '.join([e[0] for e in to_list])
@@ -68,20 +74,26 @@ def send_multiple(to_list, subject, text=None, data={},
     # https://docs.python.org/2/library/email.message.html#email.message.Message.preamble
     msg.preamble = subject + '\n'
 
+    if not server:
+        # SMTP is not configured, so log the message that would be sent and
+        # quit.
+        logging.debug('SMTP server not configured. Would send message:\n%s',
+                      msg.as_string())
+        return
+
     # Open SMTP connection
-    smtp = smtplib.SMTP('%s:%s' % (conf['smtp.server'], conf['smtp.port']))
+    smtp = smtplib.SMTP('{}:{}'.format(server, port))
     smtp.starttls()  # Calls `ehlo` if it hasn't been already
     # Calls `ehlo` if it needs to be, which it does because starttls was called
-    smtp.login(conf['smtp.user'], conf['smtp.pass'])
+    smtp.login(user, pwd)
     try:
         smtp.sendmail(msg['from'], msg['to'], msg.as_string())
-        smtp.quit()
-        logging.debug("Sent message to %s" % msg['to'])
-        return
     except Exception as e:
-        smtp.quit()  # smtp connection will stay open until closed
         logging.exception('Error sending email: %s' % e)
-        return None
+    else:
+        logging.debug("Sent message to %s" % msg['to'])
+    finally:
+        smtp.quit()
 
 
 def send_mail(to, subject, text=None, data={}, is_async=False, config=None):

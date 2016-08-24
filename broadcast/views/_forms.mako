@@ -1,18 +1,24 @@
+<%!
+    def autocomplete_attr(val):
+        if val is None:
+            return ''
+        elif val is True:
+            return ' autocomplete="on"'
+        else:
+            return ' autocomplete="off"'
+%>
+
 ## Conditionally render placeholder
 ##
 
-<%def name="pholder_attr(text=None)">${u' placeholder="{}"'.format(esc(text)) if text else ''}</%def>
-
-## Render all optional attributes
-##
-
-<%def name="opt_attrs(**kwargs)">${u' '.join([u'{}={}'.format(k, v) for (k, v) in kwargs.items()]) | h}</%def>
+<%def name="pholder_attr(text=None)">${u' placeholder="{}"'.format(esc(text)) if text else '' | n,unicode}</%def>
 
 ## Select list option
 ##
 
 <%def name="option(value, label, selected=False)">
-    <option value="${value | h}"${ ' selected' if selected else ''}>${label | h}</option>
+    <% value = '' if value is None else value %>
+    <option value="${value}"${ ' selected' if selected else '' | n,unicode}>${label}</option>
 </%def>
 
 ## Select list
@@ -27,9 +33,9 @@
             choices.insert(0, ('', empty_value))
         current_value = value or request.params.get(name, '')
     %>
-    <select name="${name | h}" id="${id or name | h}">
+    <select name="${name}" id="${id or name}">
     % for val, label in choices:
-        <% selected = val == current_value %>
+        <% selected = str(val) == str(current_value) %>
         ${option(val, label, selected)}
     % endfor
     </select>
@@ -39,23 +45,23 @@
 ## Generic input
 ##
 
-<%def name="input(name, type='text', placeholder=None, value=None, id=None, has_error=False, **kwargs)">
+<%def name="input(name, type='text', placeholder=None, value=None, id=None, has_error=False, autocomplete=False)">
     <% current_value = h.to_unicode(value or request.params.get(name, '')) %>
-    <input type="${type | h}" name="${name | h}" id="${id or name | h}" value="${current_value | h}"${self.pholder_attr(placeholder)}${self.opt_attrs(**kwargs)}>
+    <input type="${type}" name="${name}" id="${id or name}" value="${current_value}"${self.pholder_attr(placeholder)}${autocomplete_attr(autocomplete)}>
 </%def>
 
 ## Hidden input
 ##
 
-<%def name="hidden(name, value, id=None, **kwargs)">
+<%def name="hidden(name, value, id=None)">
     ${self.input(name, 'hidden', value=value, id=id or name)}
 </%def>
 
 ## Text input
 ##
 
-<%def name="text(name, placeholder=None, value=None, id=None, **kwargs)">
-    ${self.input(name, 'text', placeholder=placeholder, value=value, id=id)}
+<%def name="text(name, placeholder=None, value=None, id=None, autocomplete=False)">
+    ${self.input(name, 'text', placeholder=placeholder, value=value, id=id, autocomplete=autocomplete)}
 </%def>
 
 ## Checkbox
@@ -66,9 +72,9 @@
     current_value = request.params.getall(name)
     is_checked = value in current_value if is_checked is None else is_checked
     %>
-    <input type="checkbox" id="${id or name | h}" name="${name | h}" value="${value | h}"${' checked' if is_checked else ''}>
+    <input type="checkbox" id="${id or name}" name="${name}" value="${value}"${' checked' if is_checked else ''}>
     % if label:
-        ${self.label(label, inline=True)}
+        ${self.label(label, inline=True, id=id or name)}
     % endif
 </%def>
 
@@ -79,7 +85,7 @@
     <%
     current_value = value or request.params.getall(name)
     %>
-    <textarea name="${name | h}" id="${id or name | h}"${self.pholder_attr(placeholder)}>${current_value}</textarea>
+    <textarea name="${name}" id="${id or name}"${self.pholder_attr(placeholder)}>${current_value}</textarea>
 </%def>
 
 
@@ -87,8 +93,7 @@
 ##
 
 <%def name="label(label, inline=False, id=None)">
-    <% label = label + ':' if not label.endswith(':') and not inline else label %>
-    <label${' for="{}"'.format(id) if id else '' | h} class="field-label${' field-label-inline' if inline else ''}">${label}</label>
+    <label${' for="{}"'.format(id) if id else '' | n,unicode} class="field-label${' field-label-inline' if inline else ''}">${label}</label>
 </%def>
 
 ## Field supplemental information
@@ -96,13 +101,13 @@
 
 <%def name="field_help(message)">
     <span class="field-help-message">
-        ${message | h}
+        ${message}
     </span>
 </%def>
 
 <%def name="field_error(message)">
     <span class="field-error-message">
-        ${message | h}
+        ${message}
     </span>
 </%def>
 
@@ -120,15 +125,15 @@
 ## This def renders a bottle-utils Field instance.
 ##
 
-<%def name="field(fld, id=None, help=None, required=False)">
+<%def name="field(fld, id=None, help=None, label=None, autocomplete=None, **kw)">
     <%
         if help:
             fld.options['help_text'] = help
     %>
-    <p class="field${' field-error' if fld.error else ''}${' required' if required else ''}" id="field-${id or fld.name | h}">
+    <p class="field${' field-error' if fld.error else ''}">
         ## Label
         % if fld.type not in ('checkbox', 'radio', 'hidden'):
-            ${self.label(fld.label, id=id or fld.name)}
+            ${self.label(label or fld.label, id=id or fld.name)}
         % endif
 
         ## Help text for textarea is rendered above the field but below label
@@ -137,19 +142,17 @@
         % endif
 
         ## Field
-        <span class="field-input">
-            % if fld.type in ['text', 'email', 'date', 'password', 'file']:
-                ${self.input(fld.name, type=fld.type, value=fld.value, id=id, **fld.options)}
-            % elif fld.type == 'hidden':
-                ${self.hidden(fld.name, value=fld.value, id=id, **fld.options)}
-            % elif fld.type in ['checkbox', 'radio']:
-                ${self.checkbox(fld.name, value=fld.expected_value, is_checked=fld.value, label=fld.label, id=id)}
-            % elif fld.type == 'textarea':
-                ${self.textarea(fld.name, placeholder=fld.options.get('placeholder'), value=fld.value, id=id)}
-            % elif fld.type == 'select':
-                ${self.select(fld.name, fld.choices, value=fld.value, id=id)}
-            % endif
-        </span>
+        % if fld.type in ['text', 'email', 'date', 'password', 'file']:
+            ${self.input(fld.name, type=fld.type, placeholder=fld.options.get('placeholder'), value=fld.value, id=id, autocomplete=autocomplete, **kw)}
+        % elif fld.type == 'hidden':
+            ${self.hidden(fld.name, value=fld.value, id=id, **kw)}
+        % elif fld.type in ['checkbox', 'radio']:
+            ${self.checkbox(fld.name, value=fld.expected_value, is_checked=fld.default, label=label or fld.label, id=id, **kw)}
+        % elif fld.type == 'textarea':
+            ${self.textarea(fld.name, placeholder=fld.options.get('placeholder'), value=fld.value, id=id, **kw)}
+        % elif fld.type == 'select':
+            ${self.select(fld.name, fld.choices, value=fld.value, id=id, **kw)}
+        % endif
 
         ## Help text for non-textarea fields is rendered below the field
         % if fld.type not in ('textarea',):
@@ -169,7 +172,7 @@
     <ul class="form-errors">
         % for error in errors:
             <li class="form-error">
-            ${error | h}
+            ${error}
             </li>
         % endfor
     </ul>
@@ -180,7 +183,11 @@
     if not message:
         return ''
     %>
-    <p class="o-form-message">
-        ${message | h}
+    <p class="form-message">
+        ${message}
     </p>
+</%def>
+
+<%def name="csrf_token()">
+    <input type="hidden" name="_csrf_token" value="${request.csrf_token}">
 </%def>

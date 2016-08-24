@@ -8,13 +8,65 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-import re
+import time
+import random
+
+from bottle import request
 
 from bottle_utils import form
 from bottle_utils.i18n import lazy_gettext as _
 
-from ..util.auth.users import User
-from ..util.auth.tokens import PasswordReset
+from ..models.auth import User, EmailVerificationToken, PasswordResetToken
+from ..util.validators import EmailValidator
+
+
+CONFIRMATION_EXPIRY = 14
+RESET_EXPIRY = 5
+
+
+class UniqueUsernameValidator(form.Validator):
+    messages = {
+        'user_taken': _('This username is already in use')
+    }
+
+    def validate(self, value):
+        try:
+            User.get(username=value)
+        except User.NotFound:
+            return value
+        else:
+            raise form.ValidationError('user_taken', {})
+
+
+class UniqueEmailValidator(form.Validator):
+    messages = {
+        'user_taken': _('This username is already in use')
+    }
+
+    def validate(self, value):
+        try:
+            User.get(email=value)
+        except User.NotFound:
+            return value
+        else:
+            raise form.ValidationError('user_taken', {})
+
+
+class EmailTokenMixin(object):
+    TokenClass = None
+    token_expiry = 14
+
+    def send_token(self):
+        next_path = request.params.get('next_path', '/')
+        email = self.processed_data['email']
+        try:
+            User.get(email=email)
+        except User.NotFound:
+            # There is no such account, so we're faking it
+            time.sleep(random.randint(2, 5))
+        else:
+            token = self.TokenClass.new(email, self.token_expiry)
+            token.send(next_path)
 
 
 class LoginForm(form.Form):
@@ -51,7 +103,10 @@ class TruthValidator(form.Validator):
             raise form.ValidationError('truth', {})
 
 
-class RegistrationForm(form.Form):
+class RegisterForm(EmailTokenMixin, form.Form):
+    TokenClass = EmailVerificationToken
+    token_expiry = CONFIRMATION_EXPIRY
+
     min_password_length = 4
     messages = {
         'pwmatch': _("The entered passwords do not match."),
@@ -60,7 +115,7 @@ class RegistrationForm(form.Form):
     username = form.StringField(
         # Translators, used as label in create user form
         _("Username"),
-        validators=[form.Required()],
+        validators=[form.Required(), UniqueUsernameValidator()],
         placeholder=_('Username'),
         messages={
             'username_taken': _("Username already taken."),
@@ -68,12 +123,8 @@ class RegistrationForm(form.Form):
     email = form.StringField(
         # Translators, used as label in create user form
         _("Email"),
-        validators=[form.Required()],
-        placeholder=_('Email'),
-        messages={
-            'email_invalid': _("Invalid e-mail address entered."),
-            'email_taken': _("E-mail address already registered."),
-        })
+        validators=[form.Required(), EmailValidator(), UniqueEmailValidator()],
+        placeholder=_('Email'))
     password1 = form.PasswordField(
         # Translators, used as label in create user form
         _("Password"),
@@ -109,85 +160,52 @@ class RegistrationForm(form.Form):
             raise form.ValidationError('password_length',
                                        {'length': self.min_password_length})
 
-    def postprocess_email(self, value):
-        if not re.match(r'[^@]+@[^@]+\.[^@]+', value):
-            raise form.ValidationError('email_invalid', {})
-
-        try:
-            user = User.get(email=value)
-        except User.DoesNotExist:
-            pass  # good, email is free
-        else:
-            if not user.is_anonymous:
-                raise form.ValidationError('email_taken', {})
-
-        return value
-
-    def postprocess_username(self, value):
-        try:
-            User.get(username=value)
-        except User.DoesNotExist:
-            return value  # good, username is free
-        else:
-            raise form.ValidationError('username_taken', {})
-
     def validate(self):
         password1 = self.processed_data['password1']
         password2 = self.processed_data['password2']
         if password1 != password2:
             raise form.ValidationError('pwmatch', {})
+        user = User({
+            'username': self.processed_data['username'],
+            'email': self.processed_data['email'],
+        })
+        user.set_password(password1)
+        # TODO: the following line may still raise a User.IntegrityError in
+        # race condition. Should be fixed.
+        user.save()
+        self.send_token()
 
 
-class EmailVerificationForm(form.Form):
+class EmailVerificationForm(EmailTokenMixin, form.Form):
+    TokenClass = EmailVerificationToken
+    token_expiry = CONFIRMATION_EXPIRY
+
+    email = form.StringField(
+        # Translators, used as label in create user form
+        _("Email"),
+        validators=[form.Required(), EmailValidator()],
+        placeholder=_('Email'))
+
+    def validate(self):
+        self.send_token()
+
+
+class PasswordResetRequestForm(EmailTokenMixin, form.Form):
+    TokenClass = PasswordResetToken
+    token_expiry = RESET_EXPIRY
+
     # Translators, used as label in create user form
     email = form.StringField(
+        # Translators, used as label in create user form
         _("Email"),
-        validators=[form.Required()],
-        placeholder=_('Email'),
-        messages={
-            # Translators, used as error messages for invalid email addresses
-            # in send email confirmation form
-            'invalid_email': _("Invalid e-mail address entered."),
-            'not_registered': _("E-mail address not registered.")
-        }
-    )
+        validators=[form.Required(), EmailValidator()],
+        placeholder=_('Email'))
 
-    def postprocess_email(self, value):
-        if not re.match(r'[^@]+@[^@]+\.[^@]+', value):
-            raise form.ValidationError('invalid_email', {})
-
-        try:
-            User.get(email=value)
-        except User.DoesNotExist:
-            raise form.ValidationError('not_registered', {})
-        else:
-            return value
+    def validate(self):
+        self.send_token()
 
 
-class PasswordResetRequestForm(form.Form):
-    messages = {
-        'invalid_email': _("Invalid e-mail address entered."),
-    }
-    # Translators, used as label in create user form
-    email = form.StringField(
-        _("Email"),
-        validators=[form.Required()],
-        placeholder=_('Email'),
-        messages={
-            # Translators, used as error messages for invalid email addresses
-            # in password reset form
-            'invalid_email': _("Invalid e-mail address entered."),
-        }
-    )
-
-    def postprocess_email(self, value):
-        if not re.match(r'[^@]+@[^@]+\.[^@]+', value):
-            raise form.ValidationError('invalid_email', {})
-
-        return value
-
-
-class PasswordResetForm(form.Form):
+class ResetPasswordForm(form.Form):
     min_password_length = 4
     messages = {
         # Translators, error shown when password reset fails
@@ -216,15 +234,14 @@ class PasswordResetForm(form.Form):
     )
 
     def validate(self):
+        PasswordResetToken.clear_expired()
         key = self.processed_data['key']
         try:
-            PasswordReset.get(key=key)
-        except PasswordReset.KeyExpired:
-            raise form.ValidationError('key_expired', {})
-        except PasswordReset.DoesNotExist:
+            token = PasswordResetToken.get(key=key)
+        except PasswordResetToken.NotFound:
             raise form.ValidationError('key_invalid', {})
-
         new_password1 = self.processed_data['new_password1']
         new_password2 = self.processed_data['new_password2']
         if new_password1 != new_password2:
             raise form.ValidationError('pwmatch', {})
+        token.accept(new_password1)

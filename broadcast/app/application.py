@@ -5,10 +5,11 @@ import importlib
 
 from bottle import Bottle
 from gevent import pywsgi
+from confloader import ConfDict
 from greentasks.scheduler import TaskScheduler
 
-from .confloader import ConfDict
-from .signal_handlers import on_interrupt
+from . import exts
+from ..util.signal_handlers import on_interrupt
 
 
 class Application:
@@ -20,13 +21,19 @@ class Application:
         self.stop_hooks = []
         self.app = Bottle()
         self.root = root
+        self.exts = exts.container
 
         # Configure the applicaton
         self.configure(config)
-        self.config['root'] = root
-        self.config['bottle'] = self.app
-        self.config['args'] = args
-        self.config['tasks'] = TaskScheduler()
+        self.exts.config = self.config
+
+        # Set up access to important parts of the app
+        self.exts.root = root
+        self.exts.app = self.app
+        self.exts.args = args
+        self.exts.template_defualts = {}
+        self.exts.tasks = TaskScheduler()
+        self.exts.debug = self.debug = self.config['server.debug']
 
         # Register application hooks
         self.pre_init(self.config['stack.pre_init'])
@@ -41,28 +48,28 @@ class Application:
     def configure(self, path):
         path = os.path.abspath(path)
         base_path = os.path.dirname(path)
-        self.config = ConfDict.from_file(path,
-                                         base_dir=base_path,
-                                         catchall=True,
-                                         autojson=True)
+        self.config = ConfDict.from_file(path)
+        self.config.update(dict(
+            catchall=True,
+            autojson=True
+        ))
         self.app.config = self.config
 
     def pre_init(self, pre_init):
         for hook in pre_init:
             hook = self._import(hook)
-            hook(self.config)
+            hook()
 
     def add_plugins(self, plugins):
         for plugin in plugins:
             plugin = self._import(plugin)
-            self.app.install(plugin(self.config))
+            self.app.install(plugin())
 
     def add_routes(self, routing):
         for route in routing:
             route = self._import(route)
-            for r in route(self.config):
-                path, method, cb, name, kw = r
-                self.app.route(path, method, cb, name=name, **kw)
+            for r in route():
+                r.route(app=self.app)
 
     def add_background(self, background_calls):
         for hook in background_calls:
@@ -74,7 +81,17 @@ class Application:
             hook = self._import(hook)
             self.stop_hooks.append(hook)
 
+    def debug_app(self):
+        for r in self.app.routes:
+            logging.debug('[{}] {} {}: {}'.format(
+                r.name,
+                r.method,
+                r.rule,
+                r.callback.__name__))
+
     def start(self):
+        if self.debug:
+            self.debug_app()
         host = self.config['server.bind']
         port = self.config['server.port']
         self.server = pywsgi.WSGIServer((host, port), self.app, log=None)
@@ -89,7 +106,7 @@ class Application:
         while True:
             time.sleep(self.LOOP_INTERVAL)
             for hook in self.background_hooks:
-                hook(self.app)
+                hook()
 
     def halt(self):
         logging.info('Stopping the application')

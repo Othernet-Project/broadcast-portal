@@ -19,6 +19,9 @@ import functools
 from bottle import request, response
 from bottle_utils.common import basestring
 
+from ..app.exts import container as exts
+from ..util.helpers import utcnow
+
 
 class SessionError(Exception):
     """ Exception raised when there is an error with sessions """
@@ -93,7 +96,7 @@ class Session(object):
         return self.save()
 
     def expire(self):
-        if self.expires >= datetime.datetime.utcnow():
+        if self.expires >= utcnow():
             return self
         self.delete()
         raise SessionExpired(self.id)
@@ -105,7 +108,7 @@ class Session(object):
         return self
 
     def set_cookie(self, name, secret):
-        max_age = (self.expires - datetime.datetime.now()).seconds
+        max_age = (self.expires - utcnow()).seconds
         response.set_cookie(name, self.id, path='/', secret=secret,
                             max_age=max_age)
 
@@ -203,7 +206,6 @@ class Session(object):
         """Set the `modifed` flag in case of direct attribute assignments."""
         if name in self.modifiable_attributes:
             self.modified = True
-
         super(Session, self).__setattr__(name, value)
 
     # Request session management
@@ -215,10 +217,9 @@ class Session(object):
         :param session_id:  unique session ID
         :returns:           valid `Session` instance.
         """
-        db = request.db.sessions
+        db = exts.db.sessions
         q = db.Select(sets='sessions', where='session_id = ?')
-        db.query(q, session_id)
-        session_data = db.result
+        session_data = db.query(q, session_id).result
         if not session_data:
             raise SessionInvalid(session_id)
         sess = cls(**session_data)
@@ -245,16 +246,16 @@ class Session(object):
     @staticmethod
     def get_expiry():
         life = request.app.config['session.lifetime']
-        return datetime.datetime.utcnow() + datetime.timedelta(life)
+        return utcnow() + datetime.timedelta(life)
 
 
-def session_plugin(config):
+def session_plugin():
+    config = exts.config
     cookie_name = config['session.cookie_name']
     secret = os.getenv(config['session.secret_env_name'], 'not-secret')
-    bottle = config['bottle']
 
     # Set up a hook, so handlers that raise cannot escape session-saving
-    @bottle.hook('after_request')
+    @exts.app.hook('after_request')
     def save_session():
         if hasattr(request, 'session'):
             if request.session.modified:
