@@ -13,9 +13,9 @@ create table users
 
 create table tokens
 (
-    key text unique primary_key,    -- token ID
+    key text primary_key unique,    -- token ID
     email text,                     -- target email
-    expires timestamp,              -- expiry timestamp
+    expires timestamp               -- expiry timestamp
 );
 
 create table sessions
