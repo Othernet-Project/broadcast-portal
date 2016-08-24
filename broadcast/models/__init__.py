@@ -35,7 +35,8 @@ class Model(object):
 
     dbname = None
     table = None
-    columns = None
+    columns = {}
+    extra_columns = {}
     pk = 'id'
 
     # Alias sqlite3 error classes for easy access
@@ -183,7 +184,7 @@ class Model(object):
             return self._data.get(name, None)
         if name in self.extra_columns:
             return self._extras.get(name, None)
-        raise AttributeError(name)
+        return super(Model, self).__getattr__(name)
 
     def __setattr__(self, name, value):
         if name in self.columns:
