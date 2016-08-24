@@ -128,7 +128,7 @@ class ContentItem(Model, LastUpdateMixin):
         Generator of items that match given term and
         """
         q = cls.db.Select(sets=cls.table,
-                          where=['bins ISNULL', 'ilike(title, %:term%) = 1'],
+                          where=['bin ISNULL', 'ilike(title, %:term%) = 1'],
                           order=['-votes', '-created'])
         for row in cls.db.query(q, term=term):
             yield cls(row)
@@ -154,13 +154,13 @@ class ContentItem(Model, LastUpdateMixin):
         """
         what = list(cls.columns)
         what.append('iscandidate(size, votes) as is_candidate')
-        q = cls.db.Select(what, sets=cls.table, where=['bins ISNULL'],
+        q = cls.db.Select(what, sets=cls.table, where=['bin ISNULL'],
                           order=['-votes', '-created'], limit=limit,
                           offset=offset)
         if kind == cls.CANDIDATES:
-            q.where('iscandidate(size, votes) = 1')
+            q.where &= 'iscandidate(size, votes) = 1'
         elif kind == cls.NON_CANDIDATES:
-            q.where('iscandidate(size, votes) = 0')
+            q.where &= 'iscandidate(size, votes) = 0'
         for row in cls.db.query(q).results:
             yield cls(row)
 
