@@ -160,7 +160,7 @@ class ContentItem(Model, LastUpdateMixin):
         return cls.db.query(q).result
 
     @classmethod
-    def binless_items(cls, limit=None, offset=None, kind=None):
+    def binless_items(cls, limit=None, offset=None, kind=None, username=None):
         """
         Generator of items that are not yet in a bin
         """
@@ -173,7 +173,22 @@ class ContentItem(Model, LastUpdateMixin):
             q.where &= 'iscandidate(size, votes) = 1'
         elif kind == cls.NON_CANDIDATES:
             q.where &= 'iscandidate(size, votes) = 0'
-        for row in cls.db.query(q).results:
+
+        if username:
+            # If username is passed, then join the contents table to a subqury
+            # filtering votes that were cast by the specified username, and
+            # return a sum of vote values (therefore -1, 0 or +1) as
+            # 'user_vote' column for each record.
+            subq = cls.db.Select(['votes.content_id', 'votes.value'],
+                                 sets='votes',
+                                 where='votes.username = :username')
+            q.what.append('sum(user_votes.value) as user_vote')
+            q.sets.join(subq.as_subquery() + ' as user_votes',
+                        kind=cls.db.LEFT,
+                        on='user_votes.content_id = content.id')
+            q.group = 'content.id'
+
+        for row in cls.db.query(q, username=username).results:
             yield cls(row)
 
     @classmethod

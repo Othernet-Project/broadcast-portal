@@ -25,7 +25,8 @@ class ModeratorOnlyMixin(RoleMixin):
 class ItemListMixin(ModeratorOnlyMixin):
     def get_items(self):
         # TODO: implement paging
-        return ContentItem.binless_items(kind=self.item_type)
+        return ContentItem.binless_items(kind=self.item_type,
+                                         username=self.request.user.username)
 
     def get(self):
         return {'items': self.get_items()}
