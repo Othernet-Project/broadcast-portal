@@ -1,6 +1,6 @@
 <%inherit file="/_base.mako"/>
 
-<%block name="title">${_('Filecast center by Outernet')}</%block>
+<%block name="page_title">${_('Filecast center by Outernet')}</%block>
 
 <section id="hero" class="hero">
 <h1>${_('Filecast center')}</h1>

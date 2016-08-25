@@ -1,6 +1,6 @@
 <%inherit file="/_base.mako"/>
 
-<%block name="title">${err.status}</%block>
+<%block name="page_title">${err.status}</%block>
 
 <%block name="body_class">error</%block>
 

@@ -1,7 +1,7 @@
 <%inherit file="/_base.mako"/>
 <%namespace name="status" file="_status.mako"/>
 
-<%block name="title">${_('Filecast queue overview')}</%block>
+<%block name="page_title">${_('Filecast queue overview')}</%block>
 
 <h1>${_('Filecast queue overview')}</h1>
 
