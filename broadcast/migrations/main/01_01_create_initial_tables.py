@@ -1,7 +1,7 @@
 SQL = """
 create table bins
 (
-    id varchar primary_key unique,
+    id text primary_key unique,
     created timestamp,      -- creation timestamp
     closed timestamp,       -- finalization timestamp
     size integer default 0, -- total size (bytes)
@@ -10,25 +10,25 @@ create table bins
 
 create table content
 (
-    id varchar primary_key unique,
+    id text primary_key unique,
     created timestamp,          -- creation timestamp
-    email varchar,              -- creator email
-    username varchar,           -- creator username
-    ipaddr varchar,             -- creator IP address
-    path varchar,               -- file path relative to upload root
+    email text,                 -- creator email
+    username text,              -- creator username
+    ipaddr text,                -- creator IP address
+    path text,                  -- file path relative to upload root
     size integer default 0,     -- file size in bytes
-    bin varchar,                -- bin ID
+    bin text,                   -- bin ID
     votes integer default 0,    -- number of votes
-    category varchar            -- category name
+    category text               -- category name
 );
 
 create table votes
 (
     id integer primary_key,
     created timestamp,          -- time when vote was cast
-    name varchar,               -- voter's username
-    ipaddr varchar,             -- voter's IP address
-    is_upvote varchar,          -- whether vote is an upvote
+    name text,                  -- voter's username
+    ipaddr text,                -- voter's IP address
+    is_upvote text,             -- whether vote is an upvote
     content_id integer          -- content
 );
 """
