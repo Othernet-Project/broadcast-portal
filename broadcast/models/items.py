@@ -146,11 +146,6 @@ class ContentItem(Model, LastUpdateMixin):
     def binless_items(cls, limit=None, offset=None, kind=None):
         """
         Generator of items that are not yet in a bin
-
-        .. warning::
-            This generator opens a database transaction which is *not* closed
-            until the iteration is complete. The caller must ensure the
-            iteration is done to the end to prevent memory leak.
         """
         what = list(cls.columns)
         what.append('iscandidate(size, votes) as is_candidate')
