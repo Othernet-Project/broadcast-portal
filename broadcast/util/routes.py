@@ -71,10 +71,6 @@ class ActionMixin(object):
     constructing the template context. That is done in the other mixins.
     """
 
-    def __init__(self, *args, **kwargs):
-        self.status = None
-        super(ActionMixin, self).__init__(*args, **kwargs)
-
     feedback_template = 'feedback.mako'
     feedback_pratial_template = '_feedback.mako'
 
@@ -87,6 +83,10 @@ class ActionMixin(object):
     error_message = _('Action failed')
     error_url = None
     error_url_label = 'nowhere'
+
+    def __init__(self, *args, **kwargs):
+        self.status = None
+        super(ActionMixin, self).__init__(*args, **kwargs)
 
     def get_success_title(self):
         """
