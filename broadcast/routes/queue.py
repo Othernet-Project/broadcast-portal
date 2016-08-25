@@ -85,12 +85,26 @@ class Review(ItemListMixin, XHRPartialRoute):
 
 class Vote(ModeratorOnlyMixin, ActionTemplateRoute):
     path = '/queue/<item_id:re:[0-9a-f]{32}>/'
+    success_message = _('Your vote has been saved')
+    error_message = _('Your vote could not be saved')
+
+    def get_success_url(self):
+        return self.back_to or self.app.get_url('queue:status')
+    get_error_url = get_success_url
+
+    def get_success_url_label(self):
+        return _('previous page') if self.back_to else _('status page')
+    get_error_url_label = get_success_url_label
 
     def post(self, item_id):
+        self.back_to = self.request.params.get('next')
         username = self.request.user.username
         is_upvote = self.request.forms.get('upvote', 'yes') == 'yes'
         ipaddr = self.request.remote_addr
-        item = ContentItem.get(item_id)
+        try:
+            item = ContentItem.get(item_id)
+        except ContentItem.NotFound:
+            self.abort(404)
         try:
             item.cast_vote(username, is_upvote, ipaddr)
         except Exception:
