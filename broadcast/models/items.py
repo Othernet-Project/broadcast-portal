@@ -119,7 +119,7 @@ class ContentItem(Model, LastUpdateMixin):
             else:
                 self.votes -= 1
             self.save(cur)
-        exts.last_update = to_timestamp(now)
+        exts.last_update['timestamp'] = to_timestamp(now)
         return now
 
     @classmethod

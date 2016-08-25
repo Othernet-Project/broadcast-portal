@@ -133,9 +133,9 @@ class LastUpdate(Route):
     path = '/queue/last-update'
 
     def get(self):
-        return exts.last_update
+        return exts.last_update['timestamp']
 
 
 def route():
-    exts.last_update = to_timestamp(ContentItem.last_activity())
+    exts.last_update = {'timestamp': to_timestamp(ContentItem.last_activity())}
     return (Status, Candidates, Review, Vote, Download, LastUpdate)
