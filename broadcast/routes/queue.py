@@ -88,7 +88,7 @@ class Vote(ModeratorOnlyMixin, ActionTemplateRoute):
 
     def post(self, item_id):
         username = self.request.user.username
-        is_upvote = self.forms.get('upvote', 'yes') == 'yes'
+        is_upvote = self.request.forms.get('upvote', 'yes') == 'yes'
         ipaddr = self.request.remote_addr
         item = ContentItem.get(item_id)
         try:
