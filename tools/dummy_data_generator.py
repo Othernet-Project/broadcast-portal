@@ -18,6 +18,16 @@ Generate dummy data for testing purposes
     votes integer,          -- number of votes
     category varchar        -- category name
 
+'votes' table::
+
+    id integer primary_key,
+    created timestamp,          -- time when vote was cast
+    username text,              -- voter's username
+    ipaddr text,                -- voter's IP address
+    value integer,              -- vote value (usually +1, 0, or -1)
+    content_id text,            -- content
+    constraint uidcid unique (username, content_id) on conflict replace
+
 Migrations are not run, so you'll need to start the app once.
 """
 
@@ -38,18 +48,28 @@ FILECHARS = ('abcdefghijklmnopqrstuvwxyz'
              'абвгдђежѕијклљмнопрстћуфхцчџш'
              '0123456789'
              '-_*()')
-VOTE_SELECTION = [-2, -2, -1, -1, -1, 0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 5]
+USERCHARS = ('abcdefghijklmnopqrstuvwxyz')
 FILENAME_LENGTH_RANGE = (4, 20)  # chars
+USERNAME_LENGTH_RANGE = (4, 10)  # chars
 FILE_SIZE_RANGE = (4, 2048)  # KB
 AGE_RANGE = (0, 3)  # days
+VOTE_RANGE = (0, 10)  # votes per content
+
+
+def dummy_string(chsource, length_range):
+    chars = ''
+    length = random.randint(*length_range)
+    for _ in range(length):
+        chars += random.choice(chsource)
+    return chars
 
 
 def dummy_filename():
-    chars = ''
-    length = random.randint(*FILENAME_LENGTH_RANGE)
-    for _ in range(length):
-        chars += random.choice(FILECHARS)
-    return chars
+    return dummy_string(FILECHARS, FILENAME_LENGTH_RANGE)
+
+
+def dummy_username():
+    return dummy_string(USERCHARS, USERNAME_LENGTH_RANGE)
 
 
 def dummy_size():
@@ -62,12 +82,21 @@ def dummy_ts():
         random.randint(0, 24))
 
 
-def dummy_votes():
-    return random.choice(VOTE_SELECTION)
+def dummy_votes(content_id, dummy_users):
+    count = random.randint(*VOTE_RANGE)
+    for _ in range(count):
+        yield {
+            'content_id': content_id,
+            'username': random.choice(dummy_users),
+            'ipaddr': '127.0.0.1',
+            'value': random.choice([-1, 0, 1]),
+            'created': dummy_ts(),
+        }
 
 
-def dummy_files(count=200):
+def dummy_files(dummy_users, count=200):
     for i in range(count):
+        fileid = uuid.uuid4().hex
         yield {
             'id': uuid.uuid4().hex,
             'created': dummy_ts(),
@@ -76,16 +105,24 @@ def dummy_files(count=200):
             'ipaddr': '127.0.0.1',
             'path': dummy_filename(),
             'size': dummy_size(),
-            'votes': dummy_votes(),
+            'votes': dummy_votes(fileid, dummy_users),
         }
 
 
 def main():
     main_cn = Connection('tmp/main.sqlite')
     main = Database(main_cn)
+    dummy_users = [dummy_username() for _ in range(50)]
     start = time.time()
     with main.transaction() as cur:
-        for data in dummy_files():
+        for data in dummy_files(dummy_users):
+            votes = data.pop('votes')
+            vote_count = 0
+            for v in votes:
+                q = main.Insert('votes', cols=v.keys())
+                cur.query(q, **v)
+                vote_count += v['value']
+            data['votes'] = vote_count
             q = main.Insert('content', cols=data.keys())
             cur.query(q, **data)
     end = time.time()
