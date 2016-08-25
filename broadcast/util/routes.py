@@ -78,13 +78,13 @@ class ActionMixin(object):
     feedback_template = 'feedback.mako'
     feedback_pratial_template = '_feedback.mako'
 
-    success_title = 'Success'
-    success_message = 'Action was successful'
+    success_title = _('Success')
+    success_message = _('Action was successful')
     success_url = '/'
     success_url_label = 'home'
 
-    error_title = 'Error'
-    error_message = 'Action failed'
+    error_title = _('Error')
+    error_message = _('Action failed')
     error_url = None
     error_url_label = 'nowhere'
 
