@@ -113,7 +113,7 @@ class ActionMixin(object):
         """
         try:
             route_name, params = url
-        except ValueError:
+        except (ValueError, TypeError):
             return url
         else:
             return self.app.get_url(route_name, **params)
