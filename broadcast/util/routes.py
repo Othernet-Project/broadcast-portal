@@ -36,11 +36,14 @@ class StaticRoute(NonIterableRouteBase):
     def get_base_dir(self):
         raise NotImplementedError('Subclass must implement this method')
 
-    def get(self, path):
+    def create_file_response(self, path):
         response = static_file(path, root=self.get_base_dir())
         exp = datetime.datetime.utcnow() + datetime.timedelta(365)
         response.headers['Expires'] = exp.strftime(self.EXP_TIMESTAMP)
         return response
+
+    def get(self, path):
+        return self.create_file_response(path)
 
     @classmethod
     def get_path_prefix(cls):

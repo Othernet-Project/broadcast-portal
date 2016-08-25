@@ -116,10 +116,17 @@ class Vote(ModeratorOnlyMixin, ActionTemplateRoute):
 
 
 class Download(ModeratorOnlyMixin, StaticRoute):
-    path = '/queue/<item_id:re:[0-9a-f]{32}>/<path>'
+    path = '/download/<item_id:re:[0-9a-f]{32}>'
 
     def get_base_dir(self):
         return exts.config['content.upload_root']
+
+    def get(self, item_id):
+        try:
+            item = ContentItem.get(item_id)
+        except ContentItem.NotFound:
+            self.abort(404)
+        return self.create_file_response(item.path)
 
 
 class LastUpdate(Route):
