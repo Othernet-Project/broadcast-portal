@@ -26,9 +26,9 @@ create table votes
 (
     id integer primary_key,
     created timestamp,          -- time when vote was cast
-    name text,                  -- voter's username
+    username text,              -- voter's username
     ipaddr text,                -- voter's IP address
-    is_upvote text,             -- whether vote is an upvote
+    is_upvote integer,          -- whether vote is an upvote
     content_id integer          -- content
 );
 """
