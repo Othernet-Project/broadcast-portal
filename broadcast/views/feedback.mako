@@ -4,7 +4,7 @@
 <%block name="page_title">${title}</%block>
 <%block name="body_class">feedback feedback-${'success' if success else 'error'}</%block>
 <%block name="extra_head">
-    <meta http-equiv="refresh" content="10; url=${url}">
+    <meta http-equiv="refresh" content="${pause}; url=${url}">
 </%block>
 
 <h1>${title}</h1>

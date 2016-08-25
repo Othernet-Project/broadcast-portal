@@ -71,6 +71,9 @@ class ActionMixin(object):
     constructing the template context. That is done in the other mixins.
     """
 
+    SUCCESS_REFRESH_INTERVAL = 3
+    ERROR_REFRESH_INTERVAL = 10
+
     feedback_template = 'feedback.mako'
     feedback_pratial_template = '_feedback.mako'
 
@@ -175,7 +178,10 @@ class ActionMixin(object):
         if self.status is None:
             return ctx
         ctx['success'] = self.status
-        ctx['redirect'] = True
+        if self.status:
+            ctx['pause'] = self.SUCCESS_REFRESH_INTERVAL
+        else:
+            ctx['pause'] = self.ERROR_REFRESH_INTERVAL
         if not self.status:
             self.response.status = 400
         status = 'success' if self.status else 'error'
