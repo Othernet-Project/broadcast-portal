@@ -7,8 +7,12 @@
     </p>
     <form class="vote-form" action="${url('queue:vote', item_id=item.id)}" method="POST">
         <input type="hidden" name="next" value="${request.fullpath}">
-        <button class="vote-icon vote-up" type="submit" name="upvote" value="yes">${_('upvote')}</button>
+        <button class="vote-icon vote-up" type="submit" name="upvote" value="yes"${' disabled' if item.user_vote == 1 else ''}>
+            ${_('upvote')}
+        </button>
         ${item.votes}
-        <button class="vote-icon vote-down" type="submit" name="upvote" value="no">${_('downvote')}</button>
+        <button class="vote-icon vote-down" type="submit" name="upvote" value="no"${' disabled' if item.user_vote == -1 else ''}>
+            ${_('downvote')}
+        </button>
     </form>
 </%def>
