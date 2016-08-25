@@ -29,8 +29,8 @@ class Vote(Model, LastUpdateMixin):
     columns = (
         'id',
         'created',
-        'name',
-        'is_upvote',
+        'username',
+        'value',
         'content_id',
         'ipaddr',
     )
@@ -99,25 +99,42 @@ class ContentItem(Model, LastUpdateMixin):
 
         During vote-casting, an exlusive lock is held on the database to
         prevent miscalculation of the vote count.
+
+        Votes can be -1, 0, or +1. User can always change between these three
+        values, but they can't go beyond the -1 and +1 limit. When upvoting is
+        done on a value of +1, then the value remains +1 and nothing happens.
+        If downvoting is done on a value of -1, then, again, nothing happens.
+        Whether voting was done or not, affects the return value. If no voting
+        was recorded, ``None`` is returned by this method. Otherwise a
+        timestamp is returned.
         """
-        # TODO: Perhaps we need a better way than holding an exclusive lock
-        # here because this can become a bottleneck.
         now = utcnow()
+        vote_value = 1 if is_upvote else -1
+
+        try:
+            vote = Vote.get(username=username, content_id=self.id)
+        except Vote.NotFound:
+            vote = Vote({
+                'content_id': self.id,
+                'created': now,
+                'username': username,
+                'value': vote_value,
+                'ipaddr': ipaddr,
+            })
+        else:
+            print(vote, vote.value, vote_value)
+            if vote.value == vote_value:
+                return
+            vote.value += vote_value
+        finally:
+            vote.save()
+
+        # FIXME: Perhaps we need a better way than holding an exclusive lock
+        # here because this can become a bottleneck.
         with self.db.transaction(new_connection=True, exclusive=True) as cur:
             # Existing record is updated, so we have the latest vote count
             self.reload(cur)
-            vote = Vote({
-                'contentid': self.id,
-                'created': now,
-                'name': username,
-                'is_upvote': is_upvote,
-                'ipaddr': ipaddr,
-            })
-            vote.save(cur)
-            if is_upvote:
-                self.votes += 1
-            else:
-                self.votes -= 1
+            self.votes += vote_value
             self.save(cur)
         exts.last_update['timestamp'] = to_timestamp(now)
         return now

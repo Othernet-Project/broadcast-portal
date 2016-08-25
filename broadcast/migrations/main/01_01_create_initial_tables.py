@@ -28,8 +28,9 @@ create table votes
     created timestamp,          -- time when vote was cast
     username text,              -- voter's username
     ipaddr text,                -- voter's IP address
-    is_upvote integer,          -- whether vote is an upvote
-    content_id integer          -- content
+    value integer,              -- vote value (usually +1, 0, or -1)
+    content_id text,            -- content
+    constraint uidcid unique (username, content_id) on conflict replace
 );
 """
 
