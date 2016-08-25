@@ -78,6 +78,10 @@ class Review(ItemListMixin, XHRPartialRoute):
     partial_template_name = 'queue/_review.mako'
     item_type = ContentItem.NON_CANDIDATES
 
+    def get_items(self):
+        items = super(Review, self).get_items()
+        return sorted(items, key=lambda i: i.created, reverse=True)
+
 
 class Vote(ModeratorOnlyMixin, ActionTemplateRoute):
     path = '/queue/<item_id:re:[0-9a-f]{32}>/'
