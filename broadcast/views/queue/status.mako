@@ -14,5 +14,5 @@ ${status.body()}
 </section>
 
 <section id="candidates" class="candidates">
-<a href="${url('queue:review')}">${_('See the daily filecast candidates')}</a>
+<a href="${url('queue:candidates')}">${_('See the daily filecast candidates')}</a>
 </section>
