@@ -27,6 +27,7 @@ create table votes
     id integer primary_key,
     created timestamp,          -- time when vote was cast
     name varchar,               -- voter's username
+    ipaddr varchar,             -- voter's IP address
     is_upvote varchar,          -- whether vote is an upvote
     content_id integer          -- content
 );
