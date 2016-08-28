@@ -18,3 +18,7 @@ def skin_assets_dir():
 
 def skin_src_dir():
     return join(skin_dir(), 'src')
+
+
+def skin_bundles():
+    return join(skin_assets_dir(), 'bundles.conf')

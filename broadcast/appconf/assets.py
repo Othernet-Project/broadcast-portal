@@ -1,6 +1,6 @@
 import os
 import logging
-from os.path import normpath, join
+from os.path import normpath, abspath, join
 
 try:
     from urllib.request import pathname2url
@@ -10,7 +10,7 @@ except ImportError:
 import webassets.script
 
 from ..app.exts import container as exts
-from ..util.skinning import skin_assets_dir
+from ..util.skinning import skin_assets_dir, skin_bundles
 
 
 class Assets:
@@ -20,7 +20,7 @@ class Assets:
     out_pattern = '{filetype}/{filename}-%(version)s.{filetype}'
 
     def __init__(self, directory='static', url='/static/', debug='merge'):
-        self.directory = os.path.abspath(directory)
+        self.directory = abspath(directory)
         self.url = url
         self.debug = debug
         self.env = self._env_factory(directory, url, debug)
@@ -129,7 +129,7 @@ class Assets:
         return input value verbatim.
         """
         if type(s) is str:
-            return os.path.normpath(s + '.js')
+            return normpath(s + '.js')
         return s
 
     @staticmethod
@@ -139,7 +139,7 @@ class Assets:
         return input value verbatim.
         """
         if type(s) is str:
-            return os.path.normpath(s + '.css')
+            return normpath(s + '.css')
         return s
 
     @classmethod
@@ -148,8 +148,8 @@ class Assets:
         Create Assets instance using specified configuration.
         """
         assets = cls(basedir, url, debug)
-        assets.add_static_source(os.path.join(srcdir, 'js'))
-        assets.add_static_source(os.path.join(srcdir, 'css'))
+        assets.add_static_source(join(srcdir, 'js'))
+        assets.add_static_source(join(srcdir, 'css'))
         for name, contents in bundles['js'].items():
             assets.add_js_bundle(name, contents)
             logging.debug('Added JS bundle: %s.js', name)
@@ -233,13 +233,13 @@ def pre_init():
     logging.info('Configuring static assets')
     conf = exts.config
     output_dir = normpath(conf['assets.output_dir'])
-    if not os.path.exists(output_dir):
+    if not exists(output_dir):
         os.makedirs(output_dir)
     srcdir = skin_assets_dir()
-    bundlefile = os.path.join(srcdir, 'bundles.conf')
+    bundlefile = skin_bundles()
     bundles = BundleParser(bundlefile).parse()
     url = conf['assets.url']
-    debug = conf.get('assets.debug', False) and 'merge'
+    debug = conf.get('assets.debug', exts.debug) and 'merge'
     assets = Assets.configure(output_dir, url, srcdir, bundles, debug)
     exts.template_defaults['assets'] = assets
     exts.assets = assets
