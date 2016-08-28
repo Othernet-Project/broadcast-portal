@@ -37,7 +37,7 @@ class Status(XHRPartialRoute):
     The queue status page
     """
     template_name = 'queue/status.mako'
-    partial_template_name = 'queue/_status'
+    partial_template_name = 'queue/_status.mako'
     path = '/queue/'
 
     @staticmethod

@@ -1,5 +1,7 @@
 <!doctype html>
 
+<%namespace name="client_templates" file="_client_templates.mako"/>
+
 <html lang="en">
     <head>
         <meta chaset="utf-8">
@@ -15,6 +17,7 @@
         <footer id="footer" class="footer"></footer>
 
         <%block name="pre_script"/>
+        ${client_templates.body()}
         <script src="${assets['js/main']}"></script>
         <%block name="post_script"/>
     </body>

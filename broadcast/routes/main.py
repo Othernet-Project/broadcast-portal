@@ -22,7 +22,7 @@ class Home(TemplateRoute):
 class BetaSignup(CSRFMixin, ActionXHRPartialFormRoute):
     path = '/beta-signup'
     template_name = 'main/beta_signup.mako'
-    partial_template_name = 'main/_beta_signaup.mako'
+    partial_template_name = 'main/_beta_signup.mako'
     form_factory = BetaSignupForm
     success_message = _('You have been added to the closed beta list')
     success_url = ('main:home')
