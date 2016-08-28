@@ -3,12 +3,13 @@ import datetime
 from bottle import static_file
 
 from ..util.routes import StaticRoute
+from ..util.skinning import skin_assets_dir
 from ..app.exts import container as exts
 
 
 class Static(StaticRoute):
-    def get_base_dir(self):
-        return exts.assets.directory
+    def get_base_dirs(self):
+        return [exts.assets.directory, skin_assets_dir()]
 
     @classmethod
     def get_path_prefix(cls):

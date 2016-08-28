@@ -119,8 +119,8 @@ class Vote(ModeratorOnlyMixin, ActionTemplateRoute):
 class Download(ModeratorOnlyMixin, StaticRoute):
     path = '/download/<item_id:re:[0-9a-f]{32}>'
 
-    def get_base_dir(self):
-        return exts.config['content.upload_root']
+    def get_base_dirs(self):
+        return [exts.config['content.upload_root']]
 
     def get(self, item_id):
         try:

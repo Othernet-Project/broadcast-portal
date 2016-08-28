@@ -230,6 +230,7 @@ class BundleParser:
 
 
 def pre_init():
+    logging.info('Configuring static assets')
     conf = exts.config
     output_dir = normpath(conf['assets.output_dir'])
     if not os.path.exists(output_dir):
@@ -241,4 +242,4 @@ def pre_init():
     debug = conf.get('assets.debug', False) and 'merge'
     assets = Assets.configure(output_dir, url, srcdir, bundles, debug)
     exts.template_defaults['assets'] = assets
-    exts.assets_source = srcdir
+    exts.assets = assets

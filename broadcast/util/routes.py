@@ -1,4 +1,5 @@
 import datetime
+from os.path import normpath, join, exists
 
 from streamline import (
     Route,
@@ -33,14 +34,24 @@ class StaticRoute(NonIterableRouteBase):
 
     EXP_TIMESTAMP = '%a, %d %b %Y %H:%M:%S GMT'
 
-    def get_base_dir(self):
+    def get_base_dirs(self):
         raise NotImplementedError('Subclass must implement this method')
 
+    def try_path(self, basedir, path):
+        path = join(normpath(basedir), normpath(path))
+        if not path.startswith(basedir) or not exists(path):
+            return None
+        return path
+
     def create_file_response(self, path):
-        response = static_file(path, root=self.get_base_dir())
-        exp = datetime.datetime.utcnow() + datetime.timedelta(365)
-        response.headers['Expires'] = exp.strftime(self.EXP_TIMESTAMP)
-        return response
+        for bdir in self.get_base_dirs():
+            full_path = self.try_path(bdir, path)
+            if full_path:
+                response = static_file(path, root=bdir)
+                exp = datetime.datetime.utcnow() + datetime.timedelta(365)
+                response.headers['Expires'] = exp.strftime(self.EXP_TIMESTAMP)
+                return response
+        self.abort(404, _('Requested file was not found'))
 
     def get(self, path):
         return self.create_file_response(path)
