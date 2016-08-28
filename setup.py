@@ -38,7 +38,7 @@ setup(
     install_requires=read('requirements.txt').strip().split('\n'),
     entry_points={
         'console_scripts': [
-            'runbroadcast = broadcast.main:main',
+            'broadcast = broadcast.main:main',
         ]
     },
 )
