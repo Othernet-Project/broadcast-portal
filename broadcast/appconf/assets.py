@@ -1,6 +1,6 @@
 import os
 import logging
-from os.path import normpath, abspath, join
+from os.path import normpath, abspath, join, exists
 
 try:
     from urllib.request import pathname2url
