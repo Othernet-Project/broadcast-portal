@@ -17,9 +17,9 @@ def render(template, ctx={}):
     """
     Render a Mako template given context
     """
-    final_ctx = exts.templates['defaults'].copy()
+    final_ctx = exts.template_defaults.copy()
     final_ctx.update(ctx)
-    template = exts.templates['lookup'].get_template(template)
+    template = exts.template_lookup.get_template(template)
     return template.render(**final_ctx)
 
 

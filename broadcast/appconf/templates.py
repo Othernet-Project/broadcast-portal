@@ -29,13 +29,13 @@ def pre_init():
     if not exists(cache_dir):
         os.makedirs(cache_dir)
 
-    exts.templates = {}
-    exts.templates['lookup'] = TemplateLookup(
+    exts.template_lookup = TemplateLookup(
         directories=template_dirs,
         filesystem_checks=template_debug,
         default_filters=['unicode', 'h'],
-        module_directory=cache_dir)
-    exts.templates['defaults'] = {
+        module_directory=cache_dir
+    )
+    exts.template_defaults.update({
         'DEBUG': exts.debug,
         'request': bottle.request,
         'h': bottle_utils.html,
@@ -47,4 +47,4 @@ def pre_init():
         'csrf_tag': bottle_utils.csrf.csrf_tag,
         '_': gettext,
         'ngettext': ngettext,
-    }
+    })
