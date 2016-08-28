@@ -8,26 +8,25 @@ This software is free software licensed under the terms of GPLv3. See COPYING
 file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
-from bottle_utils.csrf import csrf_protect, csrf_token
-
-from ..util.auth.decorators import role
 from ..forms.files import ContentForm
-from ..util.routes import ActionXHRPartialFormRoute, UploadFormMixin
+from ..util.routes import (
+    ActionXHRPartialFormRoute,
+    UploadFormMixin,
+    RoleMixin,
+    CSRFMixin,
+)
 
 
-class Upload(ActionXHRPartialFormRoute, UploadFormMixin):
+class Upload(RoleMixin, CSRFMixin, UploadFormMixin, ActionXHRPartialFormRoute):
+    role = RoleMixin.MODERATOR
     path = '/upload/'
     template_name = 'files/upload'
     partial_template_name = 'files/_upload'
     form_factory = ContentForm
 
-    @csrf_token
-    @role(role.MODERATOR)
     def get(self, *args, **kwargs):
         return super(Upload, self).get(*args, **kwargs)
 
-    @csrf_protect
-    @role(role.MODERATOR)
     def post(self, *args, **kwargs):
         return super(Upload, self).post(*args, **kwargs)
 
