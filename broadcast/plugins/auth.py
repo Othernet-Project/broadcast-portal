@@ -3,7 +3,7 @@ import functools
 from bottle import request
 
 from ..app.exts import container as exts
-from ..util.auth.users import User, AnonymousUser
+from ..models.auth import User, AnonymousUser
 
 
 def user_plugin():

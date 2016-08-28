@@ -10,8 +10,8 @@ def pre_init():
     log_config({
         'version': 1,
         'root': {
-            'handlers': ['file', 'console'],
-            'level': logging.DEBUG,
+            'handlers': ['file'] if exts.quiet else ['file', 'console'],
+            'level': logging.DEBUG if exts.debug else logging.INFO,
         },
         'handlers': {
             'file': {
@@ -22,14 +22,18 @@ def pre_init():
                 'backupCount': config['logging.backups'],
             },
             'console': {
+                'formatter': 'simple',
                 'class': 'logging.StreamHandler',
                 'stream': sys.stdout
             }
         },
         'formatters': {
             'default': {
-                'format': config['logging.format'],
-                'datefmt': config['logging.date_format'],
+                'format': '[%(asctime)s] %(levelname)-8s %(message)s',
+                'datefmt': '%Y-%m-%d %H:%M:%S (%z)',
             },
+            'simple': {
+                'format': '[%(levelname)-8s] %(message)s',
+            }
         },
     })

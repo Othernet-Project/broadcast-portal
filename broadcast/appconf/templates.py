@@ -1,4 +1,5 @@
 import os
+from os.path import join, normpath, exists
 
 import bottle
 
@@ -12,24 +13,25 @@ from bottle_utils.i18n import (
 
 from mako.lookup import TemplateLookup
 
-from ..util.template_helper import template_helper
 from ..app.exts import container as exts
+from ..util.skinning import skin_view_dir
+from ..util.template_helper import template_helper
 
 
 def pre_init():
     app = exts.app
     config = exts.config
 
-    template_dir = os.path.join(exts.root, config['app.view_path'])
+    template_dirs = [skin_view_dir(), join(exts.root, 'views')]
     template_debug = config.get('app.view_debug', exts.debug)
-    cache_dir = os.path.join(exts.root, config['app.view_cache_dir'])
+    cache_dir = join(exts.root, normpath(config['app.view_cache_dir']))
 
-    if not os.path.exists(cache_dir):
+    if not exists(cache_dir):
         os.makedirs(cache_dir)
 
     exts.templates = {}
     exts.templates['lookup'] = TemplateLookup(
-        directories=[template_dir],
+        directories=template_dirs,
         filesystem_checks=template_debug,
         default_filters=['unicode', 'h'],
         module_directory=cache_dir)
@@ -45,5 +47,4 @@ def pre_init():
         'csrf_tag': bottle_utils.csrf.csrf_tag,
         '_': gettext,
         'ngettext': ngettext,
-        'REDIRECT_DELAY': config['app.redirect_delay'],
     }

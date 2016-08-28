@@ -12,7 +12,7 @@ import datetime
 import getpass
 import sys
 
-from ..util.auth.users import User
+from ..models.auth import User
 from ..plugins.static import rebuild_assets
 from ..app.exts import container as exts
 
