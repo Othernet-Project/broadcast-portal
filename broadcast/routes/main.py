@@ -25,7 +25,7 @@ class BetaSignup(CSRFMixin, ActionXHRPartialFormRoute):
     partial_template_name = 'main/_beta_signup.mako'
     form_factory = BetaSignupForm
     success_message = _('You have been added to the closed beta list')
-    success_url = ('main:home')
+    success_url = ('main:home', {})
 
 
 def load_beta_whitelist():
