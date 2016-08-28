@@ -5,7 +5,7 @@
         <meta chaset="utf-8">
         <meta http-equiv="Content-Type" content="text/html; chaset=utf-8">
         <meta name="viewport" content="initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="${assets['css/main']}">
         <title><%block name="page_title">Filecast center</%block></title>
         <%block name="extra_head"/>
     </head>
@@ -15,7 +15,7 @@
         <footer id="footer" class="footer"></footer>
 
         <%block name="pre_script"/>
-        <script src=""></script>
+        <script src="${assets['js/main']}"></script>
         <%block name="post_script"/>
     </body>
 </html>
