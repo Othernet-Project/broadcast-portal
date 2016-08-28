@@ -17,6 +17,11 @@ COFFEE_PID = join(TMPDIR, 'coffee.pid')
 COMPASS = shutil.which('compass')
 COFFEE = shutil.which('coffee')
 
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
+
 
 class AssetsCommand(object):
     """
