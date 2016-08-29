@@ -1,12 +1,13 @@
 import logging
 
 from bottle import request
+from bottle_utils.ajax import roca_view
 
-from ..util.template import view
+from ..util.template import template
 from ..app.exts import container as exts
 
 
-@view('errors/error.mako')
+@roca_view('errors/error.mako', 'errors/_error.mako', template_func=template)
 def error_handler(resp):
     if resp.traceback:
         logging.error("Unhandled error '%s' at %s %s:\n\n%s",

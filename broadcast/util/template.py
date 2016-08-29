@@ -23,6 +23,14 @@ def render(template, ctx={}):
     return template.render(**final_ctx)
 
 
+def template(template, **ctx):
+    """
+    Simple wrapper around render() that takes the context as keyword arguments
+    for a Bottle-compatible API.
+    """
+    return render(template, ctx)
+
+
 def view(template):
     """
     Bottle route decorator that renders the handler output with Mako template
