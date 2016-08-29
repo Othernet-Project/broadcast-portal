@@ -1,6 +1,6 @@
 <%def name="content_item(item)">
     <p class="item-info item-name">
-        ${item.path} <a href="${url('queue:download', item_id=item.id)}">${_('download')}</a>
+        ${item.filename} <a href="${url('queue:download', item_id=item.id)}">${_('download')}</a>
     </p>
     <p class="item-info item-attribution">
         ${_('Uploaded by {username} {timeago}').format(username=item.username, timeago=th.human_time(item.created))}
