@@ -172,15 +172,10 @@ class RegisterForm(EmailTokenMixin, form.Form):
         password2 = self.processed_data['password2']
         if password1 != password2:
             raise form.ValidationError('pwmatch', {})
-        user = User({
-            'username': self.processed_data['username'],
-            'email': self.processed_data['email'],
-        })
-        user.set_password(password1)
-        # TODO: the following line may still raise a User.IntegrityError in
-        # race condition. Should be fixed.
         try:
-            user.save()
+            User.new(username=self.processed_data['username'],
+                     email=self.processed_data['email'],
+                     password=password1)
         except User.IntegrityError:
             raise form.ValidationError('userexists')
         self.send_token()
@@ -322,16 +317,10 @@ class AcceptInvitationForm(form.Form):
         password2 = self.processed_data['password2']
         if password1 != password2:
             raise form.ValidationError('pwmatch', {})
-        user = User({
-            'username': self.processed_data['username'],
-            'email': self.processed_data['email'],
-        })
-        user.confirm()
-        user.set_password(password1)
-        # TODO: the following line may still raise a User.IntegrityError in
-        # race condition. Should be fixed.
         try:
-            user.save()
+            User.new(username=self.processed_data['username'],
+                     email=self.processed_data['email'],
+                     password=password1)
         except User.IntegrityError:
             raise form.ValidationError('userexists')
         token.accept()
