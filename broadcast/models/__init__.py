@@ -104,7 +104,7 @@ class Model(object):
         """
         DELETEs the record matching the current object's primary key
         """
-        q = self.db.Delete(self.table, where=self.pk_where())
+        q = self.db.Delete(self.table, where=self.where_pk())
         cursor = cursor or self.db.cursor()
         cursor.query(q, pk=self.get_pk())
 
