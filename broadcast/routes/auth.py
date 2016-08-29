@@ -72,7 +72,7 @@ class NoLoginNeededMixin(object):
     users to go straigth to success URL.
     """
     def get(self):
-        if not self.request.user.is_anonymous():
+        if not self.request.user.is_guest:
             # Don't bother authenticated users
             self.redirect(self.get_success_url())
         return super(NoLoginNeededMixin, self).get()
