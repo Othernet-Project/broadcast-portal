@@ -108,15 +108,15 @@ class Model(object):
         cursor = cursor or self.db.cursor()
         cursor.query(q, pk=self.get_pk())
 
-    def save(self, cursor=None, pk=None):
+    def save(self, cursor=None, pk=None, force_replace=False):
         """
         Performs an INSERT or REPLACE. REPLACE is performed only when the
-        current objet has a pk. If ``pk`` argument is specified, the object's
-        primary key will be set to the specified value just before executing
-        the query. The value is ignored if the object already has a primary
-        key. If the primary key value is not specified, it is assumed that the
-        database will set it automatically (e.g., ``INTEGER PIRMARY KEY``
-        column).
+        current objet has a pk or ``force_replace`` argument is ``True``. If
+        ``pk`` argument is specified, the object's primary key will be set to
+        the specified value just before executing the query. The value is
+        ignored if the object already has a primary key. If the primary key
+        value is not specified, it is assumed that the database will set it
+        automatically (e.g., ``INTEGER PIRMARY KEY`` column).
 
         It is not checked whether the matching record was deleted meanwhile,
         however, REPLACE always succeeds switching behavior to INSERT if no
@@ -124,7 +124,7 @@ class Model(object):
         to perform any necessary checks to ensure the record will not be
         restored by accident.
         """
-        if self.get_pk():
+        if self.get_pk() or force_replace:
             qrycls = self.db.Replace
         else:
             qrycls = self.db.Insert
