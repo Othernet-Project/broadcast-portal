@@ -139,13 +139,17 @@ class User(UserBase, Model):
         self.confirmed = utcnow()
         return self
 
+    @property
+    def group(self):
+        return self.groupname
+
     @classmethod
     def new(cls, username, email, password, group=USER, confirmed=False,
             overwrite=False):
         user = User({
             'username': username,
             'email': email,
-            'group': group,
+            'groupname': group,
             'created': utcnow(),
         })
         user.set_password(password)
