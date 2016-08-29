@@ -214,6 +214,7 @@ class ActionFormMixin(FormMixin):
 
     def form_invalid(self, *args, **kwargs):
         self.status = None
+        self.response.status = 400
 
     def get_context(self):
         ctx = super(ActionFormMixin, self).get_context()
