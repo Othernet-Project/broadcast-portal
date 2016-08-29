@@ -86,7 +86,7 @@ class ActionMixin(object):
     ERROR_REFRESH_INTERVAL = 10
 
     feedback_template = 'feedback.mako'
-    feedback_pratial_template = '_feedback.mako'
+    feedback_partial_template = '_feedback.mako'
 
     success_title = _('Success')
     success_message = _('Action was successful')
