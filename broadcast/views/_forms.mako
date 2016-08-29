@@ -18,7 +18,7 @@
 
 <%def name="option(value, label, selected=False)">
     <% value = '' if value is None else value %>
-    <option value="${value}"${ ' selected' if selected else '' | n,unicode}>${label}</option>
+    <option value="${value}"${ ' selected' if selected else '' | n,unicode}>${label | n,unicode}</option>
 </%def>
 
 ## Select list
@@ -93,7 +93,7 @@
 ##
 
 <%def name="label(label, inline=False, id=None)">
-    <label${' for="{}"'.format(id) if id else '' | n,unicode} class="field-label${' field-label-inline' if inline else ''}">${label}</label>
+    <label${' for="{}"'.format(id) if id else '' | n,unicode} class="field-label${' field-label-inline' if inline else ''}">${label | n,unicode}</label>
 </%def>
 
 ## Field supplemental information
