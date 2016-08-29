@@ -9,10 +9,20 @@
 ${status.body()}
 </section>
 
+<section id="upload" class="upload">
+<a href="${url('files:upload')}" data-roca-target="upload" data-roca-trap-submit="yes">
+    ${_('Upload a file')}
+</a>
+</section>
+
 <section id="review" class="review">
-<a href="${url('queue:review')}">${_('See the review queue')}</a>
+<a href="${url('queue:review')}" data-roca-target="review">
+    ${_('See the review queue')}
+</a>
 </section>
 
 <section id="candidates" class="candidates">
-<a href="${url('queue:candidates')}">${_('See the daily filecast candidates')}</a>
+<a href="${url('queue:candidates')}" data-roca-target="candidates">
+    ${_('See the daily filecast candidates')}
+</a>
 </section>
