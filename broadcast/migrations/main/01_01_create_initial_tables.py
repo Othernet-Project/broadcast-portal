@@ -1,7 +1,7 @@
 SQL = """
 create table bins
 (
-    id text primary_key unique,
+    id text primary key unique,
     created timestamp,      -- creation timestamp
     closed timestamp,       -- finalization timestamp
     size integer default 0, -- total size (bytes)
@@ -10,7 +10,7 @@ create table bins
 
 create table content
 (
-    id text primary_key unique,
+    id text primary key unique,
     created timestamp,          -- creation timestamp
     email text,                 -- creator email
     username text,              -- creator username
@@ -24,7 +24,7 @@ create table content
 
 create table votes
 (
-    id integer primary_key,
+    id integer primary key,
     created timestamp,          -- time when vote was cast
     username text,              -- voter's username
     ipaddr text,                -- voter's IP address

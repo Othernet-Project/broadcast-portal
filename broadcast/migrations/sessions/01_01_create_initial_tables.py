@@ -1,7 +1,7 @@
 SQL = """
 create table users
 (
-    id integer primary_key,     -- user ID
+    id integer primary key,     -- user ID
     email text unique,          -- email address
     username text unique,       -- username
     password text,              -- encrypted password
@@ -13,14 +13,14 @@ create table users
 
 create table tokens
 (
-    key text primary_key unique,    -- token ID
+    key text primary key unique,    -- token ID
     email text,                     -- target email
     expires timestamp               -- expiry timestamp
 );
 
 create table sessions
 (
-    session_id text primary_key unique,     -- session id
+    session_id text primary key unique,     -- session id
     data text,                              -- arbitary session data
     expires timestamp not null              -- timestamp when session expires
 );
