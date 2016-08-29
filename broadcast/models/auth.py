@@ -44,6 +44,13 @@ ROLE_LEVELS = {
 
 
 class UserBase(object):
+    SUPERUSER = SUPERUSER
+    MODERATOR = MODERATOR
+    USER = USER
+    GUEST = GUEST
+    GROUPS = GROUPS
+    LOGIN_GROUPS = LOGIN_GROUPS
+
     @property
     def is_authenticated(self):
         return self.email is not None
@@ -133,29 +140,19 @@ class User(UserBase, Model):
         return self
 
     @classmethod
-    def new(cls, email, username=None, password=None, is_superuser=False,
-            confirmed=None, overwrite=False, db=None, group=None):
-        if username in GROUPS:
-            raise cls.InvalidCredentials('Username cannot be a group name')
-        db = db or cls.database()
-        password = cls.encrypt_password(password) if password else None
-        if is_superuser:
-            group = SUPERUSER
-        data = {'username': username,
-                'password': password,
-                'email': email,
-                'created': datetime.datetime.utcnow(),
-                'group': group,
-                'data': None,
-                'confirmed': confirmed}
-        statement_cls = db.Replace if overwrite else db.Insert
-        query = statement_cls(cls.table, cols=cls.columns)
-        try:
-            db.execute(query, data)
-        except cls.IntegrityError:
-            raise cls.AlreadyExists()
-        else:
-            return cls(data, db=db)
+    def new(cls, username, email, password, group=USER, confirmed=False,
+            overwrite=False):
+        user = User({
+            'username': username,
+            'email': email,
+            'group': group,
+            'created': utcnow(),
+        })
+        user.set_password(password)
+        if confirmed:
+            user.confirm()
+        user.save(force_replace=overwrite)
+        return User.get(username=username, email=email)
 
     @classmethod
     def login(cls, username_or_email, password=None, verify=True, db=None):
