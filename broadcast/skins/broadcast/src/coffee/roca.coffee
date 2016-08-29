@@ -1,5 +1,8 @@
 ((window, $) ->
+  MULTIPART = 'multipart/form-data'
+
   win = $ window
+  doc = $ window.document.body
 
   $.fn.loading = () ->
     el = $ @
@@ -16,19 +19,46 @@
         return
       el.html origHtml
 
+  $.createSubmitFrame = (id) ->
+    # Create a hidden iframe for form submission
+    submitFrame = $ '<iframe></iframe>'
+    submitFrame.hide()
+    submitFrame.attr 'id', id
+    submitFrame.attr 'name', id
+    doc.append submitFrame
+    submitFrame
+
+  $.fn.makePartial = () ->
+    # Append a hidden field to the selected element, that causes it to be
+    # treated as XHR submission even though it may be submitted without XHR.
+    el = $ @
+    el.append '<input type="hidden" name="partial" value="yes">'
+
   $.fn.funnelSubmit = () ->
     # Causes the forms within the selected element to be submitted using XHR,
-    # and results loaded within the selected element.
+    # or hidden iframe, and results loaded within the selected element.
     el = $ @
+    containerId = el.attr 'id'
+    submitTarget = "#{containerId}-submit-frame"
+    submitFrame = $.createSubmitFrame submitTarget
 
-    el.on 'submit', 'form', (e) ->
-      e.preventDefault()
+    submitFrameHandler = (e) ->
+      el.html (submitFrame.contents().find 'body').html()
+
+    submitHandler = (e) ->
       form = $ @
-      formData = form.serialize()
-      action = (form.attr 'action') or window.location.pathname
-      res = $.post action, formData
-      res.done (resp) -> el.html resp
-      res.fail (xhr) -> el.html xhr.responseText
+      if (form.attr 'enctype') is MULTIPART
+        form.makePartial().attr 'target', submitTarget
+        submitFrame.one 'load', submitFrameHandler
+      else
+        e.preventDefault()
+        formData = form.serialize()
+        action = (form.attr 'action') or window.location.pathname
+        res = $.post action, formData
+        res.done (resp) -> el.html resp
+        res.fail (xhr) -> el.html xhr.responseText
+
+    el.on 'submit', 'form', submitHandler
 
   $.fn.rocaLoad = () ->
     # Load content from the URL pointed to by elements' `href` attribute into
