@@ -10,3 +10,7 @@
 <h1>${title}</h1>
 
 ${feedback.body()}
+
+<p>
+    ${_('You will be redirected to {page} shortly.').format(page=h.A(url_label, href=url)) | n,unicode}
+</p>
