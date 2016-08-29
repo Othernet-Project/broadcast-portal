@@ -11,7 +11,7 @@
     <p>${_('Filecast center is now in closed beta. We are accepting '
         'sign-ups for closed beta testers.')}</p>
     <p>
-        <a href="${url('main:beta_signup')}" data-roca-target="beta-signup">
+        <a href="${url('main:beta_signup')}" data-roca-target="beta-signup" data-roca-trap-submit="yes">
             ${'Join'}
         </a>
     </p>
