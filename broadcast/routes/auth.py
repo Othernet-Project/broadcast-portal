@@ -12,19 +12,26 @@ import logging
 
 from bottle_utils.i18n import dummy_gettext as _
 
-from ..models.auth import User, EmailVerificationToken
+from ..models.auth import (
+    User,
+    EmailVerificationToken,
+    PasswordResetToken,
+    InvitationToken,
+)
 from ..forms.auth import (
     LoginForm,
     RegisterForm,
     EmailVerificationForm,
     PasswordResetRequestForm,
     ResetPasswordForm,
+    AcceptInvitationForm,
 )
 from ..util.routes import (
     ActionXHRPartialFormRoute,
     ActionTemplateRoute,
     CSRFMixin,
     XHRJsonRoute,
+    RoleMixin,
 )
 
 
@@ -47,12 +54,12 @@ class NextPathMixin(object):
             'next', super(NextPathMixin, self).get_error_url())
 
     def get_success_url_label(self):
-        if self.params.get('next'):
+        if self.request.params.get('next'):
             return _('your previous location')
         return super(NextPathMixin, self).get_success_url_label()
 
     def get_error_url_label(self):
-        if self.params.get('next'):
+        if self.request.params.get('next'):
             return _('your previous location')
         return super(NextPathMixin, self).get_error_url_label()
 
@@ -76,6 +83,35 @@ class NoLoginNeededMixin(object):
             # Don't bother authenticated users
             self.redirect(self.get_success_url())
         return super(NoLoginNeededMixin, self).get()
+
+
+class ConfirmationMixin(object):
+    """
+    This mixin is used with token confirmation code. The token will be fetched
+    from the database based on the key, and assigned to ``token`` property on
+    the handler object. If there is no matching token, ``None`` is assigned
+    instead. The token's key and email are added to the template context for
+    GET requests, but not post.
+    """
+    token_class = None
+
+    def create_response(self):
+        key = self.kwargs['key']
+        if not self.token_class:
+            raise NotImplementedError('Subclass must define the token_class '
+                                      'property.')
+        self.token_class.clear_expired()
+        try:
+            self.token = self.token_class.get(key=key)
+        except self.token_class.NotFound:
+            self.token = None
+        super(ConfirmationMixin, self).create_response()
+
+    def get_context(self):
+        ctx = super(ConfirmationMixin, self).get_context()
+        ctx['key'] = self.token.key if self.token else None
+        ctx['email'] = self.token.email if self.token else None
+        return ctx
 
 
 class Register(NoLoginNeededMixin, CSRFMixin, ActionXHRPartialFormRoute):
@@ -107,28 +143,6 @@ class ResendConfirmation(CSRFMixin, ActionXHRPartialFormRoute):
         return self.app.get_url('main:home')
 
 
-class ConfirmEmail(LoginOnSuccessMixin, NextPathMixin, ActionTemplateRoute):
-    path = '/accounts/verify/<key:re:[0-9a-f]{32}'
-    success_message = _('Your email address has been confirmed')
-    error_message = _('The confirmation link has expired or has already been '
-                      'used.')
-    error_message = _('main page')
-
-    def get_error_url(self):
-        return self.app.get_url('main:home')
-
-    def get(self, key):
-        EmailVerificationToken.clear_expired()
-        try:
-            token = EmailVerificationToken.get(key)
-        except EmailVerificationToken.NotFound:
-            self.status = False
-            return
-        else:
-            token.accept()
-            self.status = True
-
-
 class PasswordResetRequest(CSRFMixin, LoginOnSuccessMixin,
                            ActionXHRPartialFormRoute):
     path = '/accounts/password-reset'
@@ -138,12 +152,50 @@ class PasswordResetRequest(CSRFMixin, LoginOnSuccessMixin,
     success_message = _('Check your inbox for a password reset link')
 
 
-class ResetPassword(CSRFMixin, LoginOnSuccessMixin,
+class ConfirmEmail(ConfirmationMixin, LoginOnSuccessMixin, NextPathMixin,
+                   ActionTemplateRoute):
+    token_class = EmailVerificationToken
+    path = '/accounts/verify/<key:re:[0-9a-f]{32}>'
+    success_message = _('Your email address has been confirmed')
+    error_message = _('The confirmation link has expired or has already been '
+                      'used.')
+    error_url = ('main:home', {})
+    error_url_label = _('main page')
+
+    def get(self, key):
+        if self.token:
+            self.token.accept()
+            self.status = True
+        else:
+            self.status = False
+
+
+class AcceptInvitation(ConfirmationMixin, CSRFMixin, RoleMixin,
+                       LoginOnSuccessMixin, ActionXHRPartialFormRoute):
+    role = RoleMixin.GUEST
+    strict_check = True
+    role_denied_message = _('You should lot out if you wish to create another '
+                            'account')
+    path = '/accounts/accept-invite/<key:re:[0-9a-f]{32}>'
+    template_name = 'auth/accept_invitation.mako'
+    partial_template_name = 'auth/_accept_invitation.mako'
+    form_factory = AcceptInvitationForm
+    token_class = InvitationToken
+    success_message = _('Registration is complete')
+
+    def get(self, key):
+        if not self.token:
+            self.abort(404)
+        return super(AcceptInvitation, self).get(key)
+
+
+class ResetPassword(ConfirmationMixin, CSRFMixin, LoginOnSuccessMixin,
                     ActionXHRPartialFormRoute):
-    path = '/accounts/reset-password/<key:re:[0-9a-f]{32}'
+    path = '/accounts/reset-password/<key:re:[0-9a-f]{32}>'
     template_name = 'auth/reset_password.mako'
     partial_template_name = 'auth/_reset_password.mako'
     form_factory = ResetPasswordForm
+    token_class = PasswordResetToken
     success_message = _('Your password has been updated')
 
 
@@ -190,6 +242,7 @@ def route():
         Login,
         ResendConfirmation,
         ConfirmEmail,
+        AcceptInvitation,
         PasswordResetRequest,
         ResetPassword,
         NameCheck,

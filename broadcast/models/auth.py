@@ -124,14 +124,12 @@ class User(UserBase, Model):
         request.session.rotate()
         return self
 
-    def set_password(self, new_password, cursor=None):
+    def set_password(self, new_password):
         self.password = self.encrypt_password(new_password)
-        self.save(cursor=cursor)
         return self
 
     def confirm(self, cursor=None):
         self.confirmed = utcnow()
-        self.save(cursor=cursor)
         return self
 
     @classmethod
