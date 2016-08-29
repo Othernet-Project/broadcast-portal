@@ -320,7 +320,8 @@ class AcceptInvitationForm(form.Form):
         try:
             User.new(username=self.processed_data['username'],
                      email=self.processed_data['email'],
-                     password=password1)
+                     password=password1,
+                     confirmed=True)
         except User.IntegrityError:
             raise form.ValidationError('userexists')
         token.accept()
