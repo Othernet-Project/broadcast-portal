@@ -198,6 +198,11 @@ class ResetPassword(ConfirmationMixin, CSRFMixin, LoginOnSuccessMixin,
     token_class = PasswordResetToken
     success_message = _('Your password has been updated')
 
+    def get(self, key):
+        if not self.token:
+            self.abort(404)
+        return super(ResetPassword, self).get(key)
+
 
 class NameCheck(XHRJsonRoute):
     path = '/accounts/check-name'
