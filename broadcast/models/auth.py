@@ -103,7 +103,7 @@ class User(UserBase, Model):
     dbname = 'sessions'
     table = 'users'
     columns = (
-        'id'
+        'id',
         'email',
         'username',
         'password',
