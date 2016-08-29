@@ -41,7 +41,7 @@
       });
     });
   };
-  $.fn.rocaLoad = function() {
+  return $.fn.rocaLoad = function() {
     var el;
     el = $(this);
     return el.each(function() {
@@ -67,5 +67,4 @@
       }
     });
   };
-  return ($('a[data-roca-target]')).rocaLoad();
 })(this, this.jQuery);

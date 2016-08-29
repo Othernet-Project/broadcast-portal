@@ -51,7 +51,4 @@
       if (el.data 'roca-trap-submit') is 'yes'
         target.funnelSubmit()
 
-
-  ($ 'a[data-roca-target]').rocaLoad()
-
 ) this, this.jQuery
