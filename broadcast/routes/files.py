@@ -18,17 +18,11 @@ from ..util.routes import (
 
 
 class Upload(RoleMixin, CSRFMixin, UploadFormMixin, ActionXHRPartialFormRoute):
-    role = RoleMixin.MODERATOR
+    role = RoleMixin.USER
     path = '/upload/'
-    template_name = 'files/upload'
-    partial_template_name = 'files/_upload'
+    template_name = 'files/upload.mako'
+    partial_template_name = 'files/_upload.mako'
     form_factory = ContentForm
-
-    def get(self, *args, **kwargs):
-        return super(Upload, self).get(*args, **kwargs)
-
-    def post(self, *args, **kwargs):
-        return super(Upload, self).post(*args, **kwargs)
 
     def get_context(self):
         ctx = super(Upload, self).get_context()
