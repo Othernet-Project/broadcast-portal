@@ -1,5 +1,5 @@
 import datetime
-from os.path import normpath, join, exists
+from os.path import normpath, join, exists, basename
 
 from streamline import (
     Route,
@@ -31,6 +31,7 @@ class StaticRoute(NonIterableRouteBase):
     path = None
     exclude_plugins = ['sessions']
     path_prefix = '/static'
+    force_download = False
 
     EXP_TIMESTAMP = '%a, %d %b %Y %H:%M:%S GMT'
 
@@ -44,10 +45,14 @@ class StaticRoute(NonIterableRouteBase):
         return path
 
     def create_file_response(self, path):
+        if self.force_download:
+            filename = basename(path)
+        else:
+            filename = False
         for bdir in self.get_base_dirs():
             full_path = self.try_path(bdir, path)
             if full_path:
-                response = static_file(path, root=bdir)
+                response = static_file(path, root=bdir, download=filename)
                 exp = datetime.datetime.utcnow() + datetime.timedelta(365)
                 response.headers['Expires'] = exp.strftime(self.EXP_TIMESTAMP)
                 return response
