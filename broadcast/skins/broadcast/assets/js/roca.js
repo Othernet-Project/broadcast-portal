@@ -23,6 +23,24 @@
       return el.html(origHtml);
     });
   };
+  $.fn.funnelSubmit = function() {
+    var el;
+    el = $(this);
+    return el.on('submit', 'form', function(e) {
+      var action, form, formData, res;
+      e.preventDefault();
+      form = $(this);
+      formData = form.serialize();
+      action = (form.attr('action')) || window.location.pathname;
+      res = $.post(action, formData);
+      res.done(function(resp) {
+        return el.html(resp);
+      });
+      return res.fail(function(xhr) {
+        return el.html(xhr.responseText);
+      });
+    });
+  };
   $.fn.rocaLoad = function() {
     var el;
     el = $(this);
@@ -34,7 +52,7 @@
       if (!target.length) {
         return;
       }
-      return target.loading().load(url, function(res, status, xhr) {
+      target.loading().load(url, function(res, status, xhr) {
         switch (xhr.status) {
           case 200:
             win.trigger('roca-load', [el, target]);
@@ -44,6 +62,9 @@
             win.trigger('roca-error', [el, target]);
         }
       });
+      if ((el.data('roca-trap-submit')) === 'yes') {
+        return target.funnelSubmit();
+      }
     });
   };
   return ($('a[data-roca-target]')).rocaLoad();
