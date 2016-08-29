@@ -9,7 +9,6 @@ file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
 """
 
 import os
-import re
 import logging
 import zipfile
 
@@ -78,12 +77,6 @@ class ContentForm(form.Form):
         help_text=_("Are you authorized to distribute this file?")
     )
 
-    def postprocess_email(self, value):
-        if value and not re.match(r'[^@]+@[^@]+\.[^@]+', value):
-            raise form.ValidationError('email_invalid', {})
-
-        return value
-
     def postprocess_content_file(self, file_upload):
         # validate file size
         allowed_size = request.app.config['{0}.size_limit'.format(self.type)]
@@ -100,7 +93,7 @@ class ContentForm(form.Form):
             ContentItem.new(
                 email=request.user.email,
                 username=request.user.username,
-                ipaddr=request.user.remote_addr,
+                ipaddr=request.remote_addr,
                 file_object=self.processed_data['content_file'],
             )
         except Exception:

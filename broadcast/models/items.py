@@ -63,10 +63,10 @@ class ContentItem(Model, LastUpdateMixin):
     def filename(self):
         return os.path.basename(self.path)
 
-    def save_file(self, file_object):
+    def save_file(self, file_object, cid):
         upload_root = exts.config['content.upload_root']
         # make sure folder with id exists
-        upload_dir = os.path.join(upload_root, self.id)
+        upload_dir = os.path.join(upload_root, cid)
         if not os.path.exists(upload_dir):
             os.makedirs(upload_dir)
 
@@ -89,8 +89,9 @@ class ContentItem(Model, LastUpdateMixin):
             'category': category,
         }
         item = cls(data)
-        item.attach_file(file_object)
-        item.save(pk=uuid.uuid4().hex)
+        cid = uuid.uuid4().hex
+        item.save_file(file_object, cid)
+        item.save(pk=cid)
 
     def cast_vote(self, username, is_upvote, ipaddr):
         """
