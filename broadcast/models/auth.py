@@ -16,6 +16,7 @@ from bottle import request
 from bottle_utils.i18n import dummy_gettext as _
 
 from . import Model
+from ..util.helpers import utcnow
 from ..util.sendmail import send_mail
 
 
@@ -63,7 +64,9 @@ class UserBase(object):
     def role_level(self):
         return ROLE_LEVELS[self.group]
 
-    def has_role(self, group):
+    def has_role(self, group, strict=False):
+        if strict:
+            return self.group == group or self.group == SUPERUSER
         group_level = ROLE_LEVELS[group]
         return self.role_level >= group_level
 
@@ -90,14 +93,14 @@ class AnonymousUser(UserBase):
         self.group = GUEST
 
 
-class User(Model, UserBase):
+class User(UserBase, Model):
     class AlreadyExists(Model.Error):
         pass
 
     class InvalidCredentials(Model.Error):
         pass
 
-    database = 'sessions'
+    dbname = 'sessions'
     table = 'users'
     columns = (
         'id'
@@ -127,7 +130,7 @@ class User(Model, UserBase):
         return self
 
     def confirm(self, cursor=None):
-        self.confirmed = datetime.datetime.now()
+        self.confirmed = utcnow()
         self.save(cursor=cursor)
         return self
 
@@ -181,18 +184,17 @@ class User(Model, UserBase):
 
 
 class BaseToken(Model):
-
-    class KeyExpired(Model.Error):
-        pass
-
-    database = 'sessions'
-    table = 'confirmations'
+    dbname = 'sessions'
+    table = 'tokens'
     columns = (
         'key',
         'email',
         'expires',
     )
-    pk_field = 'key'
+    pk = 'key'
+
+    class KeyExpired(Model.Error):
+        pass
 
     def __init__(self, *args, **kwargs):
         super(BaseToken, self).__init__(*args, **kwargs)
@@ -202,7 +204,7 @@ class BaseToken(Model):
 
     @property
     def has_expired(self):
-        return self.expires < datetime.datetime.now()
+        return self.expires < utcnow()
 
     def accept(self):
         self.delete()
@@ -215,12 +217,11 @@ class BaseToken(Model):
     def clear_expired(cls, cursor=None):
         cursor = cursor or cls.db.cursor()
         q = cls.db.Delete(cls.table, where='expires <= :now')
-        cursor.query(q, now=datetime.datetime.utcnow())
+        cursor.query(q, now=utcnow())
 
     @classmethod
     def new(cls, email, expiration, cursor=None):
-        expires = (datetime.datetime.utcnow() +
-                   datetime.timedelta(days=expiration))
+        expires = utcnow() + datetime.timedelta(days=expiration)
         token = cls({
             'email': email,
             'expires': expires,
@@ -228,10 +229,15 @@ class BaseToken(Model):
         token.save(pk=cls.generate_key(), cursor=cursor)
         return token
 
-    def send(self, next_path):
-        send_mail(self.email, self.email.subject, text=self.email_template,
-                  data={'confirmation_key': self.key, 'next_path': next_path},
-                  is_async=True)
+    def send(self, next_path=None):
+        email_ctx = {
+            'key': self.key,
+            'next_path': next_path,
+        }
+        send_mail(to=self.email,
+                  subject=self.email_subject,
+                  template=self.email_template,
+                  data=email_ctx)
 
 
 class EmailVerificationToken(BaseToken):
@@ -257,5 +263,5 @@ class PasswordResetToken(BaseToken):
 
 
 class InvitationToken(BaseToken):
-    email_subjet = _('You are invited to join the Outernet Filecast Center')
+    email_subject = _('You are invited to join the Outernet Filecast Center')
     email_template = 'email/invite.mako'

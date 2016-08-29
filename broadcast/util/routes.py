@@ -337,6 +337,12 @@ class RoleMixin(object):
     Route mixin that checks for user role specified by the ``role`` property,
     and aborts with 403 status code when the user role does not match.
 
+    The ``strict_check`` property is a boolean flag that tells the route
+    handler whether to enforce strict checking. With strict checking on, the
+    user must have exactly the specified role, and check fails even for users
+    that have higher roles. The only exeception is the superuser, for which all
+    checks always succeed.
+
     The ``role_denied_message`` is a string that is used as a message when role
     is denied access.
 
@@ -346,6 +352,7 @@ class RoleMixin(object):
     etc).
     """
     role = None
+    strict_check = False
     role_denided_message = _('You cannot access this page with current '
                              'privileges')
     role_needs_login_message = _('Please log in in order to gain access to '
@@ -364,6 +371,9 @@ class RoleMixin(object):
     def get_role_denied_message(self):
         return self.role_denied_message
 
+    def get_role_needs_login_message(self):
+        return self.role_needs_login_message
+
     def get_role_method_whitelist(self):
         return self.role_method_whitelist
 
@@ -375,9 +385,11 @@ class RoleMixin(object):
         role = self.get_role()
 
         if user.should_login_for_role(role):
+            # User can still log in and try again
             self.abort(401, self.get_role_needs_login_message())
 
-        if not user.has_role(role):
+        if not user.has_role(role, self.strict_check):
+            # Permanent failure
             self.abort(403, self.get_role_denied_message())
 
     def create_response(self):
