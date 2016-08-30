@@ -2,6 +2,7 @@
 @import "colors";
 @import "compass/css3";
 @import "OIcons";
+@import "media_query";
 
 * {
   @include box-sizing(border-box);
@@ -33,6 +34,11 @@ h1 {
   line-height: 110%;
   margin-bottom: 1.5rem;
   text-transform: uppercase;
+
+  @include narrower-than(768px) {
+    font-size: 180%;
+    line-height: 110%;
+  }
 }
 
 h2 {
@@ -40,6 +46,11 @@ h2 {
   line-height: 110%;
   margin-bottom: 1rem;
   text-transform: uppercase;
+
+  @include narrower-than(768px) {
+    font-size: 120%;
+    line-height: 110%;
+  }
 }
 
 p {

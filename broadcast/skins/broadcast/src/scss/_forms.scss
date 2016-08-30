@@ -42,6 +42,13 @@ input[type=text] {
   }
 }
 
+.field-help-message {
+  display: block;
+  font-size: 90%;
+  color: $aux-info;
+  line-height: 140%;
+}
+
 label,
 label {
   display: block;
@@ -51,6 +58,10 @@ label {
   &.required::after {
     content: '*';
     color: $alert;
+  }
+
+  &.field-label-inline {
+    display: inline-block;
   }
 }
 
@@ -77,5 +88,38 @@ a.button {
 
   &:visited {
     color: $foreground-inverse;
+  }
+
+  &[disabled],
+  &.disabled {
+    background: $disabled;
+    color: $disabled-text;
+  }
+
+  &.button-small {
+    padding: 0.3rem 0.7rem;
+    font-size: 90%;
+    letter-spacing: $sparse-spacing * 0.7;
+  }
+
+  .invisible-label {
+    display: none;
+  }
+
+  .hover-tip {
+    display: none;
+  }
+
+  .supplementary-info {
+    dusplay: inline-block;
+    font-size: 80%;
+    vertical-align: middle;
+    letter-spacing: 0;
+  }
+
+  &:hover {
+    .hover-tip {
+      display: inline-block;
+    }
   }
 }

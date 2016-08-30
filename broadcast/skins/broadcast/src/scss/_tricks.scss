@@ -15,61 +15,61 @@
 
 @mixin arrow-up($size, $color) {
   @include arrow-base($size);
-  border-left: $size / 2 solid transparent;
-  border-right: $size / 2 solid transparent;
-  border-bottom: $size / 2 solid $color;
+  border-left: ($size / 2) solid transparent;
+  border-right: ($size / 2) solid transparent;
+  border-bottom: ($size / 2) solid $color;
 }
 
 @mixin arrow-down($size, $color) {
   @include arrow-base($size);
-  border-left: $size / 2 solid transparent;
-  border-right: $size / 2 solid transparent;
-  border-top: $size / 2 solid $color;
+  border-left: ($size / 2) solid transparent;
+  border-right: ($size / 2) solid transparent;
+  border-top: ($size / 2) solid $color;
 }
 
 @mixin arrow-right($size, $color) {
   @include arrow-base($size);
-  border-top: $size / 2 solid transparent;
-  border-bottom: $size / 2 solid transparent;
-  border-left: $size / 2 solid $color;
+  border-top: ($size / 2) solid transparent;
+  border-bottom: ($size / 2) solid transparent;
+  border-left: ($size / 2) solid $color;
 
 }
 
 @mixin arrow-left($size, $color) {
   @include arrow-base($size);
-  border-top: $size / 2 solid transparent;
-  border-bottom: $size / 2 solid transparent;
-  border-right: $size / 2 solid $color;
+  border-top: ($size / 2) solid transparent;
+  border-bottom: ($size / 2) solid transparent;
+  border-right: ($size / 2) solid $color;
 }
 
 @mixin arrow-right-bottom($size, $color) {
   @include arrow-base($size);
-  border-top: $size / 2 solid transparent;
-  border-left: $size / 2 solid transparent;
-  border-right: $size / 2 solid $color;
-  border-bottom: $size / 2 solid $color;
+  border-top: ($size / 2) solid transparent;
+  border-left: ($size / 2) solid transparent;
+  border-right: ($size / 2) solid $color;
+  border-bottom: ($size / 2) solid $color;
 }
 
 @mixin arrow-left-bottom($size, $color) {
   @include arrow-base($size);
-  border-top: $size / 2 solid transparent;
-  border-left: $size / 2 solid $color;
-  border-right: $size / 2 solid transparent;
-  border-bottom: $size / 2 solid $color;
+  border-top: ($size / 2) solid transparent;
+  border-left: ($size / 2) solid $color;
+  border-right: ($size / 2) solid transparent;
+  border-bottom: ($size / 2) solid $color;
 }
 
 @mixin arrow-left-top($size, $color) {
   @include arrow-base($size);
-  border-top: $size / 2 solid $color;
-  border-left: $size / 2 solid $color;
-  border-right: $size / 2 solid transparent;
-  border-bottom: $size / 2 solid transparent;
+  border-top: ($size / 2) solid $color;
+  border-left: ($size / 2) solid $color;
+  border-right: ($size / 2) solid transparent;
+  border-bottom: ($size / 2) solid transparent;
 }
 
 @mixin arrow-right-top($size, $color) {
   @include arrow-base($size);
-  border-top: $size / 2 solid $color;
-  border-left: $size / 2 solid transparent;
-  border-right: $size / 2 solid $color;
-  border-bottom: $size / 2 solid transparent;
+  border-top: ($size / 2) solid $color;
+  border-left: ($size / 2) solid transparent;
+  border-right: ($size / 2) solid $color;
+  border-bottom: ($size / 2) solid transparent;
 }
