@@ -1,0 +1,75 @@
+// Collection of mixins for various non-trivial visual tricks.
+//
+// Arrow credit CSS-TRICKS:
+// https://css-tricks.com/snippets/css/css-triangle/
+//
+
+@mixin arrow-base($size) {
+  width: $size;
+  height: $size;
+  content: '';
+  display: inline-block;
+  @include box-sizing(border-box);
+}
+
+
+@mixin arrow-up($size, $color) {
+  @include arrow-base($size);
+  border-left: $size / 2 solid transparent;
+  border-right: $size / 2 solid transparent;
+  border-bottom: $size / 2 solid $color;
+}
+
+@mixin arrow-down($size, $color) {
+  @include arrow-base($size);
+  border-left: $size / 2 solid transparent;
+  border-right: $size / 2 solid transparent;
+  border-top: $size / 2 solid $color;
+}
+
+@mixin arrow-right($size, $color) {
+  @include arrow-base($size);
+  border-top: $size / 2 solid transparent;
+  border-bottom: $size / 2 solid transparent;
+  border-left: $size / 2 solid $color;
+
+}
+
+@mixin arrow-left($size, $color) {
+  @include arrow-base($size);
+  border-top: $size / 2 solid transparent;
+  border-bottom: $size / 2 solid transparent;
+  border-right: $size / 2 solid $color;
+}
+
+@mixin arrow-right-bottom($size, $color) {
+  @include arrow-base($size);
+  border-top: $size / 2 solid transparent;
+  border-left: $size / 2 solid transparent;
+  border-right: $size / 2 solid $color;
+  border-bottom: $size / 2 solid $color;
+}
+
+@mixin arrow-left-bottom($size, $color) {
+  @include arrow-base($size);
+  border-top: $size / 2 solid transparent;
+  border-left: $size / 2 solid $color;
+  border-right: $size / 2 solid transparent;
+  border-bottom: $size / 2 solid $color;
+}
+
+@mixin arrow-left-top($size, $color) {
+  @include arrow-base($size);
+  border-top: $size / 2 solid $color;
+  border-left: $size / 2 solid $color;
+  border-right: $size / 2 solid transparent;
+  border-bottom: $size / 2 solid transparent;
+}
+
+@mixin arrow-right-top($size, $color) {
+  @include arrow-base($size);
+  border-top: $size / 2 solid $color;
+  border-left: $size / 2 solid transparent;
+  border-right: $size / 2 solid $color;
+  border-bottom: $size / 2 solid transparent;
+}

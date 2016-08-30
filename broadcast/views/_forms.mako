@@ -67,14 +67,14 @@
 ## Checkbox
 ##
 
-<%def name="checkbox(name, value, is_checked=None, label=None, id=None)">
+<%def name="checkbox(name, value, is_checked=None, label=None, id=None, required=False)">
     <%
     current_value = request.params.getall(name)
     is_checked = value in current_value if is_checked is None else is_checked
     %>
     <input type="checkbox" id="${id or name}" name="${name}" value="${value}"${' checked' if is_checked else ''}>
     % if label:
-        ${self.label(label, inline=True, id=id or name)}
+        ${self.label(label, inline=True, id=id or name, required=required)}
     % endif
 </%def>
 
@@ -92,8 +92,8 @@
 ## Label
 ##
 
-<%def name="label(label, inline=False, id=None)">
-    <label${' for="{}"'.format(id) if id else '' | n,unicode} class="field-label${' field-label-inline' if inline else ''}">${label | n,unicode}</label>
+<%def name="label(label, inline=False, id=None, required=False)">
+    <label${' for="{}"'.format(id) if id else '' | n,unicode} class="field-label${' field-label-inline' if inline else ''}${' required' if required else ''}">${label | n,unicode}</label>
 </%def>
 
 ## Field supplemental information
@@ -133,7 +133,7 @@
     <p class="field${' field-error' if fld.error else ''}">
         ## Label
         % if fld.type not in ('checkbox', 'radio', 'hidden'):
-            ${self.label(label or fld.label, id=id or fld.name)}
+            ${self.label(label or fld.label, id=id or fld.name, required=kw.pop('required', False))}
         % endif
 
         ## Help text for textarea is rendered above the field but below label

@@ -11,6 +11,6 @@
 
 <form action="${url('main:beta_signup')}" method="POST">
     ${forms.csrf_token()}
-    ${forms.field(form.email)}
+    ${forms.field(form.email, required=True)}
     <button class="submit" type="submit">${_('Sign up')}</button>
 </form>
