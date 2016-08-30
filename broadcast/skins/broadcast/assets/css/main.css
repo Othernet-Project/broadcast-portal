@@ -1278,6 +1278,81 @@ p {
   animation: spin 2s linear infinite;
 }
 
+@-moz-keyframes slide-in {
+  from {
+    -moz-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+  to {
+    -moz-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+@-webkit-keyframes slide-in {
+  from {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+  to {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+@keyframes slide-in {
+  from {
+    -moz-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+  to {
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+/* line 14, ../../src/scss/_popup.scss */
+.popup {
+  position: fixed;
+  top: 1rem;
+  left: 0;
+  background: #333;
+  color: white;
+  padding: 1rem 5rem 1rem 2rem;
+  max-width: 20rem;
+  z-index: 100;
+  -moz-animation: slide-in 0.2s ease-in;
+  -webkit-animation: slide-in 0.2s ease-in;
+  animation: slide-in 0.2s ease-in;
+}
+/* line 25, ../../src/scss/_popup.scss */
+.popup .popup-close {
+  display: block;
+  position: absolute;
+  width: 3rem;
+  height: 100%;
+  top: 0;
+  right: 0;
+  background: #4d4d4d;
+  color: #bfbfbf;
+  font-size: 150%;
+  text-align: center;
+  text-decoration: none;
+}
+/* line 41, ../../src/scss/_popup.scss */
+.popup .popup-close::after, .popup .popup-close::before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+  width: 0;
+}
+/* line 50, ../../src/scss/_popup.scss */
+.popup .popup-close .text-label {
+  display: none;
+}
+
 /**
  * _media_query.scss: media query support
  *
@@ -1511,7 +1586,7 @@ p {
 .home {
   height: 100%;
   background: #1e8abb;
-  background-image: url('../img/radiodrive.jpg?1472567577');
+  background-image: url('../img/radiodrive.jpg?1472585880');
   background-position: center center;
   background-repeat: no-repeat;
   -moz-background-size: cover;
