@@ -18,6 +18,7 @@
       if not origHtml
         return
       el.html origHtml
+      el.removeData 'loading-orig-html'
 
   $.createSubmitFrame = (id) ->
     # Create a hidden iframe for form submission
@@ -63,7 +64,7 @@
   $.fn.reload = (fn) ->
     el = $ @
     url = el.data 'roca-url'
-    el.loading().load (url), (res, status, xhr) ->
+    el.load (url), (res, status, xhr) ->
       switch xhr.status
         when 200
           fn?(xhr.status)
@@ -85,7 +86,7 @@
       if not target.length
         return
       target.data 'roca-url', url
-      target.reload()
+      target.loading().reload()
       if (el.data 'roca-trap-submit') is 'yes'
         target.funnelSubmit()
 

@@ -22,7 +22,8 @@
       if (!origHtml) {
         return;
       }
-      return el.html(origHtml);
+      el.html(origHtml);
+      return el.removeData('loading-orig-html');
     });
   };
   $.createSubmitFrame = function(id) {
@@ -73,7 +74,7 @@
     var el, url;
     el = $(this);
     url = el.data('roca-url');
-    return el.loading().load(url, function(res, status, xhr) {
+    return el.load(url, function(res, status, xhr) {
       switch (xhr.status) {
         case 200:
           if (typeof fn === "function") {
@@ -102,7 +103,7 @@
         return;
       }
       target.data('roca-url', url);
-      target.reload();
+      target.loading().reload();
       if ((el.data('roca-trap-submit')) === 'yes') {
         return target.funnelSubmit();
       }
