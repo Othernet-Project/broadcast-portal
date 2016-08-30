@@ -9,7 +9,7 @@
 <ul class="item-list review-list">
     %for item in items:
         <% count += 1 %>
-        <li class="item review-item">
+        <li class="item review-item" id="item-${item.id}">
             ${items_partial.content_item(item)}
         </li>
     %endfor

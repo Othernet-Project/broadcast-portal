@@ -1,4 +1,5 @@
 @import "media_query";
+@import "compass/css3";
 
 .capacity {
   .capacity-gauge-outer {
@@ -58,6 +59,7 @@
   .review,
   .candidates {
     width: 40%;
+    min-height: 20rem;
 
     @include narrower-than(1100px) {
       width: 50%;
@@ -70,11 +72,16 @@
   }
 
   .item {
+    background: $background;
     border-top: 1px solid $separator;
     position: relative;
-    padding: 1rem 0 0 4rem;
+    padding: 1rem 0 2rem 4rem;
     width: 100%;
-    margin-bottom: 2rem;
+    @include transition(background-color 2s);
+
+    &.highlighted {
+      background-color: yellow;
+    }
 
     p {
       margin: 0;

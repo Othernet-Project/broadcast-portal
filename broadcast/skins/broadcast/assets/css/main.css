@@ -1414,7 +1414,7 @@ p {
  * COPYING file that comes with the source code, or
  * http://www.gnu.org/licenses/gpl.txt.
  */
-/* line 4, ../../src/scss/_status.scss */
+/* line 5, ../../src/scss/_status.scss */
 .capacity .capacity-gauge-outer {
   position: relative;
   display: block;
@@ -1422,7 +1422,7 @@ p {
   height: 0.5rem;
   margin-bottom: 0.5rem;
 }
-/* line 12, ../../src/scss/_status.scss */
+/* line 13, ../../src/scss/_status.scss */
 .capacity .capacity-gauge-inner {
   position: absolute;
   top: 0;
@@ -1432,26 +1432,26 @@ p {
   background: #1e8abb;
 }
 
-/* line 23, ../../src/scss/_status.scss */
+/* line 24, ../../src/scss/_status.scss */
 .status h1 {
   padding: 2rem 2rem 1rem;
 }
-/* line 27, ../../src/scss/_status.scss */
+/* line 28, ../../src/scss/_status.scss */
 .status .stats {
   padding: 1rem 2rem;
 }
-/* line 30, ../../src/scss/_status.scss */
+/* line 31, ../../src/scss/_status.scss */
 .status .stats h2 {
   text-align: right;
 }
-/* line 35, ../../src/scss/_status.scss */
+/* line 36, ../../src/scss/_status.scss */
 .status .upload,
 .status .review,
 .status .candidates {
   float: left;
   padding: 0 2rem;
 }
-/* line 42, ../../src/scss/_status.scss */
+/* line 43, ../../src/scss/_status.scss */
 .status .upload {
   background: #eee;
   padding-top: 1rem;
@@ -1464,7 +1464,7 @@ p {
   border-bottom-right-radius: 5px;
 }
 @media only screen and (max-width: 1100px) {
-  /* line 42, ../../src/scss/_status.scss */
+  /* line 43, ../../src/scss/_status.scss */
   .status .upload {
     float: none;
     width: auto;
@@ -1475,49 +1475,58 @@ p {
     border-radius: 0;
   }
 }
-/* line 58, ../../src/scss/_status.scss */
+/* line 59, ../../src/scss/_status.scss */
 .status .review,
 .status .candidates {
   width: 40%;
+  min-height: 20rem;
 }
 @media only screen and (max-width: 1100px) {
-  /* line 58, ../../src/scss/_status.scss */
+  /* line 59, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 50%;
   }
 }
 @media only screen and (max-width: 768px) {
-  /* line 58, ../../src/scss/_status.scss */
+  /* line 59, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 100%;
     float: none;
   }
 }
-/* line 72, ../../src/scss/_status.scss */
+/* line 74, ../../src/scss/_status.scss */
 .status .item {
+  background: white;
   border-top: 1px solid #ddd;
   position: relative;
-  padding: 1rem 0 0 4rem;
+  padding: 1rem 0 2rem 4rem;
   width: 100%;
-  margin-bottom: 2rem;
+  -moz-transition: background-color 2s;
+  -o-transition: background-color 2s;
+  -webkit-transition: background-color 2s;
+  transition: background-color 2s;
 }
-/* line 79, ../../src/scss/_status.scss */
+/* line 82, ../../src/scss/_status.scss */
+.status .item.highlighted {
+  background-color: yellow;
+}
+/* line 86, ../../src/scss/_status.scss */
 .status .item p {
   margin: 0;
 }
-/* line 83, ../../src/scss/_status.scss */
+/* line 90, ../../src/scss/_status.scss */
 .status .item .item-name {
   font-size: 120%;
   margin-bottom: 0.5rem;
 }
-/* line 88, ../../src/scss/_status.scss */
+/* line 95, ../../src/scss/_status.scss */
 .status .item .item-attribution {
   font-size: 80%;
   color: #595959;
 }
-/* line 93, ../../src/scss/_status.scss */
+/* line 100, ../../src/scss/_status.scss */
 .status .item .vote-form {
   position: absolute;
   top: 1rem;
@@ -1526,7 +1535,7 @@ p {
   color: white;
   text-align: center;
 }
-/* line 102, ../../src/scss/_status.scss */
+/* line 109, ../../src/scss/_status.scss */
 .status .item .vote-count {
   width: 100%;
   display: block;
@@ -1534,7 +1543,7 @@ p {
   font-weight: bold;
   background: #5ab9e5;
 }
-/* line 110, ../../src/scss/_status.scss */
+/* line 117, ../../src/scss/_status.scss */
 .status .item .vote-icon {
   border: 0 solid transparent;
   background: #1e8abb;
@@ -1548,12 +1557,12 @@ p {
   -webkit-border-radius: 0;
   border-radius: 0;
 }
-/* line 121, ../../src/scss/_status.scss */
+/* line 128, ../../src/scss/_status.scss */
 .status .item .vote-icon[disabled] {
   background: #ccc;
   color: #888;
 }
-/* line 127, ../../src/scss/_status.scss */
+/* line 134, ../../src/scss/_status.scss */
 .status .item .vote-up {
   -moz-border-radius-topleft: 3px;
   -webkit-border-top-left-radius: 3px;
@@ -1562,7 +1571,7 @@ p {
   -webkit-border-top-right-radius: 3px;
   border-top-right-radius: 3px;
 }
-/* line 132, ../../src/scss/_status.scss */
+/* line 139, ../../src/scss/_status.scss */
 .status .item .vote-down {
   -moz-border-radius-bottomleft: 3px;
   -webkit-border-bottom-left-radius: 3px;
