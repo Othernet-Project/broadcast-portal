@@ -51,7 +51,7 @@ FILECHARS = ('abcdefghijklmnopqrstuvwxyz'
 USERCHARS = ('abcdefghijklmnopqrstuvwxyz')
 FILENAME_LENGTH_RANGE = (4, 20)  # chars
 USERNAME_LENGTH_RANGE = (4, 10)  # chars
-FILE_SIZE_RANGE = (4, 2048)  # KB
+FILE_SIZE_RANGE = (40, 100)  # KB
 AGE_RANGE = (0, 3)  # days
 VOTE_RANGE = (0, 10)  # votes per content
 
@@ -73,7 +73,7 @@ def dummy_username():
 
 
 def dummy_size():
-    return random.randint(*FILE_SIZE_RANGE)
+    return random.randint(*FILE_SIZE_RANGE) * 1024
 
 
 def dummy_ts():
