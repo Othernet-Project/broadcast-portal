@@ -7,6 +7,7 @@ from ..cmdline.process import Startup, Stop
 from ..cmdline.custom_conf import CustomConf
 from ..cmdline.custom_skin import CustomSkin
 from ..cmdline.assets import Watch, StopWatchers, Recompile
+from ..cmdline.adduser import Adduser
 
 from .exts import container as exts
 
@@ -24,6 +25,7 @@ COMMANDS = (
     Watch,
     StopWatchers,
     Recompile,
+    Adduser,
 )
 
 COMMANDS_DICT = {c.name: c for c in COMMANDS}
