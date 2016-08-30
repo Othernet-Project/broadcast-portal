@@ -60,6 +60,20 @@
 
     el.on 'submit', 'form', submitHandler
 
+  $.fn.reload = (fn) ->
+    el = $ @
+    url = el.data 'roca-url'
+    el.loading().load (url), (res, status, xhr) ->
+      switch xhr.status
+        when 200
+          fn?(xhr.status)
+          win.trigger 'roca-load', [el]
+        else
+          fn?(xhr.status)
+          el.cancelLoading()
+          win.trigger 'roca-error', [el]
+      return
+
   $.fn.rocaLoad = () ->
     # Load content from the URL pointed to by elements' `href` attribute into
     # target specified by the `data-roca-target` attribute.
@@ -70,14 +84,8 @@
       target = $ "##{el.data 'roca-target'}"
       if not target.length
         return
-      target.loading().load (url), (res, status, xhr) ->
-        switch xhr.status
-          when 200
-            win.trigger 'roca-load', [el, target]
-          else
-            ($ target).cancelLoading()
-            win.trigger 'roca-error', [el, target]
-        return
+      target.data 'roca-url', url
+      target.reload()
       if (el.data 'roca-trap-submit') is 'yes'
         target.funnelSubmit()
 
