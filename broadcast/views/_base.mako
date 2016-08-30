@@ -11,7 +11,7 @@
         <title><%block name="page_title">Filecast center</%block></title>
         <%block name="extra_head"/>
     </head>
-    <body class="<%block name="body_class">default</%block>">
+    <body id="top" class="<%block name="body_class">default</%block>">
         ${self.body()}
 
         <footer id="footer" class="footer"></footer>

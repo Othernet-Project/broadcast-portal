@@ -1,10 +1,17 @@
 <%inherit file="/_base.mako"/>
 
 <%block name="page_title">${_('Filecast center by Outernet')}</%block>
+<%block name="body_class">home</%block>
 
 <section id="hero" class="hero">
-<h1>${_('Filecast center')}</h1>
-<p>${_('by Outernet')} <a href="https://outernet.is/">Outernet homepage</a></p>
+<h1 class="title">${_('Filecast center')}</h1>
+<p class="subtitle">
+    ${_('by Outernet')} 
+    <a href="https://outernet.is/" rel="nofollow" target="_blank">
+        <span class="text-label">${_('Outernet homepage')}</span>
+        <span class="icon icon-arrow-right"></span>
+    </a>
+</p>
 
 <div id="beta-signup" class="beta-signup">
     <h2>${_('Join the closed beta')}</h2>

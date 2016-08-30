@@ -1,0 +1,158 @@
+@import "colors";
+@import "tricks";
+@import "media_query";
+
+$one-col: 800px;
+
+
+.home {
+  height: 100%;
+  background: $background-inverse;
+  background-image: image-url('radiodrive.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  @include background-size(cover);
+  color: $foreground-inverse;
+
+  input[type=text] {
+    background-color: darken($background-inverse, 10);
+    border-color: $foreground-inverse;
+    color: $foreground-inverse;
+  }
+
+  .stats {
+    float: right;
+    text-align: right;
+    width: 40%;
+    margin: 6rem 0 2rem;
+    padding: 2rem;
+    background: transparentize($background, 0.3);
+    color: $foreground;
+    @include border-top-left-radius(1rem);
+    @include border-bottom-left-radius(1rem);
+
+    @include narrower-than($one-col) {
+      width: auto;
+      float: none;
+      margin: 0;
+      @include border-radius(0);
+    }
+
+    p {
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-top: 2rem;
+      }
+    }
+  }
+}
+
+.hero {
+  width: 50%;
+  padding: 6rem 2rem 2rem;
+  float: left;
+
+  @include narrower-than($one-col) {
+    width: auto;
+    float: none;
+    padding: 3rem 2rem 2rem;
+  }
+
+  p {
+    max-width: 80rem;
+  }
+
+  .field {
+    max-width: 300px;
+  }
+
+  .title {
+    font-size: 400%;
+    line-height: 110%;
+    text-transform: uppercase;
+    margin-bottom: 0;
+
+    @include narrower-than(1302px) {
+      font-size: 300%;
+    }
+
+    @include narrower-than(1016px) {
+      font-size: 240%;
+    }
+  }
+
+  .subtitle {
+    display: inline-block;
+    position: relative;
+    left: 1.65rem;
+    background: $background;
+    color: $foreground;
+    padding: 0.1rem 1rem;
+    height: 1.6rem;
+    max-width: none;
+    font-size: 90%;
+    text-transform: uppercase;
+    letter-spacing: $sparse-spacing;
+    margin-bottom: 2rem;
+
+    @include narrower-than(440px) {
+      left: 0;
+    }
+
+    a {
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      right: -3rem;
+      height: 100%;
+      width: 3rem;
+      background: darken($background-inverse, 10);
+      font-size: 140%;
+      text-align: center;
+      color: $foreground-inverse;
+
+      .text-label {
+        display: none;
+      }
+
+      &::after {
+        @include arrow-left-top(1.6rem, darken($background-inverse, 10));
+        position: absolute;
+        right: -1.6rem;
+        top: 0;
+
+        @include narrower-than(440px) {
+          display: none;
+        }
+      }
+    }
+
+    &::before {
+      @include arrow-right-bottom(1.6rem, $background);
+      position: absolute;
+      left: -1.6rem;
+      top: 0;
+
+      @include narrower-than(440px) {
+        display: none;
+      }
+    }
+  }
+
+  button,
+  .button {
+    border-color: $background;
+    background: $background;
+    color: $background-inverse;
+
+    &:visited {
+      color: $background-inverse;
+    }
+  }
+
+
+  .beta-signup label {
+    display: none;
+  }
+}

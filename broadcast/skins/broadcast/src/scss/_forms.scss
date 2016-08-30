@@ -1,0 +1,125 @@
+@import "compass/css3";
+@import "colors";
+@import "fonts";
+@import "tricks";
+@import "media_query";
+
+input[type=text] {
+  display: inline-block;
+  width: 100%;
+  font-family: $font-family;
+  font-size: $font-size;
+  border: 1px solid $field-outline;
+  padding: 0.7rem;
+  background: $background;
+  color: $foreground;
+
+  .field-error & {
+    background-color: lighten($alert, 30);
+  }
+
+  @include narrower-than(360px) {
+    width: 100%;
+    padding: 0.7rem;
+  }
+}
+
+.field-error-message {
+  display: block;
+  background: $alert;
+  color: $foreground-inverse;
+  padding: 0.4rem;
+  margin: 0.2rem 0;
+  border: 1px solid $alert;
+  position: relative;
+  @include border-radius(2px);
+
+  &::before {
+    position: absolute;
+    top: -1.2rem;
+    left: 0.2rem;
+    @include arrow-up(1.2rem, $alert);
+  }
+}
+
+.field-help-message {
+  display: block;
+  font-size: 90%;
+  color: $aux-info;
+  line-height: 140%;
+}
+
+label,
+label {
+  display: block;
+  font-size: 90%;
+  text-transform: uppercase;
+
+  &.required::after {
+    content: '*';
+    color: $alert;
+  }
+
+  &.field-label-inline {
+    display: inline-block;
+  }
+}
+
+button,
+a.button {
+  display: inline-block;
+  font-family: $font-family;
+  font-size: $font-size;
+  padding: 0.7rem 2rem;
+  letter-spacing: $sparse-spacing;
+  text-transform: uppercase;
+  background: $background-inverse;
+  color: $foreground-inverse;
+  border: 1px solid $background-inverse;
+  text-decoration: none;
+  text-align: center;
+  @include border-radius(3px);
+  white-space: nowrap;
+
+  @include narrower-than(360px) {
+    width: 100%;
+    padding: 0.7rem;
+  }
+
+  &:visited {
+    color: $foreground-inverse;
+  }
+
+  &[disabled],
+  &.disabled {
+    background: $disabled;
+    color: $disabled-text;
+  }
+
+  &.button-small {
+    padding: 0.3rem 0.7rem;
+    font-size: 90%;
+    letter-spacing: $sparse-spacing * 0.7;
+  }
+
+  .invisible-label {
+    display: none;
+  }
+
+  .hover-tip {
+    display: none;
+  }
+
+  .supplementary-info {
+    dusplay: inline-block;
+    font-size: 80%;
+    vertical-align: middle;
+    letter-spacing: 0;
+  }
+
+  &:hover {
+    .hover-tip {
+      display: inline-block;
+    }
+  }
+}

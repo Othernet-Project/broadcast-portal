@@ -18,7 +18,7 @@ class BetaSignupForm(form.Form):
         # Translators, used as label in create user form
         _("Email"),
         validators=[form.Required(), EmailValidator()],
-        placeholder=_('Email'))
+        placeholder=_('you@example.com'))
 
     def random_pause(self):
         # Simulates sending emails
