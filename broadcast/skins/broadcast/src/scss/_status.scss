@@ -20,13 +20,6 @@
 }
 
 .status {
-  .upload,
-  .review,
-  .candidates {
-    float: left;
-    padding: 0 2rem;
-  }
-
   h1 {
     padding: 2rem 2rem 1rem;
   }
@@ -39,13 +32,26 @@
     }
   }
 
+  .upload,
+  .review,
+  .candidates {
+    float: left;
+    padding: 0 2rem;
+  }
+
   .upload {
+    background: $background-subtle;
+    padding-top: 1rem;
     width: 20%;
+    @include border-top-right-radius(5px);
+    @include border-bottom-right-radius(5px);
 
     @include narrower-than(1100px) {
       float: none;
       width: auto;
-      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      @include border-radius(0);
     }
   }
 

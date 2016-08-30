@@ -1358,57 +1358,69 @@ p {
 }
 
 /* line 23, ../../src/scss/_status.scss */
+.status h1 {
+  padding: 2rem 2rem 1rem;
+}
+/* line 27, ../../src/scss/_status.scss */
+.status .stats {
+  padding: 1rem 2rem;
+}
+/* line 30, ../../src/scss/_status.scss */
+.status .stats h2 {
+  text-align: right;
+}
+/* line 35, ../../src/scss/_status.scss */
 .status .upload,
 .status .review,
 .status .candidates {
   float: left;
   padding: 0 2rem;
 }
-/* line 30, ../../src/scss/_status.scss */
-.status h1 {
-  padding: 2rem 2rem 1rem;
-}
-/* line 34, ../../src/scss/_status.scss */
-.status .stats {
-  padding: 1rem 2rem;
-}
-/* line 37, ../../src/scss/_status.scss */
-.status .stats h2 {
-  text-align: right;
-}
 /* line 42, ../../src/scss/_status.scss */
 .status .upload {
+  background: #eee;
+  padding-top: 1rem;
   width: 20%;
+  -moz-border-radius-topright: 5px;
+  -webkit-border-top-right-radius: 5px;
+  border-top-right-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 @media only screen and (max-width: 1100px) {
   /* line 42, ../../src/scss/_status.scss */
   .status .upload {
     float: none;
     width: auto;
-    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
   }
 }
-/* line 52, ../../src/scss/_status.scss */
+/* line 58, ../../src/scss/_status.scss */
 .status .review,
 .status .candidates {
   width: 40%;
 }
 @media only screen and (max-width: 1100px) {
-  /* line 52, ../../src/scss/_status.scss */
+  /* line 58, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 50%;
   }
 }
 @media only screen and (max-width: 768px) {
-  /* line 52, ../../src/scss/_status.scss */
+  /* line 58, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 100%;
     float: none;
   }
 }
-/* line 66, ../../src/scss/_status.scss */
+/* line 72, ../../src/scss/_status.scss */
 .status .item {
   border-top: 1px solid #ddd;
   position: relative;
@@ -1416,21 +1428,21 @@ p {
   width: 100%;
   margin-bottom: 2rem;
 }
-/* line 73, ../../src/scss/_status.scss */
+/* line 79, ../../src/scss/_status.scss */
 .status .item p {
   margin: 0;
 }
-/* line 77, ../../src/scss/_status.scss */
+/* line 83, ../../src/scss/_status.scss */
 .status .item .item-name {
   font-size: 120%;
   margin-bottom: 0.5rem;
 }
-/* line 82, ../../src/scss/_status.scss */
+/* line 88, ../../src/scss/_status.scss */
 .status .item .item-attribution {
   font-size: 80%;
   color: #595959;
 }
-/* line 87, ../../src/scss/_status.scss */
+/* line 93, ../../src/scss/_status.scss */
 .status .item .vote-form {
   position: absolute;
   top: 1rem;
@@ -1439,7 +1451,7 @@ p {
   color: white;
   text-align: center;
 }
-/* line 96, ../../src/scss/_status.scss */
+/* line 102, ../../src/scss/_status.scss */
 .status .item .vote-count {
   width: 100%;
   display: block;
@@ -1447,7 +1459,7 @@ p {
   font-weight: bold;
   background: #5ab9e5;
 }
-/* line 104, ../../src/scss/_status.scss */
+/* line 110, ../../src/scss/_status.scss */
 .status .item .vote-icon {
   border: 0 solid transparent;
   background: #1e8abb;
@@ -1461,12 +1473,12 @@ p {
   -webkit-border-radius: 0;
   border-radius: 0;
 }
-/* line 115, ../../src/scss/_status.scss */
+/* line 121, ../../src/scss/_status.scss */
 .status .item .vote-icon[disabled] {
   background: #ccc;
   color: #888;
 }
-/* line 121, ../../src/scss/_status.scss */
+/* line 127, ../../src/scss/_status.scss */
 .status .item .vote-up {
   -moz-border-radius-topleft: 3px;
   -webkit-border-top-left-radius: 3px;
@@ -1475,7 +1487,7 @@ p {
   -webkit-border-top-right-radius: 3px;
   border-top-right-radius: 3px;
 }
-/* line 126, ../../src/scss/_status.scss */
+/* line 132, ../../src/scss/_status.scss */
 .status .item .vote-down {
   -moz-border-radius-bottomleft: 3px;
   -webkit-border-bottom-left-radius: 3px;
