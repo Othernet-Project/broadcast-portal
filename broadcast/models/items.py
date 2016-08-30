@@ -1,13 +1,30 @@
 import os
 import uuid
 import datetime
+from contextlib import contextmanager
 
 import pytz
+from squery_lite.squery import Cursor
 
 from ..util.helpers import to_timestamp
 from ..app.exts import container as exts
 from ..util.helpers import utcnow
 from . import Model
+
+
+class IsCandidate(object):
+    """
+    Custom SQL function that determines whether an item is a bin candidate
+    """
+    def __init__(self):
+        self.limit = exts.config['bin.capacity']
+        self.total = 0
+
+    def __call__(self, size, votes):
+        if votes < 1:
+            return 0
+        self.total += size
+        return self.total <= self.limit
 
 
 class LastUpdateMixin(object):
@@ -152,13 +169,22 @@ class ContentItem(Model, LastUpdateMixin):
             yield cls(row)
 
     @classmethod
+    @contextmanager
+    def candidate_query_cursor(cls):
+        conn = cls.db.connection.new()
+        conn.add_func(IsCandidate())
+        yield Cursor(conn)
+        conn.close()
+
+    @classmethod
     def candidate_stats(cls):
         q = cls.db.Select(
             'sum(size) as size, count(*) as count',
             sets=cls.table,
             where=['bin ISNULL', 'iscandidate(size, votes) = 1'],
             order=['-votes', '-created'])
-        return cls.db.query(q).result
+        with cls.candidate_query_cursor() as cursor:
+            return cursor.query(q).result
 
     @classmethod
     def binless_items(cls, limit=None, offset=None, kind=None, username=None):
@@ -189,8 +215,9 @@ class ContentItem(Model, LastUpdateMixin):
                         on='user_votes.content_id = content.id')
             q.group = 'content.id'
 
-        for row in cls.db.query(q, username=username).results:
-            yield cls(row)
+        with cls.candidate_query_cursor() as cursor:
+            for row in cursor.query(q, username=username).results:
+                yield cls(row)
 
     @classmethod
     def last_activity(cls):

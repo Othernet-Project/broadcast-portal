@@ -41,21 +41,6 @@ def ulower(s):
     return to_unicode(s).lower()
 
 
-class IsCandidate(object):
-    """
-    Custom function that determines whether an item is a bin candidate
-    """
-    def __init__(self, limit):
-        self.limit = limit
-        self.total = 0
-
-    def __call__(self, size, votes):
-        if votes < 1:
-            return 0
-        self.total += size
-        return self.total <= self.limit
-
-
 class DatabaseContainer(object):
     def __init__(self, dbdict={}):
         self.dbdict = dbdict
@@ -87,13 +72,12 @@ def database_plugin():
 def pre_init():
     logging.info('Connecting to databases')
     config = exts.config
-    bin_limit = config['bin.capacity']
     exts.db = DatabaseContainer()
     dbdir = config['database.path']
     for name in config['database.names']:
         dbpath = os.path.join(dbdir, name + '.sqlite')
         conn = Connection(dbpath,
-                          funcs=[ilike, ulower, IsCandidate(bin_limit)])
+                          funcs=[ilike, ulower])
         exts.db.append(name, Database(conn, debug=exts.debug))
 
 
