@@ -2,12 +2,12 @@
 
   $.templates = {}
 
-  $.template = (name, substs) ->
-    Mustache.render $.templates[name], substs
+  $.template = (name, ctx) ->
+    Mustache.render $.templates[name], ctx
 
-  $.fn.template = (name, substs) ->
+  $.fn.template = (name, ctx) ->
     el = $ @
-    el.html $.template name, subst
+    el.html $.template name, ctx
 
   ($ 'script[type="text/x-template"]').each () ->
     src = $ @
