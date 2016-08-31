@@ -1508,6 +1508,28 @@ p {
   text-transform: uppercase;
 }
 
+/* line 3, ../../src/scss/_navbar.scss */
+.main-nav {
+  position: relative;
+  padding: 1rem 2rem;
+  background: #1e8abb;
+  color: white;
+  text-align: right;
+}
+/* line 10, ../../src/scss/_navbar.scss */
+.main-nav .logo {
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
+  font-size: 150%;
+}
+/* line 17, ../../src/scss/_navbar.scss */
+.main-nav a {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: white;
+}
+
 /* line 2, ../../src/scss/_items.scss */
 .default .item-list {
   padding: 2rem;
