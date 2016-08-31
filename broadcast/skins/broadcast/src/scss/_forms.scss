@@ -125,3 +125,12 @@ a.button {
     }
   }
 }
+
+.form-errors {
+  .form-error {
+    background: $alert;
+    color: $foreground-inverse;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}

@@ -266,6 +266,14 @@ a.button:hover .hover-tip {
   display: inline-block;
 }
 
+/* line 130, ../../src/scss/_forms.scss */
+.form-errors .form-error {
+  background: #f33;
+  color: white;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 @-moz-keyframes spin {
   from {
     -moz-transform: rotate(0deg);
