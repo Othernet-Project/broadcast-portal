@@ -4,7 +4,8 @@
 @import "tricks";
 @import "media_query";
 
-input[type=text] {
+input[type=text],
+input[type=password] {
   display: inline-block;
   width: 100%;
   font-family: $font-family;
@@ -122,5 +123,14 @@ a.button {
     .hover-tip {
       display: inline-block;
     }
+  }
+}
+
+.form-errors {
+  .form-error {
+    background: $alert;
+    color: $foreground-inverse;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 }

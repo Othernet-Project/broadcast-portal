@@ -1,11 +1,15 @@
-<%inherit file="/_base.mako"/>
+<%inherit file="/_inner.mako"/>
 <%namespace name="error" file="_error.mako"/>
 
-<%block name="page_title">${err.status}</%block>
+<%block name="page_title">${message}</%block>
 
-<%block name="body_class">error</%block>
+<%block name="body_class">error error-${err.status_code}</%block>
 
-<section class="error-description">
-<h1 class="error-code error-${err.status_code}">${err.status}</h1>
+<h1 class="error-code">
+    <span class="icon icon-alert-${icon}"></span>
+    <span class="heading-text">${message}</span>
+</h1>
+
+<section id="error-description" class="error-description">
 ${error.body()}
 </section>

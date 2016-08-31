@@ -85,6 +85,16 @@ p {
   h1 {
     padding: 2rem 2rem 1rem;
   }
+
+  section {
+    padding: 0 2rem 2rem;
+
+    form {
+      // Since all inputs are rigged to expand to full width, we make sure
+      // forms don't go beyond 20rem in width under any circumstance
+      max-width: 20rem;
+    }
+  }
 }
 
 @include icon-classes;

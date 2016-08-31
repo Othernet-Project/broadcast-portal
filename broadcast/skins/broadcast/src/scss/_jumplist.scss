@@ -8,9 +8,10 @@
   left: 0;
   right: 0;
   padding: 0.4rem 1rem;
-  background: transparentize($background-dark, 0.3);
+  background: transparentize($background-dark, 0.1);
   color: $foreground-inverse;
   text-align: center;
+  z-index: 1000;
 
   @include narrower-than(1100px) {
     display: block;

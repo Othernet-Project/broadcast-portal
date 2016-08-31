@@ -113,7 +113,8 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
  * http://www.gnu.org/licenses/gpl.txt.
  */
 /* line 7, ../../src/scss/_forms.scss */
-input[type=text] {
+input[type=text],
+input[type=password] {
   display: inline-block;
   width: 100%;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -123,19 +124,21 @@ input[type=text] {
   background: white;
   color: #333;
 }
-/* line 17, ../../src/scss/_forms.scss */
-.field-error input[type=text] {
+/* line 18, ../../src/scss/_forms.scss */
+.field-error input[type=text], .field-error
+input[type=password] {
   background-color: #ffcccc;
 }
 @media only screen and (max-width: 360px) {
   /* line 7, ../../src/scss/_forms.scss */
-  input[type=text] {
+  input[type=text],
+  input[type=password] {
     width: 100%;
     padding: 0.7rem;
   }
 }
 
-/* line 27, ../../src/scss/_forms.scss */
+/* line 28, ../../src/scss/_forms.scss */
 .field-error-message {
   display: block;
   background: #f33;
@@ -148,7 +151,7 @@ input[type=text] {
   -webkit-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 37, ../../src/scss/_forms.scss */
+/* line 38, ../../src/scss/_forms.scss */
 .field-error-message::before {
   position: absolute;
   top: -1.2rem;
@@ -165,7 +168,7 @@ input[type=text] {
   border-bottom: 0.6rem solid #f33;
 }
 
-/* line 45, ../../src/scss/_forms.scss */
+/* line 46, ../../src/scss/_forms.scss */
 .field-help-message {
   display: block;
   font-size: 90%;
@@ -173,26 +176,26 @@ input[type=text] {
   line-height: 140%;
 }
 
-/* line 52, ../../src/scss/_forms.scss */
+/* line 53, ../../src/scss/_forms.scss */
 label,
 label {
   display: block;
   font-size: 90%;
   text-transform: uppercase;
 }
-/* line 58, ../../src/scss/_forms.scss */
+/* line 59, ../../src/scss/_forms.scss */
 label.required::after,
 label.required::after {
   content: '*';
   color: #f33;
 }
-/* line 63, ../../src/scss/_forms.scss */
+/* line 64, ../../src/scss/_forms.scss */
 label.field-label-inline,
 label.field-label-inline {
   display: inline-block;
 }
 
-/* line 68, ../../src/scss/_forms.scss */
+/* line 69, ../../src/scss/_forms.scss */
 button,
 a.button {
   display: inline-block;
@@ -213,43 +216,43 @@ a.button {
   cursor: pointer;
 }
 @media only screen and (max-width: 360px) {
-  /* line 68, ../../src/scss/_forms.scss */
+  /* line 69, ../../src/scss/_forms.scss */
   button,
   a.button {
     width: 100%;
     padding: 0.7rem;
   }
 }
-/* line 90, ../../src/scss/_forms.scss */
+/* line 91, ../../src/scss/_forms.scss */
 button:visited,
 a.button:visited {
   color: white;
 }
-/* line 94, ../../src/scss/_forms.scss */
+/* line 95, ../../src/scss/_forms.scss */
 button[disabled], button.disabled,
 a.button[disabled],
 a.button.disabled {
   background: #ccc;
   color: #888;
 }
-/* line 100, ../../src/scss/_forms.scss */
+/* line 101, ../../src/scss/_forms.scss */
 button.button-small,
 a.button.button-small {
   padding: 0.3rem 0.7rem;
   font-size: 90%;
   letter-spacing: 0.21rem;
 }
-/* line 106, ../../src/scss/_forms.scss */
+/* line 107, ../../src/scss/_forms.scss */
 button .invisible-label,
 a.button .invisible-label {
   display: none;
 }
-/* line 110, ../../src/scss/_forms.scss */
+/* line 111, ../../src/scss/_forms.scss */
 button .hover-tip,
 a.button .hover-tip {
   display: none;
 }
-/* line 114, ../../src/scss/_forms.scss */
+/* line 115, ../../src/scss/_forms.scss */
 button .supplementary-info,
 a.button .supplementary-info {
   dusplay: inline-block;
@@ -257,10 +260,18 @@ a.button .supplementary-info {
   vertical-align: middle;
   letter-spacing: 0;
 }
-/* line 122, ../../src/scss/_forms.scss */
+/* line 123, ../../src/scss/_forms.scss */
 button:hover .hover-tip,
 a.button:hover .hover-tip {
   display: inline-block;
+}
+
+/* line 130, ../../src/scss/_forms.scss */
+.form-errors .form-error {
+  background: #f33;
+  color: white;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 @-moz-keyframes spin {
@@ -435,6 +446,14 @@ p {
 /* line 85, ../../src/scss/_basics.scss */
 .default h1 {
   padding: 2rem 2rem 1rem;
+}
+/* line 89, ../../src/scss/_basics.scss */
+.default section {
+  padding: 0 2rem 2rem;
+}
+/* line 92, ../../src/scss/_basics.scss */
+.default section form {
+  max-width: 20rem;
 }
 
 /* line 232, ../../src/scss/_OIcons.scss */
@@ -1306,6 +1325,42 @@ p {
   animation: spin 2s linear infinite;
 }
 
+/* line 3, ../../src/scss/_errors.scss */
+.error {
+  background: #1e8abb;
+  color: white;
+}
+/* line 7, ../../src/scss/_errors.scss */
+.error.error-500 {
+  background: #f33;
+}
+/* line 11, ../../src/scss/_errors.scss */
+.error a {
+  color: white;
+}
+/* line 15, ../../src/scss/_errors.scss */
+.error .error-code {
+  padding: 2rem 2rem 1rem;
+}
+/* line 19, ../../src/scss/_errors.scss */
+.error .error-message {
+  font-size: 120%;
+}
+/* line 23, ../../src/scss/_errors.scss */
+.error .error-description {
+  padding: 0 2rem;
+}
+/* line 26, ../../src/scss/_errors.scss */
+.error .error-description textarea {
+  width: 100%;
+  height: 20rem;
+  background: black;
+  padding: 1rem;
+  color: white;
+  border: 0 solid transparent;
+  font-family: monospace;
+}
+
 @-moz-keyframes slide-in {
   from {
     -moz-transform: translateX(-100%);
@@ -1399,9 +1454,10 @@ p {
   left: 0;
   right: 0;
   padding: 0.4rem 1rem;
-  background: rgba(51, 51, 51, 0.7);
+  background: rgba(51, 51, 51, 0.9);
   color: white;
   text-align: center;
+  z-index: 1000;
 }
 @media only screen and (max-width: 1100px) {
   /* line 4, ../../src/scss/_jumplist.scss */
@@ -1414,16 +1470,16 @@ p {
   .jump-list {
     padding: 1rem;
   }
-  /* line 22, ../../src/scss/_jumplist.scss */
+  /* line 23, ../../src/scss/_jumplist.scss */
   .jump-list .text-label {
     display: none;
   }
-  /* line 26, ../../src/scss/_jumplist.scss */
+  /* line 27, ../../src/scss/_jumplist.scss */
   .jump-list .icon {
     font-size: 200%;
   }
 }
-/* line 31, ../../src/scss/_jumplist.scss */
+/* line 32, ../../src/scss/_jumplist.scss */
 .jump-list a {
   display: inline-block;
   margin: 0 0.5rem;

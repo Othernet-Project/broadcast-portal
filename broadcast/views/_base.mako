@@ -12,12 +12,9 @@
         <%block name="extra_head"/>
     </head>
     <body id="top" class="<%block name="body_class">default</%block>">
+        <%block name="top"/>
         ${self.body()}
-
-        <footer id="footer" class="footer">
         <%block name="footer"/>
-        </footer>
-
         <%block name="pre_script"/>
         ${client_templates.body()}
         <script src="${assets['js/main']}"></script>
