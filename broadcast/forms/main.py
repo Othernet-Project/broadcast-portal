@@ -4,6 +4,7 @@ import logging
 
 from bottle_utils import form
 from bottle_utils.i18n import dummy_gettext as _
+from mailchimp3 import MailChimp
 
 from ..app.exts import container as exts
 from ..models.auth import User, InvitationToken
@@ -21,6 +22,12 @@ class BetaSignupForm(form.Form):
         # Simulates sending emails
         time.sleep(random.randint(2, 5))
 
+    def subscribe(self, email):
+        client = MailChimp(exts.config['mailchimp.username'],
+                           exts.config['mailchimp.secret'])
+        data = {'email_address': email, 'status': 'subscribed'}
+        client.member.create(exts.config['mailchimp.beta_list_id'], data)
+
     def validate(self):
         email = self.processed_data['email']
         try:
@@ -36,4 +43,7 @@ class BetaSignupForm(form.Form):
             token.send()
         else:
             self.random_pause()
-            logging.debug('BETA: %s', email)
+            if exts.config['mailchimp.beta_list_id']:
+                self.subscribe(email)
+            else:
+                logging.debug('BETA: %s', email)
