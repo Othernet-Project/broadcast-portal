@@ -11,6 +11,7 @@
   background: transparentize($background-dark, 0.3);
   color: $foreground-inverse;
   text-align: center;
+  z-index: 1000;
 
   @include narrower-than(1100px) {
     display: block;

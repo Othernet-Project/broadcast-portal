@@ -1402,6 +1402,7 @@ p {
   background: rgba(51, 51, 51, 0.7);
   color: white;
   text-align: center;
+  z-index: 1000;
 }
 @media only screen and (max-width: 1100px) {
   /* line 4, ../../src/scss/_jumplist.scss */
@@ -1414,16 +1415,16 @@ p {
   .jump-list {
     padding: 1rem;
   }
-  /* line 22, ../../src/scss/_jumplist.scss */
+  /* line 23, ../../src/scss/_jumplist.scss */
   .jump-list .text-label {
     display: none;
   }
-  /* line 26, ../../src/scss/_jumplist.scss */
+  /* line 27, ../../src/scss/_jumplist.scss */
   .jump-list .icon {
     font-size: 200%;
   }
 }
-/* line 31, ../../src/scss/_jumplist.scss */
+/* line 32, ../../src/scss/_jumplist.scss */
 .jump-list a {
   display: inline-block;
   margin: 0 0.5rem;
