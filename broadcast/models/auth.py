@@ -159,14 +159,14 @@ class User(UserBase, Model):
         return User.get(username=username, email=email)
 
     @classmethod
-    def login(cls, username_or_email, password=None, verify=True, db=None):
+    def login(cls, username_or_email, password=None, verify=True):
         """Makes the user of the passed in username or email logged in, with
         optional security verification."""
         try:
-            user = cls.get(email=username_or_email, db=db)
-        except cls.DoesNotExist:
+            user = cls.get(email=username_or_email)
+        except cls.NotFound:
             # if it's not found by username either, raise freely
-            user = cls.get(username=username_or_email, db=db)
+            user = cls.get(username=username_or_email)
 
         if verify and not cls.is_valid_password(password, user.password):
             raise cls.InvalidCredentials()

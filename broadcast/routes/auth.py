@@ -63,6 +63,11 @@ class NextPathMixin(object):
             return _('your previous location')
         return super(NextPathMixin, self).get_error_url_label()
 
+    def get_context(self):
+        ctx = super(NextPathMixin, self).get_context()
+        ctx['next_path'] = self.request.params.get('next', '/')
+        return ctx
+
 
 class LoginOnSuccessMixin(object):
     """

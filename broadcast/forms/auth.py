@@ -89,7 +89,7 @@ class LoginForm(form.Form):
         password = self.processed_data['password']
         try:
             User.login(username, password)
-        except (User.DoesNotExist, User.InvalidCredentials):
+        except (User.NotFound, User.InvalidCredentials):
             raise form.ValidationError('invalid', {})
 
 
