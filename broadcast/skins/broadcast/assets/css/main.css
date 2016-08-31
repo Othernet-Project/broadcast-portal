@@ -1773,18 +1773,26 @@ p {
   }
 }
 /* line 143, ../../src/scss/_home.scss */
+.hero a {
+  color: white;
+}
+/* line 146, ../../src/scss/_home.scss */
+.hero a:visited {
+  color: white;
+}
+/* line 151, ../../src/scss/_home.scss */
 .hero button,
 .hero .button {
   border-color: white;
   background: white;
   color: #1e8abb;
 }
-/* line 149, ../../src/scss/_home.scss */
+/* line 157, ../../src/scss/_home.scss */
 .hero button:visited,
 .hero .button:visited {
   color: #1e8abb;
 }
-/* line 155, ../../src/scss/_home.scss */
+/* line 163, ../../src/scss/_home.scss */
 .hero .beta-signup label {
   display: none;
 }

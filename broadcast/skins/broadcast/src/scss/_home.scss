@@ -140,6 +140,14 @@ $one-col: 800px;
     }
   }
 
+  a {
+    color: $foreground-inverse;
+
+    &:visited {
+      color: $foreground-inverse;
+    }
+  }
+
   button,
   .button {
     border-color: $background;
