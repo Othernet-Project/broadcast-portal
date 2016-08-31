@@ -3,6 +3,6 @@
 
 <h1>${_('Sign up for closed beta')}</h1>
 
-<div class="beta-signup-form">
-    ${beta_signup.body()}
-</div>
+<section id="beta-signup" class="beta-signup">
+${beta_signup.body()}
+</section>

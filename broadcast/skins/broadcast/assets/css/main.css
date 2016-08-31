@@ -436,6 +436,14 @@ p {
 .default h1 {
   padding: 2rem 2rem 1rem;
 }
+/* line 89, ../../src/scss/_basics.scss */
+.default section {
+  padding: 0 2rem 2rem;
+}
+/* line 92, ../../src/scss/_basics.scss */
+.default section form {
+  max-width: 20rem;
+}
 
 /* line 232, ../../src/scss/_OIcons.scss */
 .icon {
@@ -1620,20 +1628,6 @@ p {
     width: 100%;
     float: none;
   }
-}
-
-/* line 1, ../../src/scss/_upload.scss */
-.upload {
-  padding: 0 2rem;
-}
-
-/* line 1, ../../src/scss/_beta.scss */
-.beta-signup-form {
-  padding: 0 2rem;
-}
-/* line 4, ../../src/scss/_beta.scss */
-.beta-signup-form form {
-  max-width: 20rem;
 }
 
 /**
