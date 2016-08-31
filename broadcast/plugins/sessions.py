@@ -254,14 +254,6 @@ def session_plugin():
     cookie_name = config['session.cookie_name']
     secret = os.getenv(config['session.secret_env_name'], 'not-secret')
 
-    # Set up a hook, so handlers that raise cannot escape session-saving
-    @exts.app.hook('after_request')
-    def save_session():
-        if hasattr(request, 'session'):
-            if request.session.modified:
-                request.session.save()
-            request.session.set_cookie(cookie_name, secret)
-
     def plugin(callback):
         @functools.wraps(callback)
         def wrapper(*args, **kwargs):
@@ -270,7 +262,11 @@ def session_plugin():
                 request.session = Session.fetch(session_id)
             except (SessionExpired, SessionInvalid):
                 request.session = Session.create()
-            return callback(*args, **kwargs)
+            resp = callback(*args, **kwargs)
+            if request.session.modified:
+                request.session.save()
+            request.session.set_cookie(cookie_name, secret)
+            return resp
         return wrapper
     plugin.name = 'session'
     return plugin
