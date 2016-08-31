@@ -1317,6 +1317,42 @@ p {
   animation: spin 2s linear infinite;
 }
 
+/* line 3, ../../src/scss/_errors.scss */
+.error {
+  background: #1e8abb;
+  color: white;
+}
+/* line 7, ../../src/scss/_errors.scss */
+.error.error-500 {
+  background: #f33;
+}
+/* line 11, ../../src/scss/_errors.scss */
+.error a {
+  color: white;
+}
+/* line 15, ../../src/scss/_errors.scss */
+.error .error-code {
+  padding: 2rem 2rem 1rem;
+}
+/* line 19, ../../src/scss/_errors.scss */
+.error .error-message {
+  font-size: 120%;
+}
+/* line 23, ../../src/scss/_errors.scss */
+.error .error-description {
+  padding: 0 2rem;
+}
+/* line 26, ../../src/scss/_errors.scss */
+.error .error-description textarea {
+  width: 100%;
+  height: 20rem;
+  background: black;
+  padding: 1rem;
+  color: white;
+  border: 0 solid transparent;
+  font-family: monospace;
+}
+
 @-moz-keyframes slide-in {
   from {
     -moz-transform: translateX(-100%);
