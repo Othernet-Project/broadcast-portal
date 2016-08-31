@@ -57,4 +57,34 @@ p {
   margin-bottom: 1.4rem;
 }
 
+.footer {
+  font-size: 90%;
+  border-top: 1px solid $separator;
+  padding: 3rem 2rem;
+  margin-top: 2rem;
+  clear: both;
+
+  nav {
+    a {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+.float-container {
+  &::after {
+    content: '';
+    display: block;
+    height: 0;
+    clear: both;
+  }
+}
+
+.default {
+  h1 {
+    padding: 2rem 2rem 1rem;
+  }
+}
+
 @include icon-classes;
