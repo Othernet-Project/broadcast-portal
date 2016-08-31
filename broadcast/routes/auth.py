@@ -148,7 +148,7 @@ class ResendConfirmation(CSRFMixin, ActionXHRPartialFormRoute):
         return self.app.get_url('main:home')
 
 
-class PasswordResetRequest(CSRFMixin, LoginOnSuccessMixin,
+class PasswordResetRequest(CSRFMixin, LoginOnSuccessMixin, NextPathMixin,
                            ActionXHRPartialFormRoute):
     path = '/accounts/password-reset'
     template_name = 'auth/password_reset_request.mako'
@@ -202,6 +202,7 @@ class ResetPassword(ConfirmationMixin, CSRFMixin, LoginOnSuccessMixin,
     form_factory = ResetPasswordForm
     token_class = PasswordResetToken
     success_message = _('Your password has been updated')
+    success_url = ('auth:login', {})
 
     def get(self, key):
         if not self.token:
