@@ -1,4 +1,4 @@
-<%inherit file="/_base.mako"/>
+<%inherit file="/_inner.mako"/>
 <%namespace name="status" file="_status.mako"/>
 
 <%block name="page_title">${_('Filecast queue overview')}</%block>
@@ -8,24 +8,6 @@
 
 <section id="stats" class="stats">
 ${status.body()}
-</section>
-
-<section id="upload" class="upload">
-<a href="${url('files:upload')}" data-roca-target="upload" data-roca-trap-submit="yes">
-    ${_('Upload a file')}
-</a>
-</section>
-
-<section id="review" class="review">
-<a href="${url('queue:review')}" data-roca-target="review">
-    ${_('See the review queue')}
-</a>
-</section>
-
-<section id="candidates" class="candidates">
-<a href="${url('queue:candidates')}" data-roca-target="candidates">
-    ${_('See the daily filecast candidates')}
-</a>
 </section>
 
 <nav id="jump-list" class="jump-list">
@@ -46,3 +28,21 @@ ${status.body()}
     <span class="text-label">${_('Candidates')}</span>
 </a>
 </nav>
+
+<section id="upload" class="upload">
+<a href="${url('files:upload')}" data-roca-target="upload" data-roca-trap-submit="yes">
+    ${_('Upload a file')}
+</a>
+</section>
+
+<section id="review" class="review">
+<a href="${url('queue:review')}" data-roca-target="review">
+    ${_('See the review queue')}
+</a>
+</section>
+
+<section id="candidates" class="candidates">
+<a href="${url('queue:candidates')}" data-roca-target="candidates">
+    ${_('See the daily filecast candidates')}
+</a>
+</section>
