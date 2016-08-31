@@ -2,7 +2,7 @@
 %if request.is_xhr:
 <h2>
     <span class="icon icon-ok-outline"></span>
-    ${_('Filecast candidates')}
+    <span class="heading-text">${_('Filecast candidates')}</span>
 </h2>
 %endif
 <% count = 0 %>

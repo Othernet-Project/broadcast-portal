@@ -2,7 +2,7 @@
 %if request.is_xhr:
 <h2>
     <span class="icon icon-edit-outline"></span>
-    ${_('Review list')}
+    <span class="header-text">${_('Review list')}</span>
 </h2>
 %endif
 <% count = 0 %>

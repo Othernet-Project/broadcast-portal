@@ -204,6 +204,9 @@ class ActionMixin(object):
         for name in ('title', 'message', 'url', 'url_label'):
             prop = 'get_{status}_{name}'.format(status=status, name=name)
             meth = getattr(self, prop)
+            if name == 'url':
+                # Avoids conflict with global url variable in the template
+                name = 'redirect_url'
             ctx[name] = meth()
         return ctx
 

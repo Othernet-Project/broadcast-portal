@@ -227,7 +227,7 @@ class NameCheck(XHRJsonRoute):
         return {'result': self.has_username(username)}
 
 
-class LogOut(ActionTemplateRoute):
+class Logout(ActionTemplateRoute):
     path = '/accounts/bye'
     success_message = _('You have been logged out')
     success_url = ('main:home', {})
@@ -257,4 +257,5 @@ def route():
         PasswordResetRequest,
         ResetPassword,
         NameCheck,
+        Logout,
     )

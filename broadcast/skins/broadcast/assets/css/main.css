@@ -1361,6 +1361,26 @@ p {
   font-family: monospace;
 }
 
+/* line 3, ../../src/scss/_feedback.scss */
+.feedback-success {
+  background: #59c10f;
+  color: white;
+}
+/* line 7, ../../src/scss/_feedback.scss */
+.feedback-success a {
+  color: white;
+}
+
+/* line 12, ../../src/scss/_feedback.scss */
+.feedback-error {
+  background: #f33;
+  color: white;
+}
+/* line 16, ../../src/scss/_feedback.scss */
+.feedback-error a {
+  color: white;
+}
+
 @-moz-keyframes slide-in {
   from {
     -moz-transform: translateX(-100%);
@@ -1486,6 +1506,28 @@ p {
   color: white;
   text-decoration: none;
   text-transform: uppercase;
+}
+
+/* line 3, ../../src/scss/_navbar.scss */
+.main-nav {
+  position: relative;
+  padding: 1rem 2rem;
+  background: #1e8abb;
+  color: white;
+  text-align: right;
+}
+/* line 10, ../../src/scss/_navbar.scss */
+.main-nav .logo {
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
+  font-size: 150%;
+}
+/* line 17, ../../src/scss/_navbar.scss */
+.main-nav a {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: white;
 }
 
 /* line 2, ../../src/scss/_items.scss */
