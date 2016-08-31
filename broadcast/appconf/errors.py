@@ -10,7 +10,7 @@ from ..app.exts import container as exts
 
 #: Maps icon name and error message to status codes
 ERROR_MESSAGES = {
-    400: ('question', _('No such page')),
+    404: ('question', _('No such page')),
     500: ('stop', _('Application error')),
     401: ('key', _('Log-in required')),
     403: ('key', _('Access denied')),
