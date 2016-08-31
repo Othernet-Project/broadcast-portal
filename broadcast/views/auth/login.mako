@@ -3,6 +3,6 @@
 
 <h1>${_('Log in')}</h1>
 
-<div id="login-form" class="login-form">
+<section id="login-form" class="login-form">
     ${login.body()}
-</div>
+</section>
