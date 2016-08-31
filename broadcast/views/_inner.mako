@@ -22,6 +22,10 @@
             <span class="icon icon-${user_icon}"></span>
             <span class="label">${request.user.username}</span>
         </span>
+        <a href="${url('auth:logout')}">
+            <span class="icon icon-exit"></span>
+            <span class="label">${_('Log out')}</span>
+        </a>
     %endif
     </nav>
 </%block>
