@@ -5,6 +5,6 @@ You're receiving this e-mail because you or someone else has requested a passwor
 It can be safely ignored if you did not request it.
 Click the link below to reset your password:
     %(link)s
-""") % {'link': host_url + url('auth:reset_password', key=key) + '?next=' + next_path} }
+""") % {'link': host_url + url('auth:reset_password', key=key)} }
 
 ${signature.body()}
