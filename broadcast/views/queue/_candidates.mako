@@ -10,6 +10,7 @@
     %for item in items:
         <% count += 1 %>
         <li class="item candidate-item" id="item-${item.id}">
+            <p class="order-number">#${count}</p>
             ${items_partial.content_item(item)}
         </li>
     %endfor
