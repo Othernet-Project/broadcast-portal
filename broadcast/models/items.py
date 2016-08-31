@@ -140,7 +140,6 @@ class ContentItem(Model, LastUpdateMixin):
                 'ipaddr': ipaddr,
             })
         else:
-            print(vote, vote.value, vote_value)
             if vote.value == vote_value:
                 return
             vote.value += vote_value
