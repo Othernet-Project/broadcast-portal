@@ -410,6 +410,33 @@ p {
   margin-bottom: 1.4rem;
 }
 
+/* line 60, ../../src/scss/_basics.scss */
+.footer {
+  font-size: 90%;
+  border-top: 1px solid #ddd;
+  padding: 3rem 2rem;
+  margin-top: 2rem;
+  clear: both;
+}
+/* line 68, ../../src/scss/_basics.scss */
+.footer nav a {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* line 76, ../../src/scss/_basics.scss */
+.float-container::after {
+  content: '';
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+/* line 85, ../../src/scss/_basics.scss */
+.default h1 {
+  padding: 2rem 2rem 1rem;
+}
+
 /* line 232, ../../src/scss/_OIcons.scss */
 .icon {
   font-family: "OIcons";
@@ -1405,6 +1432,96 @@ p {
   text-transform: uppercase;
 }
 
+/* line 2, ../../src/scss/_items.scss */
+.default .item-list {
+  padding: 2rem;
+}
+
+/* line 7, ../../src/scss/_items.scss */
+.item {
+  background: white;
+  border-top: 1px solid #ddd;
+  position: relative;
+  padding: 1rem 0 2rem 4rem;
+  width: 100%;
+  -moz-transition: background-color 2s;
+  -o-transition: background-color 2s;
+  -webkit-transition: background-color 2s;
+  transition: background-color 2s;
+}
+/* line 15, ../../src/scss/_items.scss */
+.item.highlighted {
+  background-color: yellow;
+}
+/* line 19, ../../src/scss/_items.scss */
+.item p {
+  margin: 0;
+}
+/* line 23, ../../src/scss/_items.scss */
+.item .item-name {
+  font-size: 120%;
+  margin-bottom: 0.5rem;
+}
+/* line 28, ../../src/scss/_items.scss */
+.item .item-attribution {
+  font-size: 80%;
+  color: #595959;
+}
+/* line 33, ../../src/scss/_items.scss */
+.item .vote-form {
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  width: 3rem;
+  color: white;
+  text-align: center;
+}
+/* line 42, ../../src/scss/_items.scss */
+.item .vote-count {
+  width: 100%;
+  display: block;
+  padding: 0.2rem 0;
+  font-weight: bold;
+  background: #5ab9e5;
+}
+/* line 50, ../../src/scss/_items.scss */
+.item .vote-icon {
+  border: 0 solid transparent;
+  background: #1e8abb;
+  color: #333;
+  letter-spacing: 0;
+  padding: 0.2rem 0;
+  text-transform: none;
+  width: 3rem;
+  color: white;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+/* line 61, ../../src/scss/_items.scss */
+.item .vote-icon[disabled] {
+  background: #ccc;
+  color: #888;
+}
+/* line 67, ../../src/scss/_items.scss */
+.item .vote-up {
+  -moz-border-radius-topleft: 3px;
+  -webkit-border-top-left-radius: 3px;
+  border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -webkit-border-top-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+/* line 72, ../../src/scss/_items.scss */
+.item .vote-down {
+  -moz-border-radius-bottomleft: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  -moz-border-radius-bottomright: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
 /**
  * _media_query.scss: media query support
  *
@@ -1438,21 +1555,28 @@ p {
   padding: 2rem 2rem 1rem;
 }
 /* line 28, ../../src/scss/_status.scss */
-.status .stats {
+.status .stats,
+.status .info {
+  width: 50%;
+  float: left;
   padding: 1rem 2rem;
 }
-/* line 31, ../../src/scss/_status.scss */
-.status .stats h2 {
-  text-align: right;
+@media only screen and (max-width: 688px) {
+  /* line 28, ../../src/scss/_status.scss */
+  .status .stats,
+  .status .info {
+    float: none;
+    width: auto;
+  }
 }
-/* line 36, ../../src/scss/_status.scss */
+/* line 40, ../../src/scss/_status.scss */
 .status .upload,
 .status .review,
 .status .candidates {
   float: left;
   padding: 0 2rem;
 }
-/* line 43, ../../src/scss/_status.scss */
+/* line 47, ../../src/scss/_status.scss */
 .status .upload {
   background: #eee;
   padding-top: 1rem;
@@ -1465,7 +1589,7 @@ p {
   border-bottom-right-radius: 5px;
 }
 @media only screen and (max-width: 1100px) {
-  /* line 43, ../../src/scss/_status.scss */
+  /* line 47, ../../src/scss/_status.scss */
   .status .upload {
     float: none;
     width: auto;
@@ -1476,110 +1600,25 @@ p {
     border-radius: 0;
   }
 }
-/* line 59, ../../src/scss/_status.scss */
+/* line 63, ../../src/scss/_status.scss */
 .status .review,
 .status .candidates {
   width: 40%;
-  min-height: 20rem;
 }
 @media only screen and (max-width: 1100px) {
-  /* line 59, ../../src/scss/_status.scss */
+  /* line 63, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 50%;
   }
 }
 @media only screen and (max-width: 768px) {
-  /* line 59, ../../src/scss/_status.scss */
+  /* line 63, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 100%;
     float: none;
   }
-}
-/* line 74, ../../src/scss/_status.scss */
-.status .item {
-  background: white;
-  border-top: 1px solid #ddd;
-  position: relative;
-  padding: 1rem 0 2rem 4rem;
-  width: 100%;
-  -moz-transition: background-color 2s;
-  -o-transition: background-color 2s;
-  -webkit-transition: background-color 2s;
-  transition: background-color 2s;
-}
-/* line 82, ../../src/scss/_status.scss */
-.status .item.highlighted {
-  background-color: yellow;
-}
-/* line 86, ../../src/scss/_status.scss */
-.status .item p {
-  margin: 0;
-}
-/* line 90, ../../src/scss/_status.scss */
-.status .item .item-name {
-  font-size: 120%;
-  margin-bottom: 0.5rem;
-}
-/* line 95, ../../src/scss/_status.scss */
-.status .item .item-attribution {
-  font-size: 80%;
-  color: #595959;
-}
-/* line 100, ../../src/scss/_status.scss */
-.status .item .vote-form {
-  position: absolute;
-  top: 1rem;
-  left: 0;
-  width: 3rem;
-  color: white;
-  text-align: center;
-}
-/* line 109, ../../src/scss/_status.scss */
-.status .item .vote-count {
-  width: 100%;
-  display: block;
-  padding: 0.2rem 0;
-  font-weight: bold;
-  background: #5ab9e5;
-}
-/* line 117, ../../src/scss/_status.scss */
-.status .item .vote-icon {
-  border: 0 solid transparent;
-  background: #1e8abb;
-  color: #333;
-  letter-spacing: 0;
-  padding: 0.2rem 0;
-  text-transform: none;
-  width: 3rem;
-  color: white;
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-  border-radius: 0;
-}
-/* line 128, ../../src/scss/_status.scss */
-.status .item .vote-icon[disabled] {
-  background: #ccc;
-  color: #888;
-}
-/* line 134, ../../src/scss/_status.scss */
-.status .item .vote-up {
-  -moz-border-radius-topleft: 3px;
-  -webkit-border-top-left-radius: 3px;
-  border-top-left-radius: 3px;
-  -moz-border-radius-topright: 3px;
-  -webkit-border-top-right-radius: 3px;
-  border-top-right-radius: 3px;
-}
-/* line 139, ../../src/scss/_status.scss */
-.status .item .vote-down {
-  -moz-border-radius-bottomleft: 3px;
-  -webkit-border-bottom-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  -moz-border-radius-bottomright: 3px;
-  -webkit-border-bottom-right-radius: 3px;
-  border-bottom-right-radius: 3px;
 }
 
 /**

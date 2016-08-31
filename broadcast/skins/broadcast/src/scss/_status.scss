@@ -25,11 +25,15 @@
     padding: 2rem 2rem 1rem;
   }
 
-  .stats {
+  .stats,
+  .info {
+    width: 50%;
+    float: left;
     padding: 1rem 2rem;
 
-    h2 {
-      text-align: right;
+    @include narrower-than(688px) {
+      float: none;
+      width: auto;
     }
   }
 
@@ -59,7 +63,6 @@
   .review,
   .candidates {
     width: 40%;
-    min-height: 20rem;
 
     @include narrower-than(1100px) {
       width: 50%;
@@ -68,77 +71,6 @@
     @include narrower-than(768px) {
       width: 100%;
       float: none;
-    }
-  }
-
-  .item {
-    background: $background;
-    border-top: 1px solid $separator;
-    position: relative;
-    padding: 1rem 0 2rem 4rem;
-    width: 100%;
-    @include transition(background-color 2s);
-
-    &.highlighted {
-      background-color: yellow;
-    }
-
-    p {
-      margin: 0;
-    }
-
-    .item-name {
-      font-size: 120%;
-      margin-bottom: 0.5rem;
-    }
-
-    .item-attribution {
-      font-size: 80%;
-      color: $aux-info;
-    }
-
-    .vote-form {
-      position: absolute;
-      top: 1rem;
-      left: 0;
-      width: 3rem;
-      color: $foreground-inverse;
-      text-align: center;
-    }
-
-    .vote-count {
-      width: 100%;
-      display: block;
-      padding: 0.2rem 0;
-      font-weight: bold;
-      background: lighten($background-inverse, 20);
-    }
-
-    .vote-icon {
-      border: 0 solid transparent;
-      background: $background-inverse;
-      color: $foreground;
-      letter-spacing: 0;
-      padding: 0.2rem 0;
-      text-transform: none;
-      width: 3rem;
-      color: $foreground-inverse;
-      @include border-radius(0);
-
-      &[disabled] {
-        background: $disabled;
-        color: $disabled-text;
-      }
-    }
-
-    .vote-up {
-      @include border-top-left-radius(3px);
-      @include border-top-right-radius(3px);
-    }
-
-    .vote-down {
-      @include border-bottom-left-radius(3px);
-      @include border-bottom-right-radius(3px);
     }
   }
 }

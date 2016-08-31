@@ -6,9 +6,23 @@
 
 <h1>${_('Filecast queue overview')}</h1>
 
-<section id="stats" class="stats">
-${status.body()}
-</section>
+<div class="float-container">
+    <section id="stats" class="stats">
+    ${status.body()}
+    </section>
+
+    <section id="info" class="info">
+    <h2>
+        <span class="icon icon-info"></span>
+        ${_('Filecast queues')}
+    </h2>
+    <p>
+        ${_('The candidates are chosen by moderator vote, and the top-voted files '
+        'that fit the daily bandwidth quota are selected for the daily filecast '
+        'queue every midnight UTC.')}
+    </p>
+    </section>
+</div>
 
 <nav id="jump-list" class="jump-list">
 <a href="#top">
@@ -29,20 +43,22 @@ ${status.body()}
 </a>
 </nav>
 
-<section id="upload" class="upload">
-<a href="${url('files:upload')}" data-roca-target="upload" data-roca-trap-submit="yes">
-    ${_('Upload a file')}
-</a>
-</section>
+<div class="float-container">
+    <section id="upload" class="upload">
+    <a href="${url('files:upload')}" data-roca-target="upload" data-roca-trap-submit="yes">
+        ${_('Upload a file')}
+    </a>
+    </section>
 
-<section id="review" class="review">
-<a href="${url('queue:review')}" data-roca-target="review">
-    ${_('See the review queue')}
-</a>
-</section>
+    <section id="review" class="review">
+    <a href="${url('queue:review')}" data-roca-target="review">
+        ${_('See the review queue')}
+    </a>
+    </section>
 
-<section id="candidates" class="candidates">
-<a href="${url('queue:candidates')}" data-roca-target="candidates">
-    ${_('See the daily filecast candidates')}
-</a>
-</section>
+    <section id="candidates" class="candidates">
+    <a href="${url('queue:candidates')}" data-roca-target="candidates">
+        ${_('See the daily filecast candidates')}
+    </a>
+    </section>
+</div>
