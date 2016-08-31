@@ -14,7 +14,9 @@
     <body id="top" class="<%block name="body_class">default</%block>">
         ${self.body()}
 
-        <footer id="footer" class="footer"></footer>
+        <footer id="footer" class="footer">
+        <%block name="footer"/>
+        </footer>
 
         <%block name="pre_script"/>
         ${client_templates.body()}
