@@ -37,6 +37,8 @@
     width: 3rem;
     color: $foreground-inverse;
     text-align: center;
+    @include border-radius(3px);
+    overflow: hidden;
   }
 
   .vote-count {
@@ -62,16 +64,6 @@
       background: $disabled;
       color: $disabled-text;
     }
-  }
-
-  .vote-up {
-    @include border-top-left-radius(3px);
-    @include border-top-right-radius(3px);
-  }
-
-  .vote-down {
-    @include border-bottom-left-radius(3px);
-    @include border-bottom-right-radius(3px);
   }
 }
 

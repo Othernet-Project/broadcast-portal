@@ -1573,8 +1573,12 @@ p {
   width: 3rem;
   color: white;
   text-align: center;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  overflow: hidden;
 }
-/* line 42, ../../src/scss/_items.scss */
+/* line 44, ../../src/scss/_items.scss */
 .item .vote-count {
   width: 100%;
   display: block;
@@ -1582,7 +1586,7 @@ p {
   font-weight: bold;
   background: #5ab9e5;
 }
-/* line 50, ../../src/scss/_items.scss */
+/* line 52, ../../src/scss/_items.scss */
 .item .vote-icon {
   border: 0 solid transparent;
   background: #1e8abb;
@@ -1596,39 +1600,21 @@ p {
   -webkit-border-radius: 0;
   border-radius: 0;
 }
-/* line 61, ../../src/scss/_items.scss */
+/* line 63, ../../src/scss/_items.scss */
 .item .vote-icon[disabled] {
   background: #ccc;
   color: #888;
 }
-/* line 67, ../../src/scss/_items.scss */
-.item .vote-up {
-  -moz-border-radius-topleft: 3px;
-  -webkit-border-top-left-radius: 3px;
-  border-top-left-radius: 3px;
-  -moz-border-radius-topright: 3px;
-  -webkit-border-top-right-radius: 3px;
-  border-top-right-radius: 3px;
-}
-/* line 72, ../../src/scss/_items.scss */
-.item .vote-down {
-  -moz-border-radius-bottomleft: 3px;
-  -webkit-border-bottom-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  -moz-border-radius-bottomright: 3px;
-  -webkit-border-bottom-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-}
 
-/* line 79, ../../src/scss/_items.scss */
+/* line 71, ../../src/scss/_items.scss */
 .candidate-item .vote-icon {
   background-color: #59c10f;
 }
-/* line 83, ../../src/scss/_items.scss */
+/* line 75, ../../src/scss/_items.scss */
 .candidate-item .vote-count {
   background: #8df145;
 }
-/* line 87, ../../src/scss/_items.scss */
+/* line 79, ../../src/scss/_items.scss */
 .candidate-item .order-number {
   position: absolute;
   top: 0;
@@ -1636,20 +1622,20 @@ p {
   color: #595959;
 }
 
-/* line 96, ../../src/scss/_items.scss */
+/* line 88, ../../src/scss/_items.scss */
 .review-item-warning .vote-icon {
   background-color: #f93;
 }
-/* line 100, ../../src/scss/_items.scss */
+/* line 92, ../../src/scss/_items.scss */
 .review-item-warning .vote-count {
   background: #ffcc99;
 }
 
-/* line 106, ../../src/scss/_items.scss */
+/* line 98, ../../src/scss/_items.scss */
 .review-item-alert .vote-icon {
   background-color: #f33;
 }
-/* line 110, ../../src/scss/_items.scss */
+/* line 102, ../../src/scss/_items.scss */
 .review-item-alert .vote-count {
   background: #ff9999;
 }
