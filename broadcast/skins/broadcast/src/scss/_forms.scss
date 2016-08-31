@@ -4,7 +4,8 @@
 @import "tricks";
 @import "media_query";
 
-input[type=text] {
+input[type=text],
+input[type=password] {
   display: inline-block;
   width: 100%;
   font-family: $font-family;

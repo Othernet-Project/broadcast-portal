@@ -113,7 +113,8 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
  * http://www.gnu.org/licenses/gpl.txt.
  */
 /* line 7, ../../src/scss/_forms.scss */
-input[type=text] {
+input[type=text],
+input[type=password] {
   display: inline-block;
   width: 100%;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -123,19 +124,21 @@ input[type=text] {
   background: white;
   color: #333;
 }
-/* line 17, ../../src/scss/_forms.scss */
-.field-error input[type=text] {
+/* line 18, ../../src/scss/_forms.scss */
+.field-error input[type=text], .field-error
+input[type=password] {
   background-color: #ffcccc;
 }
 @media only screen and (max-width: 360px) {
   /* line 7, ../../src/scss/_forms.scss */
-  input[type=text] {
+  input[type=text],
+  input[type=password] {
     width: 100%;
     padding: 0.7rem;
   }
 }
 
-/* line 27, ../../src/scss/_forms.scss */
+/* line 28, ../../src/scss/_forms.scss */
 .field-error-message {
   display: block;
   background: #f33;
@@ -148,7 +151,7 @@ input[type=text] {
   -webkit-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 37, ../../src/scss/_forms.scss */
+/* line 38, ../../src/scss/_forms.scss */
 .field-error-message::before {
   position: absolute;
   top: -1.2rem;
@@ -165,7 +168,7 @@ input[type=text] {
   border-bottom: 0.6rem solid #f33;
 }
 
-/* line 45, ../../src/scss/_forms.scss */
+/* line 46, ../../src/scss/_forms.scss */
 .field-help-message {
   display: block;
   font-size: 90%;
@@ -173,26 +176,26 @@ input[type=text] {
   line-height: 140%;
 }
 
-/* line 52, ../../src/scss/_forms.scss */
+/* line 53, ../../src/scss/_forms.scss */
 label,
 label {
   display: block;
   font-size: 90%;
   text-transform: uppercase;
 }
-/* line 58, ../../src/scss/_forms.scss */
+/* line 59, ../../src/scss/_forms.scss */
 label.required::after,
 label.required::after {
   content: '*';
   color: #f33;
 }
-/* line 63, ../../src/scss/_forms.scss */
+/* line 64, ../../src/scss/_forms.scss */
 label.field-label-inline,
 label.field-label-inline {
   display: inline-block;
 }
 
-/* line 68, ../../src/scss/_forms.scss */
+/* line 69, ../../src/scss/_forms.scss */
 button,
 a.button {
   display: inline-block;
@@ -213,43 +216,43 @@ a.button {
   cursor: pointer;
 }
 @media only screen and (max-width: 360px) {
-  /* line 68, ../../src/scss/_forms.scss */
+  /* line 69, ../../src/scss/_forms.scss */
   button,
   a.button {
     width: 100%;
     padding: 0.7rem;
   }
 }
-/* line 90, ../../src/scss/_forms.scss */
+/* line 91, ../../src/scss/_forms.scss */
 button:visited,
 a.button:visited {
   color: white;
 }
-/* line 94, ../../src/scss/_forms.scss */
+/* line 95, ../../src/scss/_forms.scss */
 button[disabled], button.disabled,
 a.button[disabled],
 a.button.disabled {
   background: #ccc;
   color: #888;
 }
-/* line 100, ../../src/scss/_forms.scss */
+/* line 101, ../../src/scss/_forms.scss */
 button.button-small,
 a.button.button-small {
   padding: 0.3rem 0.7rem;
   font-size: 90%;
   letter-spacing: 0.21rem;
 }
-/* line 106, ../../src/scss/_forms.scss */
+/* line 107, ../../src/scss/_forms.scss */
 button .invisible-label,
 a.button .invisible-label {
   display: none;
 }
-/* line 110, ../../src/scss/_forms.scss */
+/* line 111, ../../src/scss/_forms.scss */
 button .hover-tip,
 a.button .hover-tip {
   display: none;
 }
-/* line 114, ../../src/scss/_forms.scss */
+/* line 115, ../../src/scss/_forms.scss */
 button .supplementary-info,
 a.button .supplementary-info {
   dusplay: inline-block;
@@ -257,7 +260,7 @@ a.button .supplementary-info {
   vertical-align: middle;
   letter-spacing: 0;
 }
-/* line 122, ../../src/scss/_forms.scss */
+/* line 123, ../../src/scss/_forms.scss */
 button:hover .hover-tip,
 a.button:hover .hover-tip {
   display: inline-block;
