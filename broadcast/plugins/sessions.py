@@ -18,6 +18,7 @@ import functools
 
 from bottle import request, response
 from bottle_utils.common import basestring
+from streamline import after
 
 from ..app.exts import container as exts
 from ..util.helpers import utcnow
@@ -254,6 +255,12 @@ def session_plugin():
     cookie_name = config['session.cookie_name']
     secret = os.getenv(config['session.secret_env_name'], 'not-secret')
 
+    @after
+    def save_session(*args):
+        request.session.set_cookie(cookie_name, secret)
+        if request.session.modified:
+            request.session.save()
+
     def plugin(callback):
         @functools.wraps(callback)
         def wrapper(*args, **kwargs):
@@ -262,11 +269,7 @@ def session_plugin():
                 request.session = Session.fetch(session_id)
             except (SessionExpired, SessionInvalid):
                 request.session = Session.create()
-            resp = callback(*args, **kwargs)
-            if request.session.modified:
-                request.session.save()
-            request.session.set_cookie(cookie_name, secret)
-            return resp
+            return callback(*args, **kwargs)
         return wrapper
     plugin.name = 'session'
     return plugin
