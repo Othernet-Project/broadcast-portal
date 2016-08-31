@@ -8,8 +8,15 @@
 <% count = 0 %>
 <ul class="item-list review-list">
     %for item in items:
-        <% count += 1 %>
-        <li class="item review-item" id="item-${item.id}">
+        <% 
+        count += 1 
+        itemcls = ''
+        if item.votes < -2:
+            itemcls = ' review-item-warning'
+        if item.votes < -4:
+            itemcls = ' review-item-alert'
+        %>
+        <li class="item review-item${itemcls}" id="item-${item.id}">
             ${items_partial.content_item(item)}
         </li>
     %endfor

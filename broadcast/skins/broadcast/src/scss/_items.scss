@@ -74,3 +74,40 @@
     @include border-bottom-right-radius(3px);
   }
 }
+
+.candidate-item {
+  .vote-icon {
+    background-color: $friendly;
+  }
+
+  .vote-count {
+    background: lighten($friendly, 20);
+  }
+
+  .order-number {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: $aux-info;
+  }
+}
+
+.review-item-warning {
+  .vote-icon {
+    background-color: $warning;
+  }
+
+  .vote-count {
+    background: lighten($warning, 20);
+  }
+}
+
+.review-item-alert {
+  .vote-icon {
+    background-color: $alert;
+  }
+
+  .vote-count {
+    background: lighten($alert, 20);
+  }
+}

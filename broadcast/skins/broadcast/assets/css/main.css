@@ -1620,6 +1620,40 @@ p {
   border-bottom-right-radius: 3px;
 }
 
+/* line 79, ../../src/scss/_items.scss */
+.candidate-item .vote-icon {
+  background-color: #59c10f;
+}
+/* line 83, ../../src/scss/_items.scss */
+.candidate-item .vote-count {
+  background: #8df145;
+}
+/* line 87, ../../src/scss/_items.scss */
+.candidate-item .order-number {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #595959;
+}
+
+/* line 96, ../../src/scss/_items.scss */
+.review-item-warning .vote-icon {
+  background-color: #f93;
+}
+/* line 100, ../../src/scss/_items.scss */
+.review-item-warning .vote-count {
+  background: #ffcc99;
+}
+
+/* line 106, ../../src/scss/_items.scss */
+.review-item-alert .vote-icon {
+  background-color: #f33;
+}
+/* line 110, ../../src/scss/_items.scss */
+.review-item-alert .vote-count {
+  background: #ff9999;
+}
+
 /**
  * _media_query.scss: media query support
  *
