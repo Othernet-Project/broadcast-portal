@@ -15,7 +15,9 @@ create table tokens
 (
     key text primary key unique,    -- token ID
     email text,                     -- target email
-    expires timestamp               -- expiry timestamp
+    expires timestamp,              -- expiry timestamp
+    action text,                    -- purpose of the token
+    data text                       -- arbitary optional data
 );
 
 create table sessions

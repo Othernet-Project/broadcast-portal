@@ -189,6 +189,8 @@ class BaseToken(Model):
         'key',
         'email',
         'expires',
+        'action',
+        'data',
     )
     pk = 'key'
 
@@ -221,13 +223,20 @@ class BaseToken(Model):
         cursor.query(q, now=utcnow())
 
     @classmethod
-    def new(cls, email, expiration=None, cursor=None):
+    def get(cls, *args, **kwargs):
+        kwargs['action'] = cls.ACTION
+        return super(BaseToken, cls).get(*args, **kwargs)
+
+    @classmethod
+    def new(cls, email, expiration=None, data=None, cursor=None):
         if not expiration:
             expiration = cls.EXPIRY
         expires = utcnow() + datetime.timedelta(days=expiration)
         token = cls({
             'email': email,
             'expires': expires,
+            'action': cls.ACTION,
+            'data': data,
         })
         token.save(pk=cls.generate_key(), cursor=cursor)
         return token
@@ -245,6 +254,7 @@ class BaseToken(Model):
 
 class EmailVerificationToken(BaseToken):
     EXPIRY = 7
+    ACTION = 'confirmation'
     email_subject = _("Confirm your email")
     email_template = 'email/confirm.mako'
 
@@ -257,6 +267,7 @@ class EmailVerificationToken(BaseToken):
 
 class PasswordResetToken(BaseToken):
     EXPIRY = 2
+    ACTION = 'password-reset'
     email_subject = _("Password reset request")
     email_template = 'email/confirm.mako'
 
@@ -269,5 +280,6 @@ class PasswordResetToken(BaseToken):
 
 class InvitationToken(BaseToken):
     EXPIRY = 20
+    ACTION = 'invitation'
     email_subject = _('You are invited to join the Outernet Filecast Center')
     email_template = 'email/invite.mako'
