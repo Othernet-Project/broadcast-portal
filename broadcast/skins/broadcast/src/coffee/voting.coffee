@@ -1,7 +1,5 @@
 ((window, $) ->
 
-  win = $ window
-  htmlBody = $ 'html, body'
   review = $ '#review'
   candidates = $ '#candidates'
   listCount = review.length + candidates.length
@@ -9,13 +7,14 @@
   getReloadCallback = (itemId) ->
     $.afterNCalls listCount, () ->
       item = $ "##{itemId}"
-      htmlBody.animate {scrollTop: item.offset().top}, 1000
-      item.addClass 'highlighted'
-      setTimeout () ->
-        item.removeClass 'highlighted'
-      , 4000
+      item.scrollTo () ->
+        item.addClass 'highlighted'
+        setTimeout () ->
+          item.removeClass 'highlighted'
+          return
+        , 4000
+        return
       return
-
 
   ($ 'body').on 'click', '.vote-icon', (e) ->
     e.preventDefault()
