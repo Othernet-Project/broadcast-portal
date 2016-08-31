@@ -5,7 +5,6 @@
 
     ${forms.csrf_token()}
 
-    ${h.HIDDEN('next', next_path) | n,unicode}
     ${h.HIDDEN('key', key) | n,unicode}
 
     ${forms.field(form.new_password1)}

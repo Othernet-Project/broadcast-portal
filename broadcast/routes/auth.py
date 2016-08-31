@@ -195,13 +195,14 @@ class AcceptInvitation(ConfirmationMixin, CSRFMixin, RoleMixin,
 
 
 class ResetPassword(ConfirmationMixin, CSRFMixin, LoginOnSuccessMixin,
-                    NextPathMixin, ActionXHRPartialFormRoute):
+                    ActionXHRPartialFormRoute):
     path = '/accounts/reset-password/<key:re:[0-9a-f]{32}>'
     template_name = 'auth/reset_password.mako'
     partial_template_name = 'auth/_reset_password.mako'
     form_factory = ResetPasswordForm
     token_class = PasswordResetToken
     success_message = _('Your password has been updated')
+    success_url = ('auth:login', {})
 
     def get(self, key):
         if not self.token:
