@@ -1361,6 +1361,26 @@ p {
   font-family: monospace;
 }
 
+/* line 3, ../../src/scss/_feedback.scss */
+.feedback-success {
+  background: #59c10f;
+  color: white;
+}
+/* line 7, ../../src/scss/_feedback.scss */
+.feedback-success a {
+  color: white;
+}
+
+/* line 12, ../../src/scss/_feedback.scss */
+.feedback-error {
+  background: #f33;
+  color: white;
+}
+/* line 16, ../../src/scss/_feedback.scss */
+.feedback-error a {
+  color: white;
+}
+
 @-moz-keyframes slide-in {
   from {
     -moz-transform: translateX(-100%);
