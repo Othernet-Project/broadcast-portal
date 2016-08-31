@@ -17,17 +17,18 @@
       return
 
 
-  ($ 'body').on 'submit', '.vote-form', (e) ->
+  ($ 'body').on 'click', '.vote-icon', (e) ->
     e.preventDefault()
     el = $ @
+    form = el.parents '.vote-form'
     item = el.parents '.item'
     itemId = item.attr 'id'
-    action = el.attr 'action'
-    data = el.serialize()
+    action = form.attr 'action'
+    button_value = el.val()
 
     reloadCallback = getReloadCallback itemId
 
-    res = $.post action, data
+    res = $.post action, upvote: button_value
     res.done () ->
       $.popup $.template 'vote-success'
       review.reload(reloadCallback)

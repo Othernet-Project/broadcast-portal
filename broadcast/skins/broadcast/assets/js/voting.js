@@ -19,16 +19,19 @@
       }, 4000);
     });
   };
-  return ($('body')).on('submit', '.vote-form', function(e) {
-    var action, data, el, item, itemId, reloadCallback, res;
+  return ($('body')).on('click', '.vote-icon', function(e) {
+    var action, button_value, el, form, item, itemId, reloadCallback, res;
     e.preventDefault();
     el = $(this);
+    form = el.parents('.vote-form');
     item = el.parents('.item');
     itemId = item.attr('id');
-    action = el.attr('action');
-    data = el.serialize();
+    action = form.attr('action');
+    button_value = el.val();
     reloadCallback = getReloadCallback(itemId);
-    res = $.post(action, data);
+    res = $.post(action, {
+      upvote: button_value
+    });
     res.done(function() {
       $.popup($.template('vote-success'));
       review.reload(reloadCallback);
