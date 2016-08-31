@@ -1621,6 +1621,11 @@ p {
   }
 }
 
+/* line 1, ../../src/scss/_upload.scss */
+.upload {
+  padding: 0 2rem;
+}
+
 /**
  * _media_query.scss: media query support
  *

@@ -1,4 +1,4 @@
-<%inherit file="/_base.mako"/>
+<%inherit file="/_inner.mako"/>
 <%namespace name="upload" file="_upload.mako"/>
 
 <h1>${_('Upload a file')}</h1>
