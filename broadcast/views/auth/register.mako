@@ -3,8 +3,7 @@
 
 <h1>${_('Register')}</h1>
 
+<section id="register-form" class="register-form">
 <p>${_('Please fill out the registration form below.')}</p>
-
-<div id="register-form" class="register-form">
-    ${register.body()}
-</div>
+${register.body()}
+</section>
