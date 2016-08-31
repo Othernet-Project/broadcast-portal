@@ -166,7 +166,7 @@
 
 <%def name="form_errors(errors)">
     <%
-    if not errors:
+    if not errors or not errors[0]:
         return ''
     %>
     <ul class="form-errors">
