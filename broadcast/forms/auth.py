@@ -25,10 +25,6 @@ from ..models.auth import (
 from ..util.validators import EmailValidator
 
 
-CONFIRMATION_EXPIRY = 14
-RESET_EXPIRY = 5
-
-
 class UniqueUsernameValidator(form.Validator):
     messages = {
         'user_taken': _('This username is already in use')
@@ -59,7 +55,6 @@ class UniqueEmailValidator(form.Validator):
 
 class EmailTokenMixin(object):
     TokenClass = None
-    token_expiry = 14
 
     def send_token(self):
         next_path = request.params.get('next_path', '/')
@@ -70,7 +65,7 @@ class EmailTokenMixin(object):
             # There is no such account, so we're faking it
             time.sleep(random.randint(2, 5))
         else:
-            token = self.TokenClass.new(email, self.token_expiry)
+            token = self.TokenClass.new(email)
             token.send(next_path)
 
 
@@ -110,7 +105,6 @@ class TruthValidator(form.Validator):
 
 class RegisterForm(EmailTokenMixin, form.Form):
     TokenClass = EmailVerificationToken
-    token_expiry = CONFIRMATION_EXPIRY
 
     min_password_length = 4
     messages = {
@@ -183,7 +177,6 @@ class RegisterForm(EmailTokenMixin, form.Form):
 
 class EmailVerificationForm(EmailTokenMixin, form.Form):
     TokenClass = EmailVerificationToken
-    token_expiry = CONFIRMATION_EXPIRY
 
     email = form.StringField(
         # Translators, used as label in create user form
@@ -197,7 +190,6 @@ class EmailVerificationForm(EmailTokenMixin, form.Form):
 
 class PasswordResetRequestForm(EmailTokenMixin, form.Form):
     TokenClass = PasswordResetToken
-    token_expiry = RESET_EXPIRY
 
     # Translators, used as label in create user form
     email = form.StringField(
