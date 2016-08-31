@@ -192,6 +192,8 @@ class BaseToken(Model):
     )
     pk = 'key'
 
+    EXPIRY = 14
+
     class KeyExpired(Model.Error):
         pass
 
@@ -219,7 +221,9 @@ class BaseToken(Model):
         cursor.query(q, now=utcnow())
 
     @classmethod
-    def new(cls, email, expiration, cursor=None):
+    def new(cls, email, expiration=None, cursor=None):
+        if not expiration:
+            expiration = cls.EXPIRY
         expires = utcnow() + datetime.timedelta(days=expiration)
         token = cls({
             'email': email,
@@ -240,6 +244,7 @@ class BaseToken(Model):
 
 
 class EmailVerificationToken(BaseToken):
+    EXPIRY = 7
     email_subject = _("Confirm your email")
     email_template = 'email/confirm.mako'
 
@@ -251,6 +256,7 @@ class EmailVerificationToken(BaseToken):
 
 
 class PasswordResetToken(BaseToken):
+    EXPIRY = 2
     email_subject = _("Password reset request")
     email_template = 'email/confirm.mako'
 
@@ -262,5 +268,6 @@ class PasswordResetToken(BaseToken):
 
 
 class InvitationToken(BaseToken):
+    EXPIRY = 20
     email_subject = _('You are invited to join the Outernet Filecast Center')
     email_template = 'email/invite.mako'

@@ -10,9 +10,6 @@ from ..models.auth import User, InvitationToken
 from ..util.validators import EmailValidator
 
 
-BETA_SIGNUP_EXPIRY = 20
-
-
 class BetaSignupForm(form.Form):
     email = form.StringField(
         # Translators, used as label in create user form
@@ -35,7 +32,7 @@ class BetaSignupForm(form.Form):
             self.random_pause()
             return
         if email in exts.beta_whitelist:
-            token = InvitationToken.new(email, BETA_SIGNUP_EXPIRY)
+            token = InvitationToken.new(email)
             token.send()
         else:
             self.random_pause()
