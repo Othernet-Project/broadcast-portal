@@ -14,7 +14,7 @@
     <section id="info" class="info">
     <h2>
         <span class="icon icon-info"></span>
-        ${_('Filecast queues')}
+        <span class="heading-text">${_('Filecast queues')}</span>
     </h2>
     <p>
         ${_('The candidates are chosen by moderator vote, and the top-voted files '
