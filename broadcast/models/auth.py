@@ -258,7 +258,7 @@ class EmailVerificationToken(BaseToken):
 class PasswordResetToken(BaseToken):
     EXPIRY = 2
     email_subject = _("Password reset request")
-    email_template = 'email/confirm.mako'
+    email_template = 'email/password_reset.mako'
 
     def accept(self, new_password):
         user = User.get(email=self.email)

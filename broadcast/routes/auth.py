@@ -148,7 +148,7 @@ class ResendConfirmation(CSRFMixin, ActionXHRPartialFormRoute):
         return self.app.get_url('main:home')
 
 
-class PasswordResetRequest(CSRFMixin, LoginOnSuccessMixin,
+class PasswordResetRequest(CSRFMixin, LoginOnSuccessMixin, NextPathMixin,
                            ActionXHRPartialFormRoute):
     path = '/accounts/password-reset'
     template_name = 'auth/password_reset_request.mako'
@@ -195,7 +195,7 @@ class AcceptInvitation(ConfirmationMixin, CSRFMixin, RoleMixin,
 
 
 class ResetPassword(ConfirmationMixin, CSRFMixin, LoginOnSuccessMixin,
-                    ActionXHRPartialFormRoute):
+                    NextPathMixin, ActionXHRPartialFormRoute):
     path = '/accounts/reset-password/<key:re:[0-9a-f]{32}>'
     template_name = 'auth/reset_password.mako'
     partial_template_name = 'auth/_reset_password.mako'
