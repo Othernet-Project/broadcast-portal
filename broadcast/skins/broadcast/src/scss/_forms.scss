@@ -80,6 +80,7 @@ a.button {
   text-align: center;
   @include border-radius(3px);
   white-space: nowrap;
+  cursor: pointer;
 
   @include narrower-than(360px) {
     width: 100%;

@@ -210,6 +210,7 @@ a.button {
   -webkit-border-radius: 3px;
   border-radius: 3px;
   white-space: nowrap;
+  cursor: pointer;
 }
 @media only screen and (max-width: 360px) {
   /* line 68, ../../src/scss/_forms.scss */
@@ -219,36 +220,36 @@ a.button {
     padding: 0.7rem;
   }
 }
-/* line 89, ../../src/scss/_forms.scss */
+/* line 90, ../../src/scss/_forms.scss */
 button:visited,
 a.button:visited {
   color: white;
 }
-/* line 93, ../../src/scss/_forms.scss */
+/* line 94, ../../src/scss/_forms.scss */
 button[disabled], button.disabled,
 a.button[disabled],
 a.button.disabled {
   background: #ccc;
   color: #888;
 }
-/* line 99, ../../src/scss/_forms.scss */
+/* line 100, ../../src/scss/_forms.scss */
 button.button-small,
 a.button.button-small {
   padding: 0.3rem 0.7rem;
   font-size: 90%;
   letter-spacing: 0.21rem;
 }
-/* line 105, ../../src/scss/_forms.scss */
+/* line 106, ../../src/scss/_forms.scss */
 button .invisible-label,
 a.button .invisible-label {
   display: none;
 }
-/* line 109, ../../src/scss/_forms.scss */
+/* line 110, ../../src/scss/_forms.scss */
 button .hover-tip,
 a.button .hover-tip {
   display: none;
 }
-/* line 113, ../../src/scss/_forms.scss */
+/* line 114, ../../src/scss/_forms.scss */
 button .supplementary-info,
 a.button .supplementary-info {
   dusplay: inline-block;
@@ -256,7 +257,7 @@ a.button .supplementary-info {
   vertical-align: middle;
   letter-spacing: 0;
 }
-/* line 121, ../../src/scss/_forms.scss */
+/* line 122, ../../src/scss/_forms.scss */
 button:hover .hover-tip,
 a.button:hover .hover-tip {
   display: inline-block;
