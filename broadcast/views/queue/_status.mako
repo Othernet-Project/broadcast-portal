@@ -3,7 +3,7 @@
     <span class="capacity-gauge-outer">
         <span class="capacity-gauge-inner" style="width: ${pct_capacity}%"></span>
     </span>
-    ${_('{percent} daily bandwidth of {size}').format(percent='{:.2f}%'.format(pct_capacity), size=h.hsize(capacity))}
+    ${_('{percent} of {size}/day').format(percent='{:.2f}%'.format(pct_capacity), size=h.hsize(capacity))}
 </p>
 <p>
     ${ngettext('{count} candidate file', '{count} candidate files', count).format(count=count)}
