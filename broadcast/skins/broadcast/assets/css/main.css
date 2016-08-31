@@ -1626,6 +1626,15 @@ p {
   padding: 0 2rem;
 }
 
+/* line 1, ../../src/scss/_beta.scss */
+.beta-signup-form {
+  padding: 0 2rem;
+}
+/* line 4, ../../src/scss/_beta.scss */
+.beta-signup-form form {
+  max-width: 20rem;
+}
+
 /**
  * _media_query.scss: media query support
  *

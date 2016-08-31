@@ -1,6 +1,8 @@
 <%namespace name="forms" file="/_forms.mako"/>
 
-<h2>${_('Sign up for closed beta')}</h2>
+%if request.is_xhr:
+    <h2>${_('Sign up for closed beta')}</h2>
+%endif
 
 <p>
     ${_('By submitting your email, you will be added to the closed beta '
