@@ -62,16 +62,35 @@ class Bin(Model):
         item.update(bin=None)
 
     def close(self):
+        """
+        Mark the bin as closed by writing the current timestamp to the closed
+        column.
+        """
         self.update(closed=datetime.datetime.utcnow())
 
     @classmethod
-    def new(cls, config=None):
+    def new(cls, cursor=None, config=None):
+        """
+        Create a new empty bin and return the instance wrapping it.
+        """
+        config = config or exts.config
         data = {
             'created': datetime.datetime.utcnow(),
-            'capacity': exts.config['bin.capacity'],
+            'capacity': config['bin.capacity'],
             'size': 0,
             'count': 0,
         }
-        bin = cls(data)
-        bin.save(pk=uuid.uuid4().hex)
-        return bin
+        instance = cls(data)
+        instance.save(cursor=cursor, pk=uuid.uuid4().hex)
+        return instance
+
+    @classmethod
+    def current(cls, cursor=None, config=None):
+        """
+        Return the currently open bin instance, and if there's none open
+        create a new one.
+        """
+        try:
+            return cls.get(cursor=cursor, closed=None)
+        except Bin.NotFound:
+            return cls.new(cursor=cursor, config=config)
