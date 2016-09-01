@@ -202,7 +202,8 @@ class Model(object):
             where = cls.where_pk()
             kwargs = {'pk': pk}
         else:
-            where = ['{0} = :{0}'.format(k) for k in lookup.keys()]
+            where = [('{} ISNULL' if v is None else '{0} = :{0}').format(k)
+                     for (k, v) in lookup.items()]
             kwargs = lookup
         q = cls.db.Select(sets=cls.table, where=where, limit=1)
         result = cursor.query(q, **kwargs).result
