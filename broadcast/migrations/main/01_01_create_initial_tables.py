@@ -2,10 +2,12 @@ SQL = """
 create table bins
 (
     id text primary key unique,
-    created timestamp,      -- creation timestamp
-    closed timestamp,       -- finalization timestamp
-    size integer default 0, -- total size (bytes)
-    count integer default 0 -- number of items in the bin
+    created timestamp,          -- creation timestamp
+    closed timestamp,           -- finalization timestamp
+    capacity integer not null,  -- maximum allowed size (bytes)
+    size integer default 0,     -- total size (bytes)
+    count integer default 0,    -- number of items in the bin
+    check (size <= capacity)    -- constraint to ensure size never exceeds capacity
 );
 
 create table content

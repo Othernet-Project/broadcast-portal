@@ -42,8 +42,9 @@ class Status(XHRPartialRoute):
 
     @staticmethod
     def closing_time():
-        tomorrow = datetime.date.today() + datetime.timedelta(1)
-        return to_timestamp(tomorrow)
+        closing = (datetime.datetime.utcnow() +
+                   datetime.timedelta(seconds=exts.config['bin.lifetime']))
+        return to_timestamp(closing.date())
 
     def get(self):
         stats = ContentItem.candidate_stats()
