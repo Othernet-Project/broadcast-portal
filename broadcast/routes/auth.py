@@ -12,6 +12,7 @@ import logging
 
 from bottle_utils.i18n import dummy_gettext as _
 
+from ..app.exts import container as exts
 from ..models.auth import (
     User,
     EmailVerificationToken,
@@ -248,8 +249,7 @@ class Logout(ActionTemplateRoute):
 
 
 def route():
-    return (
-        Register,
+    route_classes = (
         Login,
         ResendConfirmation,
         ConfirmEmail,
@@ -259,3 +259,6 @@ def route():
         NameCheck,
         Logout,
     )
+    if exts.config['beta.open_registration']:
+        route_classes = (Register,) + route_classes
+    return route_classes
