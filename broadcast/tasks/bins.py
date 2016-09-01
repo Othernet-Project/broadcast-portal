@@ -5,6 +5,7 @@ from greentasks import Task
 from ..app.exts import container as exts
 from ..models.bins import Bin
 from ..models.items import ContentItem
+from ..util.helpers import utcnow
 
 
 class BinPackagerTask(Task):
@@ -28,7 +29,7 @@ class BinPackagerTask(Task):
         # check if it's now or past closing time
         lifetime = exts.config['bin.lifetime']
         closing = instance.created + datetime.timedelta(seconds=lifetime)
-        if datetime.datetime.utcnow() < closing:
+        if utcnow() < closing:
             # it is not yet bin closing time, come back later
             return
         # bin is ready to be closed, add best candidates to it and wrap it up

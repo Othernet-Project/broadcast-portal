@@ -3,6 +3,7 @@ import sqlite3
 import uuid
 
 from ..app.exts import container as exts
+from ..util.helpers import utcnow
 from . import Model
 
 
@@ -75,7 +76,7 @@ class Bin(Model):
         """
         config = config or exts.config
         data = {
-            'created': datetime.datetime.utcnow(),
+            'created': utcnow(),
             'capacity': config['bin.capacity'],
             'size': 0,
             'count': 0,
