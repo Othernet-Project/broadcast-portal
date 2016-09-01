@@ -12,6 +12,7 @@ import logging
 
 from bottle_utils.i18n import dummy_gettext as _
 
+from ..app.exts import container as exts
 from ..models.auth import (
     User,
     EmailVerificationToken,
@@ -126,6 +127,16 @@ class Register(NoLoginNeededMixin, CSRFMixin, ActionXHRPartialFormRoute):
     form_factory = RegisterForm
     success_message = _('Check your inbox for an email confirmation link')
     success_url = ('main:home', {})
+
+    def get(self):
+        if not exts.config['beta.open_registration']:
+            self.redirect(self.get_success_url())
+        return super(Register, self).get()
+
+    def post(self):
+        if not exts.config['beta.open_registration']:
+            self.redirect(self.get_success_url())
+        return super(Register, self).post()
 
 
 class Login(NoLoginNeededMixin, CSRFMixin, NextPathMixin,
