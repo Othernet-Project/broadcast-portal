@@ -18,6 +18,7 @@ import functools
 
 from bottle import request, response
 from bottle_utils.common import basestring
+from streamline import after
 
 from ..app.exts import container as exts
 from ..util.helpers import utcnow
@@ -254,13 +255,11 @@ def session_plugin():
     cookie_name = config['session.cookie_name']
     secret = os.getenv(config['session.secret_env_name'], 'not-secret')
 
-    # Set up a hook, so handlers that raise cannot escape session-saving
-    @exts.app.hook('after_request')
-    def save_session():
-        if hasattr(request, 'session'):
-            if request.session.modified:
-                request.session.save()
-            request.session.set_cookie(cookie_name, secret)
+    @after
+    def save_session(*args):
+        request.session.set_cookie(cookie_name, secret)
+        if request.session.modified:
+            request.session.save()
 
     def plugin(callback):
         @functools.wraps(callback)

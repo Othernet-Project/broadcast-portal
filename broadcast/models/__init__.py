@@ -1,6 +1,7 @@
 import sqlite3
 
 from ..app.exts import container as exts
+from ..util.serializers import jsonify, dejsonify
 
 
 def to_list(names):
@@ -134,6 +135,15 @@ class Model(object):
         q = qrycls(self.table, cols=self._data.keys())
         cursor.query(q, **self._data)
         return cursor
+
+    def to_json(self):
+        data = self._data.copy()
+        data.update(self._extras)
+        return jsonify(data)
+
+    @classmethod
+    def from_json(cls, data):
+        return cls(dejsonify(data))
 
     @classmethod
     def where_pk(cls):
