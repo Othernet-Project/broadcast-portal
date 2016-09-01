@@ -1,7 +1,8 @@
 import uuid
-import datetime
 
 from . import Model
+from .items import ContentItem
+from ..util.helpers import utcnow
 
 
 class Bin(Model):
@@ -15,24 +16,42 @@ class Bin(Model):
     )
     pk = 'id'
 
-    def add(self, item):
-        if self.closed:
-            raise RuntimeError('Cannot add files to a closed bin')
-        self.size += item.size
-        self.count += 1
-        item.bin = self.id
-
-    def close(self):
-        self.closed = datetime.datetime.utcnow()
-        self.save()
+    @property
+    def items(self):
+        q = self.db.Select(sets=ContentItem.table,
+                           order=['-votes', '-created'],
+                           where='bin = :bin')
+        return ContentItem.iter(self.db.query(q, bin=self.id))
 
     @classmethod
-    def new(cls, config=None):
+    def list(cls):
+        q = cls.db.Select(sets=cls.table,
+                          what=['id', 'created'],
+                          order='-created')
+        for row in cls.db.query(q):
+            yield cls(row)
+
+    @classmethod
+    def last(cls):
+        q = cls.db.Select(sets=cls.table,
+                          order='-created',
+                          limit=1)
+        result = cls.db.query(q).result
+        if not result:
+            raise cls.NotFound()
+        return cls(result)
+
+    @classmethod
+    def new(cls):
+        bin_id = uuid.uuid4().hex
+        count, size = ContentItem.finalize_candidates(bin_id)
+        if not count:
+            return None
         data = {
-            'created': datetime.datetime.utcnow(),
-            'size': 0,
-            'count': 0,
+            'created': utcnow(),
+            'size': size,
+            'count': count,
         }
         bin = cls(data)
-        bin.save(pk=uuid.uuid4().hex)
+        bin.save(pk=bin_id)
         return bin

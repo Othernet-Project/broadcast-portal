@@ -228,6 +228,23 @@ class ContentItem(Model, LastUpdateMixin):
                 yield cls(row)
 
     @classmethod
+    def finalize_candidates(cls, bin_id):
+        """
+        Add current candidates to specified bin and return the number of
+        candidates and the total size.
+        """
+        update = cls.db.Update(cls.table,
+                               cls.binless_where_clause(cls.CANDIDATES),
+                               bin=':bin')
+        select = cls.db.Select(sets=cls.table,
+                               what=['count(*) as count', 'sum(size) as size'],
+                               where='bin = :bin')
+        with cls.candidate_query_cursor() as cursor:
+            cursor.query(update, bin=bin_id)
+            result = cursor.query(select, bin=bin_id).result
+            return result.count, result.size
+
+    @classmethod
     def last_activity(cls):
         ts_vote = Vote.last_update()
         ts_item = cls.last_update()
