@@ -120,7 +120,7 @@ class Model(object):
         cursor = cursor or self.db.cursor()
         cursor.query(query, **query_args)
         # as an exception wasn't raised, it's safe to update the instance data
-        self.set_data(kwargs)
+        self._data.update(kwargs)
 
     def delete(self, cursor=None):
         """
