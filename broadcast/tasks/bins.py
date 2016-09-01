@@ -17,10 +17,10 @@ class BinPackagerTask(Task):
     periodic = True
 
     def get_start_delay(self):
-        return exts.config['bins.check_interval']
+        return exts.config['bin.check_interval']
 
     def get_delay(self, previous_delay):
-        return exts.config['bins.check_interval']
+        return exts.config['bin.check_interval']
 
     def run(self):
         # get the currently open bin
