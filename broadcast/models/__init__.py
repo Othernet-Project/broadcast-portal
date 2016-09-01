@@ -116,7 +116,7 @@ class Model(object):
                                where=where,
                                **placeholders)
         query_args = dict(kwargs)
-        query_args[self.pk] = getattr(self, self.pk)
+        query_args[self.pk] = self.get_pk()
         cursor = cursor or self.db.cursor()
         cursor.query(query, **query_args)
         # as an exception wasn't raised, it's safe to update the instance data
