@@ -186,20 +186,29 @@ class ContentItem(Model, LastUpdateMixin):
             return cursor.query(q).result
 
     @classmethod
+    def binless_where_clause(cls, kind=None):
+        where = cls.db.Where('bin ISNULL')
+        if not kind:
+            return where
+        if kind == cls.CANDIDATES:
+            where &= 'iscandidate(size, votes) = 1'
+        else:
+            where &= 'iscandidate(size, votes) = 0'
+        return where
+
+    @classmethod
     def binless_items(cls, limit=None, offset=None, kind=None, username=None):
         """
         Generator of items that are not yet in a bin
         """
         what = list(cls.columns)
         what.append('iscandidate(size, votes) as is_candidate')
-        q = cls.db.Select(what, sets=cls.table, where=['bin ISNULL'],
-                          order=['-votes', '-created'], limit=limit,
+        q = cls.db.Select(what,
+                          sets=cls.table,
+                          where=cls.binless_where_clause(kind),
+                          order=['-votes', '-created'],
+                          limit=limit,
                           offset=offset)
-        if kind == cls.CANDIDATES:
-            q.where &= 'iscandidate(size, votes) = 1'
-        elif kind == cls.NON_CANDIDATES:
-            q.where &= 'iscandidate(size, votes) = 0'
-
         if username:
             # If username is passed, then join the contents table to a subqury
             # filtering votes that were cast by the specified username, and
