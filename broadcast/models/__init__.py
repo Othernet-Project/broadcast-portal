@@ -136,10 +136,13 @@ class Model(object):
         cursor.query(q, **self._data)
         return cursor
 
-    def to_json(self):
+    def to_dict(self):
         data = self._data.copy()
         data.update(self._extras)
-        return jsonify(data)
+        return data
+
+    def to_json(self):
+        return jsonify(self.to_dict())
 
     @classmethod
     def from_json(cls, data):
