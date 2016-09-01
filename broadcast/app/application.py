@@ -62,6 +62,7 @@ class Application:
         # Register application components
         self.add_plugins(self.config['stack.plugins'])
         self.add_routes(self.config['stack.routes'])
+        self.add_tasks(self.config['stack.tasks'])
 
         # Register interrupt handler
         on_interrupt(self.halt)
@@ -89,6 +90,11 @@ class Application:
             route = self._import(route)
             for r in route():
                 r.route(app=self.app)
+
+    def add_tasks(self, tasks):
+        for task_path in tasks:
+            task_cls = self._import(task_path)
+            self.exts.tasks.schedule(task_cls)
 
     def debug_app(self):
         logging.debug('============ DEBUG ===========')
