@@ -8,6 +8,7 @@ from ..cmdline.custom_conf import CustomConf
 from ..cmdline.custom_skin import CustomSkin
 from ..cmdline.assets import Watch, StopWatchers, Recompile
 from ..cmdline.adduser import Adduser
+from ..cmdline.apiuser import ApiUser
 from ..cmdline.invite import Invite
 
 from .exts import container as exts
@@ -27,6 +28,7 @@ COMMANDS = (
     StopWatchers,
     Recompile,
     Adduser,
+    ApiUser,
     Invite,
 )
 
