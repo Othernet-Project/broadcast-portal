@@ -101,6 +101,27 @@ class Model(object):
             raise self.Gone('The record matching this object no longer exists')
         self.set_data(result)
 
+    def update(self, cursor=None, **kwargs):
+        """
+        Update the data of the current object, first in the database, and if no
+        exception was raised, on the object instance itself as well.
+        """
+        if any([key not in self.columns for key in kwargs]):
+            raise ValueError("Unknown columns detected.")
+
+        placeholders = dict((name, ':{}'.format(name))
+                            for name in kwargs.keys())
+        where = '{pk_field} = :{pk_field}'.format(pk_field=self.pk)
+        query = self.db.Update(self.table,
+                               where=where,
+                               **placeholders)
+        query_args = dict(kwargs)
+        query_args[self.pk] = getattr(self, self.pk)
+        cursor = cursor or self.db.cursor()
+        cursor.query(query, **query_args)
+        # as an exception wasn't raised, it's safe to update the instance data
+        self.set_data(kwargs)
+
     def delete(self, cursor=None):
         """
         DELETEs the record matching the current object's primary key
