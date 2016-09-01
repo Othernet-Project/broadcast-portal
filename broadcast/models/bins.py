@@ -10,7 +10,6 @@ class Bin(Model):
     columns = (
         'id',
         'created',
-        'closed',
         'size',
         'count',
     )
