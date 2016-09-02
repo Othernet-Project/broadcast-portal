@@ -99,8 +99,7 @@
       # Reload target when `event` is fired
       refresh = () ->
         _delay = (delay || 0) * 1000
-        _refresh = () ->
-           target.loading().reload()
+        _refresh = () -> target.loading().reload()
         setTimeout _refresh, _delay
       win.on event, refresh
 
