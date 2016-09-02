@@ -35,7 +35,7 @@
     el = $ @
     el.append '<input type="hidden" name="partial" value="yes">'
 
-  $.fn.funnelSubmit = () ->
+  $.fn.funnelSubmit = (options) ->
     # Causes the forms within the selected element to be submitted using XHR,
     # or hidden iframe, and results loaded within the selected element.
     el = $ @
@@ -43,8 +43,13 @@
     submitTarget = "#{containerId}-submit-frame"
     submitFrame = $.createSubmitFrame submitTarget
 
+    submitComplete = () ->
+      if options && options.onCompleteEvent
+        win.trigger options.onCompleteEvent
+
     submitFrameHandler = (e) ->
       el.html (submitFrame.contents().find 'body').html()
+      submitComplete()
 
     submitHandler = (e) ->
       form = $ @
@@ -56,8 +61,12 @@
         formData = form.serialize()
         action = (form.attr 'action') or window.location.pathname
         res = $.post action, formData
-        res.done (resp) -> el.html resp
-        res.fail (xhr) -> el.html xhr.responseText
+        res.done (resp) ->
+          el.html resp
+          submitComplete()
+        res.fail (xhr) ->
+          el.html xhr.responseText
+          submitComplete()
 
     el.on 'submit', 'form', submitHandler
 
@@ -86,6 +95,15 @@
       reschedule = () -> setTimeout refresh, interval
       reschedule()
 
+    refreshOn = (target, event, delay) ->
+      # Reload target when `event` is fired
+      refresh = () ->
+        _delay = (delay || 0) * 1000
+        _refresh = () ->
+           target.loading().reload()
+        setTimeout _refresh, _delay
+      win.on event, refresh
+
     el.each () ->
       el = $ @
       url = el.attr 'href'
@@ -95,7 +113,17 @@
       target.data 'roca-url', url
       target.loading().reload()
       if (el.data 'roca-trap-submit') is 'yes'
-        target.funnelSubmit()
+        options = { "onCompleteEvent": el.data 'roca-submit-complete-event' }
+        target.funnelSubmit(options)
+
+      # Optionally reload container when specific events are fired, delayed by
+      # a specified time
+      event = el.data 'roca-refresh-on'
+      if event
+        delay = el.data 'roca-refresh-delay'
+        refreshOn target, event, delay
+
+      # Optionally reload container on specific time intervals
       interval = el.data 'roca-refresh-interval'
       if interval
         autoRefresh target, interval * 1000

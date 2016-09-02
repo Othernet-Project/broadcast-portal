@@ -40,14 +40,20 @@
     el = $(this);
     return el.append('<input type="hidden" name="partial" value="yes">');
   };
-  $.fn.funnelSubmit = function() {
-    var containerId, el, submitFrame, submitFrameHandler, submitHandler, submitTarget;
+  $.fn.funnelSubmit = function(options) {
+    var containerId, el, submitComplete, submitFrame, submitFrameHandler, submitHandler, submitTarget;
     el = $(this);
     containerId = el.attr('id');
     submitTarget = containerId + "-submit-frame";
     submitFrame = $.createSubmitFrame(submitTarget);
+    submitComplete = function() {
+      if (options && options.onCompleteEvent) {
+        return win.trigger(options.onCompleteEvent);
+      }
+    };
     submitFrameHandler = function(e) {
-      return el.html((submitFrame.contents().find('body')).html());
+      el.html((submitFrame.contents().find('body')).html());
+      return submitComplete();
     };
     submitHandler = function(e) {
       var action, form, formData, res;
@@ -61,10 +67,12 @@
         action = (form.attr('action')) || window.location.pathname;
         res = $.post(action, formData);
         res.done(function(resp) {
-          return el.html(resp);
+          el.html(resp);
+          return submitComplete();
         });
         return res.fail(function(xhr) {
-          return el.html(xhr.responseText);
+          el.html(xhr.responseText);
+          return submitComplete();
         });
       }
     };
@@ -92,7 +100,7 @@
     });
   };
   return $.fn.rocaLoad = function() {
-    var autoRefresh, el;
+    var autoRefresh, el, refreshOn;
     el = $(this);
     autoRefresh = function(target, interval) {
       var refresh, reschedule;
@@ -104,8 +112,20 @@
       };
       return reschedule();
     };
+    refreshOn = function(target, event, delay) {
+      var refresh;
+      refresh = function() {
+        var _delay, _refresh;
+        _delay = (delay || 0) * 1000;
+        _refresh = function() {
+          return target.loading().reload();
+        };
+        return setTimeout(_refresh, _delay);
+      };
+      return win.on(event, refresh);
+    };
     return el.each(function() {
-      var interval, target, url;
+      var delay, event, interval, options, target, url;
       el = $(this);
       url = el.attr('href');
       target = $("#" + (el.data('roca-target')));
@@ -115,7 +135,15 @@
       target.data('roca-url', url);
       target.loading().reload();
       if ((el.data('roca-trap-submit')) === 'yes') {
-        target.funnelSubmit();
+        options = {
+          "onCompleteEvent": el.data('roca-submit-complete-event')
+        };
+        target.funnelSubmit(options);
+      }
+      event = el.data('roca-refresh-on');
+      if (event) {
+        delay = el.data('roca-refresh-delay');
+        refreshOn(target, event, delay);
       }
       interval = el.data('roca-refresh-interval');
       if (interval) {
