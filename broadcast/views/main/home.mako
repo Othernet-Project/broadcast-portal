@@ -28,7 +28,7 @@
 <section id="stats" class="stats">
 <h2>${_('Daily filecast status')}</h2>
 <p>
-    <a href="${url('queue:status')}" data-roca-target="stats">
+    <a href="${url('queue:status', widget=1)}" data-roca-target="stats" data-roca-refresh-interval="5">
         ${_('See the daily filecast status')}
     </a>
 </p>

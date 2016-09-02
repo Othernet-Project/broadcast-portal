@@ -8,7 +8,8 @@
 
 <div class="float-container">
     <section id="stats" class="stats">
-    ${status.body()}
+        ${status.body()}
+        <a href="${url('queue:status')}" data-roca-target="stats" data-roca-refresh-interval="5"></a>
     </section>
 
     <section id="info" class="info">
