@@ -355,6 +355,9 @@ class RoleMixin(object):
     checked for role. It is an empty list by default, and all methods are
     checked. The values should be upper-case method names (e.g., 'GET', 'POST',
     etc).
+
+    The ``role_xhr_method_whitelist`` attribute has the same purpose as
+    ``role_method_whitelist``, except it is applied only for XHR requests.
     """
     role = None
     strict_check = False
@@ -363,6 +366,7 @@ class RoleMixin(object):
     role_needs_login_message = _('Please log in in order to gain access to '
                                  'this page')
     role_method_whitelist = []
+    role_xhr_method_whitelist = []
 
     SUPERUSER = auth.SUPERUSER
     MODERATOR = auth.MODERATOR
@@ -381,8 +385,15 @@ class RoleMixin(object):
     def get_role_method_whitelist(self):
         return self.role_method_whitelist
 
+    def get_role_xhr_method_whitelist(self):
+        return self.role_xhr_method_whitelist
+
     def check_role(self):
         if self.request.method in self.get_role_method_whitelist():
+            return
+
+        if (self.request.is_xhr and
+                self.request.method in self.get_role_xhr_method_whitelist()):
             return
 
         user = self.request.user
