@@ -46,19 +46,19 @@
 
 <div class="float-container">
     <section id="upload" class="upload">
-    <a href="${url('files:upload')}" data-roca-target="upload" data-roca-trap-submit="yes">
+    <a href="${url('files:upload')}" data-roca-target="upload" data-roca-trap-submit="yes" data-roca-submit-complete-event="file-upload-complete" data-roca-refresh-on="file-upload-complete" data-roca-refresh-delay="3">
         ${_('Upload a file')}
     </a>
     </section>
 
     <section id="review" class="review">
-    <a href="${url('queue:review')}" data-roca-target="review">
+    <a href="${url('queue:review')}" data-roca-target="review" data-roca-refresh-on="file-upload-complete">
         ${_('See the review queue')}
     </a>
     </section>
 
     <section id="candidates" class="candidates">
-    <a href="${url('queue:candidates')}" data-roca-target="candidates">
+    <a href="${url('queue:candidates')}" data-roca-target="candidates" data-roca-refresh-on="file-upload-complete">
         ${_('See the daily filecast candidates')}
     </a>
     </section>
