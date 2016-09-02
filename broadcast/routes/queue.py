@@ -32,13 +32,14 @@ class ItemListMixin(ModeratorOnlyMixin):
         return {'items': self.get_items()}
 
 
-class Status(XHRPartialRoute):
+class Status(ModeratorOnlyMixin, XHRPartialRoute):
     """
     The queue status page
     """
     template_name = 'queue/status.mako'
     partial_template_name = 'queue/_status.mako'
     path = '/queue/'
+    role_xhr_method_whitelist = ['GET']
 
     @staticmethod
     def closing_time():
