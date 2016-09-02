@@ -364,10 +364,9 @@ class RoleMixin(object):
                                  'this page')
     role_method_whitelist = []
 
-    # FIXME: Temporary assignment
-    SUPERUSER = auth.GUEST
-    MODERATOR = auth.GUEST
-    USER = auth.GUEST
+    SUPERUSER = auth.SUPERUSER
+    MODERATOR = auth.MODERATOR
+    USER = auth.USER
     GUEST = auth.GUEST
 
     def get_role(self):
