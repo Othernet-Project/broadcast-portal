@@ -92,10 +92,20 @@
     });
   };
   return $.fn.rocaLoad = function() {
-    var el;
+    var autoRefresh, el;
     el = $(this);
+    autoRefresh = function(target, interval) {
+      var refresh, reschedule;
+      refresh = function() {
+        return target.loading().reload(reschedule);
+      };
+      reschedule = function() {
+        return setTimeout(refresh, interval);
+      };
+      return reschedule();
+    };
     return el.each(function() {
-      var target, url;
+      var interval, target, url;
       el = $(this);
       url = el.attr('href');
       target = $("#" + (el.data('roca-target')));
@@ -105,7 +115,11 @@
       target.data('roca-url', url);
       target.loading().reload();
       if ((el.data('roca-trap-submit')) === 'yes') {
-        return target.funnelSubmit();
+        target.funnelSubmit();
+      }
+      interval = el.data('roca-refresh-interval');
+      if (interval) {
+        return autoRefresh(target, interval * 1000);
       }
     });
   };

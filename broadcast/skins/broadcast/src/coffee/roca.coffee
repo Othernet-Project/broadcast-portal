@@ -79,6 +79,13 @@
     # Load content from the URL pointed to by elements' `href` attribute into
     # target specified by the `data-roca-target` attribute.
     el = $ @
+
+    autoRefresh = (target, interval) ->
+      # Reload target every `interval` seconds
+      refresh = () -> target.loading().reload reschedule
+      reschedule = () -> setTimeout refresh, interval
+      reschedule()
+
     el.each () ->
       el = $ @
       url = el.attr 'href'
@@ -89,5 +96,8 @@
       target.loading().reload()
       if (el.data 'roca-trap-submit') is 'yes'
         target.funnelSubmit()
+      interval = el.data 'roca-refresh-interval'
+      if interval
+        autoRefresh target, interval * 1000
 
 ) this, this.jQuery
