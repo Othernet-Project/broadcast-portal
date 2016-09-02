@@ -1,6 +1,7 @@
 import datetime
 from os.path import normpath, join, exists, basename
 
+import pbkdf2
 from streamline import (
     Route,
     RouteBase,
@@ -18,9 +19,10 @@ from streamline.forms import FormMixin, FormBase
 from bottle_utils.i18n import dummy_gettext as _
 from bottle_utils.csrf import csrf_protect, csrf_token
 
-from .serializers import jsonify
+from .serializers import jsonify, dejsonify_file
 from .template import render
 from ..models import auth
+from ..app.exts import container as exts
 
 
 # Monkey-patch the TemplateMixin to use our own rendering function
@@ -419,7 +421,17 @@ class CSRFMixin(object):
         return super(CSRFMixin, cls).__new__(cls, *args, **kwargs)
 
 
-class XHRJsonRoute(NonIterableRouteBase):
+class JsonRoute(NonIterableRouteBase):
+    """
+    Route class that returns its responses as JSON.
+    """
+    def create_response(self):
+        super(JsonRoute, self).create_response()
+        self.body = jsonify(self.body)
+        self.response.set_header('Content-Type', 'application/json')
+
+
+class XHRJsonRoute(JsonRoute):
     """
     Route class that rejects non-XHR requests with 400 status, and responds
     with JSON data to XHR requests.
@@ -428,5 +440,49 @@ class XHRJsonRoute(NonIterableRouteBase):
         if not self.request.is_xhr:
             self.abort(400)
         super(XHRJsonRoute, self).create_response()
-        self.body = jsonify(self.body)
-        self.response.set_header('Content-Type', 'application/json')
+
+
+class APIMixin(object):
+    """
+    Mixin that rejects request that has invalid HTTP auth information.
+    """
+    exclude_plugins = ['sessions', 'auth']
+
+    class AbortRequest(Exception):
+        """
+        Exception used to signal premature end of request handling
+        """
+        pass
+
+    def get_acl(self):
+        acl_file = exts.config['app.api_acl']
+        try:
+            with open(acl_file, 'r') as f:
+                return dejsonify_file(f)
+        except Exception as e:
+            print(e)
+            return {}
+
+    def check_creds(self, password, crypted_pw):
+        return pbkdf2.crypt(password, crypted_pw) == crypted_pw
+
+    def abort(self, code=400):
+        self.response.code = code
+        raise self.AbortRequest()
+
+    def create_response(self):
+        accounts = self.get_acl()
+        try:
+            username, password = self.request.auth
+        except TypeError:
+            self.response.status = 401
+            self.body = {}
+            return
+        if not self.check_creds(password, accounts.get(username, '')):
+            self.response.status = 403
+            self.body = {}
+            return
+        try:
+            super(APIMixin, self).create_response()
+        except self.AbortRequest:
+            self.body = {}

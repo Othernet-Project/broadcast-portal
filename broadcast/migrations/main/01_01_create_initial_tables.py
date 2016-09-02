@@ -3,7 +3,6 @@ create table bins
 (
     id text primary key unique,
     created timestamp,      -- creation timestamp
-    closed timestamp,       -- finalization timestamp
     size integer default 0, -- total size (bytes)
     count integer default 0 -- number of items in the bin
 );

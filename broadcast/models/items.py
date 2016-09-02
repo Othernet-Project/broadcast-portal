@@ -186,20 +186,29 @@ class ContentItem(Model, LastUpdateMixin):
             return cursor.query(q).result
 
     @classmethod
+    def binless_where_clause(cls, kind=None):
+        where = cls.db.Where('bin ISNULL')
+        if not kind:
+            return where
+        if kind == cls.CANDIDATES:
+            where &= 'iscandidate(size, votes) = 1'
+        else:
+            where &= 'iscandidate(size, votes) = 0'
+        return where
+
+    @classmethod
     def binless_items(cls, limit=None, offset=None, kind=None, username=None):
         """
         Generator of items that are not yet in a bin
         """
         what = list(cls.columns)
         what.append('iscandidate(size, votes) as is_candidate')
-        q = cls.db.Select(what, sets=cls.table, where=['bin ISNULL'],
-                          order=['-votes', '-created'], limit=limit,
+        q = cls.db.Select(what,
+                          sets=cls.table,
+                          where=cls.binless_where_clause(kind),
+                          order=['-votes', '-created'],
+                          limit=limit,
                           offset=offset)
-        if kind == cls.CANDIDATES:
-            q.where &= 'iscandidate(size, votes) = 1'
-        elif kind == cls.NON_CANDIDATES:
-            q.where &= 'iscandidate(size, votes) = 0'
-
         if username:
             # If username is passed, then join the contents table to a subqury
             # filtering votes that were cast by the specified username, and
@@ -217,6 +226,23 @@ class ContentItem(Model, LastUpdateMixin):
         with cls.candidate_query_cursor() as cursor:
             for row in cursor.query(q, username=username).results:
                 yield cls(row)
+
+    @classmethod
+    def finalize_candidates(cls, bin_id):
+        """
+        Add current candidates to specified bin and return the number of
+        candidates and the total size.
+        """
+        update = cls.db.Update(cls.table,
+                               cls.binless_where_clause(cls.CANDIDATES),
+                               bin=':bin')
+        select = cls.db.Select(sets=cls.table,
+                               what=['count(*) as count', 'sum(size) as size'],
+                               where='bin = :bin')
+        with cls.candidate_query_cursor() as cursor:
+            cursor.query(update, bin=bin_id)
+            result = cursor.query(select, bin=bin_id).result
+            return result.count, result.size
 
     @classmethod
     def last_activity(cls):
