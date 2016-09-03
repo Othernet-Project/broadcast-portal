@@ -10,6 +10,11 @@
     target = el.attr 'href'
     ($ target).scrollTo()
 
+  win.on 'upload-submit', (e, uploadSection) ->
+    setTimeout () ->
+      uploadSection.reload()
+    , 7000
+
   win.on 'state-update', (e) ->
     $.popup $.template 'status-update'
 
