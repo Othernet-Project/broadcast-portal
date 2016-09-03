@@ -16,7 +16,10 @@
       return uploadSection.reload();
     }, 7000);
   });
-  return win.on('state-update', function(e) {
+  return win.on('state-update', function(e, data) {
+    if (data.forced) {
+      return;
+    }
     return $.popup($.template('status-update'));
   });
 })(this, this.jQuery);

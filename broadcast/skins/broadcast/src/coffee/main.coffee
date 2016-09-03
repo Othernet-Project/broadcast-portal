@@ -15,7 +15,8 @@
       uploadSection.reload()
     , 7000
 
-  win.on 'state-update', (e) ->
+  win.on 'state-update', (e, data) ->
+    return if data.forced
     $.popup $.template 'status-update'
 
 ) this, this.jQuery
