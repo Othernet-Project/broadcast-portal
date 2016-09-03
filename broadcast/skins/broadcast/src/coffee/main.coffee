@@ -1,4 +1,6 @@
 ((window, $) ->
+  win = $ window
+
   ($ 'a[data-roca-target]').rocaLoad()
   ($ '*[data-roca-url]').rocaConfigureContainer()
 
@@ -7,6 +9,9 @@
     el = $ @
     target = el.attr 'href'
     ($ target).scrollTo()
+
+  win.on 'state-update', (e) ->
+    $.popup $.template 'status-update'
 
 ) this, this.jQuery
 

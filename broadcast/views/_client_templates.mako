@@ -27,3 +27,7 @@
     <span class="icon icon-alert-stop"></span>
     ${_('Your vote could not be saved')}
 </script>
+
+<script id="status-update" type="text/x-template">
+    ${_('Filecast queue updated')}
+</script>
