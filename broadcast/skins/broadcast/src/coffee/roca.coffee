@@ -71,16 +71,19 @@
 
   $.fn.reload = (fn) ->
     el = $ @
+    id = el.attr 'id'
     url = el.data 'roca-url'
     el.load (url), (res, status, xhr) ->
       switch xhr.status
         when 200
           fn?(xhr.status)
           win.trigger 'roca-load', [el]
+          win.trigger "#{id}-roca-load", [el]
         else
           fn?(xhr.status)
           el.cancelLoading()
           win.trigger 'roca-error', [el]
+          win.trigger "#{id}-roca-error"
       return
 
   $.fn.rocaLoad = () ->
