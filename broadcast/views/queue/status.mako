@@ -7,9 +7,8 @@
 <h1>${_('Filecast queue overview')}</h1>
 
 <div class="float-container">
-    <section id="stats" class="stats">
+    <section id="stats" class="stats" data-roca-url="${url('queue:status')}" data-roca-refresh-on="state-update">
         ${status.body()}
-        <a href="${url('queue:status')}" data-roca-target="stats" data-roca-refresh-interval="5"></a>
     </section>
 
     <section id="info" class="info">
@@ -45,20 +44,20 @@
 </nav>
 
 <div class="float-container">
-    <section id="upload" class="upload">
-    <a href="${url('files:upload')}" data-roca-target="upload" data-roca-trap-submit="yes" data-roca-submit-complete-event="file-upload-complete" data-roca-refresh-on="file-upload-complete" data-roca-refresh-delay="3">
+    <section id="upload" class="upload" data-roca-trap-submit="yes">
+    <a href="${url('files:upload')}" data-roca-target="upload">
         ${_('Upload a file')}
     </a>
     </section>
 
-    <section id="review" class="review">
-    <a href="${url('queue:review')}" data-roca-target="review" data-roca-refresh-on="file-upload-complete">
+    <section id="review" class="review" data-roca-refresh-on="state-update">
+    <a href="${url('queue:review')}" data-roca-target="review">
         ${_('See the review queue')}
     </a>
     </section>
 
-    <section id="candidates" class="candidates">
-    <a href="${url('queue:candidates')}" data-roca-target="candidates" data-roca-refresh-on="file-upload-complete">
+    <section id="candidates" class="candidates" data-roca-refresh-on="state-update">
+    <a href="${url('queue:candidates')}" data-roca-target="candidates">
         ${_('See the daily filecast candidates')}
     </a>
     </section>
