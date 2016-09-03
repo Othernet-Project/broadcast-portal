@@ -9,7 +9,7 @@
 
   stateReloaded = (data) ->
     return if lastUpdate is data.timestamp
-    win.trigger 'state-update'
+    win.trigger 'state-update', [data]
     lastUpdate = data.timestamp
     return
 
