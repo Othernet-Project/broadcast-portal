@@ -12,7 +12,7 @@ from ..util.routes import (
     ActionTemplateRoute,
     XHRPartialRoute,
     StaticRoute,
-    Route,
+    XHRJsonRoute,
     RoleMixin,
 )
 
@@ -132,11 +132,11 @@ class Download(ModeratorOnlyMixin, StaticRoute):
         return self.create_file_response(item.path)
 
 
-class LastUpdate(Route):
+class LastUpdate(XHRJsonRoute):
     path = '/queue/last-update'
 
     def get(self):
-        return exts.last_update['timestamp']
+        return exts.last_update
 
 
 def route():
