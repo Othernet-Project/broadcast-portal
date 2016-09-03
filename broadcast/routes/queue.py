@@ -141,4 +141,5 @@ class LastUpdate(XHRJsonRoute):
 
 def route():
     exts.last_update = {'timestamp': to_timestamp(ContentItem.last_activity())}
+    exts.template_defaults['last_update'] = exts.last_update
     return (Status, Candidates, Review, Vote, Download, LastUpdate)
