@@ -40,20 +40,23 @@
     el = $(this);
     return el.append('<input type="hidden" name="partial" value="yes">');
   };
-  $.fn.funnelSubmit = function(options) {
+  $.fn.funnelSubmit = function() {
     var containerId, el, submitComplete, submitFrame, submitFrameHandler, submitHandler, submitTarget;
     el = $(this);
     containerId = el.attr('id');
     submitTarget = containerId + "-submit-frame";
     submitFrame = $.createSubmitFrame(submitTarget);
     submitComplete = function() {
-      if (options && options.onCompleteEvent) {
-        return win.trigger(options.onCompleteEvent);
-      }
+      return win.trigger(containerId + "-submit", [el]);
     };
     submitFrameHandler = function(e) {
-      el.html((submitFrame.contents().find('body')).html());
-      return submitComplete();
+      var frameContent, status;
+      frameContent = submitFrame.contents().find('body');
+      el.html(frameContent.html());
+      status = (frameContent.find('.feedback-message')).data('status');
+      if (status === 'ok') {
+        return submitComplete();
+      }
     };
     submitHandler = function(e) {
       var action, form, formData, res;
@@ -71,24 +74,30 @@
           return submitComplete();
         });
         return res.fail(function(xhr) {
-          el.html(xhr.responseText);
-          return submitComplete();
+          return el.html(xhr.responseText);
         });
       }
     };
     return el.on('submit', 'form', submitHandler);
   };
   $.fn.reload = function(fn) {
-    var el, url;
+    var el, id, url;
     el = $(this);
+    if ((el.data('loading')) === true) {
+      return;
+    }
+    el.data('loading', true);
+    id = el.attr('id');
     url = el.data('roca-url');
     return el.load(url, function(res, status, xhr) {
+      el.removeData('loading');
       switch (xhr.status) {
         case 200:
           if (typeof fn === "function") {
             fn(xhr.status);
           }
           win.trigger('roca-load', [el]);
+          win.trigger(id + "-roca-load", [el]);
           break;
         default:
           if (typeof fn === "function") {
@@ -96,36 +105,20 @@
           }
           el.cancelLoading();
           win.trigger('roca-error', [el]);
+          win.trigger(id + "-roca-error");
       }
     });
   };
-  return $.fn.rocaLoad = function() {
-    var autoRefresh, el, refreshOn;
+  $.fn.reloadOn = function(event) {
+    var el;
     el = $(this);
-    autoRefresh = function(target, interval) {
-      var refresh, reschedule;
-      refresh = function() {
-        return target.loading().reload(reschedule);
-      };
-      reschedule = function() {
-        return setTimeout(refresh, interval);
-      };
-      return reschedule();
-    };
-    refreshOn = function(target, event, delay) {
-      var refresh;
-      refresh = function() {
-        var _delay, _refresh;
-        _delay = (delay || 0) * 1000;
-        _refresh = function() {
-          return target.loading().reload();
-        };
-        return setTimeout(_refresh, _delay);
-      };
-      return win.on(event, refresh);
-    };
-    return el.each(function() {
-      var delay, event, interval, options, target, url;
+    return win.on(event, function() {
+      return el.reload();
+    });
+  };
+  $.fn.rocaLoad = function() {
+    return ($(this)).each(function() {
+      var el, target, url;
       el = $(this);
       url = el.attr('href');
       target = $("#" + (el.data('roca-target')));
@@ -133,21 +126,19 @@
         return;
       }
       target.data('roca-url', url);
-      target.loading().reload();
+      target.rocaConfigureContainer();
+      return target.loading().reload();
+    });
+  };
+  return $.fn.rocaConfigureContainer = function() {
+    return ($(this)).each(function() {
+      var el, event;
+      el = $(this);
       if ((el.data('roca-trap-submit')) === 'yes') {
-        options = {
-          "onCompleteEvent": el.data('roca-submit-complete-event')
-        };
-        target.funnelSubmit(options);
+        el.funnelSubmit();
       }
-      event = el.data('roca-refresh-on');
-      if (event) {
-        delay = el.data('roca-refresh-delay');
-        refreshOn(target, event, delay);
-      }
-      interval = el.data('roca-refresh-interval');
-      if (interval) {
-        return autoRefresh(target, interval * 1000);
+      if (event = el.data('roca-refresh-on')) {
+        return el.reloadOn(event);
       }
     });
   };

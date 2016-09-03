@@ -89,22 +89,30 @@
           win.trigger "#{id}-roca-error"
       return
 
+  $.fn.reloadOn = (event) ->
+    el = $ @
+    win.on event, () -> el.reload()
+
   $.fn.rocaLoad = () ->
     # Load content from the URL pointed to by elements' `href` attribute into
     # target specified by the `data-roca-target` attribute.
-    el = $ @
-
-    el.each () ->
+    ($ @).each () ->
       el = $ @
       url = el.attr 'href'
       target = $ "##{el.data 'roca-target'}"
       if not target.length
         return
       target.data 'roca-url', url
+      target.rocaConfigureContainer()
       target.loading().reload()
+
+  $.fn.rocaConfigureContainer = () ->
+    # Set up ROCA containers
+    ($ @).each () ->
+      el = $ @
       if (el.data 'roca-trap-submit') is 'yes'
-        target.funnelSubmit()
+        el.funnelSubmit()
       if event = el.data 'roca-refresh-on'
-        win.on event, () -> target.reload()
+        el.reloadOn event
 
 ) this, this.jQuery
