@@ -43,7 +43,7 @@
     submitTarget = "#{containerId}-submit-frame"
     submitFrame = $.createSubmitFrame submitTarget
 
-    submitComplete = () -> win.trigger "#{containerId}-submit"
+    submitComplete = () -> win.trigger "#{containerId}-submit", [el]
 
     submitFrameHandler = (e) ->
       frameContent = submitFrame.contents().find 'body'
