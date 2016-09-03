@@ -3,6 +3,17 @@
 <%block name="page_title">${_('Filecast center by Outernet')}</%block>
 <%block name="body_class">home</%block>
 
+<%block name="top">
+    %if request.user.is_guest:
+        <nav id="main-nav" class="main-nav">
+        <a href="${url('auth:login')}">
+            <span class="icon icon-key"></span>
+            <span class="label">${_('Log in')}</span>
+        </a>
+        </nav>
+    %endif
+</%block>
+
 <section id="hero" class="hero">
 <h1 class="title">${_('Filecast center')}</h1>
 <p class="subtitle">

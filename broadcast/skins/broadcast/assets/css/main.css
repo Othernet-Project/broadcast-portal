@@ -1525,9 +1525,11 @@ p {
 }
 /* line 17, ../../src/scss/_navbar.scss */
 .main-nav a {
+  display: inline-block;
   text-decoration: none;
   text-transform: uppercase;
   color: white;
+  margin-left: 1rem;
 }
 
 /* line 2, ../../src/scss/_items.scss */
