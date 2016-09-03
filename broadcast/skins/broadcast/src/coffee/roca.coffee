@@ -43,8 +43,13 @@
     submitTarget = "#{containerId}-submit-frame"
     submitFrame = $.createSubmitFrame submitTarget
 
+    submitComplete = () -> win.trigger "#{containerId}-submit", [el]
+
     submitFrameHandler = (e) ->
-      el.html (submitFrame.contents().find 'body').html()
+      frameContent = submitFrame.contents().find 'body'
+      el.html frameContent.html()
+      status = (frameContent.find '.feedback-message').data 'status'
+      submitComplete() if status is 'ok'
 
     submitHandler = (e) ->
       form = $ @
@@ -56,38 +61,58 @@
         formData = form.serialize()
         action = (form.attr 'action') or window.location.pathname
         res = $.post action, formData
-        res.done (resp) -> el.html resp
-        res.fail (xhr) -> el.html xhr.responseText
+        res.done (resp) ->
+          el.html resp
+          submitComplete()
+        res.fail (xhr) ->
+          el.html xhr.responseText
 
     el.on 'submit', 'form', submitHandler
 
   $.fn.reload = (fn) ->
     el = $ @
+    return if (el.data 'loading') is yes
+    el.data 'loading', yes
+    id = el.attr 'id'
     url = el.data 'roca-url'
     el.load (url), (res, status, xhr) ->
+      el.removeData 'loading'
       switch xhr.status
         when 200
           fn?(xhr.status)
           win.trigger 'roca-load', [el]
+          win.trigger "#{id}-roca-load", [el]
         else
           fn?(xhr.status)
           el.cancelLoading()
           win.trigger 'roca-error', [el]
+          win.trigger "#{id}-roca-error"
       return
+
+  $.fn.reloadOn = (event) ->
+    el = $ @
+    win.on event, () -> el.reload()
 
   $.fn.rocaLoad = () ->
     # Load content from the URL pointed to by elements' `href` attribute into
     # target specified by the `data-roca-target` attribute.
-    el = $ @
-    el.each () ->
+    ($ @).each () ->
       el = $ @
       url = el.attr 'href'
       target = $ "##{el.data 'roca-target'}"
       if not target.length
         return
       target.data 'roca-url', url
+      target.rocaConfigureContainer()
       target.loading().reload()
+
+  $.fn.rocaConfigureContainer = () ->
+    # Set up ROCA containers
+    ($ @).each () ->
+      el = $ @
       if (el.data 'roca-trap-submit') is 'yes'
-        target.funnelSubmit()
+        el.funnelSubmit()
+      if event = el.data 'roca-refresh-on'
+        el.reloadOn event
 
 ) this, this.jQuery

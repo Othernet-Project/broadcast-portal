@@ -25,8 +25,7 @@ class Upload(RoleMixin, CSRFMixin, UploadFormMixin, ActionXHRPartialFormRoute):
     template_name = 'files/upload.mako'
     partial_template_name = 'files/_upload.mako'
     form_factory = ContentForm
-    success_message = _('Your file has been saved. Reload the page to see the '
-                        'updated file list')
+    success_message = _('Your file has been saved.')
     success_url = ('queue:status', {})
     success_url_label = _('status page')
 

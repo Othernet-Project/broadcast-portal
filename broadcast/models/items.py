@@ -109,6 +109,7 @@ class ContentItem(Model, LastUpdateMixin):
         cid = uuid.uuid4().hex
         item.save_file(file_object, cid)
         item.save(pk=cid)
+        exts.last_update['timestamp'] = to_timestamp(item.created)
 
     def cast_vote(self, username, is_upvote, ipaddr):
         """

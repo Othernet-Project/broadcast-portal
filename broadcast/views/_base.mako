@@ -11,7 +11,7 @@
         <title><%block name="page_title">Filecast center</%block></title>
         <%block name="extra_head"/>
     </head>
-    <body id="top" class="<%block name="body_class">default</%block>">
+    <body id="top" class="<%block name="body_class">default</%block>" data-last-update="${last_update['timestamp']}" data-update-url="${url('queue:last_update')}">
         <%block name="top"/>
         ${self.body()}
         <%block name="footer"/>

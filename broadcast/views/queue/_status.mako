@@ -9,7 +9,7 @@
     ${ngettext('{count} candidate file', '{count} candidate files', count).format(count=count)}
     (${h.hsize(size)})
 </p>
-%if request.is_xhr:
+%if request.query.get('widget') and request.user.has_role(request.user.MODERATOR):
 <p>
     <a class="button" href="${url('queue:status')}" class="button">
         ${_('See full status')}

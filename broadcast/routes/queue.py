@@ -12,7 +12,7 @@ from ..util.routes import (
     ActionTemplateRoute,
     XHRPartialRoute,
     StaticRoute,
-    Route,
+    XHRJsonRoute,
     RoleMixin,
 )
 
@@ -32,13 +32,14 @@ class ItemListMixin(ModeratorOnlyMixin):
         return {'items': self.get_items()}
 
 
-class Status(XHRPartialRoute):
+class Status(ModeratorOnlyMixin, XHRPartialRoute):
     """
     The queue status page
     """
     template_name = 'queue/status.mako'
     partial_template_name = 'queue/_status.mako'
     path = '/queue/'
+    role_xhr_method_whitelist = ['GET']
 
     @staticmethod
     def closing_time():
@@ -131,13 +132,14 @@ class Download(ModeratorOnlyMixin, StaticRoute):
         return self.create_file_response(item.path)
 
 
-class LastUpdate(Route):
+class LastUpdate(XHRJsonRoute):
     path = '/queue/last-update'
 
     def get(self):
-        return exts.last_update['timestamp']
+        return exts.last_update
 
 
 def route():
     exts.last_update = {'timestamp': to_timestamp(ContentItem.last_activity())}
+    exts.template_defaults['last_update'] = exts.last_update
     return (Status, Candidates, Review, Vote, Download, LastUpdate)
