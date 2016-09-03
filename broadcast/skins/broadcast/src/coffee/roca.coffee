@@ -94,20 +94,6 @@
     # target specified by the `data-roca-target` attribute.
     el = $ @
 
-    autoRefresh = (target, interval) ->
-      # Reload target every `interval` seconds
-      refresh = () -> target.loading().reload reschedule
-      reschedule = () -> setTimeout refresh, interval
-      reschedule()
-
-    refreshOn = (target, event, delay) ->
-      # Reload target when `event` is fired
-      refresh = () ->
-        _delay = (delay || 0) * 1000
-        _refresh = () -> target.loading().reload()
-        setTimeout _refresh, _delay
-      win.on event, refresh
-
     el.each () ->
       el = $ @
       url = el.attr 'href'
@@ -117,19 +103,8 @@
       target.data 'roca-url', url
       target.loading().reload()
       if (el.data 'roca-trap-submit') is 'yes'
-        options = { "onCompleteEvent": el.data 'roca-submit-complete-event' }
-        target.funnelSubmit(options)
-
-      # Optionally reload container when specific events are fired, delayed by
-      # a specified time
-      event = el.data 'roca-refresh-on'
-      if event
-        delay = el.data 'roca-refresh-delay'
-        refreshOn target, event, delay
-
-      # Optionally reload container on specific time intervals
-      interval = el.data 'roca-refresh-interval'
-      if interval
-        autoRefresh target, interval * 1000
+        target.funnelSubmit()
+      if event = el.data 'roca-refresh-on'
+        win.on event, () -> target.reload()
 
 ) this, this.jQuery
