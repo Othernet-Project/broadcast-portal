@@ -1,22 +1,27 @@
 ((window, $) ->
 
+  win = $ window
+  body = $ 'body'
   review = $ '#review'
   candidates = $ '#candidates'
   listCount = review.length + candidates.length
+  lastVotedItem = null
 
-  getReloadCallback = (itemId) ->
-    $.afterNCalls listCount, () ->
-      item = $ "##{itemId}"
-      item.scrollTo () ->
-        item.addClass 'highlighted'
-        setTimeout () ->
-          item.removeClass 'highlighted'
-          return
-        , 4000
+  onRocaLoad = (e, parent) ->
+    return if lastVotedItem is null
+    item = parent.find "##{lastVotedItem}"
+    return if not item.length
+    lastVotedItem = null
+    item.scrollTo () ->
+      item.addClass 'highlighted'
+      setTimeout () ->
+        item.removeClass 'highlighted'
         return
+      , 4000
       return
+    return
 
-  ($ 'body').on 'click', '.vote-icon', (e) ->
+  onVote = (e) ->
     e.preventDefault()
     el = $ @
     form = el.parents '.vote-form'
@@ -25,18 +30,20 @@
     action = form.attr 'action'
     button_value = el.val()
 
-    reloadCallback = getReloadCallback itemId
-
     res = $.post action, upvote: button_value
     res.done () ->
+      lastVotedItem = itemId
+      win.trigger 'vote-submit'
       $.popup $.template 'vote-success'
-      review.reload(reloadCallback)
-      candidates.reload(reloadCallback)
+      $.forceStateUpdate()
       return
     res.fail () ->
       $.popup $.template 'vote-fail'
       return
     return
 
+  win.on 'review-roca-load', onRocaLoad
+  win.on 'candidates-roca-load', onRocaLoad
+  body.on 'click', '.vote-icon', onVote
 
 ) this, this.jQuery
