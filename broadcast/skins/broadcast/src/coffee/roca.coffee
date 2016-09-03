@@ -35,7 +35,7 @@
     el = $ @
     el.append '<input type="hidden" name="partial" value="yes">'
 
-  $.fn.funnelSubmit = (options) ->
+  $.fn.funnelSubmit = () ->
     # Causes the forms within the selected element to be submitted using XHR,
     # or hidden iframe, and results loaded within the selected element.
     el = $ @
@@ -43,13 +43,13 @@
     submitTarget = "#{containerId}-submit-frame"
     submitFrame = $.createSubmitFrame submitTarget
 
-    submitComplete = () ->
-      if options && options.onCompleteEvent
-        win.trigger options.onCompleteEvent
+    submitComplete = () -> win.trigger "#{containerId}-submit"
 
     submitFrameHandler = (e) ->
-      el.html (submitFrame.contents().find 'body').html()
-      submitComplete()
+      frameContent = submitFrame.contents().find 'body'
+      el.html frameContent.html()
+      status = (frameContent.find '.feedback-message').data 'status'
+      submitComplete() if status is 'ok'
 
     submitHandler = (e) ->
       form = $ @
@@ -66,7 +66,6 @@
           submitComplete()
         res.fail (xhr) ->
           el.html xhr.responseText
-          submitComplete()
 
     el.on 'submit', 'form', submitHandler
 
