@@ -76,7 +76,7 @@
     id = el.attr 'id'
     url = el.data 'roca-url'
     el.load (url), (res, status, xhr) ->
-      el.removeData 'loadng'
+      el.removeData 'loading'
       switch xhr.status
         when 200
           fn?(xhr.status)
