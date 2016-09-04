@@ -31,7 +31,7 @@ TemplateMixin.template_func = staticmethod(render)
 
 class StaticRoute(NonIterableRouteBase):
     path = None
-    exclude_plugins = ['sessions']
+    exclude_plugins = ['session']
     path_prefix = '/static'
     force_download = False
 
