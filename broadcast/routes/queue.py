@@ -133,6 +133,7 @@ class Download(ModeratorOnlyMixin, StaticRoute):
 
 class LastUpdate(XHRJsonRoute):
     path = '/queue/last-update'
+    exclude_plugins = ['session']
 
     def get(self):
         return exts.last_update
