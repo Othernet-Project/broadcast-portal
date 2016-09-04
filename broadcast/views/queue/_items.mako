@@ -7,7 +7,7 @@
         ${_('Uploaded by {username} {timeago}').format(username=item.username, timeago=th.human_time(item.created))}
     </p>
     <p class="item-info item-download">
-        <a class="button button-small" href="${url('queue:download', item_id=item.id)}">
+        <a class="button button-small" href="${url('queue:download', item_id=item.id)}" target="_blank">
             <span class="icon icon-download"></span>
             <span class="invisible-label">${_('download')}</span>
             <span class="supplementary-info">${h.hsize(item.size)}</span>
