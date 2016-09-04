@@ -1608,15 +1608,19 @@ p {
   color: #888;
 }
 
-/* line 71, ../../src/scss/_items.scss */
+/* line 70, ../../src/scss/_items.scss */
+.candidate-item {
+  background: #e4fcd3;
+}
+/* line 73, ../../src/scss/_items.scss */
 .candidate-item .vote-icon {
   background-color: #59c10f;
 }
-/* line 75, ../../src/scss/_items.scss */
+/* line 77, ../../src/scss/_items.scss */
 .candidate-item .vote-count {
   background: #8df145;
 }
-/* line 79, ../../src/scss/_items.scss */
+/* line 81, ../../src/scss/_items.scss */
 .candidate-item .order-number {
   position: absolute;
   top: 0;
@@ -1624,22 +1628,37 @@ p {
   color: #595959;
 }
 
-/* line 88, ../../src/scss/_items.scss */
+/* line 89, ../../src/scss/_items.scss */
+.review-item {
+  background: #def1fa;
+}
+
+/* line 94, ../../src/scss/_items.scss */
 .review-item-warning .vote-icon {
   background-color: #f93;
 }
-/* line 92, ../../src/scss/_items.scss */
+/* line 98, ../../src/scss/_items.scss */
 .review-item-warning .vote-count {
   background: #ffcc99;
 }
 
-/* line 98, ../../src/scss/_items.scss */
+/* line 104, ../../src/scss/_items.scss */
 .review-item-alert .vote-icon {
   background-color: #f33;
 }
-/* line 102, ../../src/scss/_items.scss */
+/* line 108, ../../src/scss/_items.scss */
 .review-item-alert .vote-count {
   background: #ff9999;
+}
+
+/* line 113, ../../src/scss/_items.scss */
+.review {
+  background: #def1fa;
+}
+
+/* line 117, ../../src/scss/_items.scss */
+.candidates {
+  background: #e4fcd3;
 }
 
 /**
@@ -1694,7 +1713,7 @@ p {
 .status .review,
 .status .candidates {
   float: left;
-  padding: 0 2rem;
+  padding: 1rem 2rem;
 }
 /* line 47, ../../src/scss/_status.scss */
 .status .upload {
@@ -1713,27 +1732,25 @@ p {
   .status .upload {
     float: none;
     width: auto;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
   }
 }
-/* line 63, ../../src/scss/_status.scss */
+/* line 61, ../../src/scss/_status.scss */
 .status .review,
 .status .candidates {
   width: 40%;
 }
 @media only screen and (max-width: 1100px) {
-  /* line 63, ../../src/scss/_status.scss */
+  /* line 61, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 50%;
   }
 }
 @media only screen and (max-width: 768px) {
-  /* line 63, ../../src/scss/_status.scss */
+  /* line 61, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 100%;
@@ -1755,7 +1772,7 @@ p {
 .home {
   height: 100%;
   background: #1e8abb;
-  background-image: url('../img/radiodrive.jpg?1472585880');
+  background-image: url('../img/radiodrive.jpg?1472988226');
   background-position: center center;
   background-repeat: no-repeat;
   -moz-background-size: cover;

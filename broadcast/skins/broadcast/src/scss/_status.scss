@@ -41,7 +41,7 @@
   .review,
   .candidates {
     float: left;
-    padding: 0 2rem;
+    padding: 1rem 2rem;
   }
 
   .upload {
@@ -54,8 +54,6 @@
     @include narrower-than(1100px) {
       float: none;
       width: auto;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
       @include border-radius(0);
     }
   }

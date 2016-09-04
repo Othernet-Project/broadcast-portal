@@ -68,6 +68,8 @@
 }
 
 .candidate-item {
+  background: lighten($friendly, 50);
+
   .vote-icon {
     background-color: $friendly;
   }
@@ -82,6 +84,10 @@
     right: 0;
     color: $aux-info;
   }
+}
+
+.review-item {
+  background: lighten($background-inverse, 50);
 }
 
 .review-item-warning {
@@ -102,4 +108,12 @@
   .vote-count {
     background: lighten($alert, 20);
   }
+}
+
+.review {
+  background: lighten($background-inverse, 50);
+}
+
+.candidates {
+  background: lighten($friendly, 50);
 }
