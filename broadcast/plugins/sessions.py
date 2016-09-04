@@ -257,6 +257,8 @@ def session_plugin():
 
     @after
     def save_session(*args):
+        if not hasattr(request, 'sessions'):
+            return
         request.session.set_cookie(cookie_name, secret)
         if request.session.modified:
             request.session.save()
