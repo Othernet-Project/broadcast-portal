@@ -1532,12 +1532,12 @@ p {
   margin-left: 1rem;
 }
 
-/* line 2, ../../src/scss/_items.scss */
+/* line 4, ../../src/scss/_items.scss */
 .default .item-list {
   padding: 2rem;
 }
 
-/* line 7, ../../src/scss/_items.scss */
+/* line 9, ../../src/scss/_items.scss */
 .item {
   background: white;
   border-top: 1px solid #ddd;
@@ -1548,26 +1548,38 @@ p {
   -o-transition: background-color 2s;
   -webkit-transition: background-color 2s;
   transition: background-color 2s;
+  overflow-x: hidden;
 }
-/* line 15, ../../src/scss/_items.scss */
+/* line 18, ../../src/scss/_items.scss */
 .item.highlighted {
   background-color: yellow;
 }
-/* line 19, ../../src/scss/_items.scss */
+/* line 22, ../../src/scss/_items.scss */
 .item p {
   margin: 0;
 }
-/* line 23, ../../src/scss/_items.scss */
+/* line 26, ../../src/scss/_items.scss */
 .item .item-name {
   font-size: 120%;
   margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
-/* line 28, ../../src/scss/_items.scss */
+@media only screen and (max-width: 1100px) {
+  /* line 26, ../../src/scss/_items.scss */
+  .item .item-name {
+    font-size: 100%;
+  }
+}
+/* line 36, ../../src/scss/_items.scss */
 .item .item-attribution {
   font-size: 80%;
   color: #595959;
 }
-/* line 33, ../../src/scss/_items.scss */
+/* line 41, ../../src/scss/_items.scss */
 .item .vote-form {
   position: absolute;
   top: 1rem;
@@ -1580,7 +1592,7 @@ p {
   border-radius: 3px;
   overflow: hidden;
 }
-/* line 44, ../../src/scss/_items.scss */
+/* line 52, ../../src/scss/_items.scss */
 .item .vote-count {
   width: 100%;
   display: block;
@@ -1588,7 +1600,7 @@ p {
   font-weight: bold;
   background: #5ab9e5;
 }
-/* line 52, ../../src/scss/_items.scss */
+/* line 60, ../../src/scss/_items.scss */
 .item .vote-icon {
   border: 0 solid transparent;
   background: #1e8abb;
@@ -1602,25 +1614,25 @@ p {
   -webkit-border-radius: 0;
   border-radius: 0;
 }
-/* line 63, ../../src/scss/_items.scss */
+/* line 71, ../../src/scss/_items.scss */
 .item .vote-icon[disabled] {
   background: #ccc;
   color: #888;
 }
 
-/* line 70, ../../src/scss/_items.scss */
+/* line 78, ../../src/scss/_items.scss */
 .candidate-item {
   background: #e4fcd3;
 }
-/* line 73, ../../src/scss/_items.scss */
+/* line 81, ../../src/scss/_items.scss */
 .candidate-item .vote-icon {
   background-color: #59c10f;
 }
-/* line 77, ../../src/scss/_items.scss */
+/* line 85, ../../src/scss/_items.scss */
 .candidate-item .vote-count {
   background: #8df145;
 }
-/* line 81, ../../src/scss/_items.scss */
+/* line 89, ../../src/scss/_items.scss */
 .candidate-item .order-number {
   position: absolute;
   top: 0;
@@ -1628,35 +1640,35 @@ p {
   color: #595959;
 }
 
-/* line 89, ../../src/scss/_items.scss */
+/* line 97, ../../src/scss/_items.scss */
 .review-item {
   background: #def1fa;
 }
 
-/* line 94, ../../src/scss/_items.scss */
+/* line 102, ../../src/scss/_items.scss */
 .review-item-warning .vote-icon {
   background-color: #f93;
 }
-/* line 98, ../../src/scss/_items.scss */
+/* line 106, ../../src/scss/_items.scss */
 .review-item-warning .vote-count {
   background: #ffcc99;
 }
 
-/* line 104, ../../src/scss/_items.scss */
+/* line 112, ../../src/scss/_items.scss */
 .review-item-alert .vote-icon {
   background-color: #f33;
 }
-/* line 108, ../../src/scss/_items.scss */
+/* line 116, ../../src/scss/_items.scss */
 .review-item-alert .vote-count {
   background: #ff9999;
 }
 
-/* line 113, ../../src/scss/_items.scss */
+/* line 121, ../../src/scss/_items.scss */
 .review {
   background: #def1fa;
 }
 
-/* line 117, ../../src/scss/_items.scss */
+/* line 125, ../../src/scss/_items.scss */
 .candidates {
   background: #e4fcd3;
 }
