@@ -18,7 +18,7 @@ import functools
 
 from bottle import request, response
 from bottle_utils.common import basestring
-from streamline import after
+from streamline import after, before
 
 from ..app.exts import container as exts
 from ..util.helpers import utcnow
@@ -250,31 +250,28 @@ class Session(object):
         return utcnow() + datetime.timedelta(life)
 
 
-def session_plugin():
+def pre_init():
     config = exts.config
     cookie_name = config['session.cookie_name']
     secret = os.getenv(config['session.secret_env_name'], 'not-secret')
 
+    @before
+    def initialize_session(route):
+        if 'session' in (route.exclude_plugins or []):
+            return
+        session_id = request.get_cookie(cookie_name, secret=secret)
+        try:
+            request.session = Session.fetch(session_id)
+        except (SessionExpired, SessionInvalid):
+            request.session = Session.create()
+
     @after
-    def save_session(*args):
+    def save_session(route):
         if not hasattr(request, 'sessions'):
             return
         request.session.set_cookie(cookie_name, secret)
         if request.session.modified:
             request.session.save()
-
-    def plugin(callback):
-        @functools.wraps(callback)
-        def wrapper(*args, **kwargs):
-            session_id = request.get_cookie(cookie_name, secret=secret)
-            try:
-                request.session = Session.fetch(session_id)
-            except (SessionExpired, SessionInvalid):
-                request.session = Session.create()
-            return callback(*args, **kwargs)
-        return wrapper
-    plugin.name = 'session'
-    return plugin
 
 
 def generate_secret_key():

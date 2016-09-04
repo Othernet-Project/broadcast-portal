@@ -1,34 +1,22 @@
-import functools
-
 from bottle import request
-from streamline import after
-
-from ..app.exts import container as exts
-from ..models.auth import User, AnonymousUser
+from streamline import after, before
 
 
-def user_plugin():
-    conf = exts.config
-    no_auth = conf['session.no_auth']
+def pre_init():
+    @before
+    def init_user(route):
+        from ..models.auth import User, AnonymousUser
+        if 'auth' in (route.exclude_plugins or []):
+            return
+        if not hasattr(request, 'session'):
+            return
+        user_data = request.session.get('user')
+        if user_data:
+            request.user = User.from_json(user_data)
+        else:
+            request.user = AnonymousUser()
 
     @after
-    def store_user(*args):
+    def store_user(route):
         if hasattr(request, 'user') and not request.user.is_guest:
             request.session['user'] = request.user.to_json()
-
-    def plugin(callback):
-        @functools.wraps(callback)
-        def wrapper(*args, **kwargs):
-            if not hasattr(request, 'session'):
-                return callback(*args, **kwargs)
-
-            request.no_auth = no_auth
-            user_data = request.session.get('user')
-            if user_data:
-                request.user = User.from_json(user_data)
-            else:
-                request.user = AnonymousUser()
-            return callback(*args, **kwargs)
-        return wrapper
-    plugin.name = 'user'
-    return plugin
