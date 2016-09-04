@@ -1,0 +1,54 @@
+@import "colors";
+@import "compass/css3";
+
+@include keyframes(slide-in) {
+  from {
+    @include translateX(-100%);
+  }
+  to {
+    @include translateX(0);
+  }
+}
+
+
+.popup {
+  position: fixed;
+  top: 1rem;
+  left: 0;
+  background: $background-dark;
+  color: $foreground-inverse;
+  padding: 1rem 5rem 1rem 2rem;
+  max-width: 20rem;
+  z-index: 100;
+  @include animation(slide-in 0.2s ease-in);
+
+  .popup-close {
+    display: block;
+    position: absolute;
+    width: 3rem;
+    height: 100%;
+    top: 0;
+    right: 0;
+    background: lighten($background-dark, 10);
+    color: darken($foreground-inverse, 25);
+    font-size: 150%;
+    text-align: center;
+    text-decoration: none;
+
+    // Both after and before are added here for symmetry, as the text within
+    // the box is center-aligned, and these pseudo elements are also taken
+    // into account for centering.
+    &::after,
+    &::before{
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      height: 100%;
+      width: 0;
+    }
+
+    .text-label {
+      display: none;
+    }
+  }
+}

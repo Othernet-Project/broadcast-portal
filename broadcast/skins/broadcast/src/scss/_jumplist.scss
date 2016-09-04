@@ -1,0 +1,39 @@
+@import "colors";
+@import "media_query";
+
+.jump-list {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.4rem 1rem;
+  background: transparentize($background-dark, 0.1);
+  color: $foreground-inverse;
+  text-align: center;
+  z-index: 1000;
+
+  @include narrower-than(1100px) {
+    display: block;
+  }
+
+  @include narrower-than(580px) {
+    padding: 1rem;
+
+    .text-label {
+      display: none;
+    }
+
+    .icon {
+      font-size: 200%;
+    }
+  }
+
+  a {
+    display: inline-block;
+    margin: 0 0.5rem;
+    color: $foreground-inverse;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+}

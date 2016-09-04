@@ -1,0 +1,19 @@
+@import "colors";
+
+.feedback-success {
+  background: $friendly;
+  color: $foreground-inverse;
+
+  a {
+    color: $foreground-inverse;
+  }
+}
+
+.feedback-error {
+  background: $alert;
+  color: $foreground-inverse;
+
+  a {
+    color: $foreground-inverse;
+  }
+}

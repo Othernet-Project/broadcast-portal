@@ -25,4 +25,4 @@ def on_interrupt(handler):
         sys.exit(ret)
 
     signal.signal(signal.SIGTERM, wrapper)
-    signal.signal(signal.SIGSEGV, wrapper)
+    signal.signal(signal.SIGINT, wrapper)

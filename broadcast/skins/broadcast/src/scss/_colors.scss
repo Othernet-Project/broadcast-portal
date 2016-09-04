@@ -1,0 +1,18 @@
+$background: white;
+$foreground: #333;
+$background-dark: #333;
+$background-subtle: #eee;
+$background-inverse: #1e8abb;
+$foreground-inverse: white;
+$link: #1e8abb;
+$link-inverse: lighten($link, 20);
+$link-visited: #aa55ff;
+$link-visited-inverse: lighten($link-visited, 20);
+$field-outline: #0e516e;
+$alert: #f33;
+$warning: #f93;
+$friendly: #59c10f;
+$separator: #ddd;
+$disabled: #ccc;
+$disabled-text: #888;
+$aux-info: lighten($foreground, 15);

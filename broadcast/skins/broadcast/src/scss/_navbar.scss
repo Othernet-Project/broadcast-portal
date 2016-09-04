@@ -1,0 +1,24 @@
+@import "colors";
+
+.main-nav {
+  position: relative;
+  padding: 1rem 2rem;
+  background: $background-inverse;
+  color: $foreground-inverse;
+  text-align: right;
+
+  .logo {
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
+    font-size: 150%;
+  }
+
+  a {
+    display: inline-block;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: $foreground-inverse;
+    margin-left: 1rem;
+  }
+}

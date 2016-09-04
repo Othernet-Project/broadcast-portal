@@ -29,3 +29,19 @@ class DateTimeDecoder(json.JSONDecoder):
             obj['__type__'] = obj_type
             return obj
 
+
+def jsonify(obj):
+    return json.dumps(obj, cls=DateTimeEncoder)
+
+
+def dejsonify(s):
+    return json.loads(s, cls=DateTimeDecoder)
+
+
+def jsonify_file(obj, fd):
+    json.dump(obj, fd, cls=DateTimeEncoder, sort_keys=True, indent=4,
+              separators=(',', ':'))
+
+
+def dejsonify_file(fd):
+    return json.load(fd, cls=DateTimeDecoder)

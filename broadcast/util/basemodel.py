@@ -14,6 +14,20 @@ class Model(object):
     columns = None
     order = None
 
+    NEGATION_MAP = {
+        'ISNULL': 'NOT NULL',
+        'IS': 'IS NOT',
+        '=': '!=',
+        # For all other cases, NOT is prepended to the operator
+    }
+
+    class Not:
+        """
+        Simple marker class that negates the meaning of filters.
+        """
+        def __init__(self, value):
+            self.value = value
+
     class Error(Exception):
         pass
 
@@ -26,13 +40,27 @@ class Model(object):
         # data must be json-serializable, make sure it is
         if not isinstance(data, dict):
             data = dict((k, data[k]) for k in data.keys())
-
+        self._updated = []
         self._data = data
 
     def __getattr__(self, name):
         if name in self.columns:
             return self._data.get(name, None)
         raise AttributeError(name)
+
+    def __setattr__(self, name, value):
+        if name in self.columns:
+            if self._data.get(name, None) == value:
+                pass
+            if name not in self._updated:
+                self.updated.append(name)
+            self._data[name] = value
+        else:
+            object.__setattr__(self, name, value)
+
+    def save(self):
+        update_dict = dict((k, self._data[k]) for k in self._updates)
+        self.update(**update_dict)
 
     def to_native(self):
         return dict(self._data)
@@ -65,17 +93,30 @@ class Model(object):
         return request.db[cls.database]
 
     @classmethod
+    def _negate_op(cls, op, negated=False):
+        if not negated:
+            return op
+        if op in cls.NEGATION_MAP:
+            return cls.NEGATION_MAP[op]
+        return 'NOT {}'.format(op)
+
+    @classmethod
     def _unpack_command(cls, command, value):
-        splitted = command.split(cls._command_delimiter)
-        if len(splitted) > 1:
-            (field, op) = splitted
+        opposite = isinstance(value, cls.Not)
+        if opposite:
+            # Get original value
+            value = value.value
+        tokens = command.split(cls._command_delimiter)
+        if len(tokens) > 1:
+            (field, op) = tokens
             if op.lower() == 'like':
                 value = '%{value}%'.format(value=value)
-
-            return (field, op, value)
-
-        (field,) = splitted
-        return (field, 'IS' if value is None else '=', value)
+            op = cls._negate_op(op, opposite)
+        else:
+            (field,) = tokens
+            op = 'IS' if value is None else '='
+            op = cls._negate_op(op, opposite)
+        return (field, op, value)
 
     @classmethod
     def _construct_query(cls, db, **kwargs):
@@ -139,4 +180,3 @@ class Model(object):
                 return subclass
 
         raise TypeError("Unable to cast into: {}".format(into))
-

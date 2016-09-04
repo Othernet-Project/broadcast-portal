@@ -1,0 +1,100 @@
+@import "fonts";
+@import "colors";
+@import "compass/css3";
+@import "OIcons";
+@import "media_query";
+
+* {
+  @include box-sizing(border-box);
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: $font-family;
+  font-size: $font-size;
+  line-height: $line-height;
+  background: $background;
+  color: $foreground;
+}
+
+
+a {
+  color: $link;
+
+  &:visited {
+    color: $link-visited;
+  }
+}
+
+h1 {
+  font-size: 250%;
+  line-height: 110%;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+
+  @include narrower-than(768px) {
+    font-size: 180%;
+    line-height: 110%;
+  }
+}
+
+h2 {
+  font-size: 150%;
+  line-height: 110%;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+
+  @include narrower-than(768px) {
+    font-size: 120%;
+    line-height: 110%;
+  }
+}
+
+p {
+  margin-bottom: 1.4rem;
+}
+
+.footer {
+  font-size: 90%;
+  border-top: 1px solid $separator;
+  padding: 3rem 2rem;
+  margin-top: 2rem;
+  clear: both;
+
+  nav {
+    a {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+.float-container {
+  &::after {
+    content: '';
+    display: block;
+    height: 0;
+    clear: both;
+  }
+}
+
+.default {
+  h1 {
+    padding: 2rem 2rem 1rem;
+  }
+
+  section {
+    padding: 0 2rem 2rem;
+
+    form {
+      // Since all inputs are rigged to expand to full width, we make sure
+      // forms don't go beyond 20rem in width under any circumstance
+      max-width: 20rem;
+    }
+  }
+}
+
+@include icon-classes;

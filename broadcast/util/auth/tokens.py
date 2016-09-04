@@ -1,8 +1,6 @@
 import datetime
 import uuid
 
-from bottle import request
-
 from ..basemodel import Model
 from .users import User
 
@@ -67,4 +65,3 @@ class PasswordReset(BaseToken):
         user.set_password(new_password)
         self.delete()
         return user
-

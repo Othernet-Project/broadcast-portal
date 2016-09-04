@@ -1,0 +1,76 @@
+@import "media_query";
+@import "compass/css3";
+
+.capacity {
+  .capacity-gauge-outer {
+    position: relative;
+    display: block;
+    background: darken($background-inverse, 10);
+    height: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .capacity-gauge-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    height: 100%;
+    background: $background-inverse;
+  }
+}
+
+.status {
+  h1 {
+    padding: 2rem 2rem 1rem;
+  }
+
+  .stats,
+  .info {
+    width: 50%;
+    float: left;
+    padding: 1rem 2rem;
+
+    @include narrower-than(688px) {
+      float: none;
+      width: auto;
+    }
+  }
+
+  .upload,
+  .review,
+  .candidates {
+    float: left;
+    padding: 0 2rem;
+  }
+
+  .upload {
+    background: $background-subtle;
+    padding-top: 1rem;
+    width: 20%;
+    @include border-top-right-radius(5px);
+    @include border-bottom-right-radius(5px);
+
+    @include narrower-than(1100px) {
+      float: none;
+      width: auto;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      @include border-radius(0);
+    }
+  }
+
+  .review,
+  .candidates {
+    width: 40%;
+
+    @include narrower-than(1100px) {
+      width: 50%;
+    }
+
+    @include narrower-than(768px) {
+      width: 100%;
+      float: none;
+    }
+  }
+}

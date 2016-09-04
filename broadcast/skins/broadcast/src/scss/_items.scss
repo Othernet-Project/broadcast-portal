@@ -1,0 +1,105 @@
+.default {
+  .item-list {
+    padding: 2rem;
+  }
+}
+
+.item {
+  background: $background;
+  border-top: 1px solid $separator;
+  position: relative;
+  padding: 1rem 0 2rem 4rem;
+  width: 100%;
+  @include transition(background-color 2s);
+
+  &.highlighted {
+    background-color: yellow;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  .item-name {
+    font-size: 120%;
+    margin-bottom: 0.5rem;
+  }
+
+  .item-attribution {
+    font-size: 80%;
+    color: $aux-info;
+  }
+
+  .vote-form {
+    position: absolute;
+    top: 1rem;
+    left: 0;
+    width: 3rem;
+    color: $foreground-inverse;
+    text-align: center;
+    @include border-radius(3px);
+    overflow: hidden;
+  }
+
+  .vote-count {
+    width: 100%;
+    display: block;
+    padding: 0.2rem 0;
+    font-weight: bold;
+    background: lighten($background-inverse, 20);
+  }
+
+  .vote-icon {
+    border: 0 solid transparent;
+    background: $background-inverse;
+    color: $foreground;
+    letter-spacing: 0;
+    padding: 0.2rem 0;
+    text-transform: none;
+    width: 3rem;
+    color: $foreground-inverse;
+    @include border-radius(0);
+
+    &[disabled] {
+      background: $disabled;
+      color: $disabled-text;
+    }
+  }
+}
+
+.candidate-item {
+  .vote-icon {
+    background-color: $friendly;
+  }
+
+  .vote-count {
+    background: lighten($friendly, 20);
+  }
+
+  .order-number {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: $aux-info;
+  }
+}
+
+.review-item-warning {
+  .vote-icon {
+    background-color: $warning;
+  }
+
+  .vote-count {
+    background: lighten($warning, 20);
+  }
+}
+
+.review-item-alert {
+  .vote-icon {
+    background-color: $alert;
+  }
+
+  .vote-count {
+    background: lighten($alert, 20);
+  }
+}
