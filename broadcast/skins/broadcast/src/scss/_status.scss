@@ -48,13 +48,10 @@
     background: $background-subtle;
     padding-top: 1rem;
     width: 20%;
-    @include border-top-right-radius(5px);
-    @include border-bottom-right-radius(5px);
 
     @include narrower-than(1100px) {
       float: none;
       width: auto;
-      @include border-radius(0);
     }
   }
 

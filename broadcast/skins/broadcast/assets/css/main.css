@@ -1732,37 +1732,28 @@ p {
   background: #eee;
   padding-top: 1rem;
   width: 20%;
-  -moz-border-radius-topright: 5px;
-  -webkit-border-top-right-radius: 5px;
-  border-top-right-radius: 5px;
-  -moz-border-radius-bottomright: 5px;
-  -webkit-border-bottom-right-radius: 5px;
-  border-bottom-right-radius: 5px;
 }
 @media only screen and (max-width: 1100px) {
   /* line 47, ../../src/scss/_status.scss */
   .status .upload {
     float: none;
     width: auto;
-    -moz-border-radius: 0;
-    -webkit-border-radius: 0;
-    border-radius: 0;
   }
 }
-/* line 61, ../../src/scss/_status.scss */
+/* line 58, ../../src/scss/_status.scss */
 .status .review,
 .status .candidates {
   width: 40%;
 }
 @media only screen and (max-width: 1100px) {
-  /* line 61, ../../src/scss/_status.scss */
+  /* line 58, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 50%;
   }
 }
 @media only screen and (max-width: 768px) {
-  /* line 61, ../../src/scss/_status.scss */
+  /* line 58, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 100%;
