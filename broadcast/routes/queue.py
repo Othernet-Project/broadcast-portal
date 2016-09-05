@@ -6,7 +6,7 @@ import datetime
 from bottle_utils.i18n import dummy_gettext as _
 
 from ..models.items import ContentItem
-from ..util.helpers import to_timestamp, utcnow
+from ..util.helpers import to_timestamp, utcnow, tomorrow
 from ..app.exts import container as exts
 from ..util.routes import (
     ActionTemplateRoute,
@@ -58,6 +58,7 @@ class Status(ModeratorOnlyMixin, XHRPartialRoute):
             'closing': self.closing_time(),
             'last_update': exts.last_update,
             'today': utcnow().date(),
+            'timestamp': to_timestamp(tomorrow())
         }
 
 

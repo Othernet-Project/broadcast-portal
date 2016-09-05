@@ -1,4 +1,4 @@
-<h2><time class="date" datetime="${today}">${_('{date} filecast queue').format(date=today)}</time></h2>
+<h2><time id="filecast-time" class="date" datetime="${today}" data-timestamp="${timestamp}">${_('{date} filecast queue').format(date=today)}</time></h2>
 <p class="capacity">
     <span class="capacity-gauge-outer">
         <span class="capacity-gauge-inner" style="width: ${pct_capacity}%"></span>
