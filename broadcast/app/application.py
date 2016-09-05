@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import logging
 import importlib
@@ -13,6 +14,14 @@ from . import cmdline
 from .. import __version__
 from ..util.signal_handlers import on_interrupt
 
+try:
+    import pwd
+    import grp
+except ImportError:
+    has_user = False
+else:
+    has_user = True
+
 
 class Application:
     LOOP_INTERVAL = 5  # in seconds
@@ -21,8 +30,10 @@ class Application:
         self.name = 'broadcast'
         self.version = __version__
         self.root = root
+        self.work_dir = os.getcwd()
         self.server = None
         self.app = Bottle()
+        self.child = False
         self.hooks = {
             'pre_init': [],
             'pre_start': [],
@@ -103,10 +114,97 @@ class Application:
                           r.callback.__name__)
         logging.debug('==============================')
 
+    def fork(self):
+        """
+        Attempt to fork the current process
+
+        Raises ``RuntimeError`` if the fork is not successful.
+        """
+        try:
+            pid = os.fork()
+        except OSError:
+            raise RuntimeError('process failed to fork')
+        if pid == 0:
+            if not self.child:
+                os.setsid()
+        else:
+            os._exit(0)
+        return pid
+
+    def setuid(self):
+        """
+        Set user and group ID of the process
+
+        If ``self.group`` is not defined, then this method uses the group ID of
+        the ``self.user``.
+
+        Returns a tuple containing the active user and group IDs.
+        """
+        if not has_user:
+            logging.warn('User switching is disabled on this OS')
+            return
+        user = self.exts.proc_conf['user']
+        group = self.exts.proc_conf['group']
+        logging.debug('Setting process UID and GID')
+        pwinfo = pwd.getpwnam(user)
+        uid = pwinfo.pw_uid
+        os.setuid(uid)
+        os.seteuid(uid)
+        if group:
+            logging.debug('Using specified group for GID')
+            gid = grp.getgrpnam(group).grp_gid
+        else:
+            logging.debug('Using specified user for GID')
+            gid = pwinfo.pw_gid
+        os.setgid(gid)
+        os.setegid(gid)
+        logging.debug('Process UID=%s and GID=%s', uid, gid)
+        return uid, gid
+
+    def daemonize(self):
+        """
+        Background the process in which the app instance is initialized
+
+        This method converts the process to which this instance belongs, to a
+        double-forking daemon.
+
+        This method returns the current PID of the forked child process.
+        """
+        logging.info('Forking into background')
+        # Fork once
+        try:
+            self.fork()
+        except RuntimeError:
+            logging.critical('Could not fork the process')
+            sys.exit(1)
+        logging.debug('Started child process')
+        self.child = True
+        # Set up the process environment
+        os.chdir(os.path.normpath(self.work_dir))
+        os.umask(0)
+        # Fork second time
+        try:
+            self.fork()
+        except RuntimeError:
+            logging.critical('Could not double-fork the process')
+            sys.exit(1)
+        logging.debug('Running as daemon (PID={})'.format(os.getpid()))
+        # Write the PID as needed
+        pid_file = self.exts.proc_conf['pid_file']
+        if pid_file:
+            with open(pid_file, 'w') as f:
+                f.write(str(os.getpid()))
+            logging.debug('PID file written to %s', pid_file)
+        # Switch to unprivileged user
+        if self.exts.proc_conf['user']:
+            self.setuid()
+
     def start(self):
         self.run_hooks('pre_start')
         if self.debug:
             self.debug_app()
+        if self.exts.proc_conf['background']:
+            self.daemonize()
         host = self.config['server.bind']
         port = self.config['server.port']
         self.server = pywsgi.WSGIServer((host, port), self.app, log=None)

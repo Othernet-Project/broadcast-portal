@@ -7,6 +7,12 @@ import signal
 from . import Option, Command
 
 
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = OSError
+
+
 DEFAULT_PID = '/var/run/broadcast.pid'
 
 
@@ -42,14 +48,14 @@ class Startup(Option):
         self.exts.debug = args.debug or debug_default
         self.exts.quiet = args.quiet or args.command is not None
         if hasattr(os, 'fork'):
-            self.exts.proc_config = {
+            self.exts.proc_conf = {
                 'background': args.background,
                 'pid_file': args.pid_file,
                 'user': args.user or user_default,
                 'group': args.group or group_default,
             }
         else:
-            self.exts.proc_config = {
+            self.exts.proc_conf = {
                 'background': False,
                 'pid_file': None,
                 'user': None,
@@ -62,8 +68,12 @@ class Stop(Command):
     help = 'stop the process that would be started with given options'
 
     def run(self, args):
-        with open(args.pid_file, 'r') as f:
-            pid = f.read()
+        try:
+            with open(self.exts.proc_conf['pid_file'], 'r') as f:
+                pid = f.read()
+        except (OSError, IOError, FileNotFoundError):
+            print('No pid file specified', file=sys.stderr)
+            self.quit(1)
         try:
             os.kill(int(pid), signal.SIGTERM)
         except (ValueError, TypeError):
