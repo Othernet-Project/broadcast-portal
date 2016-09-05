@@ -313,7 +313,6 @@ class AcceptInvitationForm(form.Form):
             User.new(username=self.processed_data['username'],
                      email=self.processed_data['email'],
                      password=password1,
-                     group=User.MODERATOR,
                      confirmed=True)
         except User.IntegrityError:
             raise form.ValidationError('userexists')
