@@ -8,6 +8,8 @@ from ..app.exts import container as exts
 
 
 class Static(StaticRoute):
+    exclude_plugins = ['session']
+
     def get_base_dirs(self):
         return [exts.assets.directory, skin_assets_dir()]
 
