@@ -274,6 +274,7 @@ class PasswordResetToken(BaseToken):
     def accept(self, new_password):
         user = User.get(email=self.email)
         user.set_password(new_password)
+        user.save()
         super(PasswordResetToken, self).accept()
         return user
 
