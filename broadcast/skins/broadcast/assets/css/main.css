@@ -1578,8 +1578,9 @@ p {
 .item .item-attribution {
   font-size: 80%;
   color: #595959;
+  margin-bottom: 0.5rem;
 }
-/* line 41, ../../src/scss/_items.scss */
+/* line 42, ../../src/scss/_items.scss */
 .item .vote-form {
   position: absolute;
   top: 1rem;
@@ -1592,7 +1593,7 @@ p {
   border-radius: 3px;
   overflow: hidden;
 }
-/* line 52, ../../src/scss/_items.scss */
+/* line 53, ../../src/scss/_items.scss */
 .item .vote-count {
   width: 100%;
   display: block;
@@ -1600,7 +1601,7 @@ p {
   font-weight: bold;
   background: #5ab9e5;
 }
-/* line 60, ../../src/scss/_items.scss */
+/* line 61, ../../src/scss/_items.scss */
 .item .vote-icon {
   border: 0 solid transparent;
   background: #1e8abb;
@@ -1614,25 +1615,25 @@ p {
   -webkit-border-radius: 0;
   border-radius: 0;
 }
-/* line 71, ../../src/scss/_items.scss */
+/* line 72, ../../src/scss/_items.scss */
 .item .vote-icon[disabled] {
   background: #ccc;
   color: #888;
 }
 
-/* line 78, ../../src/scss/_items.scss */
+/* line 79, ../../src/scss/_items.scss */
 .candidate-item {
   background: #e4fcd3;
 }
-/* line 81, ../../src/scss/_items.scss */
+/* line 82, ../../src/scss/_items.scss */
 .candidate-item .vote-icon {
   background-color: #59c10f;
 }
-/* line 85, ../../src/scss/_items.scss */
+/* line 86, ../../src/scss/_items.scss */
 .candidate-item .vote-count {
   background: #8df145;
 }
-/* line 89, ../../src/scss/_items.scss */
+/* line 90, ../../src/scss/_items.scss */
 .candidate-item .order-number {
   position: absolute;
   top: 0;
@@ -1640,35 +1641,35 @@ p {
   color: #595959;
 }
 
-/* line 97, ../../src/scss/_items.scss */
+/* line 98, ../../src/scss/_items.scss */
 .review-item {
   background: #def1fa;
 }
 
-/* line 102, ../../src/scss/_items.scss */
+/* line 103, ../../src/scss/_items.scss */
 .review-item-warning .vote-icon {
   background-color: #f93;
 }
-/* line 106, ../../src/scss/_items.scss */
+/* line 107, ../../src/scss/_items.scss */
 .review-item-warning .vote-count {
   background: #ffcc99;
 }
 
-/* line 112, ../../src/scss/_items.scss */
+/* line 113, ../../src/scss/_items.scss */
 .review-item-alert .vote-icon {
   background-color: #f33;
 }
-/* line 116, ../../src/scss/_items.scss */
+/* line 117, ../../src/scss/_items.scss */
 .review-item-alert .vote-count {
   background: #ff9999;
 }
 
-/* line 121, ../../src/scss/_items.scss */
+/* line 122, ../../src/scss/_items.scss */
 .review {
   background: #def1fa;
 }
 
-/* line 125, ../../src/scss/_items.scss */
+/* line 126, ../../src/scss/_items.scss */
 .candidates {
   background: #e4fcd3;
 }
