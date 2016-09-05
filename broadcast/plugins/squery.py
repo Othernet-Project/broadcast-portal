@@ -12,9 +12,8 @@ from __future__ import print_function
 
 import os
 import logging
-from functools import wraps
 
-from bottle import request
+from streamline import before
 from bottle_utils.common import to_unicode
 from squery_lite.squery import Database, Connection
 
@@ -58,17 +57,6 @@ class DatabaseContainer(object):
         return iter(self.dbdict.items())
 
 
-def database_plugin():
-    def plugin(callback):
-        @wraps(callback)
-        def wrapper(*args, **kwargs):
-            request.db = exts.db
-            return callback(*args, **kwargs)
-        return wrapper
-    plugin.name = 'squery'
-    return plugin
-
-
 def pre_init():
     logging.info('Connecting to databases')
     config = exts.config
@@ -79,6 +67,10 @@ def pre_init():
         conn = Connection(dbpath,
                           funcs=[ilike, ulower])
         exts.db.append(name, Database(conn, debug=exts.debug))
+
+    @before
+    def add_database_object(route):
+        route.request.db = exts.db
 
 
 def post_stop():
