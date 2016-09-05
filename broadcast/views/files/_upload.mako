@@ -3,7 +3,7 @@
 %if request.is_xhr:
     <h2>
         <span class="icon icon-plus-outline"></span>
-        <span class="heading-text">${_('Add files')}</span>
+        <span class="heading-text">${_('Add a file')}</span>
     </h2>
 %endif
 
