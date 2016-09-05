@@ -10,10 +10,13 @@
     target = el.attr 'href'
     ($ target).scrollTo()
 
-  win.on 'upload-submit', (e, uploadSection) ->
+  sectionReload = (e, section) ->
     setTimeout () ->
-      uploadSection.reload()
+      section.reload()
     , 7000
+
+  win.on 'upload-submit', sectionReload
+  win.on 'beta-signup-submit', sectionReload
 
   win.on 'state-update', (e, data) ->
     return if data.forced
