@@ -31,6 +31,11 @@ def utcnow():
     return datetime.datetime.now(tz=pytz.utc)
 
 
+def tomorrow():
+    today = utcnow().date()
+    return today + datetime.timedelta(1)
+
+
 def to_timestamp(d):
     return int(time.mktime(d.timetuple()))
 
