@@ -71,7 +71,8 @@ class ContentForm(form.Form):
     )
     is_authorized = form.BooleanField(
         # Translators, used as label for is_authorized field
-        _("I am authorized"),
+        _('I am <a href="https://outernet.is/content-guidelines" '
+          'target="_blank">authorized</a>'),
         value="authorized",
         validators=[form.Required()],
         help_text=_("Are you authorized to distribute this file?")
