@@ -1,5 +1,6 @@
-=========================
-Outernet Broadcast Portal
-=========================
+========================
+Outernet Filecast Center
+========================
 
-Web interface for broadcasting content on Outernet.
+Public web interface for moderating and uploading content for the Outernet
+filecast service.
