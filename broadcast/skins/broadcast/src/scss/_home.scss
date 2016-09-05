@@ -159,6 +159,9 @@ $one-col: 800px;
     }
   }
 
+  .field-help-message {
+    color: darken($foreground-inverse, 20);
+  }
 
   .beta-signup label {
     display: none;

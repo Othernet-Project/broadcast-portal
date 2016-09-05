@@ -40,16 +40,27 @@
     </a>
 </p>
 
-<div id="beta-signup" class="beta-signup" data-roca-trap-submit="yes">
-    <h2>${_('Join the closed beta')}</h2>
-    <p>${_('Filecast center is now in closed beta. We are accepting '
-        'sign-ups for closed beta testers.')}</p>
-    <p>
-        <a href="${url('main:beta_signup')}" data-roca-target="beta-signup">
-            ${'Join'}
-        </a>
-    </p>
-</div>
+%if request.user.is_guest:
+    <div id="beta-signup" class="beta-signup" data-roca-trap-submit="yes">
+        <h2>${_('Join the closed beta')}</h2>
+        <p>${_('Filecast center is now in closed beta. We are accepting '
+            'sign-ups for closed beta testers.')}</p>
+        <p>
+            <a href="${url('main:beta_signup')}" data-roca-target="beta-signup">
+                ${'Join'}
+            </a>
+        </p>
+    </div>
+%else:
+    <div id="upload" class="upload" data-roca-trap-submit="yes">
+        <h2>${_('Upload a file')}</h2>
+        <p>
+            <a href="${url('files:upload')}" data-roca-target="upload">
+                ${'Add a new file to the review list'}
+            </a>
+        </p>
+    </div>
+%endif
 </section>
 
 <section id="stats" class="stats" data-roca-refresh-on="state-update">

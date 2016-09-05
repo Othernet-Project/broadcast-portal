@@ -1989,7 +1989,11 @@ p {
 .hero .button:visited {
   color: #1e8abb;
 }
-/* line 163, ../../src/scss/_home.scss */
+/* line 162, ../../src/scss/_home.scss */
+.hero .field-help-message {
+  color: #cccccc;
+}
+/* line 166, ../../src/scss/_home.scss */
 .hero .beta-signup label {
   display: none;
 }
