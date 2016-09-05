@@ -152,13 +152,13 @@ class Application:
         os.seteuid(uid)
         if group:
             logging.debug('Using specified group for GID')
-            gid = grp.getgrpnam(group).grp_gid
+            gid = grp.getgrnam(group).gr_gid
         else:
             logging.debug('Using specified user for GID')
             gid = pwinfo.pw_gid
+        logging.debug('Process UID=%s and GID=%s', uid, gid)
         os.setgid(gid)
         os.setegid(gid)
-        logging.debug('Process UID=%s and GID=%s', uid, gid)
         return uid, gid
 
     def daemonize(self):
