@@ -267,7 +267,7 @@ def pre_init():
 
     @after
     def save_session(route):
-        if not hasattr(request, 'sessions'):
+        if not hasattr(request, 'session'):
             return
         request.session.set_cookie(cookie_name, secret)
         if request.session.modified:
