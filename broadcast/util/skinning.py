@@ -1,4 +1,4 @@
-from os.path import join, normpath, isdir
+from os.path import join, normpath, isdir, abspath
 
 from ..app.exts import container as exts
 
@@ -8,7 +8,7 @@ def skin_dir():
     extras = exts.config['assets.extra_skins']
     skin = exts.config['assets.skin']
     if extras:
-        skinpath = join(normpath(extras), skin)
+        skinpath = join(abspath(normpath(extras)), skin)
     if isdir(skinpath):
         return skinpath
     return join(exts.root, normpath(skindir), skin)
