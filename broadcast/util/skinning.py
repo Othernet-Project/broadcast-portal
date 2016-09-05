@@ -7,6 +7,7 @@ def skin_dir():
     skindir = exts.config['assets.skin_dir']
     extras = exts.config['assets.extra_skins']
     skin = exts.config['assets.skin']
+    skinpath = ''
     if extras:
         skinpath = join(abspath(normpath(extras)), skin)
     if isdir(skinpath):
