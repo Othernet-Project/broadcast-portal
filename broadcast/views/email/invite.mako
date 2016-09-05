@@ -11,6 +11,6 @@ email) signed up for Filecast center closed beta program.
 To complete the signup process, please follow this link:
 
 {link}
-''').format(link=host_url + url('auth:accept_invitation', key=key)}
+''').format(link=host_url + url('auth:accept_invitation', key=key))}
 
 ${signature.body()}
