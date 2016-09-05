@@ -6,12 +6,15 @@
     <p class="item-info item-attribution">
         ${_('Uploaded by {username} {timeago}').format(username=item.username, timeago=th.human_time(item.created))}
     </p>
-    <p class="item-info item-download">
+    <p class="item-info item-download item-abuse">
         <a class="button button-small" href="${url('queue:download', item_id=item.id)}" target="_blank">
             <span class="icon icon-download"></span>
             <span class="invisible-label">${_('download')}</span>
             <span class="supplementary-info">${h.hsize(item.size)}</span>
         </a> 
+        <a class="button button-small" href="mailto:abuse@outernet.is?subject=Reporting+abuse+for+file+ID+${item.id}">
+            ${_('Report')}
+        </a>
     </p>
     <form class="vote-form" action="${url('queue:vote', item_id=item.id)}" method="POST">
         <input type="hidden" name="next" value="${request.fullpath}">
