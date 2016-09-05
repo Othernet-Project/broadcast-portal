@@ -5,6 +5,11 @@
     <span class="heading-text">${_('Filecast candidates')}</span>
 </h2>
 %endif
+
+<p class="notes">
+    ${_('Final review list')}
+</p>
+
 <% count = 0 %>
 <ul class="item-list candidate-list">
     %for item in items:

@@ -37,6 +37,23 @@
     }
   }
 
+  .queue-diagram {
+    font-size: 200%;
+    padding: 1rem 0 0;
+    white-space: nowrap;
+    color: $background-inverse;
+
+    .icon-arrow-right {
+      font-size: 80%;
+      margin: 0 0.5rem;
+    }
+  }
+
+  .notes {
+    font-size: 90%;
+    color: $aux-info;
+  }
+
   .upload,
   .review,
   .candidates {

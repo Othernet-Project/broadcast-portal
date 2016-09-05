@@ -16,10 +16,17 @@
         <span class="icon icon-info"></span>
         <span class="heading-text">${_('Filecast queues')}</span>
     </h2>
-    <p>
-        ${_('The candidates are chosen by moderator vote, and the top-voted files '
-        'that fit the daily bandwidth quota are selected for the daily filecast '
-        'queue every midnight UTC.')}
+    <p class="queue-diagram">
+        <span class="icon icon-edit-outline"></span>
+        <span class="icon icon-arrow-right"></span>
+        <span class="icon icon-ok-outline"></span>
+        <span class="icon icon-arrow-right"></span>
+        <span class="icon icon-satellite"></span>
+    </p>
+    <p class="notes">
+        ${_('Moderators vote the files in the review list into the candidate '
+        'list. The top-voted candidates that fit the daily filecast bandwidth '
+        'will be uplinked every day at midnight UTC.')}
     </p>
     </section>
 </div>

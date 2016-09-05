@@ -5,6 +5,11 @@
     <span class="header-text">${_('Review list')}</span>
 </h2>
 %endif
+
+<p class="notes">
+    ${_('Latest uploads')}
+</p>
+
 <% count = 0 %>
 <ul class="item-list review-list">
     %for item in items:

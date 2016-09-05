@@ -1721,39 +1721,56 @@ p {
   }
 }
 /* line 40, ../../src/scss/_status.scss */
+.status .queue-diagram {
+  font-size: 200%;
+  padding: 1rem 0 0;
+  white-space: nowrap;
+  color: #1e8abb;
+}
+/* line 46, ../../src/scss/_status.scss */
+.status .queue-diagram .icon-arrow-right {
+  font-size: 80%;
+  margin: 0 0.5rem;
+}
+/* line 52, ../../src/scss/_status.scss */
+.status .notes {
+  font-size: 90%;
+  color: #595959;
+}
+/* line 57, ../../src/scss/_status.scss */
 .status .upload,
 .status .review,
 .status .candidates {
   float: left;
   padding: 1rem 2rem;
 }
-/* line 47, ../../src/scss/_status.scss */
+/* line 64, ../../src/scss/_status.scss */
 .status .upload {
   background: #eee;
   padding-top: 1rem;
   width: 20%;
 }
 @media only screen and (max-width: 1100px) {
-  /* line 47, ../../src/scss/_status.scss */
+  /* line 64, ../../src/scss/_status.scss */
   .status .upload {
     float: none;
     width: auto;
   }
 }
-/* line 58, ../../src/scss/_status.scss */
+/* line 75, ../../src/scss/_status.scss */
 .status .review,
 .status .candidates {
   width: 40%;
 }
 @media only screen and (max-width: 1100px) {
-  /* line 58, ../../src/scss/_status.scss */
+  /* line 75, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 50%;
   }
 }
 @media only screen and (max-width: 768px) {
-  /* line 58, ../../src/scss/_status.scss */
+  /* line 75, ../../src/scss/_status.scss */
   .status .review,
   .status .candidates {
     width: 100%;
