@@ -1,10 +1,14 @@
 <%namespace name="signature" file="_signature.mako"/>
 
 ${ _("""Dear user,
-You're receiving this e-mail because you or someone else has requested a password reset using your email address.
-It can be safely ignored if you did not request it.
-Click the link below to reset your password:
-    %(link)s
-""") % {'link': host_url + url('auth:reset_password', key=key)} }
+
+You are receiving this e-mail because you (or someone else using your email)
+has requested a password reset. It can be safely ignored if you did not request
+it.
+
+Please follow the link below to reset your password:
+
+{link}
+""").format(link=host_url + url('auth:reset_password', key=key))}
 
 ${signature.body()}
