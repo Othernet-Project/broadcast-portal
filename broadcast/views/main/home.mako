@@ -4,14 +4,30 @@
 <%block name="body_class">home</%block>
 
 <%block name="top">
+    <nav id="main-nav" class="main-nav">
     %if request.user.is_guest:
-        <nav id="main-nav" class="main-nav">
-        <a href="${url('auth:login')}">
+        <a class="login-link" href="${_(url('auth:login', next=request.fullpath))}">
             <span class="icon icon-key"></span>
             <span class="label">${_('Log in')}</span>
         </a>
-        </nav>
+    %else:
+        <%
+            USER_ICONS = {
+                'moderator': 'user-shield',
+                'superuser': 'user-star',
+            }
+            user_icon = USER_ICONS.get(request.user.group, 'user')
+        %>
+        <span class="user-profile">
+            <span class="icon icon-${user_icon}"></span>
+            <span class="label">${request.user.username}</span>
+        </span>
+        <a href="${url('auth:logout')}">
+            <span class="icon icon-exit"></span>
+            <span class="label">${_('Log out')}</span>
+        </a>
     %endif
+    </nav>
 </%block>
 
 <section id="hero" class="hero">
