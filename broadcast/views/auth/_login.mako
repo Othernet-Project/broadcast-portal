@@ -5,6 +5,7 @@
 
     ${forms.csrf_token()}
 
+    ${h.HIDDEN('next', request.params.get('next', url('main:home'))) |n,unicode}
     ${forms.field(form.username)}
     ${forms.field(form.password)}
     <p class="buttons">
