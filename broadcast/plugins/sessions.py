@@ -258,20 +258,25 @@ def pre_init():
     @before
     def initialize_session(route):
         if 'session' in (route.exclude_plugins or []):
+            logging.debug('Sessions disabled for route')
             return
         session_id = request.get_cookie(cookie_name, secret=secret)
         try:
             request.session = Session.fetch(session_id)
+            logging.debug('Using existing session data: %s', session_id)
         except (SessionExpired, SessionInvalid):
+            logging.debug('Starting new session')
             request.session = Session.create()
 
     @after
     def save_session(route):
         if not hasattr(request, 'session'):
+            logging.debug('No attribute requrest.session, nothing to do')
             return
         request.session.set_cookie(cookie_name, secret)
         if request.session.modified:
             request.session.save()
+            logging.debug('Wrote session data')
 
 
 def generate_secret_key():

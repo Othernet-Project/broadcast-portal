@@ -1,3 +1,5 @@
+import logging
+
 from bottle import request
 from streamline import after, before
 
@@ -7,6 +9,7 @@ def pre_init():
     def init_user(route):
         from ..models.auth import User, AnonymousUser
         if 'auth' in (route.exclude_plugins or []):
+            logging.debug('Auth disabled')
             return
         if not hasattr(request, 'session'):
             return
