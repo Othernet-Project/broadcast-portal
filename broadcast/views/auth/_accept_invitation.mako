@@ -8,11 +8,11 @@
     ${h.HIDDEN('key', key) | n,unicode}
     ${h.HIDDEN('email', email) | n,unicode}
 
-    ${forms.field(form.username)}
-    ${forms.field(form.password1)}
-    ${forms.field(form.password2)}
-    ${forms.field(form.tos_agree)}
-    ${forms.field(form.priv_read)}
+    ${forms.field(form.username, required=True)}
+    ${forms.field(form.password1, required=True)}
+    ${forms.field(form.password2, required=True)}
+    ${forms.field(form.tos_agree, required=True)}
+    ${forms.field(form.priv_read, required=True)}
     <p class="buttons">
         <button type="submit">${_('Register')}</button>
     </p>
