@@ -1,7 +1,6 @@
 from __future__ import division
 
 import logging
-import datetime
 
 from bottle_utils.i18n import dummy_gettext as _
 
@@ -41,11 +40,6 @@ class Status(ModeratorOnlyMixin, XHRPartialRoute):
     path = '/queue/'
     role_xhr_method_whitelist = ['GET']
 
-    @staticmethod
-    def closing_time():
-        tomorrow = datetime.date.today() + datetime.timedelta(1)
-        return to_timestamp(tomorrow)
-
     def get(self):
         stats = ContentItem.candidate_stats()
         bin_limit = exts.config['bin.capacity']
@@ -55,7 +49,6 @@ class Status(ModeratorOnlyMixin, XHRPartialRoute):
             'size': stats.size or 0,
             'count': stats.count or 0,
             'pct_capacity': pct_cap,
-            'closing': self.closing_time(),
             'last_update': exts.last_update,
             'today': utcnow().date(),
             'timestamp': to_timestamp(tomorrow())
