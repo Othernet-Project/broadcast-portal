@@ -1,13 +1,13 @@
 <%namespace name="items_partial" file="_items.mako"/>
 %if request.is_xhr:
 <h2>
-    <span class="icon icon-edit-outline"></span>
-    <span class="header-text">${_('Review list')}</span>
+    <span class="icon icon-upload-outline"></span>
+    <span class="header-text">${_('Latest uploads')}</span>
 </h2>
 %endif
 
 <p class="notes">
-    ${_('Latest uploads')}
+    ${_('User uploads that have never been in a queue')}
 </p>
 
 <% count = 0 %>

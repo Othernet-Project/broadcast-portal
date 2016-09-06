@@ -41,13 +41,18 @@ class Status(ModeratorOnlyMixin, XHRPartialRoute):
     role_xhr_method_whitelist = ['GET']
 
     def get(self):
-        stats = ContentItem.candidate_stats()
+        candidates, non_candidates = ContentItem.candidate_stats()
         bin_limit = exts.config['bin.capacity']
-        pct_cap = (stats.size / bin_limit) * 100 if stats.count else 0
+        if candidates.count:
+            pct_cap = (candidates.size / bin_limit) * 100
+        else:
+            pct_cap = 0
         return {
             'capacity': bin_limit,
-            'size': stats.size or 0,
-            'count': stats.count or 0,
+            'candidates_size': candidates.size or 0,
+            'candidates_count': candidates.count or 0,
+            'non_candidates_size': non_candidates.size or 0,
+            'non_candidates_count': non_candidates.count or 0,
             'pct_capacity': pct_cap,
             'last_update': exts.last_update,
             'today': utcnow().date(),

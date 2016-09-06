@@ -181,13 +181,20 @@ class ContentItem(Model):
 
     @classmethod
     def candidate_stats(cls):
-        q = cls.db.Select(
+        candidates = cls.db.Select(
             'sum(size) as size, count(*) as count',
             sets=cls.table,
             where=['bin ISNULL', 'iscandidate(size, votes) = 1'],
             order=['-votes', '-created'])
+        non_candidates = cls.db.Select(
+            'sum(size) as size, count(*) as count',
+            sets=cls.table,
+            where=['bin ISNULL', 'iscandidate(size, votes) = 0'],
+            order=['-votes', '-created'])
         with cls.candidate_query_cursor() as cursor:
-            return cursor.query(q).result
+            candidates = cursor.query(candidates).result
+            non_candidates = cursor.query(non_candidates).result
+            return candidates, non_candidates
 
     @classmethod
     def binless_where_clause(cls, kind=None):

@@ -6,8 +6,18 @@
     ${_('{percent} of {size}/day').format(percent='{:.2f}%'.format(pct_capacity), size=h.hsize(capacity))}
 </p>
 <p>
-    ${ngettext('{count} candidate file', '{count} candidate files', count).format(count=count)}
-    (${h.hsize(size)})
+    <span class="icon icon-ok-outline"></span>
+    <span class="label">
+        ${ngettext('{count} candidate file', '{count} candidate files', count).format(count=candidates_count)}
+        (${h.hsize(candidates_size)})
+    </span>
+</p>
+<p>
+    <span class="icon icon-upload-outline"></span>
+    <span class="label">
+        ${ngettext('{count} upload', '{count} uploads', count).format(count=non_candidates_count)}
+        (${h.hsize(non_candidates_size)})
+    </span>
 </p>
 %if request.query.get('widget') and request.user.has_role(request.user.MODERATOR):
 <p>
