@@ -33,7 +33,7 @@
 <%block name="footer">
     <footer id="footer" class="footer">
     <nav id="smallprint">
-    <a href="${url('main:terms')}">${_('Terms of Service and Privacy Policy')}</a>
+    <a href="${url('main:terms')}">${_('Terms and Conditions, and Privacy Policy')}</a>
     </nav>
     <p id="copyright">
         &copy;2016, Outernet Inc. All rights reserved.
