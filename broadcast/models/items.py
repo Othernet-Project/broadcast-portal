@@ -247,4 +247,5 @@ class ContentItem(Model):
         with cls.candidate_query_cursor() as cursor:
             cursor.query(update, bin=bin_id, updated=timestamp)
             result = cursor.query(select, bin=bin_id).result
+            exts.last_update['timestamp'] = timestamp
             return result.count, result.size
