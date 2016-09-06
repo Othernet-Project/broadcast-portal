@@ -32,6 +32,8 @@ class ErrorHandler(XHRPartialRoute):
                           self.request.method.upper(),
                           self.request.path,
                           resp.traceback)
+        if resp.status_code == 404:
+            logging.error('404: Page missing at %s', self.request.fullpath)
         icon, message = ERROR_MESSAGES.get(resp.status_code,
                                            (DEFAULT_ICON, DEFAULT_MESSAGE))
         return dict(err=resp, icon=icon, message=message)
