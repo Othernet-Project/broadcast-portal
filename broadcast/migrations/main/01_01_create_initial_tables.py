@@ -11,6 +11,7 @@ create table content
 (
     id text primary key unique,
     created timestamp,          -- creation timestamp
+    updated timestamp,          -- updated timestamp
     email text,                 -- creator email
     username text,              -- creator username
     ipaddr text,                -- creator IP address

@@ -9,6 +9,7 @@ Generate dummy data for testing purposes
 
     id varchar primary_key unique,
     created timestamp,      -- creation timestamp
+    updated timestamp,      -- update timestamp
     email varchar,          -- creator email
     username varchar,       -- creator username
     ipaddr varchar,         -- creator IP address
@@ -97,9 +98,11 @@ def dummy_votes(content_id, dummy_users):
 def dummy_files(dummy_users, count=200):
     for i in range(count):
         fileid = uuid.uuid4().hex
+        ts = dummy_ts()
         yield {
             'id': uuid.uuid4().hex,
-            'created': dummy_ts(),
+            'created': ts,
+            'updated': ts,
             'username': 'dummy',
             'email': 'dummy@example.com',
             'ipaddr': '127.0.0.1',

@@ -27,20 +27,7 @@ class IsCandidate(object):
         return self.total <= self.limit
 
 
-class LastUpdateMixin(object):
-    VERY_OLD = datetime.datetime(1, 1, 1, tzinfo=pytz.utc)
-
-    @classmethod
-    def last_update(cls):
-        q = cls.db.Select(['created'], sets=cls.table, order=['-created'],
-                          limit=1)
-        try:
-            return cls.db.query(q).result.created
-        except AttributeError:
-            return cls.VERY_OLD
-
-
-class Vote(Model, LastUpdateMixin):
+class Vote(Model):
     dbname = 'main'
     table = 'votes'
     columns = (
@@ -53,13 +40,14 @@ class Vote(Model, LastUpdateMixin):
     )
 
 
-class ContentItem(Model, LastUpdateMixin):
+class ContentItem(Model):
     dbname = 'main'
     database = 'main'
     table = 'content'
     columns = (
         'id',
         'created',
+        'updated',
         'email',
         'username',
         'ipaddr',
@@ -75,6 +63,8 @@ class ContentItem(Model, LastUpdateMixin):
     ALL = 0
     CANDIDATES = 1
     NON_CANDIDATES = 2
+
+    VERY_OLD = datetime.datetime(1, 1, 1, tzinfo=pytz.utc)
 
     @property
     def filename(self):
@@ -98,8 +88,10 @@ class ContentItem(Model, LastUpdateMixin):
 
     @classmethod
     def new(cls, email, username, ipaddr, file_object, category=None):
+        timestamp = utcnow()
         data = {
-            'created': utcnow(),
+            'created': timestamp,
+            'updated': timestamp,
             'email': email,
             'username': username,
             'ipaddr': ipaddr,
@@ -109,7 +101,7 @@ class ContentItem(Model, LastUpdateMixin):
         cid = uuid.uuid4().hex
         item.save_file(file_object, cid)
         item.save(pk=cid)
-        exts.last_update['timestamp'] = to_timestamp(item.created)
+        exts.last_update['timestamp'] = to_timestamp(timestamp)
 
     def cast_vote(self, username, is_upvote, ipaddr):
         """
@@ -144,6 +136,7 @@ class ContentItem(Model, LastUpdateMixin):
             if vote.value == vote_value:
                 return
             vote.value += vote_value
+            vote.created = now
         finally:
             vote.save()
 
@@ -153,9 +146,19 @@ class ContentItem(Model, LastUpdateMixin):
             # Existing record is updated, so we have the latest vote count
             self.reload(cur)
             self.votes += vote_value
+            self.updated = now
             self.save(cur)
         exts.last_update['timestamp'] = to_timestamp(now)
         return now
+
+    @classmethod
+    def last_update(cls):
+        q = cls.db.Select(['updated'], sets=cls.table, order=['-updated'],
+                          limit=1)
+        try:
+            return cls.db.query(q).result.updated
+        except AttributeError:
+            return cls.VERY_OLD
 
     @classmethod
     def search_binless(cls, term):
@@ -244,9 +247,3 @@ class ContentItem(Model, LastUpdateMixin):
             cursor.query(update, bin=bin_id)
             result = cursor.query(select, bin=bin_id).result
             return result.count, result.size
-
-    @classmethod
-    def last_activity(cls):
-        ts_vote = Vote.last_update()
-        ts_item = cls.last_update()
-        return max([ts_vote, ts_item])
