@@ -36,14 +36,6 @@ class Terms(TemplateRoute):
         return {}
 
 
-class Privacy(TemplateRoute):
-    path = '/privacy'
-    template_name = 'main/privacy.mako'
-
-    def get(self):
-        return {}
-
-
 def load_beta_whitelist():
     whitelist_path = exts.config['beta.whitelist']
     try:
@@ -57,4 +49,4 @@ def load_beta_whitelist():
 
 def route():
     exts.beta_whitelist = load_beta_whitelist()
-    return (Home, BetaSignup, Terms, Privacy)
+    return (Home, BetaSignup, Terms)

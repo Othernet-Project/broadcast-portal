@@ -11,8 +11,8 @@
     ${forms.field(form.username, required=True)}
     ${forms.field(form.password1, required=True)}
     ${forms.field(form.password2, required=True)}
-    ${forms.field(form.tos_agree, label=_('I agree to the <a href="{url}" target="_blank">Terms of Service</a>').format(url=url('main:terms')))}
-    ${forms.field(form.priv_read, label=_('I have read the <a href="{url}" target="_blank">Privacy Policy</a>').format(url=url('main:privacy')))}
+    ${forms.field(form.tos_agree, label=_('I agree to the <a href="{url}#tos" target="_blank">Terms of Service</a>').format(url=url('main:terms')))}
+    ${forms.field(form.priv_read, label=_('I have read the <a href="{url}#privacy" target="_blank">Privacy Policy</a>').format(url=url('main:terms')))}
     <p class="buttons">
         <button type="submit">${_('Register')}</button>
     </p>
