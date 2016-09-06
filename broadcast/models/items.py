@@ -237,13 +237,14 @@ class ContentItem(Model):
         Add current candidates to specified bin and return the number of
         candidates and the total size.
         """
+        timestamp = utcnow()
         update = cls.db.Update(cls.table,
                                cls.binless_where_clause(cls.CANDIDATES),
-                               bin=':bin')
+                               bin=':bin', updated=':updated')
         select = cls.db.Select(sets=cls.table,
                                what=['count(*) as count', 'sum(size) as size'],
                                where='bin = :bin')
         with cls.candidate_query_cursor() as cursor:
-            cursor.query(update, bin=bin_id)
+            cursor.query(update, bin=bin_id, updated=timestamp)
             result = cursor.query(select, bin=bin_id).result
             return result.count, result.size
