@@ -26,10 +26,6 @@ class ErrorHandler(XHRPartialRoute):
         return 'any'
 
     def any(self, resp):
-        try:
-            print(self.request.session)
-        except AttributeError:
-            print('no session')
         if resp.traceback:
             logging.error("Unhandled error '%s' at %s %s:\n\n%s",
                           resp.exception,
