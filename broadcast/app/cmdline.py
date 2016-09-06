@@ -53,7 +53,8 @@ def parse_args():
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument('command', metavar='COMMAND', nargs='?',
                         help='optional utility command (use --help COMMAND '
-                        'to get invididual command options)')
+                        'to get invididual command options)',
+                        choices=COMMANDS_DICT.keys())
 
     # Register all options
     options = [option(parser) for option in OPTIONS]
