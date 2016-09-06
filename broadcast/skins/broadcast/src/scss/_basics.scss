@@ -94,6 +94,21 @@ p {
       // forms don't go beyond 20rem in width under any circumstance
       max-width: 20rem;
     }
+
+    ul {
+      padding-left: 2rem;
+
+      li {
+        list-style: disc;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}
+
+.narrow {
+  section {
+    max-width: 60rem;
   }
 }
 
