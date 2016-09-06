@@ -11,6 +11,8 @@
     'owners will be invited first, so please be patient.')}
 </p>
 
+${forms.form_errors([form.error])}
+
 <form action="${url('main:beta_signup')}" method="POST">
     ${forms.csrf_token()}
     ${forms.field(form.email, required=True)}

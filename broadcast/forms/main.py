@@ -12,6 +12,11 @@ from ..util.validators import EmailValidator
 
 
 class BetaSignupForm(form.Form):
+    messages = {
+        'nosubscribe': _('We could not subscribe you at this time. '
+                         'Please try again later.')
+    }
+
     email = form.StringField(
         # Translators, used as label in create user form
         _("Email"),
@@ -23,6 +28,7 @@ class BetaSignupForm(form.Form):
         time.sleep(random.randint(2, 5))
 
     def subscribe(self, email):
+        logging.debug('Subscribing email to mailchimp')
         client = MailChimp(exts.config['mailchimp.username'],
                            exts.config['mailchimp.secret'])
         data = {'email_address': email, 'status': 'subscribed'}
@@ -43,7 +49,11 @@ class BetaSignupForm(form.Form):
             token.send()
         else:
             self.random_pause()
-            if exts.config['mailchimp.beta_list_id']:
-                self.subscribe(email)
+            if exts.config.get('mailchimp.beta_list_id'):
+                try:
+                    self.subscribe(email)
+                except Exception:
+                    logging.exception('Error subscribing email to MailChimp')
+                    raise form.ValidationError('nosubscribe', {})
             else:
                 logging.debug('BETA: %s', email)
