@@ -7,7 +7,7 @@ from ..app.exts import container as exts
 
 def pre_init():
     config = exts.config
-    log_config({
+    log_conf = {
         'version': 1,
         'root': {
             'handlers': ['file'] if exts.quiet else ['file', 'console'],
@@ -36,4 +36,15 @@ def pre_init():
                 'format': '[%(levelname)-8s] %(message)s',
             }
         },
-    })
+    }
+
+    if exts.config['logging.webhook']:
+        log_conf['handlers']['slack'] = {
+            'formatter': 'default',
+            'class': 'broadcast.util.slacklog.SlackLog',
+            'url': exts.config['logging.webhook'],
+            'level': logging.ERROR,
+        }
+        log_conf['root']['handlers'].append('slack')
+
+    log_config(log_conf)
