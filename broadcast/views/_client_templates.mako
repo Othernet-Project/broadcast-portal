@@ -31,3 +31,7 @@
 <script id="status-update" type="text/x-template">
     ${_('Filecast queue updated')}
 </script>
+
+<script id="countdown" type="text/x-template">
+    ${_('filecast in {{time}}')}
+</script>
