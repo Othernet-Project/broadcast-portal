@@ -5,14 +5,14 @@
     </span>
     ${_('{percent} of {size}/day').format(percent='{:.2f}%'.format(pct_capacity), size=h.hsize(capacity))}
 </p>
-<p>
+<p class="counts">
     <span class="icon icon-ok-outline"></span>
     <span class="label">
         ${ngettext('{count} candidate file', '{count} candidate files', count).format(count=candidates_count)}
         (${h.hsize(candidates_size)})
     </span>
 </p>
-<p>
+<p class="counts">
     <span class="icon icon-upload-outline"></span>
     <span class="label">
         ${ngettext('{count} upload', '{count} uploads', count).format(count=non_candidates_count)}
