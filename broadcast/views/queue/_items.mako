@@ -14,7 +14,7 @@
             <span class="invisible-label">${_('download')}</span>
             <span class="supplementary-info">${h.hsize(item.size)}</span>
         </a> 
-        <a class="button button-small" href="mailto:abuse@outernet.is?subject=Reporting+abuse+for+file+ID+${item.id}">
+        <a class="button button-small" href="mailto:report@outernet.is?subject=Reporting+abuse+for+file+ID+${item.id}">
             <span class="icon icon-flag"></span>
             <span class="invisible-label">${_('Report')}</span>
         </a>
