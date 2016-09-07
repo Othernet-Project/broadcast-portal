@@ -16,7 +16,7 @@ pyOpenSSL==0.15.1
 oauth2client==1.5.2
 google-api-python-client==1.4.2
 gspread==0.3.0
-squery-lite>=2.0.dev4
+squery-lite>=2.0
 confloader>=1.1
 mailchimp3==1.0.26
 shutilwhich
