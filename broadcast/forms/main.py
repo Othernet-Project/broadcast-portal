@@ -53,7 +53,6 @@ class BetaSignupForm(form.Form):
                 try:
                     self.subscribe(email)
                 except Exception:
-                    logging.exception('Error subscribing email to MailChimp')
                     raise form.ValidationError('nosubscribe', {})
             else:
                 logging.debug('BETA: %s', email)
