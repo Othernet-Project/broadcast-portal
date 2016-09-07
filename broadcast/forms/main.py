@@ -3,8 +3,9 @@ import random
 import logging
 
 from bottle_utils import form
-from bottle_utils.i18n import dummy_gettext as _
+from requests import HTTPError
 from mailchimp3 import MailChimp
+from bottle_utils.i18n import dummy_gettext as _
 
 from ..app.exts import container as exts
 from ..models.auth import User, InvitationToken
@@ -52,7 +53,7 @@ class BetaSignupForm(form.Form):
             if exts.config.get('mailchimp.beta_list_id'):
                 try:
                     self.subscribe(email)
-                except Exception:
+                except HTTPError:
                     raise form.ValidationError('nosubscribe', {})
             else:
                 logging.debug('BETA: %s', email)
