@@ -13,8 +13,8 @@ from ..util.validators import EmailValidator
 
 class BetaSignupForm(form.Form):
     messages = {
-        'nosubscribe': _('We could not subscribe you at this time. '
-                         'Please try again later.')
+        'nosubscribe': _('We could not sign you up you. '
+                         'Are you sure you have not already signed up?')
     }
 
     email = form.StringField(
