@@ -19,18 +19,18 @@
             <span class="invisible-label">${_('Report')}</span>
         </a>
     </p>
-    <% canvote = (not item.user_vote) and request.user.has_role(request.user.MODERATOR) %>
+    <% canvote = request.user.has_role(request.user.MODERATOR) %>
     <form class="vote-form" action="${url('queue:vote', item_id=item.id)}" method="POST">
         <input type="hidden" name="next" value="${request.fullpath}">
         %if canvote:
-            <button class="vote-icon vote-up" type="submit" name="upvote" value="yes"${' disabled' if novote else ''}>
+            <button class="vote-icon vote-up" type="submit" name="upvote" value="yes"${' disabled' if item.user_vote == 1 else ''}>
                 <span class="icon icon-expand-up"></span>
                 <span class="invisible-label">${_('upvote')}</span>
             </button>
         %endif
         <span class="vote-count">${item.votes}</span>
         %if canvote:
-            <button class="vote-icon vote-down" type="submit" name="upvote" value="no"${' disabled' if novote else ''}>
+            <button class="vote-icon vote-down" type="submit" name="upvote" value="no"${' disabled' if item.user_vote == -1 else ''}>
                 <span class="invisible-label">${_('downvote')}</span>
                 <span class="icon icon-expand-down"></span>
             </button>
