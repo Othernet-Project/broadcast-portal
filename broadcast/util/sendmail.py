@@ -54,7 +54,7 @@ def send_multiple(to_list, subject, template=None, data={}):
     # Construct message object
     msg = MIMEText(message, 'plain', 'utf-8')
     msg['subject'] = subject
-    msg['from'] = user
+    msg['from'] = conf.get('smtp.sender', user)
     # As described in the docstring, we only use the first item in whatever
     # objects make up the to_list. This is historical, BD (Before Docstrings).
     msg['to'] = ', '.join([e[0] for e in to_list])
