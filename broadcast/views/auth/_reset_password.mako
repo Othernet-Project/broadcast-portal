@@ -10,6 +10,6 @@
     ${forms.field(form.new_password1)}
     ${forms.field(form.new_password2)}
     <p class="buttons">
-        <button type="submit">${_('Reset password')}</button>
+        <button type="submit">${_('Save password')}</button>
     </p>
 </form>

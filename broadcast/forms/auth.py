@@ -229,7 +229,10 @@ class ResetPasswordForm(form.Form):
         new_password2 = self.processed_data['new_password2']
         if new_password1 != new_password2:
             raise form.ValidationError('pwmatch', {})
-        token.accept(new_password1)
+        is_reg = token.data == 'registration'
+        self.processed_data['is_reg'] = is_reg
+        user = token.accept(new_password1)
+        self.processed_data['is_moderator'] = user.group == user.MODERATOR
 
 
 class AcceptInvitationForm(form.Form):

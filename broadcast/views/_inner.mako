@@ -34,6 +34,7 @@
     <footer id="footer" class="footer">
     <nav id="smallprint">
     <a href="${url('main:terms')}">${_('Terms and Conditions, and Privacy Policy')}</a>
+    <a href="https://outernet.is/content-guidelines" target="_blank">Outernet Content Guidelines</a>
     </nav>
     <p id="copyright">
         &copy;2016, Outernet Inc. All rights reserved.

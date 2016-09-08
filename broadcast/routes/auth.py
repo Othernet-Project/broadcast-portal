@@ -175,15 +175,33 @@ class AcceptInvitation(ConfirmationMixin, CSRFMixin, RoleMixin,
         return super(AcceptInvitation, self).get(key)
 
 
-class ResetPassword(ConfirmationMixin, CSRFMixin, LoginOnSuccessMixin,
-                    ActionXHRPartialFormRoute):
+class ResetPassword(ConfirmationMixin, CSRFMixin, ActionXHRPartialFormRoute):
     path = '/accounts/reset-password/<key:re:[0-9a-f]{32}>'
     template_name = 'auth/reset_password.mako'
     partial_template_name = 'auth/_reset_password.mako'
     form_factory = ResetPasswordForm
     token_class = PasswordResetToken
-    success_message = _('Your password has been updated')
-    success_url = ('auth:login', {})
+
+    def get_success_message(self):
+        if self.is_reg:
+            return _('Your password has been set')
+        return _('Your password has been updated')
+
+    def get_success_url(self):
+        if self.is_new_mod:
+            return self.app.get_url('main:moderator')
+        return self.app.get_url('auth:login')
+
+    def get_success_url_label(self):
+        if self.is_new_mod:
+            return _('moderator welcome page')
+        return _('log-in page')
+
+    def form_valid(self, *args, **kwargs):
+        super(ResetPassword, self).form_valid()
+        self.is_mod = self.form.processed_data['is_moderator']
+        self.is_reg = self.form.processed_data['is_reg']
+        self.is_new_mod = all([self.is_mod, self.is_reg])
 
     def get(self, key):
         if not self.token:
