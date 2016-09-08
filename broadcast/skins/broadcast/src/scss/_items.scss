@@ -54,8 +54,14 @@
     width: 100%;
     display: block;
     padding: 0.2rem 0;
-    font-weight: bold;
     background: lighten($background-inverse, 20);
+  }
+
+  .vote-label {
+    background: $background-inverse;
+    color: $foreground-inverse;
+    text-transform: uppercase;
+    font-size: 70%;
   }
 
   .vote-icon {
@@ -79,7 +85,8 @@
 .candidate-item {
   background: lighten($friendly, 50);
 
-  .vote-icon {
+  .vote-icon,
+  .vote-label {
     background-color: $friendly;
   }
 
@@ -100,7 +107,8 @@
 }
 
 .review-item-warning {
-  .vote-icon {
+  .vote-icon,
+  .vote-label {
     background-color: $warning;
   }
 
@@ -110,7 +118,8 @@
 }
 
 .review-item-alert {
-  .vote-icon {
+  .vote-icon,
+  .vote-label {
     background-color: $alert;
   }
 

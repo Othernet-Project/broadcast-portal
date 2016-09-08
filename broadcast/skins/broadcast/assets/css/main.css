@@ -1632,10 +1632,16 @@ p {
   width: 100%;
   display: block;
   padding: 0.2rem 0;
-  font-weight: bold;
   background: #5ab9e5;
 }
-/* line 61, ../../src/scss/_items.scss */
+/* line 60, ../../src/scss/_items.scss */
+.item .vote-label {
+  background: #1e8abb;
+  color: white;
+  text-transform: uppercase;
+  font-size: 70%;
+}
+/* line 67, ../../src/scss/_items.scss */
 .item .vote-icon {
   border: 0 solid transparent;
   background: #1e8abb;
@@ -1649,25 +1655,26 @@ p {
   -webkit-border-radius: 0;
   border-radius: 0;
 }
-/* line 72, ../../src/scss/_items.scss */
+/* line 78, ../../src/scss/_items.scss */
 .item .vote-icon[disabled] {
   background: #ccc;
   color: #888;
 }
 
-/* line 79, ../../src/scss/_items.scss */
+/* line 85, ../../src/scss/_items.scss */
 .candidate-item {
   background: #e4fcd3;
 }
-/* line 82, ../../src/scss/_items.scss */
-.candidate-item .vote-icon {
+/* line 88, ../../src/scss/_items.scss */
+.candidate-item .vote-icon,
+.candidate-item .vote-label {
   background-color: #59c10f;
 }
-/* line 86, ../../src/scss/_items.scss */
+/* line 93, ../../src/scss/_items.scss */
 .candidate-item .vote-count {
   background: #8df145;
 }
-/* line 90, ../../src/scss/_items.scss */
+/* line 97, ../../src/scss/_items.scss */
 .candidate-item .order-number {
   position: absolute;
   top: 0;
@@ -1675,35 +1682,37 @@ p {
   color: #595959;
 }
 
-/* line 98, ../../src/scss/_items.scss */
+/* line 105, ../../src/scss/_items.scss */
 .review-item {
   background: #def1fa;
 }
 
-/* line 103, ../../src/scss/_items.scss */
-.review-item-warning .vote-icon {
+/* line 110, ../../src/scss/_items.scss */
+.review-item-warning .vote-icon,
+.review-item-warning .vote-label {
   background-color: #f93;
 }
-/* line 107, ../../src/scss/_items.scss */
+/* line 115, ../../src/scss/_items.scss */
 .review-item-warning .vote-count {
   background: #ffcc99;
 }
 
-/* line 113, ../../src/scss/_items.scss */
-.review-item-alert .vote-icon {
+/* line 121, ../../src/scss/_items.scss */
+.review-item-alert .vote-icon,
+.review-item-alert .vote-label {
   background-color: #f33;
 }
-/* line 117, ../../src/scss/_items.scss */
+/* line 126, ../../src/scss/_items.scss */
 .review-item-alert .vote-count {
   background: #ff9999;
 }
 
-/* line 122, ../../src/scss/_items.scss */
+/* line 131, ../../src/scss/_items.scss */
 .review {
   background: #def1fa;
 }
 
-/* line 126, ../../src/scss/_items.scss */
+/* line 135, ../../src/scss/_items.scss */
 .candidates {
   background: #e4fcd3;
 }

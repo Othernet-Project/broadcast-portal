@@ -16,12 +16,13 @@ from ..util.routes import (
 )
 
 
-class ModeratorOnlyMixin(RoleMixin):
-    role = RoleMixin.MODERATOR
-    role_denied_message = _('This feature is only accessible to moderators')
+class UsersOnlyMixin(RoleMixin):
+    role = RoleMixin.USER
+    role_denied_message = _('This feature is only accessible to registered '
+                            'users')
 
 
-class ItemListMixin(ModeratorOnlyMixin):
+class ItemListMixin(UsersOnlyMixin):
     def get_items(self):
         # TODO: implement paging
         return ContentItem.binless_items(kind=self.item_type,
@@ -31,7 +32,7 @@ class ItemListMixin(ModeratorOnlyMixin):
         return {'items': self.get_items()}
 
 
-class Status(ModeratorOnlyMixin, XHRPartialRoute):
+class Status(UsersOnlyMixin, XHRPartialRoute):
     """
     The queue status page
     """
@@ -84,10 +85,12 @@ class Review(ItemListMixin, XHRPartialRoute):
         return sorted(items, key=lambda i: i.created, reverse=True)
 
 
-class Vote(ModeratorOnlyMixin, ActionTemplateRoute):
+class Vote(RoleMixin, ActionTemplateRoute):
     path = '/queue/<item_id:re:[0-9a-f]{32}>/'
     success_message = _('Your vote has been saved')
     error_message = _('Your vote could not be saved')
+    role = RoleMixin.MODERATOR
+    role_denied_message = _('Voting is only available to moderators')
 
     def get_success_url(self):
         return self.back_to or self.app.get_url('queue:status')
@@ -116,7 +119,7 @@ class Vote(ModeratorOnlyMixin, ActionTemplateRoute):
             self.status = True
 
 
-class Download(ModeratorOnlyMixin, StaticRoute):
+class Download(UsersOnlyMixin, StaticRoute):
     path = '/download/<item_id:re:[0-9a-f]{32}>'
 
     def get_base_dirs(self):

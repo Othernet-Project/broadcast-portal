@@ -19,7 +19,7 @@
         (${h.hsize(non_candidates_size)})
     </span>
 </p>
-%if request.query.get('widget') and request.user.has_role(request.user.MODERATOR):
+%if request.query.get('widget'):
 <p>
     <a class="button" href="${url('queue:status')}" class="button">
         ${_('See full status')}
