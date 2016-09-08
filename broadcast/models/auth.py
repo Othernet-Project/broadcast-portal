@@ -278,6 +278,7 @@ class PasswordResetToken(BaseToken):
         user.confirm()
         user.set_password(new_password)
         user.save()
+        user.make_logged_in()
         super(PasswordResetToken, self).accept()
         return user
 

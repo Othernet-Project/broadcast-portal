@@ -190,12 +190,12 @@ class ResetPassword(ConfirmationMixin, CSRFMixin, ActionXHRPartialFormRoute):
     def get_success_url(self):
         if self.is_new_mod:
             return self.app.get_url('main:moderator')
-        return self.app.get_url('auth:login')
+        return self.app.get_url('queue:status')
 
     def get_success_url_label(self):
         if self.is_new_mod:
             return _('moderator welcome page')
-        return _('log-in page')
+        return _('filecast queue status')
 
     def form_valid(self, *args, **kwargs):
         super(ResetPassword, self).form_valid()
