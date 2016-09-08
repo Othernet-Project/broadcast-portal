@@ -41,12 +41,12 @@
 </p>
 
 %if request.user.is_guest:
-    <div id="beta-signup" class="beta-signup" data-roca-trap-submit="yes">
-        <h2>${_('Join the closed beta')}</h2>
-        <p>${_('Filecast center is now in closed beta. We are accepting '
-            'sign-ups for closed beta testers.')}</p>
+    <div id="register-form" class="register-form" data-roca-trap-submit="yes">
+        <h2>${_('Join the filecaster community')}</h2>
+        <p>${_('Join now to partitipate in shaping the future of the Outernet '
+            'L-band service.')}</p>
         <p>
-            <a href="${url('main:beta_signup')}" data-roca-target="beta-signup">
+            <a href="${url('auth:register')}" data-roca-target="register-form">
                 ${'Join'}
             </a>
         </p>

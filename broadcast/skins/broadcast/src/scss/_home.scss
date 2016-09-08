@@ -24,7 +24,7 @@ $one-col: 800px;
     float: right;
     text-align: right;
     width: 40%;
-    margin: 6rem 0 2rem;
+    margin: 2rem 0;
     padding: 2rem;
     background: transparentize($background, 0.3);
     color: $foreground;
@@ -50,7 +50,7 @@ $one-col: 800px;
 
 .hero {
   width: 50%;
-  padding: 6rem 2rem 2rem;
+  padding: 2rem;
   float: left;
 
   @include narrower-than($one-col) {

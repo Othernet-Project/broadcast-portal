@@ -1,5 +1,9 @@
 <%namespace name="forms" file="/_forms.mako"/>
 
+%if request.is_xhr:
+    <h2>${_('Join the filecaster community')}</h2>
+%endif
+
 <form action="${url('auth:register')}" method="POST">
     ${forms.form_errors([form.error])}
 
@@ -7,9 +11,7 @@
 
     ${forms.field(form.username)}
     ${forms.field(form.email)}
-    ${forms.field(form.password1)}
-    ${forms.field(form.password2)}
-    ${forms.field(form.tos_agree, label=_('I agree to the <a href="{url}#tos" target="_blank">Terms and Conditions</a>').format(url=url('main:terms')))}
+    ${forms.field(form.tos_agree, label=_('I agree to the <a href="{url}#tos" target="_blank">Terms</a>').format(url=url('main:terms')))}
     ${forms.field(form.priv_read, label=_('I have read the <a href="{url}#privacy" target="_blank">Privacy Policy</a>').format(url=url('main:terms')))}
     <p class="buttons">
         <button type="submit">${_('Register')}</button>

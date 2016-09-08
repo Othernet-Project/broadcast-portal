@@ -1,13 +1,6 @@
 import logging
 
-from bottle_utils.i18n import dummy_gettext as _
-
-from ..util.routes import (
-    TemplateRoute,
-    ActionXHRPartialFormRoute,
-    CSRFMixin,
-)
-from ..forms.main import BetaSignupForm
+from ..util.routes import TemplateRoute
 from ..app.exts import container as exts
 
 
@@ -17,15 +10,6 @@ class Home(TemplateRoute):
 
     def get(self):
         return {}
-
-
-class BetaSignup(CSRFMixin, ActionXHRPartialFormRoute):
-    path = '/beta-signup'
-    template_name = 'main/beta_signup.mako'
-    partial_template_name = 'main/_beta_signup.mako'
-    form_factory = BetaSignupForm
-    success_message = _('You have been added to the closed beta list')
-    success_url = ('main:home', {})
 
 
 class Terms(TemplateRoute):
@@ -49,4 +33,4 @@ def load_beta_whitelist():
 
 def route():
     exts.beta_whitelist = load_beta_whitelist()
-    return (Home, BetaSignup, Terms)
+    return (Home, Terms)

@@ -144,7 +144,7 @@ class User(UserBase, Model):
         return self.groupname
 
     @classmethod
-    def new(cls, username, email, password, group=USER, confirmed=False,
+    def new(cls, username, email, password=None, group=USER, confirmed=False,
             overwrite=False):
         user = User({
             'username': username,
@@ -152,7 +152,8 @@ class User(UserBase, Model):
             'groupname': group,
             'created': utcnow(),
         })
-        user.set_password(password)
+        if password:
+            user.set_password(password)
         if confirmed:
             user.confirm()
         user.save(force_replace=overwrite)
@@ -241,38 +242,40 @@ class BaseToken(Model):
         token.save(pk=cls.generate_key(), cursor=cursor)
         return token
 
+    def get_email_subject(self):
+        return self.email_subject
+
+    def get_email_template(self):
+        return self.email_template
+
     def send(self, next_path=None):
         email_ctx = {
             'key': self.key,
             'next_path': next_path,
         }
         send_mail(to=self.email,
-                  subject=self.email_subject,
-                  template=self.email_template,
+                  subject=self.get_email_subject(),
+                  template=self.get_email_template(),
                   data=email_ctx)
-
-
-class EmailVerificationToken(BaseToken):
-    EXPIRY = 7
-    ACTION = 'confirmation'
-    email_subject = _("Confirm your email")
-    email_template = 'email/confirm.mako'
-
-    def accept(self):
-        user = User.get(email=self.email)
-        user.confirm().make_logged_in()
-        super(EmailVerificationToken, self).accept()
-        return user
 
 
 class PasswordResetToken(BaseToken):
     EXPIRY = 2
     ACTION = 'password-reset'
-    email_subject = _("Password reset request")
-    email_template = 'email/password_reset.mako'
+
+    def get_email_subject(self):
+        if self.data == 'registration':
+            return _('Complete the registration for Filecast Center')
+        return _('Password reset request')
+
+    def get_email_template(self):
+        if self.data == 'registration':
+            return 'email/confirm.mako'
+        return 'email/password_reset.mako'
 
     def accept(self, new_password):
         user = User.get(email=self.email)
+        user.confirm()
         user.set_password(new_password)
         user.save()
         super(PasswordResetToken, self).accept()

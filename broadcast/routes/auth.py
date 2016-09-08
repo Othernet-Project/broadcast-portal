@@ -12,10 +12,8 @@ import logging
 
 from bottle_utils.i18n import dummy_gettext as _
 
-from ..app.exts import container as exts
 from ..models.auth import (
     User,
-    EmailVerificationToken,
     PasswordResetToken,
     InvitationToken,
 )
@@ -158,24 +156,6 @@ class PasswordResetRequest(CSRFMixin, LoginOnSuccessMixin, NextPathMixin,
     success_message = _('Check your inbox for a password reset link')
 
 
-class ConfirmEmail(ConfirmationMixin, LoginOnSuccessMixin, NextPathMixin,
-                   ActionTemplateRoute):
-    token_class = EmailVerificationToken
-    path = '/accounts/verify/<key:re:[0-9a-f]{32}>'
-    success_message = _('Your email address has been confirmed')
-    error_message = _('The confirmation link has expired or has already been '
-                      'used.')
-    error_url = ('main:home', {})
-    error_url_label = _('main page')
-
-    def get(self, key):
-        if self.token:
-            self.token.accept()
-            self.status = True
-        else:
-            self.status = False
-
-
 class AcceptInvitation(ConfirmationMixin, CSRFMixin, RoleMixin,
                        LoginOnSuccessMixin, ActionXHRPartialFormRoute):
     role = RoleMixin.GUEST
@@ -251,14 +231,12 @@ class Logout(ActionTemplateRoute):
 def route():
     route_classes = (
         Login,
+        Register,
         ResendConfirmation,
-        ConfirmEmail,
         AcceptInvitation,
         PasswordResetRequest,
         ResetPassword,
         NameCheck,
         Logout,
     )
-    if exts.config['beta.open_registration']:
-        route_classes = (Register,) + route_classes
     return route_classes

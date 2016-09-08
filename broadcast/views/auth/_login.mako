@@ -15,6 +15,6 @@
         <a href="${url('auth:password_reset_request')}">${_("Forgot your password?")}</a>
     </p>
     <p>
-        <a href="${url('auth:resend_confirmation')}">${_("Didn't receive the confirmation e-mail?")}</a>
+        <a href="${url('auth:resend_confirmation')}">${_("Didn't receive the welcome e-mail?")}</a>
     </p>
 </form>

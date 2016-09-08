@@ -18,10 +18,10 @@ from bottle_utils.i18n import lazy_gettext as _
 
 from ..models.auth import (
     User,
-    EmailVerificationToken,
     PasswordResetToken,
     InvitationToken,
 )
+from ..app.exts import container as exts
 from ..util.validators import EmailValidator
 
 
@@ -41,7 +41,7 @@ class UniqueUsernameValidator(form.Validator):
 
 class UniqueEmailValidator(form.Validator):
     messages = {
-        'user_taken': _('This username is already in use')
+        'user_taken': _('This email is already in use')
     }
 
     def validate(self, value):
@@ -55,6 +55,10 @@ class UniqueEmailValidator(form.Validator):
 
 class EmailTokenMixin(object):
     TokenClass = None
+    token_data = None
+
+    def get_token_data(self):
+        return self.token_data
 
     def send_token(self):
         next_path = request.params.get('next_path', '/')
@@ -65,7 +69,7 @@ class EmailTokenMixin(object):
             # There is no such account, so we're faking it
             time.sleep(random.randint(2, 5))
         else:
-            token = self.TokenClass.new(email)
+            token = self.TokenClass.new(email, data=self.get_token_data())
             token.send(next_path)
 
 
@@ -104,7 +108,8 @@ class TruthValidator(form.Validator):
 
 
 class RegisterForm(EmailTokenMixin, form.Form):
-    TokenClass = EmailVerificationToken
+    TokenClass = PasswordResetToken
+    token_data = 'registration'
 
     min_password_length = 4
     messages = {
@@ -126,22 +131,9 @@ class RegisterForm(EmailTokenMixin, form.Form):
         _("Email"),
         validators=[form.Required(), EmailValidator(), UniqueEmailValidator()],
         placeholder=_('Email'))
-    password1 = form.PasswordField(
-        # Translators, used as label in create user form
-        _("Password"),
-        validators=[form.Required()],
-        placeholder=_('Password'),
-        messages={
-            'password_length': _('Must be longer than {length} characters.'),
-        })
-    password2 = form.PasswordField(
-        # Translators, used as label in create user form
-        _("Confirm Password"),
-        validators=[form.Required()],
-        placeholder=_('Retype the password'))
     tos_agree = form.BooleanField(
         # Translators, used as label for terms of service agreement checkbox
-        _('I agree to the <a href="%(url)s">Terms of Service</a>'),
+        _('I agree to the <a href="%(url)s">Terms</a>'),
         validators=[TruthValidator()],
         value='agree_tos',
         messages={
@@ -156,27 +148,24 @@ class RegisterForm(EmailTokenMixin, form.Form):
             'truth': _('You must confirm that you have read the policy')
         })
 
-    def preprocess_password(self, value):
-        if len(value) < self.min_password_length:
-            raise form.ValidationError('password_length',
-                                       {'length': self.min_password_length})
-
     def validate(self):
-        password1 = self.processed_data['password1']
-        password2 = self.processed_data['password2']
-        if password1 != password2:
-            raise form.ValidationError('pwmatch', {})
+        email = self.processed_data['email']
+        if email in exts.beta_whitelist:
+            group = User.MODERATOR
+        else:
+            group = User.USER
         try:
             User.new(username=self.processed_data['username'],
-                     email=self.processed_data['email'],
-                     password=password1)
+                     email=email,
+                     group=group)
         except User.IntegrityError:
             raise form.ValidationError('userexists')
         self.send_token()
 
 
 class EmailVerificationForm(EmailTokenMixin, form.Form):
-    TokenClass = EmailVerificationToken
+    TokenClass = PasswordResetToken
+    token_data = 'registration'
 
     email = form.StringField(
         # Translators, used as label in create user form
