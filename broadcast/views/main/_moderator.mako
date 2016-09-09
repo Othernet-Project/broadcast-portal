@@ -11,7 +11,7 @@ guidelines</a> that will help you make your decision, but for anything outside
 of those guidelines, you are calling the shots.
 ''') | n,unicode}</p>
 
-<p>${_("Welcome to the Filecast Center. Let's make the future together!")}</p>
+<p>${_("Welcome to the Filecaster. Let's make the future together!")}</p>
 
 <p>
     <a class="button" href="${url('queue:status')}">${_('Get started')}</a>

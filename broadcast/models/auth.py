@@ -265,7 +265,7 @@ class PasswordResetToken(BaseToken):
 
     def get_email_subject(self):
         if self.data == 'registration':
-            return _('Complete the registration for Filecast Center')
+            return _('Complete the registration for Filecaster')
         return _('Password reset request')
 
     def get_email_template(self):
@@ -286,5 +286,5 @@ class PasswordResetToken(BaseToken):
 class InvitationToken(BaseToken):
     EXPIRY = 20
     ACTION = 'invitation'
-    email_subject = _('You are invited to join the Outernet Filecast Center')
+    email_subject = _('You are invited to join the Outernet Filecaster')
     email_template = 'email/invite.mako'

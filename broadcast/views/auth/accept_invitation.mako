@@ -4,7 +4,7 @@
 <h1>${_('Just one more thing')}</h1>
 
 <section id="accept-invitation" class="accept-invitation">
-<p>${_('In order to join the Filecast center community, you will need a user account.')}</p>
+<p>${_('In order to join the Filecaster community, you will need a user account.')}</p>
 
 <div id="register-form" class="register-form">
     ${accept_invitation.body()}

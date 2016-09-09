@@ -3,7 +3,7 @@
 <%block name="top">
     <nav id="main-nav" class="main-nav">
     <div class="logo">
-        <a href="${url('main:home')}">Filecast center</a>
+        <a href="${url('main:home')}">Filecaster</a>
     </div>
     %if request.user.is_guest:
         <a class="login-link" href="${_(url('auth:login', next=request.fullpath))}">

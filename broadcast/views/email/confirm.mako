@@ -2,7 +2,7 @@
 
 ${ _("""Dear user,
 
-Welcome to the Outernet Filecast Center.
+Welcome to the Outernet Filecaster.
 
 Please follow this link and verify your email address:
 
