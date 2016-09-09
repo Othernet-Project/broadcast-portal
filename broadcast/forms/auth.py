@@ -211,7 +211,7 @@ class ResetPasswordForm(form.Form):
     )
     new_password2 = form.PasswordField(
         # Translators, used as label in password reset form
-        _("Confirm bew password"),
+        _("Confirm new password"),
         validators=[form.Required()],
         placeholder=_('Password'),
         messages={
