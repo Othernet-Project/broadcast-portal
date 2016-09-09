@@ -43,4 +43,12 @@ class ErrorHandler(XHRPartialRoute):
 
 def pre_init():
     app = exts.app
-    app.default_error_handler = ErrorHandler
+    original_error_handler = app.default_error_handler
+
+    def safe_error_handler(err):
+        try:
+            return u''.join(list(ErrorHandler(err)))
+        except Exception:
+            return original_error_handler(err)
+
+    app.default_error_handler = safe_error_handler
