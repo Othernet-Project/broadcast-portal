@@ -11,7 +11,7 @@
     ${forms.form_errors([form.error])}
     ${forms.csrf_token()}
     ${forms.field(form.content_file, help=_('Max {size_limit}').format(size_limit=h.hsize(size_limit)), required=True)}
-    ${forms.field(form.is_authorized, required=True)}
+    ${_("By uploading, I confirm that I am authorized to distribute this file.")}
     <p class="buttons">
         <button type="submit">${_('Upload')}</button>
     </p>

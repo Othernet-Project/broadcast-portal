@@ -69,14 +69,6 @@ class ContentForm(form.Form):
             'index': _('No HTML file found in {filename}'),
         }
     )
-    is_authorized = form.BooleanField(
-        # Translators, used as label for is_authorized field
-        _('I am <a href="https://outernet.is/content-guidelines" '
-          'target="_blank">authorized</a>'),
-        value="authorized",
-        validators=[form.Required()],
-        help_text=_("Are you authorized to distribute this file?")
-    )
 
     def postprocess_content_file(self, file_upload):
         # validate file size
