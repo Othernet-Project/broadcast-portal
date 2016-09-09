@@ -1,14 +1,9 @@
-import datetime
-
-from bottle import static_file
-
 from ..util.routes import StaticRoute
 from ..util.skinning import skin_assets_dir
 from ..app.exts import container as exts
 
 
 class Static(StaticRoute):
-    exclude_plugins = ['session']
 
     def get_base_dirs(self):
         return [exts.assets.directory, skin_assets_dir()]
