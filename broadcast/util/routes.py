@@ -88,7 +88,7 @@ class ActionMixin(object):
     constructing the template context. That is done in the other mixins.
     """
 
-    SUCCESS_REFRESH_INTERVAL = 3
+    SUCCESS_REFRESH_INTERVAL = 0
     ERROR_REFRESH_INTERVAL = 10
 
     feedback_template = 'feedback.mako'
