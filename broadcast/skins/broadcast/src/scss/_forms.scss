@@ -5,7 +5,8 @@
 @import "media_query";
 
 input[type=text],
-input[type=password] {
+input[type=password],
+textarea {
   display: inline-block;
   width: 100%;
   font-family: $font-family;
