@@ -82,9 +82,7 @@
 ##
 
 <%def name="textarea(name, placeholder=None, value=None, id=None)">
-    <%
-    current_value = value or request.params.getall(name)
-    %>
+    <% current_value = h.to_unicode(value or request.params.get(name, '')) %>
     <textarea name="${name}" id="${id or name}"${self.pholder_attr(placeholder)}>${current_value}</textarea>
 </%def>
 
