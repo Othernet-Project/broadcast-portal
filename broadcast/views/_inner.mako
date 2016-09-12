@@ -5,6 +5,10 @@
     <div class="logo">
         <a href="${url('main:home')}">Filecaster</a>
     </div>
+    <a class="feedback-link" href="${url('feedback:submit')}">
+        <span class="icon icon-feedback"></span>
+        <span class="label">${_('Feedback')}</span>
+    </a>
     %if request.user.is_guest:
         <a class="login-link" href="${_(url('auth:login', next=request.fullpath))}">
             <span class="icon icon-key"></span>
