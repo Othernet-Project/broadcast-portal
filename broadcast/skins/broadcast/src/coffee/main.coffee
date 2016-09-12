@@ -3,6 +3,12 @@
 
   ($ 'a[data-roca-target]').rocaLoad()
   ($ '*[data-roca-url]').rocaConfigureContainer()
+  ($ 'a[data-modal]').on 'click', (e) ->
+    e.preventDefault()
+    el = $ @
+    name = el.data 'modal'
+    url = el.attr 'href'
+    $.modal name, url
 
   ($ '#jump-list').on 'click', 'a', (e) ->
     e.preventDefault()

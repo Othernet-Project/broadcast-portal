@@ -5,7 +5,7 @@
     <div class="logo">
         <a href="${url('main:home')}">Filecaster</a>
     </div>
-    <a class="feedback-link" href="${url('feedback:submit')}">
+    <a class="feedback-link" href="${url('feedback:submit')}" data-modal="feedback">
         <span class="icon icon-feedback"></span>
         <span class="label">${_('Feedback')}</span>
     </a>

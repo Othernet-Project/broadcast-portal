@@ -4,6 +4,14 @@
   win = $(window);
   ($('a[data-roca-target]')).rocaLoad();
   ($('*[data-roca-url]')).rocaConfigureContainer();
+  ($('a[data-modal]')).on('click', function(e) {
+    var el, name, url;
+    e.preventDefault();
+    el = $(this);
+    name = el.data('modal');
+    url = el.attr('href');
+    return $.modal(name, url);
+  });
   ($('#jump-list')).on('click', 'a', function(e) {
     var el, target;
     e.preventDefault();

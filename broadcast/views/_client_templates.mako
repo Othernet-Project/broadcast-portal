@@ -18,6 +18,16 @@
     </div>
 </script>
 
+<script id="modal" type="text/x-template">
+    <div class="modal">
+        <div class="modal-body" id="modal-{{&name}}" data-roca-url="{{&url}}" data-roca-target="modal-{{&name}}" data-roca-trap-submit="yes"></div>
+        <a class="modal-close" href="javascript:void(0);">
+            <span class="text-label">${_('close')}</span>
+            <span class="icon icon-close"></span>
+        </a>
+    </div>
+</script>
+
 <script id="vote-success" type="text/x-template">
     <span class="icon icon-ok-outline"></span>
     ${_('Your vote was saved')}

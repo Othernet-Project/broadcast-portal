@@ -5,7 +5,7 @@
 
 <%block name="top">
     <nav id="main-nav" class="main-nav">
-        <a class="feedback-link" href="${url('feedback:submit')}">
+        <a class="feedback-link" href="${url('feedback:submit')}" data-modal="feedback">
             <span class="icon icon-feedback"></span>
             <span class="label">${_('Feedback')}</span>
         </a>
