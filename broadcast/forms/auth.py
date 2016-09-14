@@ -253,22 +253,6 @@ class AcceptInvitationForm(form.Form):
         _("Confirm Password"),
         validators=[form.Required()],
         placeholder=_('Retype the password'))
-    tos_agree = form.BooleanField(
-        # Translators, used as label for terms of service agreement checkbox
-        _('I agree to the <a href="%(url)s">Terms of Service</a>'),
-        validators=[TruthValidator()],
-        value='agree_tos',
-        messages={
-            'truth': _('You must agree to the terms')
-        })
-    priv_read = form.BooleanField(
-        # Translators, used as label for privacy policy read checkbox
-        _('I have read the <a href="%(url)s">Privacy Policy</a>'),
-        validators=[TruthValidator()],
-        value='read_tos',
-        messages={
-            'truth': _('You must confirm that you have read the policy')
-        })
 
     def preprocess_password(self, value):
         if len(value) < self.min_password_length:
