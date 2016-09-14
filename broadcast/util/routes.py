@@ -476,8 +476,10 @@ class APIMixin(object):
     def check_creds(self, password, crypted_pw):
         return pbkdf2.crypt(password, crypted_pw) == crypted_pw
 
-    def abort(self, code=400):
+    def abort(self, code=400, message=None):
         self.response.code = code
+        if message is not None:
+            self.response.body = message
         raise self.AbortRequest()
 
     def create_response(self):
