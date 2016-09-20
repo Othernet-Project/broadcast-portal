@@ -4,6 +4,7 @@ from ..app.exts import container as exts
 
 
 class Static(StaticRoute):
+    exclude_plugins = ['session', 'auth']
 
     def get_base_dirs(self):
         return [exts.assets.directory, skin_assets_dir()]
@@ -15,6 +16,7 @@ class Static(StaticRoute):
 
 class Favicon(Static):
     path = '/favicon.ico'
+    exclude_plugins = ['session', 'auth']
 
     def get(self):
         return super(Favicon, self).get('favicon.ico')

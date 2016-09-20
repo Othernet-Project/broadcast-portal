@@ -33,7 +33,6 @@ class StaticRoute(NonIterableRouteBase):
     path = None
     path_prefix = '/static'
     force_download = False
-    exclude_plugins = ['session', 'auth']
 
     EXP_TIMESTAMP = '%a, %d %b %Y %H:%M:%S GMT'
 
