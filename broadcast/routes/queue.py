@@ -90,7 +90,7 @@ class Vote(RoleMixin, ActionTemplateRoute):
     success_message = _('Your vote has been saved')
     error_message = _('Your vote could not be saved')
     role = RoleMixin.USER
-    role_denied_message = _('Voting is only available to moderators')
+    role_denied_message = _('Voting is only available to registered users')
 
     def get_success_url(self):
         return self.back_to or self.app.get_url('queue:status')
