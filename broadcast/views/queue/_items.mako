@@ -19,7 +19,7 @@
             <span class="invisible-label">${_('Report')}</span>
         </a>
     </p>
-    <% canvote = request.user.has_role(request.user.MODERATOR) %>
+    <% canvote = request.user.has_role(request.user.USER) %>
     <form class="vote-form" action="${url('queue:vote', item_id=item.id)}" method="POST">
         <input type="hidden" name="next" value="${request.fullpath}">
         %if canvote:
