@@ -89,7 +89,7 @@ class Vote(RoleMixin, ActionTemplateRoute):
     path = '/queue/<item_id:re:[0-9a-f]{32}>/'
     success_message = _('Your vote has been saved')
     error_message = _('Your vote could not be saved')
-    role = RoleMixin.MODERATOR
+    role = RoleMixin.USER
     role_denied_message = _('Voting is only available to moderators')
 
     def get_success_url(self):
