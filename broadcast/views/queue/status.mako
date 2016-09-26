@@ -51,11 +51,13 @@
 </nav>
 
 <div class="float-container">
+    %if request.user.is_authenticated:
     <section id="upload" class="upload" data-roca-trap-submit="yes">
     <a href="${url('files:upload')}" data-roca-target="upload">
         ${_('Upload a file')}
     </a>
     </section>
+    %endif
 
     <section id="review" class="review" data-roca-refresh-on="state-update">
     <a href="${url('queue:review')}" data-roca-target="review">

@@ -22,7 +22,8 @@ class UsersOnlyMixin(RoleMixin):
                             'users')
 
 
-class ItemListMixin(UsersOnlyMixin):
+class ItemListMixin(object):
+
     def get_items(self):
         # TODO: implement paging
         return ContentItem.binless_items(kind=self.item_type,
@@ -32,7 +33,7 @@ class ItemListMixin(UsersOnlyMixin):
         return {'items': self.get_items()}
 
 
-class Status(UsersOnlyMixin, XHRPartialRoute):
+class Status(XHRPartialRoute):
     """
     The queue status page
     """
