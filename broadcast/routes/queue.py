@@ -120,7 +120,7 @@ class Vote(RoleMixin, ActionTemplateRoute):
             self.status = True
 
 
-class Download(UsersOnlyMixin, StaticRoute):
+class Download(StaticRoute):
     path = '/download/<item_id:re:[0-9a-f]{32}>'
 
     def get_base_dirs(self):
