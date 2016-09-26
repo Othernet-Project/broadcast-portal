@@ -6,7 +6,7 @@
         </a>
     </p>
     <p class="item-info item-attribution">
-        ${_('Uploaded by {username} {timeago}').format(username=item.username, timeago=th.human_time(item.created))}
+        ${_('Uploaded by {username} {timeago}').format(username=th.protect_email(item.username), timeago=th.human_time(item.created))}
     </p>
     <p class="item-info item-download item-abuse">
         <a class="button button-small" href="${url('queue:download', item_id=item.id)}" target="_blank">

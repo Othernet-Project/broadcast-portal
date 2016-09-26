@@ -114,3 +114,12 @@ def plan_price(item, charge):
 @template_helper
 def from_ts(timestamp):
     return datetime.datetime.fromtimestamp(timestamp)
+
+
+@template_helper
+def protect_email(value, delimiter='@'):
+    """
+    Return the first portion of a passed in string delimited on the first
+    occurrence of `delimiter`.
+    """
+    return ''.join(value.split(delimiter)[0])
